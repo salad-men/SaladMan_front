@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.sidebar{
+    background-color: #4D774E;
+    color: white;
+    height: 100vh;
+    max-width: 230px;
+    margin: 0;
+    padding: 20px;
+}
+h1 {
+    margin: 10px 0 0 20px;
+}
+ul {
+    padding: 10px;
+}
+ul li{
+    list-style: none;
+    font-size: 20px;
+    padding: 10px 20px;
+    
+}
+li:hover {
+    background-color: #3F6940;
+}
+a {
+    
+    text-decoration: none;
+    color: inherit;
+}
