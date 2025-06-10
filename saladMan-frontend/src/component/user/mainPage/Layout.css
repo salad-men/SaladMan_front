@@ -1,0 +1,20 @@
+
+
+.layout-container {
+  font-family: 'Noto Sans KR', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0px;
+  box-sizing: border-box;
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+  .layout-container {
+    padding: 0 16px;
+  }
+}
+.layout-scroll-wrapper {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
