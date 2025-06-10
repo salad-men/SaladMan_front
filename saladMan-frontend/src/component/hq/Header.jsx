@@ -8,12 +8,12 @@ export default function Header() {
             <div className="header">
                 <div className="nav">
                     <div className="dropdown-container">
-                        <a href="#">재고</a>
+                        <a href="/hq/InventoryList">재고</a>
                         <div className="dropdown">
                             <ul>
-                                <li><a href="#">전체 재고 조회</a></li>
+                                <li><a href="/hq/InventoryList">전체 재고 조회</a></li>
                                 <li><a href="#">재고 입출고 내역</a></li>
-                                <li><a href="#">유통기한 조회</a></li>
+                                <li><a href="/InventoryExpiration">유통기한 조회</a></li>
                                 <li><a href="#">폐기 목록 조회</a></li>
                                 <li><a href="#">매장별 재료 설정</a></li>
                             </ul>
