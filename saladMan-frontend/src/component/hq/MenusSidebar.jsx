@@ -3,7 +3,7 @@ import './Sidebar.css'
 export default function MenusSidebar() {
     return(
         <>
-            <div className="sidebar">
+            <div className="menus-sidebar">
                 <h1>메뉴</h1>
                 <ul>
                     <li><a href="#">전메뉴 조회</a></li>

@@ -1,0 +1,139 @@
+.inventory-wrap {
+  padding: 40px 60px;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #fff;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  position: relative;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #3D5A40;
+}
+
+/* 필터 영역 */
+.filter-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.category-select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  min-width: 140px;
+  cursor: pointer;
+}
+
+.name-search {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 180px;
+}
+
+.name-search:focus,
+.category-select:focus {
+  outline-color: #3d5a40;
+  border-color: #3d5a40;
+}
+
+/* 버튼 영역 */
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
+  width: 100%;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+/* 취소/저장 버튼도 오른쪽 정렬 */
+.cancel-save-row {
+  justify-content: flex-end;
+}
+
+.btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  padding: 8px 16px;
+  color: white;
+  transition: background-color 0.3s;
+  user-select: none;
+}
+
+.btn-edit {
+  background-color: #718096;
+}
+
+.btn-edit:hover {
+  background-color: #5a6979;
+}
+
+.save {
+  background-color: #2a9d8f;
+}
+
+.save:hover {
+  background-color: #20776b;
+}
+
+.cancel {
+  background-color: #e76f51;
+}
+
+.cancel:hover {
+  background-color: #bf533c;
+}
+
+/* 테이블 스타일 */
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  background: white;
+}
+
+.inventory-table thead {
+  background-color: #f3f4f6;
+}
+
+.inventory-table th,
+.inventory-table td {
+  padding: 12px 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+}
+
+.inventory-table tbody tr:hover {
+  background-color: #f2f7f2;
+}
+
+.editable {
+  border: 1px solid #3D5A40;
+  background-color: #fcfff5;
+  border-radius: 4px;
+  padding: 4px 6px;
+  width: 100px;
+  font-size: 14px;
+  text-align: center;
+  outline-color: #3D5A40;
+  transition: border-color 0.3s;
+}
+
+.editable:focus {
+  border-color: #2f4a31;
+}
