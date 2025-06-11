@@ -10,7 +10,7 @@ const inventoryAtom = atom([
 
 const isEditModeAtom = atom(false);
 
-export default function StoreIngredientSetting() {
+export default function HqIngredientSetting() {
   const [inventory, setInventory] = useAtom(inventoryAtom);
   const [isEditMode, setIsEditMode] = useAtom(isEditModeAtom);
 

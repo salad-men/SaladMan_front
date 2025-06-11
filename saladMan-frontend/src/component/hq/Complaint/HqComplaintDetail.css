@@ -1,0 +1,86 @@
+.detail-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 36px 48px;
+  background-color: #fff;
+  border-radius: 8px;
+  font-family: 'Pretendard', sans-serif;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.detail-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 17px;
+  color: #444;
+  margin-bottom: 28px;
+}
+
+.detail-table th,
+.detail-table td {
+  padding: 16px 20px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+}
+
+.detail-table th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+  width: 100px;
+}
+
+.content-cell p {
+  margin: 12px 0;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.btn {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn.cancel {
+  background-color: #ddd;
+  color: #333;
+}
+
+.btn.cancel:hover {
+  background-color: #ccc;
+}
+
+.btn.submit {
+  background-color: #49653f;
+  color: #fff;
+}
+
+.btn.submit:hover {
+  background-color: #3d5634;
+}
+
+.forwarded-text {
+  font-weight: 700;
+  color: #27ae60;
+  align-self: center;
+  font-size: 16px;
+}

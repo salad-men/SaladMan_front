@@ -1,0 +1,36 @@
+.notice-container {
+  max-width: 1680px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: 'Pretendard', sans-serif;
+}
+
+.notice-title {
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #333;
+}
+
+.notice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.notice-row {
+  border-bottom: 1px solid #eee;
+}
+
+.notice-cell {
+  padding: 12px 8px;
+  text-align: left;
+  color: #555;
+}
+
+.notice-cell.center {
+  text-align: center;
+}

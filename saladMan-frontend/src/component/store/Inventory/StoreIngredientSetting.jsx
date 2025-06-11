@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { atom, useAtom } from 'jotai';
-import './StoreIngredientSetting.css';  
+import './StoreIngredientSetting.css';  // 변경된 부분
 
 const inventoryAtom = atom([
   { store: '본사', name: '로메인', category: '베이스채소', unit: 'kg', min: 100, max: 500, price: 180 },
@@ -29,7 +29,7 @@ export default function StoreIngredientSetting() {
   const handleCancelEdit = () => setIsEditMode(false);
   const handleSaveEdit = () => {
     setIsEditMode(false);
-    alert('매장 재료 설정이 저장되었습니다.');
+    alert('본사 재료 설정이 저장되었습니다.');
   };
 
   const filteredInventory = inventory.filter(item => {
@@ -40,7 +40,7 @@ export default function StoreIngredientSetting() {
 
   return (
     <div className="inventory-wrap">
-      <h2>매장 재료 설정</h2>
+      <h2>본사 재료 설정</h2>
 
       <div className="filter-row">
         <select
