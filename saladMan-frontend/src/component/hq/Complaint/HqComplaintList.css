@@ -1,0 +1,89 @@
+.complaint-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px 32px;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.complaint-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.complaint-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  color: #444;
+}
+
+.complaint-table th,
+.complaint-table td {
+  padding: 14px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.complaint-table th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+}
+
+.complaint-table td.status-cell {
+  text-align: center;
+  font-weight: 700;
+}
+
+/* 상태별 색상 */
+.status-cell.미열람 {
+  color: #e74c3c; /* 빨강 */
+}
+.status-cell.열람 {
+  color: #2980b9; /* 파랑 */
+}
+.status-cell.전달완료 {
+  color: #27ae60; /* 초록 */
+}
+
+/* 체크박스 셀 중앙 정렬 */
+.complaint-table td:first-child {
+  text-align: center;
+  width: 40px;
+}
+
+/* 전달 버튼 */
+.btn-forward {
+  padding: 6px 14px;
+  border: none;
+  background-color: #49653f;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-forward:hover {
+  background-color: #3d5634;
+}
+
+/* 제목 클릭시 마우스 포인터 및 밑줄 */
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.clickable:hover {
+  text-decoration: underline;
+}
+
+/* 미열람 행 배경색 */
+tr.unread {
+  background-color: #fff7f7;
+}
