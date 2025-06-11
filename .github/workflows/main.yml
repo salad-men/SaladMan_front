@@ -20,13 +20,17 @@ jobs:
         with:
           node-version: 18
 
-      # 3) 의존성 설치 및 빌드
-      - name: 의존성 설치 및 빌드
-        run: |
-          npm install
-          npm run build
+      # 3) 의존성 설치 (working-directory 지정)
+      - name: 의존성 설치
+        working-directory: SaladMan_front
+        run: npm install
 
-      # 4) AWS 자격증명 설정
+      # 4) React 빌드 (working-directory 지정)
+      - name: React 빌드
+        working-directory: SaladMan_front
+        run: npm run build
+
+      # 5) AWS 자격증명 설정
       - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -34,16 +38,16 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      # 5) S3 기존 파일 삭제 후 빌드 결과 업로드
+      # 6) S3 기존 파일 전체 삭제 후 빌드 결과 업로드
       - name: S3 기존 파일들 전체 삭제 후 새로 업로드
         run: |
           aws s3 rm --recursive s3://saladman-web
-          aws s3 cp ./build s3://saladman-web/ --recursive
+          aws s3 cp ./SaladMan_front/build s3://saladman-web/ --recursive
 
-      # 6) CloudFront 캐시 무효화
+      # 7) CloudFront 캐시 무효화
       - name: CloudFront 캐시 무효화
         run: aws cloudfront create-invalidation --distribution-id E3P9MO1X33X9JJ --paths "/*"
 
-      # 7) 작업 디렉터리 내용 확인 (디버깅용)
+      # 8) 작업 디렉터리 내용 확인 (디버깅용)
       - name: 작업 디렉터리 내용 확인
         run: ls -R
