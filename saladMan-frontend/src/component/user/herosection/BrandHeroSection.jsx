@@ -8,7 +8,7 @@ return (
     <h1 className={styles.title}><b>BRAND</b></h1>
     <br />
     <p className={styles.subtitle}>
-        <a href='/BrandIntro'>스토리</a> <span className={styles.divider}>ㅣ</span> <a href='/SloganIntro'>슬로건</a>
+        <a href='/brandIntro'>스토리</a> <span className={styles.divider}>ㅣ</span> <a href='/sloganIntro'>슬로건</a>
     </p>
      <div className={styles.imageBanner}>
         <img src="brand.jpg" alt="샐러드" />
