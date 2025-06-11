@@ -20,14 +20,14 @@ jobs:
         with:
           node-version: 18
 
-      # 3) 의존성 설치 (working-directory 지정)
+      # 3) 의존성 설치 (working-directory 정확히 지정)
       - name: 의존성 설치
-        working-directory: SaladMan_front
+        working-directory: saladMan-frontend
         run: npm install
 
-      # 4) React 빌드 (working-directory 지정)
+      # 4) React 빌드
       - name: React 빌드
-        working-directory: SaladMan_front
+        working-directory: saladMan-frontend
         run: npm run build
 
       # 5) AWS 자격증명 설정
@@ -38,11 +38,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      # 6) S3 기존 파일 전체 삭제 후 빌드 결과 업로드
+      # 6) S3 기존 파일 삭제 후 빌드 결과 업로드
       - name: S3 기존 파일들 전체 삭제 후 새로 업로드
         run: |
           aws s3 rm --recursive s3://saladman-web
-          aws s3 cp ./SaladMan_front/build s3://saladman-web/ --recursive
+          aws s3 cp ./saladMan-frontend/build s3://saladman-web/ --recursive
 
       # 7) CloudFront 캐시 무효화
       - name: CloudFront 캐시 무효화
