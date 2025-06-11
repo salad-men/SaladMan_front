@@ -3,8 +3,9 @@
   color: white;
   text-align: center;
   padding: 60px 40px;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .section h2 {

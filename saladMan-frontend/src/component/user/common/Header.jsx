@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
 
-const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+const Header = ({ staticScrolled = false }) => {
+  const [isScrolled, setIsScrolled] = useState(staticScrolled);
 
   useEffect(() => {
+    if (staticScrolled) return; 
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 800);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [staticScrolled]);
 
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="layout-container header-content">
-        <div className="logo">Saladman</div> 
+        <a href="/mainPage" className="logo">Saladman</a>
         <nav className="nav">
           <a href="/BrandIntro">브랜드</a>
           <a href="/">메뉴</a>
@@ -29,5 +31,6 @@ const Header = () => {
     </header>
   );
 };
+
 
 export default Header;

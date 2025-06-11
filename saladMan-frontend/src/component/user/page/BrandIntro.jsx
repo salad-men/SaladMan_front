@@ -1,16 +1,22 @@
 import React from 'react';
 import '../brand/BrandIntro.module.css'
-import '../mainPage/Header.css';
+import '../common/Header.css';
+import '../herosection/Herosection.module.css'
+import '../common/Footer.css';
 
-import BrandIntro from "../brand/brandIntro";
-import Header from '../mainPage/Header';
 
+import BrandIntro from "../brand/BrandIntro";
+import Header from '../common/Header';
+import BrandHeroSection from '../herosection/BrandHeroSection';
+import Footer from '../common/Footer';
 
 const BrandIntroPage = () => {
   return (
     <>
-      <Header/>
+      <Header staticScrolled={true} />
+      <BrandHeroSection />
       <BrandIntro />
+      <Footer />
     </>
   );
 };

@@ -3,7 +3,7 @@
   top: 0;
   width: 100%;
   height: auto;
-  padding: 24px 48px;
+  padding: 12px 48px;
   background: transparent;
   display: flex;
   justify-content: space-between;
@@ -11,6 +11,7 @@
   transition: background 0.7s ease;
   z-index: 1000;
   font-family: 'Noto Sans KR', sans-serif;
+  
 }
 
 .layout-container {
@@ -32,7 +33,7 @@
   font-weight: bold;
   color: white;
   margin-right:300px;
-  margin-left: -200px;
+  margin-left: 0px;
 }
 
 .nav a {
