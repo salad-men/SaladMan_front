@@ -1,0 +1,113 @@
+/* StoreAccountList.css */
+
+.storeAccountContainer {
+    display: flex;
+    padding: 30px;
+    font-family: "Arial", sans-serif;
+}
+
+.storeAccountContent {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    padding: 40px;
+    margin-left: 100px;
+}
+
+.storeAccountContent h2 {
+    margin-top: 100px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.storeAccTopBar {
+    display: flex;
+    width: 1100px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.registerButton {
+    padding: 6px 16px;
+    font-size: 14px;
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.registerButton:hover {
+    background-color: #3a5e3b;
+}
+
+.searchGroup {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.searchGroup select,
+.searchGroup input[type="text"] {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.searchGroup select {
+    width: 150px;
+}
+
+.searchGroup input[type="text"] {
+    width: 250px;
+}
+
+.searchButton {
+    padding: 6px 16px;
+    font-size: 14px;
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.searchButton:hover {
+    background-color: #3a5e3b;
+}
+
+.storeAccountTable {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.storeAccountTable th,
+.storeAccountTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.storeAccountTable th {
+    background-color: #f6f6f6;
+    font-weight: bold;
+}
+
+.editButton {
+    padding: 4px 10px;
+    font-size: 13px;
+    background-color: #888;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.editButton:hover {
+    background-color: #555;
+}

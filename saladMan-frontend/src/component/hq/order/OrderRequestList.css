@@ -1,0 +1,95 @@
+/* OrderRequestList.css */
+.orderRequestContainer {
+    display: flex;
+    padding: 30px;
+    font-family: "Arial", sans-serif;
+}
+
+.orderRequestContent {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    padding: 40px;
+    margin-left: 100px;
+}
+
+.orderRequestContent h2 {
+    margin-top: 100px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.orderRequestFilters {
+    margin-bottom: 20px;
+}
+
+.orderRequestFilters .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.orderRequestFilters label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.orderRequestFilters input[type="date"],
+.orderRequestFilters input[type="text"],
+.orderRequestFilters select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.orderRequestFilters button {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.orderRequestFilters button:hover {
+    opacity: 0.9;
+}
+
+.orderRequestFilters .searchButton {
+    background-color: #4D774E;
+    color: white;
+}
+
+.resetButton {
+    background-color: #aaa;
+    color: white;
+}
+
+.orderTable {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.orderTable th,
+.orderTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.orderTable th {
+    background-color: #f6f6f6;
+    font-weight: bold;
+}
+
+.orderTable th.checkboxColumn,
+.orderTable td.checkboxColumn {
+    width: 40px;           /* 원하는 폭 */
+    text-align: center;    /* 혹은 left/right 조정 가능 */
+    padding: 4px;          /* 좌우 여백 줄임 */
+}

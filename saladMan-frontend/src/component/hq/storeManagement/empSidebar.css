@@ -1,0 +1,30 @@
+.sidebar {
+    /**/
+    position: fixed;        /* ← 추가 */
+    top: 0;                 /* ← 상단에 고정 */
+    left: 0;                /* ← 왼쪽에 고정 */
+    /**/
+    
+    width: 200px;
+    background-color: #4D774E;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 10px 0;
+}
+
+.sidebar a {
+    color: rgb(192, 154, 154);
+    text-decoration: none;
+}

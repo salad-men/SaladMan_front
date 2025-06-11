@@ -1,0 +1,104 @@
+.storeRegisterContainer {
+  display: flex;
+  font-family: 'Arial', sans-serif;
+}
+
+.mainContent {
+  position: absolute;
+  top: 0;
+  left: 200px;
+  width: calc(100% - 200px);
+  padding: 40px;
+}
+
+.mainContent h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.formSection {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.registerTable {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 500px;
+}
+
+.registerTable td {
+  padding: 12px 10px;
+  vertical-align: middle;
+}
+
+.registerTable td:first-child {
+  width: 130px;
+  font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+  color: #333;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input[type="button"] {
+  padding: 8px 16px;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+input[type="button"]:hover {
+  background-color: #3a5e3b;
+}
+
+.mapBox {
+  width: 500px;
+  height: 400px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  
+}
+
+.submitSection {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.submitButton {
+  padding: 10px 24px;
+  background-color: #555;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #333;
+}

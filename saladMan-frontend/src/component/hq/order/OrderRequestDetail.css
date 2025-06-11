@@ -1,0 +1,57 @@
+/* OrderRequestDetail.css */
+.orderDetailContainer {
+    padding: 40px;
+    font-family: Arial, sans-serif;
+}
+
+.orderDetailContainer h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.orderInfo {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.orderDetailTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.orderDetailTable th,
+.orderDetailTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.orderDetailTable th {
+    background-color: #e9f3e9;
+    font-weight: bold;
+}
+
+.summaryRow td {
+    background-color: #f3f3f3;
+    font-weight: bold;
+}
+
+.submitArea {
+    text-align: center;
+}
+
+.submitArea button {
+    padding: 8px 20px;
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submitArea button:hover {
+    background-color: #3a5e3b;
+}
