@@ -1,17 +1,28 @@
 import './AllMenus.css'
-import MenusSidebar from './MenusSidebar'
-import { Input } from 'reactstrap';
+import SidebarMenus from './SidebarMenus'
 
-export default function AllMenus() {
+const AllMenus = () => {
+    const dummyMenus = [
+    { id: 1, name: '치킨 시저 샐러드', price: '12,000원', imageUrl: '/img1.png', badge: '신메뉴' },
+    { id: 2, name: '그릴드 스테이크 샐러드', price: '12,000원', imageUrl: '/img2.png' },
+    { id: 3, name: '연어 아보카도 샐러드', price: '12,000원', imageUrl: '/img2.png' },
+    { id: 4, name: '단호박 닭가슴살 샐러드', price: '12,000원', imageUrl: '/img2.png' },
+    { id: 5, name: '리코타 치즈 샐러드', price: '12,000원', imageUrl: '/img1.png' },
+    { id: 6, name: '참치 곡물 샐러드', price: '12,000원', imageUrl: '/img2.png' },
+    { id: 7, name: '훈제 오리 샐러드', price: '12,000원', imageUrl: '/img3.png' },
+    { id: 8, name: '두부 아보카도 샐러드', price: '12,000원', imageUrl: '/img1.png' },
+    { id: 9, name: '닭가슴살 퀴노아 샐러드', price: '12,000원', imageUrl: '/img2.png' },
+    ];
+
     return (
         <>
             <div className="wrapper">
-                <MenusSidebar />
+                <SidebarMenus />
                 <div className="content">
                     <header className="page-header">
                         <h2>전체 메뉴 조회</h2>
                         <div className="controls">
-                            <Input type="text" id="searchInput" placeholder="메뉴명을 검색하세요" />
+                            <input type="text" id="searchInput" placeholder="메뉴명을 검색하세요" />
                             <select id="sortSelect">
                                 <option value="release_desc">출시일 순 (최신순)</option>
                                 <option value="release_asc">출시일 순 (오래된순)</option>
@@ -25,82 +36,21 @@ export default function AllMenus() {
                     </header>
 
                     <section className="menu-grid">
-
-                        <div className="menu-card">
+                        {dummyMenus.map(menu => (
+                            <div className="menu-card" key={menu.id}>
                             <div className="image-wrapper">
-                                <img src="img1.png" alt="샐러드" />
-                                <span className="badge">신메뉴</span>
+                                <img src={menu.imageUrl} alt={menu.name} />
+                                {menu.badge && <span className="badge">{menu.badge}</span>}
                             </div>
-                            <h3>치킨 시저 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img2.png" alt="샐러드" />
+                            <h3>{menu.name}</h3>
+                            <p>{menu.price}</p>
                             </div>
-                            <h3>그릴드 스테이크 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img2.png" alt="샐러드" />
-                            </div>
-                            <h3>연어 아보카도 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img2.png" alt="샐러드" />
-                            </div>
-                            <h3>단호박 닭가슴살 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img1.png" alt="샐러드" />
-                            </div>
-                            <h3>리코타 치즈 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img2.png" alt="샐러드" />
-                            </div>
-                            <h3>참치 곡물 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img3.png" alt="샐러드" />
-                            </div>
-                            <h3>훈제 오리 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img1.png" alt="샐러드" />
-                            </div>
-                            <h3>두부 아보카도 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
-
-                        <div className="menu-card">
-                            <div className="image-wrapper">
-                                <img src="img2.png" alt="샐러드" />
-                            </div>
-                            <h3>닭가슴살 퀴노아 샐러드</h3>
-                            <p>12,000원</p>
-                        </div>
+                        ))}
                     </section>
                 </div>
             </div>
         </>
     )
 }
+
+export default AllMenus;

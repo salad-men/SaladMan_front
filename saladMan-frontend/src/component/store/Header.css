@@ -15,6 +15,7 @@ body {
     justify-content: space-between;
     margin-left: 300px;
     flex: 1;
+    padding: 4px 0;
 }
 
 .dropdown-container>a {
@@ -26,8 +27,6 @@ body {
 }
 .dropdown-container {
   position: relative;
-  padding: 10px 15px; /* 🔼 hover 영역 확대 */
-  display: inline-block;
 }
 .dropdown-container:hover .dropdown {
   display: block;
