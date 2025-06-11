@@ -8,12 +8,22 @@ import FindStorePage from './component/user/page/FindStore';
 import NewsPage from './component/user/page/News';
 
 import Header from './component/hq/Header'
-import AllMenus from './component/hq/AllMenus';
 import InventoryList from './component/hq/Inventory/InventoryList';
 import InventoryExpiration from './component/hq/Inventory/InventoryExpiration';
 import DisposalList from './component/hq/Inventory/DisposalList';
 import HqIngredientSetting from './component/hq/Inventory/HqIngredientSetting';
 import IngredientInventoryRecord from './component/hq/Inventory/IngredientInventoryRecord';
+
+
+import HqLayout from './component/hq/HqLayout';
+import AllMenus from './component/hq/AllMenus';
+import UpdateMenu from './component/hq/UpdateMenu';
+import Recipe from './component/hq/Recipe';
+import Login from './component/common/Login';
+import TotalSales from './component/hq/Totalsales';
+import StoreSales from './component/hq/Storesales';
+import StoreStock from './component/hq/StoreStock';
+
 
 import StoreInventoryList from './component/store/Inventory/StoreInventoryList';
 import StoreInventoryExpiration from './component/store/Inventory/StoreInventoryExpiration';
@@ -37,16 +47,15 @@ function App() {
   return (
     <>
 
+
       <Header />
       <Routes>
-        <Route path='/AllMenus' element={<AllMenus />} />
 
         <Route path='/hq/InventoryList' element={<InventoryList />} />
         <Route path='/hq/InventoryExpiration' element={<InventoryExpiration />} />
         <Route path='/hq/DisposalList' element={<DisposalList />} />
         <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting />} />
         <Route path='/hq/IngredientInventoryRecord' element={<IngredientInventoryRecord />} />
-
 
         <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
         <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
@@ -72,12 +81,24 @@ function App() {
           <Route path="empRegister" element={<EmployeeRegister />} />
           <Route path="empList" element={<EmployeeList />} />
         </Route>
+
         <Route path="/hq/orderSidebar/*" element={<OrderSidebar />}>
           <Route path="orderRequest" element={<OrderRequestList />} />
           <Route path="orderRequestDetail" element={<OrderRequestDetail />} />
         </Route>
-      </Routes>
 
+        <Route element={<HqLayout />}>
+          <Route path='/hq/allMenus' element={<AllMenus />} />
+          <Route path='/hq/updateMenu' element={<UpdateMenu />} />
+          <Route path='/hq/recipe' element={<Recipe />} />
+          <Route path='/hq/totalSales' element={<TotalSales />} />
+          <Route path='/hq/storeSales' element={<StoreSales />} />
+          <Route path='/hq/storeStock' element={<StoreStock />} />
+        </Route>
+
+        <Route path='/' element={<Login />} />
+
+      </Routes>
     </>
   )
 }

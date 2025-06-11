@@ -1,0 +1,67 @@
+.login-background {
+    min-height: 100vh;
+    width: 100vw;
+    background-image: url('/loginback.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-blur {
+  height: 100vh;
+  width: 100vw;
+  background: #fff;
+  background-color: rgba(187, 187, 187, 0.158);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-box {
+  width: 220px;
+  height: 250px;
+  padding: 30px;
+  top: 50%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  margin: auto;
+}
+.login-box h2 {
+  margin: 0 0 50px 0;
+}
+.loginform {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loginform  input[type="text"] {
+  padding: 8px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fafbfc;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.loginform input[type="text"]:focus {
+  border-color: #809781;
+  background: #fff;
+}
+
+.login-button {
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.login-button:hover {
+  background: #3F6940;
+}

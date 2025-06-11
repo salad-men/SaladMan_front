@@ -1,0 +1,132 @@
+.form-container {
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 8px;
+    vertical-align: top;
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+
+.label-cell {
+    width: 120px;
+    background-color: #ddd;
+    font-weight: bold;
+    text-align: right;
+}
+
+.a-content input[type="text"],
+.a-content input[type="number"], 
+.a-content textarea {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.a-content textarea {
+    height: 100px;
+}
+
+.a-content input[type="file"] {
+    border: none;
+}
+
+/* button {
+    padding: 8px 20px;
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #3b5f3c;
+} */
+
+.ingredient-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+.ingredient-table th,
+.ingredient-table td {
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 6px;
+    font-size: 13px;
+}
+
+   .ingredient-table button {
+       background-color: #ddd;
+       border: 1px solid #999;
+       padding: 4px 10px;
+       cursor: pointer;
+   }
+
+   .flex-row {
+       display: flex;
+       gap: 20px;
+   }
+
+   .flex-row>div {
+       flex: 1;
+   }
+
+   .modal {
+       display: none;
+       position: fixed;
+       z-index: 1000;
+       left: 0;
+       top: 0;
+       width: 100%;
+       height: 100%;
+       background-color: rgba(0, 0, 0, 0.4);
+
+   }
+
+   .modal-content {
+       background-color: white;
+       border-radius: 10px;
+       margin: 10% auto;
+       padding: 20px;
+       width: 300px;
+       border: 1px solid #ccc;
+   }
+
+   .modal-list {
+       list-style: none;
+       padding: 0;
+       margin: 0 0 10px;
+   }
+
+   .modal-list li {
+       padding: 6px 0;
+       border-bottom: 1px solid #eee;
+   }
+
+   .ingredient-grid {
+       display: flex;
+       flex-wrap: wrap;
+       gap: 10px 20px;
+   }
+
+   .ingredient-grid label {
+       display: flex;
+       align-items: center;
+       font-size: 14px;
+       width: 45%;
+   }
