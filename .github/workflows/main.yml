@@ -30,6 +30,10 @@ jobs:
         working-directory: saladMan-frontend
         run: npm run build
 
+      - name: 빌드 결과 확인
+        working-directory: saladMan-frontend
+        run: ls -l build
+
       # 5) AWS 자격증명 설정
       - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
         uses: aws-actions/configure-aws-credentials@v4
