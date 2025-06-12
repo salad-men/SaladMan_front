@@ -1,0 +1,94 @@
+.stockInspectionContent {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    padding: 40px;
+    margin-left: 100px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.infoBox p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.inspectorBox {
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.inspectorBox span {
+
+    display: inline-flex;
+}
+
+.inspectorBox select {
+    padding: 6px;
+    margin-left: 4px;
+}
+
+.inspectionTable {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #f9fdf8;
+}
+
+.inspectionTable th,
+.inspectionTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.inspectionTable .inputBox {
+    width: 80px;
+    padding: 6px;
+}
+
+.inspectionTable .selectBox {
+    padding: 6px;
+}
+
+.inspectionTable .textArea {
+    width: 90%;
+    height: 20px;
+    padding: 6px;
+    resize: none;
+}
+
+.footerSection {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+    width: 80%;
+}
+
+.completeButton {
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.completeButton:hover {
+    background-color: #3a5e3b;
+}
+
+.statusText {
+    font-size: 14px;
+    font-weight: bold;
+}

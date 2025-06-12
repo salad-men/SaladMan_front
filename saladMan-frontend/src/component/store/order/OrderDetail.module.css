@@ -1,0 +1,80 @@
+
+.orderDetailContent {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    padding: 40px;
+    margin-left: 100px;
+}
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.infoSection {
+    margin-bottom: 30px;
+    line-height: 1.8;
+}
+
+.status {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.orderNumber {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.progressBar {
+    width: 200px;
+    height: 6px;
+    margin-bottom: 10px;
+}
+
+.orderDate,
+.requester {
+    font-size: 14px;
+}
+
+.tableSection {
+    position: relative;
+}
+
+.editButton {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    font-size: 14px;
+    padding: 4px 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.detailTable {
+    margin-top: 10px;
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.detailTable th,
+.detailTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.totalRow {
+    text-align: right;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-top: 2px solid #ccc;
+}

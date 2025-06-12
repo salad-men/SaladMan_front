@@ -15,6 +15,7 @@
     "bootstrap": "^5.3.6",
     "chart.js": "^4.4.9",
     "jotai": "^2.12.5",
+    "lucide-react": "^0.514.0",
     "react": "^19.1.0",
     "react-daum-postcode": "^3.2.0",
     "react-dom": "^19.1.0",

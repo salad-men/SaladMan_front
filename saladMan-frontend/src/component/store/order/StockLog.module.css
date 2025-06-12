@@ -1,0 +1,67 @@
+.stockHistoryContainer {
+    display: flex;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+}
+
+.stockHistoryContent {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    padding: 40px;
+    margin-left: 100px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+.filterSection {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 80%;
+}
+.filterSection input {
+
+    width: 150px;
+}
+
+.tabButtons {
+    margin-bottom: 10px;
+}
+
+.tabButtons button {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #4D774E;
+    color: white;
+    font-weight: bold;
+}
+
+.table {
+    width: 80%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #f8f8f8;
+}

@@ -1,0 +1,132 @@
+/* OrderList.module.css */
+.orderListContainer {
+    padding: 40px;
+    font-family: Arial, sans-serif;
+}
+
+.orderListContent {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    padding: 40px;
+    margin-left: 100px;
+}
+
+.orderListContent h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.filters {
+    margin-bottom: 40px;
+    width: 80%;
+}
+
+.filters .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.filters label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.filters input[type="date"]{
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+    width: 200px;
+}
+.filters input[type="text"]{
+     padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 184px;
+    margin-right: 10px;   
+}
+.filters select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 175px;
+    margin-right: 10px;
+}
+
+.filters button {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.searchButton {
+    background-color: #4D774E;
+    color: white;
+}
+
+.resetButton {
+    background-color: #aaa;
+    color: white;
+}
+.activeButton {
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.disabledButton {
+  background-color: #ddd;
+  color: #aaa;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: not-allowed;
+}
+.orderTable {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.orderTable th,
+.orderTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.orderTable th {
+    background-color: #f6f6f6;
+    font-weight: bold;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination .active {
+    background-color: #4D774E;
+    color: white;
+}

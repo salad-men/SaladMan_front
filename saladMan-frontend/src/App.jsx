@@ -41,6 +41,12 @@ import StoreAccountList from './component/hq/storeManagement/StoreAccountList'
 import OrderRequestList from './component/hq/order/OrderRequestList'
 import OrderRequestDetail from './component/hq/order/OrderRequestDetail'
 import OrderItemManage from './component/hq/order/OrderItemManage'
+import OrderList from './component/store/order/OrderList';
+import OrderApply from './component/store/order/OrderApply';
+import OrderDetail from './component/store/order/OrderDetail';
+import StockInspection from './component/store/order/StockInspection';
+import OrderSettings from './component/store/order/OrderSettings';
+import StockLog from './component/store/order/StockLog';
 
 function App() {
 
@@ -80,11 +86,18 @@ function App() {
         <Route path="/hq/storeAccount" element={<StoreAccountList />} />
         <Route path="/hq/empRegister" element={<EmployeeRegister />} />
         <Route path="/hq/empList" element={<EmployeeList />} />
-        {/*발주*/}
+        {/*본사 발주*/}
         <Route path="/hq/orderRequest" element={<OrderRequestList />} />
         <Route path="/hq/orderRequestDetail" element={<OrderRequestDetail />} />
         <Route path="/hq/orderItemManage" element={<OrderItemManage />} />
-        
+        {/*매장 발주*/}
+        <Route path="/store/orderList" element={<OrderList />} />
+        <Route path="/store/orderApply" element={<OrderApply />} />
+        <Route path="/store/orderDetail" element={<OrderDetail />} />
+        <Route path="/store/stockInspection" element={<StockInspection />} />
+        <Route path="/store/orderSettings" element={<OrderSettings />} />
+        <Route path="/store/stockLog" element={<StockLog />} />
+
         <Route element={<HqLayout />}>
           <Route path='/hq/allMenus' element={<AllMenus />} />
           <Route path='/hq/updateMenu' element={<UpdateMenu />} />
