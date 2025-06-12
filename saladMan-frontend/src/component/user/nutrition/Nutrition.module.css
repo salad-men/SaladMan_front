@@ -5,6 +5,7 @@
 .tabs {
   display: flex;
   margin-bottom: 16px;
+  justify-content: center;
 }
 
 .tab {
@@ -20,11 +21,13 @@
 .tab.active {
   background: #4D774E;
   color: white;
+  
 }
 
 .table {
-  width: 100%;
+  width: 50%;
   border-collapse: collapse;
+  margin: 0 auto;
 }
 
 .table th,

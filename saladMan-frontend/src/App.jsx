@@ -26,6 +26,8 @@ import StoreIngredientInventoryRecord from './component/store/Inventory/StoreIng
 import HqNoticeList from './component/hq/Notice/HqNoticeList';
 import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
 import NewsDetailPage from './component/user/page/NewDetailPage';
+import KioskPage from './component/user/page/KioskPage';
+import KioskMenuPage from './component/user/page/KioskMenuPage';
 
 
 
@@ -55,18 +57,19 @@ function App() {
         <Route path='/hq/HqNoticeList' element ={<HqNoticeList/>}/>
         <Route path='/hq/HqNoticeDetail' element ={<HqNoticeDetail/>}/>
 
-        <Route path="/mainPage" element={<MainPage />} />
-        <Route path="/brandIntro" element={<BrandIntro />}/>
-        <Route path="/sloganIntro" element={<SloganIntro/>}/>
-        <Route path="/menuPage" element={<MenuPage/>}/>
-        <Route path="/nutritionPage" element={<Nutrition />}/>
-        <Route path="/findStore" element={<FindStorePage/>}/>
+        <Route path="/MainPage" element={<MainPage />} />
+        <Route path="/BrandIntro" element={<BrandIntro />}/>
+        <Route path="/SloganIntro" element={<SloganIntro/>}/>
+        <Route path="/MenuPage" element={<MenuPage/>}/>
+        <Route path="/NutritionPage" element={<Nutrition />}/>
+        <Route path="/FindStore" element={<FindStorePage/>}/>
         <Route path="/News" element={<NewsPage/>}/>
         <Route path="/NewsDetail" element={<NewsDetailPage/>}/>
         <Route path="/PraiseStore" element={<PraiseStorePage/>}/>
         <Route path="/Event" element={<EventPage/>}/>
-        <Route path="FindStore" element={<FindStorePage/>}/>
-
+        <Route path="/FindStore" element={<FindStorePage/>}/>
+        <Route path="/Kiosk" element={<KioskPage/>}/>
+        <Route path="/KioskMenu" element={<KioskMenuPage/>}/>
 
      </Routes>
     </>
