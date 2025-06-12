@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./DisposalList.css";
+import "./HqDisposalList.css";
 
 const initialData = [
   { id: 1, store: "본사", name: "렌틸콩", category: "단백질", unit: "kg", stock: 300, discardQty: 100, reason: "폐기 예정", discardDate: "2025-05-27", status: "완료", remark: "-" },
@@ -9,7 +9,7 @@ const initialData = [
   { id: 5, store: "홍대점", name: "아보카도", category: "과일", unit: "개", stock: 40, discardQty: 5, reason: "숙성 과잉으로 인한 폐기", discardDate: "2025-05-27", status: "대기", remark: "-" },
 ];
 
-export default function DisposalList() {
+export default function HqDisposalList() {
   const [filters, setFilters] = useState({
     store: "all",
     category: "all",

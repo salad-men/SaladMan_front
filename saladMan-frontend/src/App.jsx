@@ -11,48 +11,52 @@ import EventPage from './component/user/page/EventPage';
 
 import Header from './component/hq/Header'
 import AllMenus from './component/hq/AllMenus';
-import InventoryList from './component/hq/Inventory/InventoryList';
-import InventoryExpiration from './component/hq/Inventory/InventoryExpiration';
-import DisposalList from './component/hq/Inventory/DisposalList';
+
+
+import HqInventoryList from './component/hq/Inventory/HqInventoryList';
+import HqInventoryExpiration from './component/hq/Inventory/HqInventoryExpiration';
+import HqDisposalList from './component/hq/Inventory/HqDisposalList';
 import HqIngredientSetting from './component/hq/Inventory/HqIngredientSetting';
-import IngredientInventoryRecord from './component/hq/Inventory/IngredientInventoryRecord';
+import HqInventoryRecord from './component/hq/Inventory/HqInventoryRecord';
 
 import StoreInventoryList from './component/store/Inventory/StoreInventoryList';
 import StoreInventoryExpiration from './component/store/Inventory/StoreInventoryExpiration';
 import StoreDisposalList from './component/store/Inventory/StoreDisposalList';
 import StoreIngredientSetting from './component/store/Inventory/StoreIngredientSetting';
-import StoreIngredientInventoryRecord from './component/store/Inventory/StoreIngredientInventoryRecord';
+import StoreInventoryRecord from './component/store/Inventory/StoreInventoryRecord';
 
 import HqNoticeList from './component/hq/Notice/HqNoticeList';
 import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
 
-
-
+import HqComplaintList from './component/hq/Complaint/HqComplaintList';
+import HqComplaintDetail from './component/hq/Complaint/HqComplaintDetail';
 
 function App() {
 
   return (
     <>
-     {/* <Header/> */}
+     <Header/>
      <Routes>
         <Route path='/AllMenus' element={<AllMenus/>}/>
 
-        <Route path='/hq/InventoryList' element={<InventoryList/>}/>
-        <Route path='/hq/InventoryExpiration' element={<InventoryExpiration/>}/>
-        <Route path='/hq/DisposalList' element={<DisposalList/>}/>
+        <Route path='/hq/HqInventoryList' element={<HqInventoryList/>}/>
+        <Route path='/hq/HqInventoryExpiration' element={<HqInventoryExpiration/>}/>
+        <Route path='/hq/HqDisposalList' element={<HqDisposalList/>}/>
         <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting/>}/>
-        <Route path='/hq/IngredientInventoryRecord' element={<IngredientInventoryRecord/>}/>
+        <Route path='/hq/HqInventoryRecord' element={<HqInventoryRecord/>}/>
 
+        <Route path='/hq/HqNoticeList' element ={<HqNoticeList/>}/>
+        <Route path='/hq/HqNoticeDetail' element ={<HqNoticeDetail/>}/>
+        <Route path='/hq/HqComplaintList' element ={<HqComplaintList/>}/>
+        <Route path='/hq/HqComplaintDetail' element ={<HqComplaintDetail/>}/>
 
         <Route path='/store/StoreInventoryList' element={<StoreInventoryList/>}/>
         <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration/>}/>
         <Route path='/store/StoreDisposalList' element={<StoreDisposalList/>}/>
         <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting/>}/>
-        <Route path='/store/StoreIngredientInventoryRecord' element={<StoreIngredientInventoryRecord/>}/>
+        <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord/>}/>
         
 
-        <Route path='/hq/HqNoticeList' element ={<HqNoticeList/>}/>
-        <Route path='/hq/HqNoticeDetail' element ={<HqNoticeDetail/>}/>
 
         <Route path="/mainPage" element={<MainPage />} />
         <Route path="/brandIntro" element={<BrandIntro />}/>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./IngredientInventoryRecord.css";
+import "./StoreInventoryRecord.css";
 
 const sampleIngredients = [
   { i_id: "101", name: "닭가슴살", category: "단백질" },
@@ -12,7 +12,7 @@ const sampleIngredients = [
 // 카테고리 목록 생성 ("전체" 포함)
 const categories = ["전체", ...new Set(sampleIngredients.map((i) => i.category))];
 
-export default function IngredientInventoryRecord() {
+export default function StoreInventoryRecord() {
   const [records, setRecords] = useState([
     {
       id: 1,

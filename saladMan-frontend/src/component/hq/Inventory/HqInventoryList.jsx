@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { atom, useAtom } from 'jotai';
-import './InventoryList.css';
+import './HqInventoryList.css';
 
 // --- Jotai atoms ---
 const inventoryAtom = atom([
@@ -18,7 +18,7 @@ const categories = ['베이스채소', '단백질', '토핑', '드레싱'];
 const units = ['g', 'kg', 'ml', 'ea'];
 
 // --- 컴포넌트 ---
-export default function InventoryList() {
+export default function HqInventoryList() {
   const [inventory, setInventory] = useAtom(inventoryAtom);
   const [filters, setFilters] = useAtom(filtersAtom);
   const [isEditMode, setIsEditMode] = useAtom(isEditModeAtom);
