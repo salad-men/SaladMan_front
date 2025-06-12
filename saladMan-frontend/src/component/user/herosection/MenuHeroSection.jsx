@@ -5,6 +5,7 @@ const MenuHeroSection= () =>{
     return (
     <div className= {styles.heroSection}>
         <h1 className= {styles.title}>메뉴</h1>
+        <br />
             <p className={styles.subtitle}>
                 <a href='/brandIntro'>샐러볼</a> 
                 <span className={styles.divider}>ㅣ</span> 
