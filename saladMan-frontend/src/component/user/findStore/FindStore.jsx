@@ -1,6 +1,5 @@
 // src/components/FindStore.jsx
 import React, { useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
 import styles from "./FindStore.module.css";
 
 const storeData = [
