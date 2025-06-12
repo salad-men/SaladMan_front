@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Menu.module.css"; // CSS 모듈 import
+import styles from "./menu.module.css"; // CSS 모듈 import
 
 const mockMenus = [
   { id: 1, titleKor: "직화 닭다리살 포케", imageSrc: "/1.png" },
