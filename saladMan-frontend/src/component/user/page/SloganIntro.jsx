@@ -1,4 +1,4 @@
-import '../Slogan/SloganIntro.module.css'
+import '../slogan/SloganIntro.module.css'
 import '../common/Header.css';
 import '../herosection/Herosection.module.css'
 import '../common/Footer.css'
