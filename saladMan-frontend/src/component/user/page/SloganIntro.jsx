@@ -1,5 +1,5 @@
 import '../Slogan/SloganIntro.module.css'
-import '../common/Header.css';
+import '../common/Header.module.css';
 import '../herosection/Herosection.module.css'
 import '../common/Footer.css'
 

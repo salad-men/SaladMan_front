@@ -5,7 +5,9 @@ import SloganIntro from './component/user/page/SloganIntro';
 import MenuPage from './component/user/page/Menu';
 import Nutrition from './component/user/page/Nutrition';
 import FindStorePage from './component/user/page/FindStore';
-import NewsPage from './component/user/page/News';
+import NewsPage from './component/user/page/NewsPage';
+import PraiseStorePage from './component/user/page/PraiseStorePage';
+import EventPage from './component/user/page/EventPage';
 
 import Header from './component/hq/Header'
 import AllMenus from './component/hq/AllMenus';
@@ -25,11 +27,13 @@ import HqNoticeList from './component/hq/Notice/HqNoticeList';
 import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
 
 
+
+
 function App() {
 
   return (
     <>
-     <Header/>
+     {/* <Header/> */}
      <Routes>
         <Route path='/AllMenus' element={<AllMenus/>}/>
 
@@ -57,6 +61,9 @@ function App() {
         <Route path="/nutritionPage" element={<Nutrition />}/>
         <Route path="/findStore" element={<FindStorePage/>}/>
         <Route path="/News" element={<NewsPage/>}/>
+        <Route path="/PraiseStore" element={<PraiseStorePage/>}/>
+        <Route path="/Event" element={<EventPage/>}/>
+        <Route path="FindStore" element={<FindStorePage/>}/>
 
      </Routes>
     </>

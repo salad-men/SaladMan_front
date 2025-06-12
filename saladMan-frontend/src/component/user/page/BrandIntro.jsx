@@ -1,6 +1,6 @@
 import React from 'react';
 import '../brand/BrandIntro.module.css'
-import '../common/Header.css';
+import '../common/Header.module.css';
 import '../herosection/Herosection.module.css'
 import '../common/Footer.css';
 

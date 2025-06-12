@@ -1,4 +1,4 @@
-import '../common/Header.css';
+import '../common/Header.module.css';
 import '../common/Footer.css';
 import '../herosection/Herosection.module.css'
 

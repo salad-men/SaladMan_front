@@ -5,7 +5,7 @@ import User from './User.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <User />
+    {/* <User /> */}
     <App />
   </BrowserRouter>,
 )
