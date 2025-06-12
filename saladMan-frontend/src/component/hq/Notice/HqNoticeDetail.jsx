@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./HqNoticeDetail.css";
 
-export default function NoticeDetail() {
+export default function HqNoticeDetail() {
   // 공지사항 초기 데이터
   const initialNotice = {
     title: "[공지] 샐러드 배송 지역 확대 안내",

@@ -5,6 +5,7 @@ import '../herosection/HeroSection.module.css'
 import Header from "../common/Header"
 import NutritionHeroSection from "../herosection/NutritionHeroSection";
 import Footer from '../common/Footer';
+import Nutrition from '../nutrition/Nutrition';
 
 const NutritionPage = () => {
 
@@ -13,6 +14,7 @@ const NutritionPage = () => {
         <>
         <Header staticScrolled={true} />
         <NutritionHeroSection />
+        <Nutrition/>
         <Footer />
 
         </>

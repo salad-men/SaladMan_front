@@ -1,0 +1,42 @@
+.container {
+  padding: 24px;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.tab {
+  padding: 10px 20px;
+  margin-right: 8px;
+  background: #eee;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.tab.active {
+  background: #4D774E;
+  color: white;
+  
+}
+
+.table {
+  width: 50%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}

@@ -1,0 +1,83 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #333;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: #2d6a4f;
+  margin-bottom: 2rem;
+}
+
+.header {
+  border-top: 2px solid #444;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+.subject {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+ul {
+  margin: 1rem 0;
+  padding-left: 1.2rem;
+}
+
+ul li {
+  margin-bottom: 0.5rem;
+  list-style: disc;
+}
+
+.note {
+  font-size: 0.95rem;
+  color: #444;
+  background: #f9f9f9;
+  padding: 0.8rem;
+  border-left: 4px solid #2d6a4f;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.buttonGreen {
+  background-color: #2d6a4f;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.buttonGray {
+  background-color: #ddd;
+  color: #333;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+}

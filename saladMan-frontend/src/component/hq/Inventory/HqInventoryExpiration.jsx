@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { atom, useAtom } from "jotai";
-import "./InventoryExpiration.css";
+import "./HqInventoryExpiration.css";
 
 const storeAtom = atom("all");
 const categoryAtom = atom("all");
@@ -97,7 +97,7 @@ const inventoryAtom = atom([
 
 const selectedIdsAtom = atom([]);
 
-export default function InventoryExpiration() {
+export default function HqInventoryExpiration() {
   const [store, setStore] = useAtom(storeAtom);
   const [category, setCategory] = useAtom(categoryAtom);
   const [keyword, setKeyword] = useAtom(keywordAtom);

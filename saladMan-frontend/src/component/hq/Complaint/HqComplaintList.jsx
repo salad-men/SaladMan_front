@@ -14,7 +14,7 @@ const initialComplaints = [
   { id: 10, title: "[전달사항] 고객 불편사항 공유 및 개선 요청", author: "관리자", date: "2025-05-21", store: "강남점", status: "미열람" },
 ];
 
-export default function ComplaintList() {
+export default function HqComplaintList() {
   const [complaints, setComplaints] = useState(initialComplaints);
 
   // 내가 본 항목 클릭 시 '열람' 처리 (여기선 제목 클릭으로 간단 처리)

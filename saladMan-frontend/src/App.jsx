@@ -10,11 +10,20 @@ import PraiseStorePage from './component/user/page/PraiseStorePage';
 import EventPage from './component/user/page/EventPage';
 
 import Header from './component/hq/Header'
+<<<<<<< HEAD
 import InventoryList from './component/hq/Inventory/InventoryList';
 import InventoryExpiration from './component/hq/Inventory/InventoryExpiration';
 import DisposalList from './component/hq/Inventory/DisposalList';
+=======
+import AllMenus from './component/hq/AllMenus';
+
+
+import HqInventoryList from './component/hq/Inventory/HqInventoryList';
+import HqInventoryExpiration from './component/hq/Inventory/HqInventoryExpiration';
+import HqDisposalList from './component/hq/Inventory/HqDisposalList';
+>>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
 import HqIngredientSetting from './component/hq/Inventory/HqIngredientSetting';
-import IngredientInventoryRecord from './component/hq/Inventory/IngredientInventoryRecord';
+import HqInventoryRecord from './component/hq/Inventory/HqInventoryRecord';
 
 
 import HqLayout from './component/hq/HqLayout';
@@ -31,11 +40,15 @@ import StoreInventoryList from './component/store/Inventory/StoreInventoryList';
 import StoreInventoryExpiration from './component/store/Inventory/StoreInventoryExpiration';
 import StoreDisposalList from './component/store/Inventory/StoreDisposalList';
 import StoreIngredientSetting from './component/store/Inventory/StoreIngredientSetting';
-import StoreIngredientInventoryRecord from './component/store/Inventory/StoreIngredientInventoryRecord';
+import StoreInventoryRecord from './component/store/Inventory/StoreInventoryRecord';
 
 import HqNoticeList from './component/hq/Notice/HqNoticeList';
 import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
+import NewsDetailPage from './component/user/page/NewDetailPage';
+import KioskPage from './component/user/page/KioskPage';
+import KioskMenuPage from './component/user/page/KioskMenuPage';
 
+<<<<<<< HEAD
 import StoreRegister from './component/hq/storeManagement/StoreRegister'
 import EmployeeRegister from './component/hq/storeManagement/EmployeeRegister'
 import EmployeeList from './component/hq/storeManagement/EmployeeList'
@@ -52,22 +65,31 @@ import StockLog from './component/store/order/StockLog';
 import EmpSchedule from './component/store/storeManagement/empSchedule';
 
 
+=======
+import HqComplaintList from './component/hq/Complaint/HqComplaintList';
+import HqComplaintDetail from './component/hq/Complaint/HqComplaintDetail';
+>>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
 
 function App() {
 
   return (
     <>
+<<<<<<< HEAD
 
      {/* <Header/> */}
+=======
+     <Header/>
+>>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
      <Routes>
         <Route path='/AllMenus' element={<AllMenus/>}/>
 
-        <Route path='/hq/InventoryList' element={<InventoryList/>}/>
-        <Route path='/hq/InventoryExpiration' element={<InventoryExpiration/>}/>
-        <Route path='/hq/DisposalList' element={<DisposalList/>}/>
+        <Route path='/hq/HqInventoryList' element={<HqInventoryList/>}/>
+        <Route path='/hq/HqInventoryExpiration' element={<HqInventoryExpiration/>}/>
+        <Route path='/hq/HqDisposalList' element={<HqDisposalList/>}/>
         <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting/>}/>
-        <Route path='/hq/IngredientInventoryRecord' element={<IngredientInventoryRecord/>}/>
+        <Route path='/hq/HqInventoryRecord' element={<HqInventoryRecord/>}/>
 
+<<<<<<< HEAD
         <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
         <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
         <Route path='/store/StoreDisposalList' element={<StoreDisposalList />} />
@@ -86,10 +108,34 @@ function App() {
         <Route path="/menuPage" element={<MenuPage/>}/>
         <Route path="/nutritionPage" element={<Nutrition />}/>
         <Route path="/findStore" element={<FindStorePage/>}/>
+=======
+        <Route path='/hq/HqNoticeList' element ={<HqNoticeList/>}/>
+        <Route path='/hq/HqNoticeDetail' element ={<HqNoticeDetail/>}/>
+        <Route path='/hq/HqComplaintList' element ={<HqComplaintList/>}/>
+        <Route path='/hq/HqComplaintDetail' element ={<HqComplaintDetail/>}/>
+
+        <Route path='/store/StoreInventoryList' element={<StoreInventoryList/>}/>
+        <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration/>}/>
+        <Route path='/store/StoreDisposalList' element={<StoreDisposalList/>}/>
+        <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting/>}/>
+        <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord/>}/>
+        
+
+
+        <Route path="/MainPage" element={<MainPage />} />
+        <Route path="/BrandIntro" element={<BrandIntro />}/>
+        <Route path="/SloganIntro" element={<SloganIntro/>}/>
+        <Route path="/MenuPage" element={<MenuPage/>}/>
+        <Route path="/NutritionPage" element={<Nutrition />}/>
+        <Route path="/FindStore" element={<FindStorePage/>}/>
+>>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
         <Route path="/News" element={<NewsPage/>}/>
+        <Route path="/NewsDetail" element={<NewsDetailPage/>}/>
         <Route path="/PraiseStore" element={<PraiseStorePage/>}/>
         <Route path="/Event" element={<EventPage/>}/>
-        <Route path="FindStore" element={<FindStorePage/>}/>
+        <Route path="/FindStore" element={<FindStorePage/>}/>
+        <Route path="/Kiosk" element={<KioskPage/>}/>
+        <Route path="/KioskMenu" element={<KioskMenuPage/>}/>
 
         {/*본사 매장관리 */}
         <Route path="/hq/storeRegister" element={<StoreRegister />} />

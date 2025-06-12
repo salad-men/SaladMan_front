@@ -7,20 +7,16 @@ const Header = () => {
             <div className="header">
                 <div className="nav">
                     <div className="dropdown-container">
-                        <a href="/hq/InventoryList">재고</a>
-                            <div className="dropdown-container">
-                                <a href="/hq/InventoryList">재고</a>
+                        <a href="/hq/HqInventoryList">재고</a>
                                 <div className="dropdown">
                                     <ul>
-                                        <li><a href="/hq/InventoryList">전체 재고 조회</a></li>
-                                        <li><a href="#">재고 입출고 내역</a></li>
-                                        <li><a href="/InventoryExpiration">유통기한 조회</a></li>
-                                        <li><a href="#">폐기 목록 조회</a></li>
-                                        <li><a href="#">매장별 재료 설정</a></li>
+                                        <li><a href="/hq/HqInventoryList">전체 재고 조회</a></li>
+                                        <li><a href="/hq/HqInventoryRecord">재고 입출고 내역</a></li>
+                                        <li><a href="/hq/HqInventoryExpiration">유통기한 조회</a></li>
+                                        <li><a href="/hq/HqDisposalList">폐기 목록 조회</a></li>
+                                        <li><a href="/hq/HqIngredientSetting">매장별 재료 설정</a></li>
                                     </ul>
-                                </div>  
-                            </div>
-
+                                </div>
                     </div>
                     <div className="dropdown-container">
                         <a href="#">발주</a>
@@ -75,11 +71,11 @@ const Header = () => {
                         </div> 
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">공지사항</a>
+                        <a href="/hq/HqNoticeList">공지사항</a>
                         <div className="dropdown">
                             <ul>
-                                <li><a href="#">공지사항 조회</a></li>
-                                <li><a href="#">불편사항 조회</a></li>
+                                <li><a href="/hq/HqNoticeList">공지사항 조회</a></li>
+                                <li><a href="/hq/HqComplaintList">불편사항 조회</a></li>
                                 <li><a href="#">쪽지</a></li>
                                 <li><a href="#">알림 목록</a></li>
                             </ul>
