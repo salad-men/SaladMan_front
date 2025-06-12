@@ -11,16 +11,18 @@
   transition: background 0.7s ease;
   z-index: 1000;
   font-family: 'Noto Sans KR', sans-serif;
-  
 }
 
-.layout-container {
+.layoutContainer {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.headerContent {
 }
 
 .scrolled {
@@ -32,8 +34,9 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: white;
-  margin-right:300px;
-  margin-left: 0px;
+  margin-right: 250px;
+  margin-left: -120px;
+  text-decoration: none;
 }
 
 .nav a {

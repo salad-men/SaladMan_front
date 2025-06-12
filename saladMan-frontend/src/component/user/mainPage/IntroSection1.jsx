@@ -30,7 +30,7 @@ const IntroSection = () => {
       ref={sectionRef}
     >
       <div className="imageBox">
-        <img src="introSalad.jpg" alt="샐러드" />
+        <img src="/introSalad.jpg" alt="샐러드" />
       </div>
       <div className="textBox">
         <h2>당신을 위한 가장 작은 배려, 한 끼 샐러드</h2>

@@ -5,7 +5,9 @@ import SloganIntro from './component/user/page/SloganIntro';
 import MenuPage from './component/user/page/Menu';
 import Nutrition from './component/user/page/Nutrition';
 import FindStorePage from './component/user/page/FindStore';
-import NewsPage from './component/user/page/News';
+import NewsPage from './component/user/page/NewsPage';
+import PraiseStorePage from './component/user/page/PraiseStorePage';
+import EventPage from './component/user/page/EventPage';
 
 import Header from './component/hq/Header'
 import InventoryList from './component/hq/Inventory/InventoryList';
@@ -49,20 +51,22 @@ import OrderSettings from './component/store/order/OrderSettings';
 import StockLog from './component/store/order/StockLog';
 import EmpSchedule from './component/store/storeManagement/empSchedule';
 
+
+
 function App() {
 
   return (
     <>
 
+     {/* <Header/> */}
+     <Routes>
+        <Route path='/AllMenus' element={<AllMenus/>}/>
 
-      <Header />
-      <Routes>
-
-        <Route path='/hq/InventoryList' element={<InventoryList />} />
-        <Route path='/hq/InventoryExpiration' element={<InventoryExpiration />} />
-        <Route path='/hq/DisposalList' element={<DisposalList />} />
-        <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting />} />
-        <Route path='/hq/IngredientInventoryRecord' element={<IngredientInventoryRecord />} />
+        <Route path='/hq/InventoryList' element={<InventoryList/>}/>
+        <Route path='/hq/InventoryExpiration' element={<InventoryExpiration/>}/>
+        <Route path='/hq/DisposalList' element={<DisposalList/>}/>
+        <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting/>}/>
+        <Route path='/hq/IngredientInventoryRecord' element={<IngredientInventoryRecord/>}/>
 
         <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
         <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
@@ -75,12 +79,17 @@ function App() {
         <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
 
         <Route path="/mainPage" element={<MainPage />} />
-        <Route path="/brandIntro" element={<BrandIntro />} />
-        <Route path="/sloganIntro" element={<SloganIntro />} />
-        <Route path="/menuPage" element={<MenuPage />} />
-        <Route path="/nutritionPage" element={<Nutrition />} />
-        <Route path="/findStore" element={<FindStorePage />} />
-        <Route path="/News" element={<NewsPage />} />
+
+
+        <Route path="/brandIntro" element={<BrandIntro />}/>
+        <Route path="/sloganIntro" element={<SloganIntro/>}/>
+        <Route path="/menuPage" element={<MenuPage/>}/>
+        <Route path="/nutritionPage" element={<Nutrition />}/>
+        <Route path="/findStore" element={<FindStorePage/>}/>
+        <Route path="/News" element={<NewsPage/>}/>
+        <Route path="/PraiseStore" element={<PraiseStorePage/>}/>
+        <Route path="/Event" element={<EventPage/>}/>
+        <Route path="FindStore" element={<FindStorePage/>}/>
 
         {/*본사 매장관리 */}
         <Route path="/hq/storeRegister" element={<StoreRegister />} />

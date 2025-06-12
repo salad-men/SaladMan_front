@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../common/Header.css';
+import '../common/Header.module.css';
 import '../common/Footer.css';
 import '../mainPage/BestMenuSection.css';
 import '../mainPage/SearchStore.css';
