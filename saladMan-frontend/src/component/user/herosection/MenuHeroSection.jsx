@@ -13,7 +13,7 @@ const MenuHeroSection= () =>{
                 <a href='/sloganIntro'>비건볼</a>
             </p>
         <div className={styles.imageBanner}>
-            <img src="Menu.jpg" alt="메뉴" />
+            <img src="/Menu.jpg" alt="메뉴" />
             <span className={styles.Overlay}>Signature</span>
         </div>
     </div>

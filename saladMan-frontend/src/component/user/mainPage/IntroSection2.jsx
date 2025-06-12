@@ -35,7 +35,7 @@ const WorkingSolutionSection = () => {
         <button>자세히 보기</button>
       </div>
       <div className="imageBox">
-        <img src="./store.jpg" alt="매장 사진" />
+        <img src="/store.jpg" alt="매장 사진" />
       </div>
     </section>
   );
