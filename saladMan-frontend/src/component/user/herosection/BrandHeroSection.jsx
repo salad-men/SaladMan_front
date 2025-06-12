@@ -11,7 +11,7 @@ return (
         <a href='/brandIntro'>스토리</a> <span className={styles.divider}>ㅣ</span> <a href='/sloganIntro'>슬로건</a>
     </p>
      <div className={styles.imageBanner}>
-        <img src="brand.jpg" alt="샐러드" />
+        <img src="/brand.jpg" alt="샐러드" />
         <span className={styles.Overlay}>SaladMan</span>
      </div>
     </div>

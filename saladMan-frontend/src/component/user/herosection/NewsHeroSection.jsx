@@ -14,7 +14,7 @@ const NewsHeroSection= () =>{
                 <a href='/PraiseStore'>칭찬매장</a>
             </p>
         <div className={styles.imageBanner}>
-            <img src="News.jpg" alt="새소식" />
+            <img src="/News.jpg" alt="새소식" />
             <span className={styles.Overlay}>News</span>
         </div>
     </div>

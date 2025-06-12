@@ -1,0 +1,54 @@
+name: React Build & Deploy To S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2) Node.js 설치
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3) 의존성 설치
+      - name: Install dependencies
+        working-directory: saladMan-frontend
+        run: npm install
+
+      # 4) 빌드 실행
+      - name: Build project
+        working-directory: saladMan-frontend
+        run: npm run build
+
+      # 5) 빌드 결과 확인 (디버깅용)
+      - name: Check build output
+        working-directory: saladMan-frontend
+        run: ls -l dist
+
+      # 6) AWS 자격증명 설정
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ap-northeast-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # 7) S3 기존 파일 삭제 및 새 빌드 업로드
+      - name: Sync build to S3 bucket
+        run: |
+          aws s3 rm --recursive s3://saladman-web
+          aws s3 cp ./saladMan-frontend/dist s3://saladman-web/ --recursive
+
+      # 8) CloudFront 캐시 무효화
+      - name: Invalidate CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id E3P9MO1X33X9JJ --paths "/*"
