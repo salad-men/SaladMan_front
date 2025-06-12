@@ -25,36 +25,43 @@ body {
     position: relative;
     text-align: center;
 }
+
 .dropdown-container {
-  position: relative;
+    position: relative;
 }
+
 .dropdown-container:hover .dropdown {
-  display: block;
+    display: block;
 }
+
 .dropdown {
-  display: none;
-  width: 170px;
-  position: absolute;
-  top: 30px;
-  left: -50px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  z-index: 10;
-  padding: 0 10px;
-  border: 1px solid #ddd;
+    display: none;
+    width: 170px;
+    position: absolute;
+    top: 30px;
+    left: -50px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding: 0 10px;
+    border: 1px solid #ddd;
 }
+
 .dropdown a {
     text-decoration: none;
     color: black;
 }
+
 .dropdown ul {
     padding: 0;
     list-style: none;
 }
+
 .dropdown li {
     padding: 5px;
     width: fit-content;
 }
+
 .user-info {
     margin: auto 100px;
     font-size: 0.9rem;

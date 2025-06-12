@@ -9,19 +9,11 @@ import NewsPage from './component/user/page/NewsPage';
 import PraiseStorePage from './component/user/page/PraiseStorePage';
 import EventPage from './component/user/page/EventPage';
 
-import Header from './component/hq/Header'
-<<<<<<< HEAD
-import InventoryList from './component/hq/Inventory/InventoryList';
-import InventoryExpiration from './component/hq/Inventory/InventoryExpiration';
-import DisposalList from './component/hq/Inventory/DisposalList';
-=======
-import AllMenus from './component/hq/AllMenus';
 
 
 import HqInventoryList from './component/hq/Inventory/HqInventoryList';
 import HqInventoryExpiration from './component/hq/Inventory/HqInventoryExpiration';
 import HqDisposalList from './component/hq/Inventory/HqDisposalList';
->>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
 import HqIngredientSetting from './component/hq/Inventory/HqIngredientSetting';
 import HqInventoryRecord from './component/hq/Inventory/HqInventoryRecord';
 
@@ -48,7 +40,6 @@ import NewsDetailPage from './component/user/page/NewDetailPage';
 import KioskPage from './component/user/page/KioskPage';
 import KioskMenuPage from './component/user/page/KioskMenuPage';
 
-<<<<<<< HEAD
 import StoreRegister from './component/hq/storeManagement/StoreRegister'
 import EmployeeRegister from './component/hq/storeManagement/EmployeeRegister'
 import EmployeeList from './component/hq/storeManagement/EmployeeList'
@@ -65,37 +56,30 @@ import StockLog from './component/store/order/StockLog';
 import EmpSchedule from './component/store/storeManagement/empSchedule';
 
 
-=======
 import HqComplaintList from './component/hq/Complaint/HqComplaintList';
 import HqComplaintDetail from './component/hq/Complaint/HqComplaintDetail';
->>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
+import Header from './component/hq/Header';
 
 function App() {
 
   return (
     <>
-<<<<<<< HEAD
 
-     {/* <Header/> */}
-=======
-     <Header/>
->>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
-     <Routes>
-        <Route path='/AllMenus' element={<AllMenus/>}/>
+      <Header/>
 
-        <Route path='/hq/HqInventoryList' element={<HqInventoryList/>}/>
-        <Route path='/hq/HqInventoryExpiration' element={<HqInventoryExpiration/>}/>
-        <Route path='/hq/HqDisposalList' element={<HqDisposalList/>}/>
-        <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting/>}/>
-        <Route path='/hq/HqInventoryRecord' element={<HqInventoryRecord/>}/>
+      <Routes>
+        <Route path='/AllMenus' element={<AllMenus />} />
 
-<<<<<<< HEAD
+        <Route path='/hq/HqInventoryList' element={<HqInventoryList />} />
+        <Route path='/hq/HqInventoryExpiration' element={<HqInventoryExpiration />} />
+        <Route path='/hq/HqDisposalList' element={<HqDisposalList />} />
+        <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting />} />
+        <Route path='/hq/HqInventoryRecord' element={<HqInventoryRecord />} />
+
         <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
         <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
         <Route path='/store/StoreDisposalList' element={<StoreDisposalList />} />
         <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting />} />
-        <Route path='/store/StoreIngredientInventoryRecord' element={<StoreIngredientInventoryRecord />} />
-
 
         <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
         <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
@@ -103,39 +87,37 @@ function App() {
         <Route path="/mainPage" element={<MainPage />} />
 
 
-        <Route path="/brandIntro" element={<BrandIntro />}/>
-        <Route path="/sloganIntro" element={<SloganIntro/>}/>
-        <Route path="/menuPage" element={<MenuPage/>}/>
-        <Route path="/nutritionPage" element={<Nutrition />}/>
-        <Route path="/findStore" element={<FindStorePage/>}/>
-=======
-        <Route path='/hq/HqNoticeList' element ={<HqNoticeList/>}/>
-        <Route path='/hq/HqNoticeDetail' element ={<HqNoticeDetail/>}/>
-        <Route path='/hq/HqComplaintList' element ={<HqComplaintList/>}/>
-        <Route path='/hq/HqComplaintDetail' element ={<HqComplaintDetail/>}/>
+        <Route path="/brandIntro" element={<BrandIntro />} />
+        <Route path="/sloganIntro" element={<SloganIntro />} />
+        <Route path="/menuPage" element={<MenuPage />} />
+        <Route path="/nutritionPage" element={<Nutrition />} />
+        <Route path="/findStore" element={<FindStorePage />} />
+        <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
+        <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
+        <Route path='/hq/HqComplaintList' element={<HqComplaintList />} />
+        <Route path='/hq/HqComplaintDetail' element={<HqComplaintDetail />} />
 
-        <Route path='/store/StoreInventoryList' element={<StoreInventoryList/>}/>
-        <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration/>}/>
-        <Route path='/store/StoreDisposalList' element={<StoreDisposalList/>}/>
-        <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting/>}/>
-        <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord/>}/>
-        
+        <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
+        <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
+        <Route path='/store/StoreDisposalList' element={<StoreDisposalList />} />
+        <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting />} />
+        <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord />} />
+
 
 
         <Route path="/MainPage" element={<MainPage />} />
-        <Route path="/BrandIntro" element={<BrandIntro />}/>
-        <Route path="/SloganIntro" element={<SloganIntro/>}/>
-        <Route path="/MenuPage" element={<MenuPage/>}/>
-        <Route path="/NutritionPage" element={<Nutrition />}/>
-        <Route path="/FindStore" element={<FindStorePage/>}/>
->>>>>>> 2d3bfaddde8950ca0f2f0279a7e183ae4219145c
-        <Route path="/News" element={<NewsPage/>}/>
-        <Route path="/NewsDetail" element={<NewsDetailPage/>}/>
-        <Route path="/PraiseStore" element={<PraiseStorePage/>}/>
-        <Route path="/Event" element={<EventPage/>}/>
-        <Route path="/FindStore" element={<FindStorePage/>}/>
-        <Route path="/Kiosk" element={<KioskPage/>}/>
-        <Route path="/KioskMenu" element={<KioskMenuPage/>}/>
+        <Route path="/BrandIntro" element={<BrandIntro />} />
+        <Route path="/SloganIntro" element={<SloganIntro />} />
+        <Route path="/MenuPage" element={<MenuPage />} />
+        <Route path="/NutritionPage" element={<Nutrition />} />
+        <Route path="/FindStore" element={<FindStorePage />} />
+        <Route path="/News" element={<NewsPage />} />
+        <Route path="/NewsDetail" element={<NewsDetailPage />} />
+        <Route path="/PraiseStore" element={<PraiseStorePage />} />
+        <Route path="/Event" element={<EventPage />} />
+        <Route path="/FindStore" element={<FindStorePage />} />
+        <Route path="/Kiosk" element={<KioskPage />} />
+        <Route path="/KioskMenu" element={<KioskMenuPage />} />
 
         {/*본사 매장관리 */}
         <Route path="/hq/storeRegister" element={<StoreRegister />} />
@@ -144,7 +126,7 @@ function App() {
         <Route path="/hq/empList" element={<EmployeeList />} />
         {/*매장 매장관리*/}
         <Route path="/store/empSchedule" element={<EmpSchedule />} />
-        
+
         {/*본사 발주*/}
         <Route path="/hq/orderRequest" element={<OrderRequestList />} />
         <Route path="/hq/orderRequestDetail" element={<OrderRequestDetail />} />
