@@ -31,7 +31,7 @@ const News = () => {
           {notices.map((notice) => (
             <tr key={notice.id}>
               <td>{notice.id}</td>
-              <td>{notice.title}</td>
+              <td><a href="/NewsDetail">{notice.title}</a></td>
               <td>관리자</td>
               <td>{notice.date}</td>
               <td>{notice.views.toLocaleString()}</td>

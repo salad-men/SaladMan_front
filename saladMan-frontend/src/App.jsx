@@ -25,6 +25,7 @@ import StoreIngredientInventoryRecord from './component/store/Inventory/StoreIng
 
 import HqNoticeList from './component/hq/Notice/HqNoticeList';
 import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
+import NewsDetailPage from './component/user/page/NewDetailPage';
 
 
 
@@ -61,9 +62,11 @@ function App() {
         <Route path="/nutritionPage" element={<Nutrition />}/>
         <Route path="/findStore" element={<FindStorePage/>}/>
         <Route path="/News" element={<NewsPage/>}/>
+        <Route path="/NewsDetail" element={<NewsDetailPage/>}/>
         <Route path="/PraiseStore" element={<PraiseStorePage/>}/>
         <Route path="/Event" element={<EventPage/>}/>
         <Route path="FindStore" element={<FindStorePage/>}/>
+
 
      </Routes>
     </>

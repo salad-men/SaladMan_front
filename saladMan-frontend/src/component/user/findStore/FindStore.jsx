@@ -59,6 +59,7 @@ const FindStore = () => {
             />
           ))}
         </Map>
+        
       </div>
 
       {/* 리스트 영역 */}
@@ -82,6 +83,7 @@ const FindStore = () => {
         </ul>
       </div>
     </div>
+    
   );
 };
 

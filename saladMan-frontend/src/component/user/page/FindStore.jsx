@@ -8,7 +8,7 @@ const FindStorePage = () => {
         <>
         <Header staticScrolled={true}/>
         <StoreHeroSection/>
-        <FindStore/>
+        <FindStore />
         
         
         </>
