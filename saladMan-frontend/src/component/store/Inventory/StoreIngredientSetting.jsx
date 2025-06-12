@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { atom, useAtom } from 'jotai';
-import './StoreIngredientSetting.css';  
+import './StoreIngredientSetting.module.css';  
 
 const inventoryAtom = atom([
   { store: '본사', name: '로메인', category: '베이스채소', unit: 'kg', min: 100, max: 500, price: 180 },

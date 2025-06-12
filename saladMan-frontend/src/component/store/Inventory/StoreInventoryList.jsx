@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { atom, useAtom } from 'jotai';
-import './StoreInventoryList.css';
+import './StoreInventoryList.module.css';
 
 // --- Jotai atoms ---
 const inventoryAtom = atom([

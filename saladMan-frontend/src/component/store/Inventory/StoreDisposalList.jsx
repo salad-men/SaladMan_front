@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./StoreDisposalList.css";
+import "./StoreDisposalList.module.css";
 
 const initialData = [
   { id: 1, store: "본사", name: "렌틸콩", category: "단백질", unit: "kg", stock: 300, discardQty: 100, reason: "폐기 예정", discardDate: "2025-05-27", status: "완료", remark: "-" },

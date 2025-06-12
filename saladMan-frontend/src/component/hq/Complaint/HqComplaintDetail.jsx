@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./HqComplaintDetail.css";
+import "./HqComplaintDetail.module.css";
 
 export default function HqComplaintDetail({ initialComplaint, onBack }) {
   initialComplaint = initialComplaint || {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./HqComplaintList.css";
+import "./HqComplaintList.module.css";
 
 const initialComplaints = [
   { id: 1, title: "[불편사항] 강남점 매장이 더러워요.", author: "관리자", date: "2025-05-21", store: "강남점", status: "미열람" },

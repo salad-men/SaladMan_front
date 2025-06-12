@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./HqNoticeDetail.css";
+import "./HqNoticeDetail.module.css";
 
 export default function HqNoticeDetail() {
   // 공지사항 초기 데이터

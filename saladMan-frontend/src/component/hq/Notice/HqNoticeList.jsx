@@ -1,5 +1,5 @@
 import React from "react";
-import "./HqNoticeList.css";
+import "./HqNoticeList.module.css";
 
 const notices = [
   { id: 1, title: "[공지] 샐러드 배송 지역 확대 안내", author: "관리자", date: "2025-05-21" },

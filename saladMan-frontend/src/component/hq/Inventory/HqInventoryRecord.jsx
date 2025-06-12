@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./HqInventoryRecord.css";
+import "./HqInventoryRecord.module.css";
 
 const sampleIngredients = [
   { i_id: "101", name: "닭가슴살", category: "단백질" },
