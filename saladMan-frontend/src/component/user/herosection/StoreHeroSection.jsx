@@ -6,7 +6,7 @@ const StoreHeroSection= () =>{
     <div className= {styles.heroSection}>
         <h1 className= {styles.title}>매장찾기</h1>
         <div className={styles.imageBanner}>
-            <img src="FindStore.jpg" alt="매장찾기" />
+            <img src="/FindStore.jpg" alt="매장찾기" />
             <span className={styles.Overlay}>FindStore</span>
         </div>
     </div>
