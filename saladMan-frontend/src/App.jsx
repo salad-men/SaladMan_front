@@ -47,6 +47,7 @@ import OrderDetail from './component/store/order/OrderDetail';
 import StockInspection from './component/store/order/StockInspection';
 import OrderSettings from './component/store/order/OrderSettings';
 import StockLog from './component/store/order/StockLog';
+import EmpSchedule from './component/store/storeManagement/empSchedule';
 
 function App() {
 
@@ -81,11 +82,14 @@ function App() {
         <Route path="/findStore" element={<FindStorePage />} />
         <Route path="/News" element={<NewsPage />} />
 
-        {/* 매장관리 */}
+        {/*본사 매장관리 */}
         <Route path="/hq/storeRegister" element={<StoreRegister />} />
         <Route path="/hq/storeAccount" element={<StoreAccountList />} />
         <Route path="/hq/empRegister" element={<EmployeeRegister />} />
         <Route path="/hq/empList" element={<EmployeeList />} />
+        {/*매장 매장관리*/}
+        <Route path="/store/empSchedule" element={<EmpSchedule />} />
+        
         {/*본사 발주*/}
         <Route path="/hq/orderRequest" element={<OrderRequestList />} />
         <Route path="/hq/orderRequestDetail" element={<OrderRequestDetail />} />
