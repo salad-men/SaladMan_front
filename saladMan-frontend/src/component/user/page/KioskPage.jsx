@@ -1,4 +1,4 @@
-import Kiosk from "../kiosk/kiosk";
+import Kiosk from "../kiosk/Kiosk";
 
 const KioskPage = () => {
     return (
