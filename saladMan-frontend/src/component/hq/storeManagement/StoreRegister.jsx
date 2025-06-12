@@ -36,22 +36,21 @@ export default function StoreRegister() {
         height: '480px',
     };
     useEffect(() => {
-        if (window.kakao && window.kakao.maps) {
-            const container = mapContainerRef.current;
-            const options = {
-                center: new window.kakao.maps.LatLng(37.5665, 126.9780),
-                level: 3
-            };
-            const map = new window.kakao.maps.Map(container, options);
+        if (!window.kakao || !window.kakao.maps || !mapContainerRef.current) return;
 
-            // 마커 추가
-            const markerPosition = new window.kakao.maps.LatLng(37.5665, 126.9780);
-            const marker = new window.kakao.maps.Marker({
-                position: markerPosition
-            });
-            marker.setMap(map);
-        }
-    }, []);
+        const container = mapContainerRef.current;
+        const options = {
+            center: new window.kakao.maps.LatLng(coords.lat, coords.lng),
+            level: 3
+        };
+
+        const map = new window.kakao.maps.Map(container, options);
+
+        const marker = new window.kakao.maps.Marker({
+            position: new window.kakao.maps.LatLng(coords.lat, coords.lng)
+        });
+        marker.setMap(map);
+    }, [coords]);
 
 
     const completeHandler = (data) => {
@@ -84,7 +83,10 @@ export default function StoreRegister() {
 
     return (
         <>
+
             <div>
+                <EmpSidebar />
+
                 <div className="storeRegisterContainer">
 
                     <div className="mainContent">
@@ -120,7 +122,7 @@ export default function StoreRegister() {
                                 <div
                                     ref={mapContainerRef}
                                     style={{ width: '500px', height: '400px' }}
-                                ></div>                                
+                                ></div>
                             </div>
 
                         </div>

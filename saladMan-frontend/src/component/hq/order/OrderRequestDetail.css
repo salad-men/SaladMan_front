@@ -4,9 +4,19 @@
     font-family: Arial, sans-serif;
 }
 
+
 .orderDetailContainer h2 {
     margin-bottom: 20px;
     font-size: 20px;
+}
+
+.orderDetailContent{
+        position: absolute;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    padding: 40px;
+    margin-left: 100px;
 }
 
 .orderInfo {

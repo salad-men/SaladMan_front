@@ -26,7 +26,7 @@ const Header = () => {
                         <a href="#">발주</a>
                         <div className="dropdown">
                             <ul>
-                                <li><a href="#">발주목록조회</a></li>
+                                <li><a href="/hq/orderRequest">발주목록조회</a></li>
                                 <li><a href="#">발주목록상세</a></li>
                                 <li><a href="#">발주신청</a></li>
                                 <li><a href="#">발주입고검수</a></li>

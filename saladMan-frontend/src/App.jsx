@@ -35,13 +35,13 @@ import HqNoticeList from './component/hq/Notice/HqNoticeList';
 import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
 
 import StoreRegister from './component/hq/storeManagement/StoreRegister'
-import EmpSidebar from './component/hq/storeManagement/EmpSidebar'
 import EmployeeRegister from './component/hq/storeManagement/EmployeeRegister'
 import EmployeeList from './component/hq/storeManagement/EmployeeList'
 import StoreAccountList from './component/hq/storeManagement/StoreAccountList'
-import OrderSidebar from './component/hq/order/OrderSidebar'
 import OrderRequestList from './component/hq/order/OrderRequestList'
 import OrderRequestDetail from './component/hq/order/OrderRequestDetail'
+import OrderItemManage from './component/hq/order/OrderItemManage'
+
 function App() {
 
   return (
@@ -75,18 +75,16 @@ function App() {
         <Route path="/findStore" element={<FindStorePage />} />
         <Route path="/News" element={<NewsPage />} />
 
-        <Route path="/hq/empSidebar/*" element={<EmpSidebar />}>
-          <Route path="storeRegister" element={<StoreRegister />} />
-          <Route path="storeAccount" element={<StoreAccountList />} />
-          <Route path="empRegister" element={<EmployeeRegister />} />
-          <Route path="empList" element={<EmployeeList />} />
-        </Route>
-
-        <Route path="/hq/orderSidebar/*" element={<OrderSidebar />}>
-          <Route path="orderRequest" element={<OrderRequestList />} />
-          <Route path="orderRequestDetail" element={<OrderRequestDetail />} />
-        </Route>
-
+        {/* 매장관리 */}
+        <Route path="/hq/storeRegister" element={<StoreRegister />} />
+        <Route path="/hq/storeAccount" element={<StoreAccountList />} />
+        <Route path="/hq/empRegister" element={<EmployeeRegister />} />
+        <Route path="/hq/empList" element={<EmployeeList />} />
+        {/*발주*/}
+        <Route path="/hq/orderRequest" element={<OrderRequestList />} />
+        <Route path="/hq/orderRequestDetail" element={<OrderRequestDetail />} />
+        <Route path="/hq/orderItemManage" element={<OrderItemManage />} />
+        
         <Route element={<HqLayout />}>
           <Route path='/hq/allMenus' element={<AllMenus />} />
           <Route path='/hq/updateMenu' element={<UpdateMenu />} />
