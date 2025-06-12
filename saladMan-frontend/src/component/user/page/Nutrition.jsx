@@ -1,6 +1,6 @@
 import '../common/Header.css';
 import '../common/Footer.css';
-import '../herosection/Herosection.module.css'
+import '../herosection/HeroSection.module.css'
 
 import Header from "../common/Header"
 import NutritionHeroSection from "../herosection/NutritionHeroSection";
