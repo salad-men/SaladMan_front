@@ -19,13 +19,13 @@ import HqInventoryRecord from './component/hq/Inventory/HqInventoryRecord';
 
 
 import HqLayout from './component/hq/HqLayout';
-import AllMenus from './component/hq/AllMenus';
-import UpdateMenu from './component/hq/UpdateMenu';
-import Recipe from './component/hq/Recipe';
+import AllMenus from './component/hq/Menus/AllMenus';
+import UpdateMenu from './component/hq/Menus/UpdateMenu';
+import Recipe from './component/hq/Menus/Recipe';
 import Login from './component/common/Login';
-import TotalSales from './component/hq/Totalsales';
-import StoreSales from './component/hq/Storesales';
-import StoreStock from './component/hq/StoreStock';
+import TotalSales from './component/hq/Sales/TotalSales';
+import StoreSales from './component/hq/Sales/Storesales';
+import StoreStock from './component/hq/StoreInquiry/StoreStock';
 
 
 import StoreInventoryList from './component/store/Inventory/StoreInventoryList';
