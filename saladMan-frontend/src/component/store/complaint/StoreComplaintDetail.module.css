@@ -1,0 +1,91 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 40px 40px 60px;
+  background-color: white;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2f4f27;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.writeDate {
+  font-size: 14px;
+  color: #555;
+  text-align: right;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+.detailTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  color: #333;
+  table-layout: fixed;
+}
+
+.tableHeader,
+.tableData {
+  border: 1px solid #ddd;
+  padding: 16px 20px;
+  vertical-align: top;
+}
+
+.tableHeader {
+  width: 120px;
+  background-color: #f4f4f4;
+  font-weight: 700;
+  text-align: left;
+  color: #2f4f27;
+  user-select: none;
+}
+
+.tableData {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.writer {
+  font-weight: 700;
+  color: #2f4f27;
+}
+
+.buttonGroup {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.listButton {
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  background-color: #d9d9d9;
+  color: #2f4f27;
+  transition: background-color 0.3s ease;
+}
+
+.listButton:hover {
+  background-color: #bfbfbf;
+}

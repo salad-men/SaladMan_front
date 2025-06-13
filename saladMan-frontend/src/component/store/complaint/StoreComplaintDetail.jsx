@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import NoticeSidebar from "../Notice/NoticeSidebar";
-import styles from "./HqComplaintDetail.module.css";
+import NoticeSidebar from "../notice/NoticeSidebar";
+import styles from "./StoreComplaintDetail.module.css";
 
-export default function HqComplaintDetail() {
+export default function HqComplaintDetailStore() {
   const navigate = useNavigate();
 
   const complaint = {
@@ -19,10 +19,6 @@ export default function HqComplaintDetail() {
 
   const handleListClick = () => {
     navigate(-1);
-  };
-
-  const handleSendClick = () => {
-    alert(`${complaint.branch} 지점으로 전달되었습니다.`);
   };
 
   return (
@@ -44,7 +40,9 @@ export default function HqComplaintDetail() {
             </tr>
             <tr>
               <th className={styles.tableHeader}>고객 닉네임</th>
-              <td className={`${styles.tableData} ${styles.writer}`}>{complaint.nickname}</td>
+              <td className={`${styles.tableData} ${styles.writer}`}>
+                {complaint.nickname}
+              </td>
             </tr>
             <tr>
               <th className={styles.tableHeader}>내용</th>
@@ -67,9 +65,6 @@ export default function HqComplaintDetail() {
         <div className={styles.buttonGroup}>
           <button className={styles.listButton} onClick={handleListClick}>
             목록
-          </button>
-          <button className={styles.sendButton} onClick={handleSendClick}>
-            전달
           </button>
         </div>
       </main>

@@ -64,8 +64,12 @@ import EmpSchedule from './component/store/storeManagement/empSchedule';
 
 import HqComplaintList from './component/hq/Complaint/HqComplaintList';
 import HqComplaintDetail from './component/hq/Complaint/HqComplaintDetail';
-import Header from './component/hq/HqHeader';
 import Notification from './component/hq/Notice/HqNotification';
+import StoreNoticeList from './component/store/notice/StoreNoticeList';
+import StoreNoticeDetail from './component/store/notice/StoreNoticeDetail';
+import StoreComplaintList from './component/store/complaint/StoreComplaintList';
+import StoreComplaintDetail from './component/store/complaint/StoreComplaintDetail';
+import Header from './component/hq/Header';
 
 function App() {
 
@@ -84,30 +88,27 @@ function App() {
         <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
         <Route path='/store/StoreDisposalList' element={<StoreDisposalList />} />
         <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting />} />
+        <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord />} />
 
         <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
         <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
 
-        <Route path="/mainPage" element={<MainPage />} />
+        <Route path='/store/StoreNoticeList' element={<StoreNoticeList />} />
+        <Route path='/store/StoreNoticeDetail' element={<StoreNoticeDetail />} />
 
+        <Route path='/hq/HqComplaintList' element={<HqComplaintList />} />
+        <Route path='/hq/HqComplaintDetail' element={<HqComplaintDetail />} />
+
+        <Route path='/store/StoreComplaintList' element={<StoreComplaintList />} />
+        <Route path='/store/StoreComplaintDetail' element={<StoreComplaintDetail />} /> 
+
+        <Route path="/mainPage" element={<MainPage />} />
 
         <Route path="/brandIntro" element={<BrandIntro />} />
         <Route path="/sloganIntro" element={<SloganIntro />} />
         <Route path="/menuPage" element={<MenuPage />} />
         <Route path="/nutritionPage" element={<Nutrition />} />
         <Route path="/findStore" element={<FindStorePage />} />
-        <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
-        <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
-        <Route path='/hq/HqComplaintList' element={<HqComplaintList />} />
-        <Route path='/hq/HqComplaintDetail' element={<HqComplaintDetail />} />
-
-        <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
-        <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
-        <Route path='/store/StoreDisposalList' element={<StoreDisposalList />} />
-        <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting />} />
-        <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord />} />
-
-
 
         <Route path="/MainPage" element={<MainPage />} />
         <Route path="/BrandIntro" element={<BrandIntro />} />

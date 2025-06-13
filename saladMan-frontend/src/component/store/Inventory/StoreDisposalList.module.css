@@ -1,0 +1,152 @@
+.container {
+  display: flex;
+}
+
+.content {
+  position: absolute;
+  top: 62px;
+  left: 200px;
+  width: calc(100% - 200px);
+  padding: 40px;
+  background-color: #f9fafb;
+  border-left: 1px solid #ddd;
+  box-sizing: border-box;
+  min-height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #3d5a40;
+  font-weight: bold;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.row label {
+  font-weight: bold;
+  font-size: 14px;
+  min-width: 30px;
+}
+
+.row input[type="date"],
+.row input[type="text"],
+.row select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.row input[type="date"]:focus,
+.row input[type="text"]:focus,
+.row select:focus {
+  border-color: #3d5a40;
+  outline: none;
+}
+
+.row button {
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: #3d5a40;
+  color: white;
+}
+
+.row button:hover {
+  background-color: #2f4a31;
+}
+
+.resetButton {
+  background-color: #777;
+}
+
+.resetButton:hover {
+  background-color: #555;
+}
+
+.searchButton {
+  background-color: #3d5a40;
+  color: white;
+}
+
+.searchButton:hover {
+  background-color: #2f4a31;
+}
+
+.noData {
+  padding: 30px 0;
+  color: #777;
+  font-style: italic;
+}
+
+.table {
+  width: 100%;
+  min-width: 1100px;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 20px;
+  table-layout: fixed;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.table th {
+  background-color: #f6f6f6;
+  font-weight: bold;
+  color: #3d5a40;
+}
+
+/* 기간 버튼 그룹 스타일 변경 */
+.periodButtons {
+  display: flex;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.periodButtons button {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 5px;
+  background-color: #f0f0f0; /* 연한 회색 */
+  color: #606060;            /* 진한 회색 */
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: none;
+}
+
+.periodButtons button:hover,
+.periodButtons button:focus {
+  background-color: #f0f0f0;
+  color: #606060;
+  outline: none;
+}
