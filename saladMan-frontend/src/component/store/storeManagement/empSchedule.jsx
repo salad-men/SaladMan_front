@@ -1,10 +1,11 @@
-import CalendarTest from "./CalendarTest";
+import ScheduleCalendar from "./ScheduleCalendar";
+import CalendarTest from "./ScheduleCalendar";
 
 export default function EmpSchedule() {
 
     return(
         <>
-            <CalendarTest/>
+            <ScheduleCalendar/>
         </>
     )
 }
