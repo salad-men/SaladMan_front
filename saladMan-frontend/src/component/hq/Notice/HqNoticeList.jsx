@@ -1,5 +1,6 @@
 import React from "react";
-import "./HqNoticeList.css";
+import NoticeSidebar from "./NoticeSidebar";
+import styles from "./HqNoticeList.module.css";
 
 const notices = [
   { id: 1, title: "[공지] 샐러드 배송 지역 확대 안내", author: "관리자", date: "2025-05-21" },
@@ -14,30 +15,33 @@ const notices = [
   { id: 10, title: "[공지] 향후 거래 내역 저장 안내", author: "관리자", date: "2025-05-21" },
 ];
 
-export default function NoticeList() {
+export default function HqNoticeList() {
   return (
-    <div className="notice-container">
-      <h2 className="notice-title">공지사항</h2>
-      <table className="notice-table">
-        <thead>
-          <tr>
-            <th style={{ width: "5%" }}>번호</th>
-            <th style={{ width: "65%" }}>제목</th>
-            <th style={{ width: "15%" }}>작성자</th>
-            <th style={{ width: "15%" }}>작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {notices.map((notice) => (
-            <tr key={notice.id} className="notice-row">
-              <td className="notice-cell center">{notice.id}</td>
-              <td className="notice-cell">{notice.title}</td>
-              <td className="notice-cell center">{notice.author}</td>
-              <td className="notice-cell center">{notice.date}</td>
+    <div className={styles.container}>
+      <NoticeSidebar />
+      <main className={styles.content}>
+        <h2 className={styles.title}>공지사항</h2>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th style={{ width: "5%" }}>번호</th>
+              <th style={{ width: "65%" }}>제목</th>
+              <th style={{ width: "15%" }}>작성자</th>
+              <th style={{ width: "15%" }}>작성일</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {notices.map((notice) => (
+              <tr key={notice.id} className={styles.row}>
+                <td className={`${styles.cell} ${styles.center}`}>{notice.id}</td>
+                <td className={styles.cell}>{notice.title}</td>
+                <td className={`${styles.cell} ${styles.center}`}>{notice.author}</td>
+                <td className={`${styles.cell} ${styles.center}`}>{notice.date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </main>
     </div>
   );
 }

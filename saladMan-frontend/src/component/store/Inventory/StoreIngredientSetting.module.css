@@ -1,0 +1,199 @@
+/* 레이아웃 */
+.container {
+  display: flex;
+}
+
+.content {
+  position: absolute;
+  top: 62px;
+  left: 200px;
+  width: calc(100% - 200px);
+  padding: 30px 20px;
+  background-color: #f9fafb;
+  border-left: 1px solid #ddd;
+  box-sizing: border-box;
+  min-height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+/* 텍스트 스타일 */
+.title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: #3d5a40;
+  font-weight: bold;
+}
+
+.filters {
+  margin-bottom: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.row label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* 폼 요소 스타일 */
+.row input[type="date"],
+.row input[type="text"],
+.row input[type="number"],
+.row select {
+  padding: 5px 8px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 160px;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #333;
+}
+
+/* 버튼 스타일 */
+.row button {
+  padding: 5px 12px;
+  font-size: 13px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.row button:hover {
+  opacity: 0.9;
+}
+
+.btnSmall {
+  background-color: #eee;
+  color: #333;
+}
+
+.search {
+  background-color: #4d774e;
+  color: white;
+}
+
+/* 액션 버튼 그룹 */
+.actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+
+.add {
+  background-color: #2196f3;
+  color: white;
+}
+
+.edit {
+  background-color: #607d8b;
+  color: white;
+}
+
+.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+/* 테이블 스타일 */
+.table {
+  width: 100%;
+  min-width: 1200px;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 16px;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.table th {
+  background-color: #f6f6f6;
+  font-weight: 600;
+  color: #3d5a40;
+}
+
+/* 체크박스 셀 너비 */
+.checkbox {
+  width: 36px;
+  padding: 3px;
+}
+
+/* 데이터 없을 때 */
+.noData {
+  padding: 24px 0;
+  color: #777;
+  font-style: italic;
+}
+
+/* 편집용 인풋 */
+.editable {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  background: #fff;
+  box-sizing: border-box;
+  font-size: 13px;
+  color: #333;
+}
+
+.editable:focus {
+  outline: none;
+  background: #e3f2fd;
+}
+
+/* 반응형 */
+@media (max-width: 700px) {
+  .content {
+    padding: 20px 15px;
+    left: 0;
+    width: 100%;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .row input[type="date"],
+  .row input[type="text"],
+  .row input[type="number"],
+  .row select {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 10px;
+  }
+
+  .table {
+    min-width: 0;
+    font-size: 11px;
+  }
+
+  .table th,
+  .table td {
+    padding: 4px 5px;
+  }
+}
