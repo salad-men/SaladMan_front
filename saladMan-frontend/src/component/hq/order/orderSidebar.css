@@ -1,11 +1,11 @@
 .orderSidebar {
     /**/
+    position: fixed;        /* ← 추가 */
     top: 0;                 /* ← 상단에 고정 */
     left: 0;                /* ← 왼쪽에 고정 */
     /**/
     
     width: 200px;
-    height: 100vh;
     background-color: #4D774E;
     color: white;
     padding: 20px;
@@ -22,9 +22,11 @@
 
 .orderSidebar li {
     margin: 10px 0;
+    list-style: none;
+
 }
 
 .orderSidebar a {
-    color: white;
+    color: rgb(192, 154, 154);
     text-decoration: none;
 }

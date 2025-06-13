@@ -1,14 +1,19 @@
 .storeRegisterContainer {
   display: flex;
-  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  background-color: #f9fafb;
 }
 
 .mainContent {
-  position: absolute;
-  top: 0;
-  left: 200px;
-  width: calc(100% - 200px);
-  padding: 40px;
+  flex: 1;
+  padding: 40px 40px 60px;
+  background-color: white;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
 }
 
 .mainContent h2 {
@@ -42,8 +47,8 @@
   color: #333;
 }
 
-input[type="text"],
-input[type="password"] {
+.registerTable input[type="text"],
+.registerTable input[type="password"] {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #ccc;
@@ -52,7 +57,7 @@ input[type="password"] {
   box-sizing: border-box;
 }
 
-input[type="button"] {
+.registerTable input[type="button"] {
   padding: 8px 16px;
   background-color: #4D774E;
   color: white;
@@ -65,7 +70,7 @@ input[type="button"] {
   margin-bottom: 6px;
 }
 
-input[type="button"]:hover {
+.registerTable input[type="button"]:hover {
   background-color: #3a5e3b;
 }
 

@@ -84,11 +84,9 @@ export default function StoreRegister() {
     return (
         <>
 
-            <div>
-                <EmpSidebar />
 
                 <div className="storeRegisterContainer">
-
+                <EmpSidebar />
                     <div className="mainContent">
                         <h2>매장 등록</h2>
                         <div className="formSection">
@@ -132,7 +130,6 @@ export default function StoreRegister() {
                         </div>
                     </div>
                 </div>
-            </div>
             {isOpen &&
                 <Modal title="주소입력"
                     open={isOpen} footer={null} >

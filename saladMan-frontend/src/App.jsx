@@ -1,75 +1,76 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MainPage from './component/user/page/MainPage';
-import BrandIntro from './component/user/page/BrandIntro';
-import SloganIntro from './component/user/page/SloganIntro';
-import MenuPage from './component/user/page/Menu';
-import Nutrition from './component/user/page/Nutrition';
-import FindStorePage from './component/user/page/FindStore';
-import NewsPage from './component/user/page/NewsPage';
-import PraiseStorePage from './component/user/page/PraiseStorePage';
-import EventPage from './component/user/page/EventPage';
+import MainPage from '@user/page/MainPage';
+import BrandIntro from '@user/page/BrandIntro';
+import SloganIntro from '@user/page/SloganIntro';
+import MenuPage from '@user/page/Menu';
+import Nutrition from '@user/page/Nutrition';
+import FindStorePage from '@user/page/FindStore';
+import NewsPage from '@user/page/NewsPage';
+import PraiseStorePage from '@user/page/PraiseStorePage';
+import EventPage from '@user/page/EventPage';
 
 
 
-import HqInventoryList from './component/hq/Inventory/HqInventoryList';
-import HqInventoryExpiration from './component/hq/Inventory/HqInventoryExpiration';
-import HqDisposalList from './component/hq/Inventory/HqDisposalList';
-import HqIngredientSetting from './component/hq/Inventory/HqIngredientSetting';
-import HqInventoryRecord from './component/hq/Inventory/HqInventoryRecord';
+import HqInventoryList from '@hq/Inventory/HqInventoryList';
+import HqInventoryExpiration from '@hq/Inventory/HqInventoryExpiration';
+import HqDisposalList from '@hq/Inventory/HqDisposalList';
+import HqIngredientSetting from '@hq/Inventory/HqIngredientSetting';
+import HqInventoryRecord from '@hq/Inventory/HqInventoryRecord';
 
 // 지현
-import HqLayout from './component/hq/HqLayout';
-import HqAllMenus from './component/hq/Menus/HqAllMenus';
-import HqUpdateMenu from './component/hq/Menus/HqUpdateMenu';
-import HqRecipe from './component/hq/Menus/HqRecipe';
-import HqTotalSales from './component/hq/Sales/HqTotalSales';
-import HqStoreSales from './component/hq/Sales/HqStoreSales';
-import HqStoreStock from './component/hq/StoreInquiry/HqStoreStock';
-import HqNotification from './component/hq/Notice/HqNotification';
+import HqLayout from '@hq/HqLayout';
+import HqAllMenus from '@hq/Menus/HqAllMenus';
+import HqUpdateMenu from '@hq/Menus/HqUpdateMenu';
+import HqRecipe from '@hq/Menus/HqRecipe';
+import HqTotalSales from '@hq/Sales/HqTotalSales';
+import HqStoreSales from '@hq/Sales/HqStoreSales';
+import HqStoreStock from '@hq/StoreInquiry/HqStoreStock';
+import HqNotification from '@hq/Notice/HqNotification';
+
+import StoreLayout from '@store/StoreLayout';
+import AllMenus from '@store/Menus/AllMenus';
+import MenuStatus from '@store/Menus/MenuStatus';
+import Recipe from '@store/Menus/Recipe';
+import OtherStoreInven from '@store/StoreInquiry/OtherStoreInven';
+import FindOtherStore from '@store/StoreInquiry/FindOtherStore';
+
+import StoreInventoryList from '@store/Inventory/StoreInventoryList';
+import StoreInventoryExpiration from '@store/Inventory/StoreInventoryExpiration';
+import StoreDisposalList from '@store/Inventory/StoreDisposalList';
+import StoreIngredientSetting from '@store/Inventory/StoreIngredientSetting';
+import StoreInventoryRecord from '@store/Inventory/StoreInventoryRecord';
+
+import HqNoticeList from '@hq/Notice/HqNoticeList';
+import HqNoticeDetail from '@hq/Notice/HqNoticeDetail';
+import NewsDetailPage from '@user/page/NewDetailPage';
+import KioskPage from '@user/page/KioskPage';
+import KioskMenuPage from '@user/page/KioskMenuPage';
+
+import StoreRegister from '@hq/storeManagement/StoreRegister'
+import EmployeeRegister from '@hq/storeManagement/EmployeeRegister'
+import EmployeeList from '@hq/storeManagement/EmployeeList'
+import StoreAccountList from '@hq/storeManagement/StoreAccountList'
+import OrderRequestList from '@hq/order/OrderRequestList'
+import OrderRequestDetail from '@hq/order/OrderRequestDetail'
+import OrderItemManage from '@hq/order/OrderItemManage'
+import OrderList from '@store/order/OrderList';
+import OrderApply from '@store/order/OrderApply';
+import OrderDetail from '@store/order/OrderDetail';
+import StockInspection from '@store/order/StockInspection';
+import OrderSettings from '@store/order/OrderSettings';
+import StockLog from '@store/order/StockLog';
+import EmpSchedule from '@store/storeManagement/empSchedule';
+
+
+import HqComplaintList from '@hq/Complaint/HqComplaintList';
+import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
+import Notification from '@hq/Notice/HqNotification';
+import StoreNoticeList from '@store/notice/StoreNoticeList';
+import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
+import StoreComplaintList from '@store/complaint/StoreComplaintList';
+import StoreComplaintDetail from '@store/complaint/StoreComplaintDetail';
+
 import Login from './component/common/Login';
-import StoreLayout from './component/store/StoreLayout';
-import AllMenus from './component/store/Menus/AllMenus';
-import MenuStatus from './component/store/Menus/MenuStatus';
-import Recipe from './component/store/Menus/Recipe';
-import OtherStoreInven from './component/store/StoreInquiry/OtherStoreInven';
-import FindOtherStore from './component/store/StoreInquiry/FindOtherStore';
-
-import StoreInventoryList from './component/store/Inventory/StoreInventoryList';
-import StoreInventoryExpiration from './component/store/Inventory/StoreInventoryExpiration';
-import StoreDisposalList from './component/store/Inventory/StoreDisposalList';
-import StoreIngredientSetting from './component/store/Inventory/StoreIngredientSetting';
-import StoreInventoryRecord from './component/store/Inventory/StoreInventoryRecord';
-
-import HqNoticeList from './component/hq/Notice/HqNoticeList';
-import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
-import NewsDetailPage from './component/user/page/NewDetailPage';
-import KioskPage from './component/user/page/KioskPage';
-import KioskMenuPage from './component/user/page/KioskMenuPage';
-
-import StoreRegister from './component/hq/storeManagement/StoreRegister'
-import EmployeeRegister from './component/hq/storeManagement/EmployeeRegister'
-import EmployeeList from './component/hq/storeManagement/EmployeeList'
-import StoreAccountList from './component/hq/storeManagement/StoreAccountList'
-import OrderRequestList from './component/hq/order/OrderRequestList'
-import OrderRequestDetail from './component/hq/order/OrderRequestDetail'
-import OrderItemManage from './component/hq/order/OrderItemManage'
-import OrderList from './component/store/order/OrderList';
-import OrderApply from './component/store/order/OrderApply';
-import OrderDetail from './component/store/order/OrderDetail';
-import StockInspection from './component/store/order/StockInspection';
-import OrderSettings from './component/store/order/OrderSettings';
-import StockLog from './component/store/order/StockLog';
-import EmpSchedule from './component/store/storeManagement/empSchedule';
-
-
-import HqComplaintList from './component/hq/Complaint/HqComplaintList';
-import HqComplaintDetail from './component/hq/Complaint/HqComplaintDetail';
-import Notification from './component/hq/Notice/HqNotification';
-import StoreNoticeList from './component/store/notice/StoreNoticeList';
-import StoreNoticeDetail from './component/store/notice/StoreNoticeDetail';
-import StoreComplaintList from './component/store/complaint/StoreComplaintList';
-import StoreComplaintDetail from './component/store/complaint/StoreComplaintDetail';
-import HqHeader from './component/hq/HqHeader';
 
 function App() {
 
