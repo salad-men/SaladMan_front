@@ -69,7 +69,7 @@ import StoreNoticeList from './component/store/notice/StoreNoticeList';
 import StoreNoticeDetail from './component/store/notice/StoreNoticeDetail';
 import StoreComplaintList from './component/store/complaint/StoreComplaintList';
 import StoreComplaintDetail from './component/store/complaint/StoreComplaintDetail';
-import Header from './component/hq/Header';
+import HqHeader from './component/hq/HqHeader';
 
 function App() {
 
