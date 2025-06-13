@@ -1,0 +1,106 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #f9fafb;
+}
+
+.content {
+  flex: 1;
+  padding: 40px 40px 60px;
+  background-color: white;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  min-width: 0;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #3d5a40;
+  margin-bottom: 24px;
+  user-select: none;
+}
+
+.actions {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+}
+
+.forwardSelectedBtn {
+  padding: 8px 20px;
+  background-color: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.forwardSelectedBtn:disabled {
+  background-color: #a0a0a0;
+  cursor: default;
+}
+
+.forwardSelectedBtn:not(:disabled):hover {
+  background-color: #3f6940;
+}
+
+.detailTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  margin-bottom: 32px;
+  color: #3b4263;
+  min-width: 900px;
+}
+
+.detailTable th,
+.detailTable td {
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.detailTable th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.statusCell {
+  font-weight: 700;
+  font-size: 14px;
+  color: inherit;
+}
+
+.statusCell.miyeollam {
+  color: #b91c1c; /* 미열람: 진한 빨강 */
+}
+
+.statusCell.yeollam {
+  color: #2563eb; /* 열람: 파랑 */
+}
+
+.statusCell.jeondalwanryo {
+  color: #16a34a; /* 전달완료: 초록 */
+}
+
+.unread {
+  background-color: transparent; /* 배경색 제거 */
+}
+
+.clickable {
+  cursor: pointer;
+  text-align: left;
+  color: #1f2937;
+}
+
+.clickable:hover {
+  text-decoration: none; /* hover 음영 제거 */
+}

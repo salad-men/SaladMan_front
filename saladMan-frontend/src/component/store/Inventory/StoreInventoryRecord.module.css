@@ -1,0 +1,345 @@
+.container {
+  display: flex;
+}
+
+.content {
+  position: absolute;
+  top: 62px;
+  left: 200px;
+  width: calc(100% - 200px);
+  padding: 40px;
+  background-color: #f9fafb;
+  border-left: 1px solid #ddd;
+  box-sizing: border-box;
+  min-height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+/* 타이틀 */
+.title {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #3d5a40;
+  font-weight: bold;
+}
+
+/* 필터 영역 */
+.filters {
+  margin-bottom: 20px;
+}
+
+/* 필터 줄 */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* 필터 라벨 */
+.row label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* 입력, 셀렉트 */
+.row input[type="date"],
+.row input[type="text"],
+.row select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.row input[type="date"]:focus,
+.row input[type="text"]:focus,
+.row select:focus {
+  border-color: #3d5a40;
+  outline: none;
+}
+
+/* ----------- 버튼 스타일 변경 시작 ----------- */
+.row button,
+.actions button,
+.modalActions button {
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  background-color: #ededed; /* 연한 회색 배경 */
+  color: #555555;           /* 진한 회색 글씨 */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: none;
+}
+
+.row button:hover,
+.actions button:hover,
+.modalActions button:hover {
+  background-color: #dedede;
+  color: #555555;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.15);
+}
+
+/* 선택된(활성화) 버튼 스타일 (필요시 적용) */
+.row button.active,
+.actions button.active,
+.modalActions button.active {
+  background-color: #bbbbbb;
+  color: #333333;
+  box-shadow: none;
+}
+/* ----------- 버튼 스타일 변경 끝 ----------- */
+
+.btnSmall {
+  background-color: #eee;
+  color: #333;
+}
+
+.search {
+  background-color: #4d774e;
+  color: white;
+}
+
+.reset {
+  background-color: #aaa;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+/* 탭 버튼과 등록 버튼 */
+.btn {
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  background-color: #607d8b;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #4b6571;
+}
+
+.edit {
+  background-color: #4caf50;
+}
+
+.edit:hover {
+  background-color: #388e3c;
+}
+
+.add {
+  background-color: #2196f3;
+}
+
+.add:hover {
+  background-color: #1769aa;
+}
+
+.save {
+  background-color: #4caf50;
+}
+
+.save:hover {
+  background-color: #388e3c;
+}
+
+.cancel {
+  background-color: #f44336;
+}
+
+.cancel:hover {
+  background-color: #d32f2f;
+}
+
+/* 기록 테이블 */
+.table {
+  width: 100%;
+  min-width: 1200px;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 20px;
+  table-layout: fixed;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.table th {
+  background-color: #f6f6f6;
+  font-weight: bold;
+  color: #3d5a40;
+}
+
+/* 데이터 없을 때 메시지 */
+.noData {
+  padding: 30px 0;
+  color: #777;
+  font-style: italic;
+}
+
+/* 모달 */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modalBox {
+  position: relative;
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  width: 1000px;
+  max-width: 98vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  font-family: 'Pretendard', sans-serif;
+  color: #3d5a40;
+}
+
+.modalBox h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  user-select: none;
+}
+
+/* 모달 내 폼 레이아웃 */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* label과 input/textarea 수평 정렬 */
+.form label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  user-select: none;
+}
+
+/* select, input, textarea 공통 스타일 */
+.form select,
+.form input[type="number"],
+.form textarea {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline-color: #3d5a40;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form select:focus,
+.form input[type="number"]:focus,
+.form textarea:focus {
+  border-color: #3d5a40;
+  outline: none;
+}
+
+.form textarea {
+  min-height: 70px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* 모달 액션 버튼 그룹 */
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.modalActions button {
+  padding: 8px 20px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.modalActions button.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+.modalActions button.cancel:hover {
+  background-color: #d32f2f;
+}
+
+.modalActions button.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modalActions button.save:hover {
+  background-color: #388e3c;
+}
+
+/* 반응형: 모바일에서 폼 요소 수직 배치 */
+@media (max-width: 700px) {
+  .modalBox {
+    width: 95vw;
+    padding: 20px;
+  }
+
+  .form label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  .modalActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modalActions button {
+    width: 100%;
+  }
+}

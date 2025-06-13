@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./HqNoticeDetail.css";
+import NoticeSidebar from "./NoticeSidebar";
+import styles from "./HqNoticeDetail.module.css";
 
 export default function HqNoticeDetail() {
-  // 공지사항 초기 데이터
   const initialNotice = {
     title: "[공지] 샐러드 배송 지역 확대 안내",
     author: "관리자",
@@ -14,112 +14,109 @@ export default function HqNoticeDetail() {
 앞으로도 더 많은 지역에서 만날 수 있도록 최선을 다하겠습니다. 감사합니다.`,
   };
 
-  // 상태 관리: 수정 모드 여부, 공지 데이터
   const [notice, setNotice] = useState(initialNotice);
   const [isEditing, setIsEditing] = useState(false);
 
-  // 수정폼 입력값 상태
   const [editTitle, setEditTitle] = useState(notice.title);
-  const [editAuthor, setEditAuthor] = useState(notice.author);
   const [editContent, setEditContent] = useState(notice.content);
 
-  // 수정 버튼 클릭
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  const handleEditClick = () => setIsEditing(true);
 
-  // 등록 버튼 클릭 (수정 완료)
   const handleSubmitClick = () => {
     setNotice({
       ...notice,
       title: editTitle,
-      author: editAuthor,
       content: editContent,
     });
     setIsEditing(false);
   };
 
-  // 취소 버튼 클릭 (수정 취소)
   const handleCancelClick = () => {
-    // 입력폼 값 초기화 후 편집 모드 종료
     setEditTitle(notice.title);
-    setEditAuthor(notice.author);
     setEditContent(notice.content);
     setIsEditing(false);
   };
 
+  const handleBackClick = () => {
+    window.history.back();
+  };
+
   return (
-    <div className="detail-container">
-      <h2 className="detail-title">공지사항</h2>
+    <div className={styles.container}>
+      <NoticeSidebar />
+      <main className={styles.content}>
+        <h2 className={styles.title}>공지사항</h2>
 
-      <div className="detail-meta">
-        <span className="detail-date">작성일 {notice.date}</span>
-      </div>
+        <div className={styles.detailMeta}>
+          <span>작성일 {notice.date}</span>
+        </div>
 
-      <table className="detail-table">
-        <tbody>
-          <tr>
-            <th>제목</th>
-            <td>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  className="input-text"
-                />
-              ) : (
-                notice.title
-              )}
-            </td>
-          </tr>
-          <tr>
-            <th>작성자</th>
-            <td>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={editAuthor}
-                  onChange={(e) => setEditAuthor(e.target.value)}
-                  className="input-text"
-                />
-              ) : (
-                notice.author
-              )}
-            </td>
-          </tr>
-          <tr>
-            <th>내용</th>
-            <td className="content-cell">
-              {isEditing ? (
-                <textarea
-                  value={editContent}
-                  onChange={(e) => setEditContent(e.target.value)}
-                  className="input-textarea"
-                  rows={12}
-                />
-              ) : (
-                notice.content.split("\n").map((line, idx) => <p key={idx}>{line}</p>)
-              )}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table className={styles.detailTable}>
+          <tbody>
+            <tr>
+              <th>제목</th>
+              <td>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className={styles.inputText}
+                  />
+                ) : (
+                  notice.title
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th>작성자</th>
+              <td className={styles.authorCell}>{notice.author}</td>
+            </tr>
+            <tr>
+              <th>내용</th>
+              <td className={styles.contentCell}>
+                {isEditing ? (
+                  <textarea
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    className={styles.inputTextarea}
+                    rows={20}
+                  />
+                ) : (
+                  notice.content.split("\n").map((line, idx) => <p key={idx}>{line}</p>)
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <div className="button-group">
-        <button className="btn cancel" onClick={handleCancelClick}>
-          취소
-        </button>
-        {isEditing ? (
-          <button className="btn submit" onClick={handleSubmitClick}>
-            등록
+        <div className={styles.buttonGroup}>
+          <button
+            className={styles.back}
+            onClick={handleBackClick}
+            type="button"
+          >
+            목록
           </button>
-        ) : (
-          <button className="btn submit" onClick={handleEditClick}>
-            수정
+
+          {isEditing && (
+            <button
+              className={`${styles.btn} ${styles.cancel}`}
+              onClick={handleCancelClick}
+              type="button"
+            >
+              취소
+            </button>
+          )}
+          <button
+            className={`${styles.btn} ${styles.submit}`}
+            onClick={isEditing ? handleSubmitClick : handleEditClick}
+            type="button"
+          >
+            {isEditing ? "등록" : "수정"}
           </button>
-        )}
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

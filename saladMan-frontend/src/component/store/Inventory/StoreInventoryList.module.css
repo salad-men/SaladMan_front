@@ -1,0 +1,210 @@
+/* 전체 컨테이너 및 콘텐츠 기본 스타일 */
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.content {
+  position: relative;
+  width: calc(100% - 200px);
+  background-color: white;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 타이틀 */
+.title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  color: #3d5a40;
+  font-weight: 700;
+}
+
+/* 필터 영역 */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 간격 조금 줄임 */
+  margin-bottom: 12px;
+}
+
+.filterLabel {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #3d5a40;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.filterSelect {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 100px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.filterSelect:focus {
+  border-color: #4d774e;
+  outline: none;
+  background: #e3f2fd;
+}
+
+/* 재료명 검색 input 너비 고정 */
+.filterInput {
+  width: 20px;
+  flex : none;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.filterInput:focus {
+  border-color: #4d774e;
+  outline: none;
+  background: #e3f2fd;
+}
+
+/* 버튼 스타일 */
+.searchButton,
+.resetButton {
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton {
+  background-color: #4d774e;
+  color: white;
+}
+
+.searchButton:hover {
+  background-color: #3a5a37;
+}
+
+.resetButton {
+  background-color: #aaa;
+  color: white;
+}
+
+.resetButton:hover {
+  background-color: #888;
+}
+
+/* 액션 버튼 그룹 */
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+/* 수정, 저장, 취소 버튼 */
+.edit,
+.save,
+.cancel {
+  padding: 6px 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.edit {
+  background-color: #607d8b;
+}
+.edit:hover {
+  background-color: #4b6571;
+}
+
+.save {
+  background-color: #4caf50;
+}
+.save:hover {
+  background-color: #388e3c;
+}
+
+.cancel {
+  background-color: #f44336;
+}
+.cancel:hover {
+  background-color: #d32f2f;
+}
+
+/* 테이블 스타일 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.table th {
+  background-color: #f6f6f6;
+  font-weight: 600;
+  color: #3d5a40;
+}
+
+.noData {
+  padding: 24px 0;
+  color: #777;
+  font-style: italic;
+}
+
+/* 편집용 인풋 */
+.editable {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  background: #fff;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.editable:focus {
+  outline: none;
+  background: #e3f2fd;
+}
+
+/* 번호 컬럼 고정 너비 */
+.table th:first-child,
+.table td:first-child {
+  width: 40px;
+}
+.filterInput {
+  width: 100px !important;
+}

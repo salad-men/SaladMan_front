@@ -1,0 +1,365 @@
+/* 레이아웃 */
+.container {
+  display: flex;
+}
+
+.content {
+  position: absolute;
+  top: 62px;
+  left: 200px;
+  width: calc(100% - 200px);
+  padding: 30px 20px;
+  background-color: #f9fafb;
+  border-left: 1px solid #ddd;
+  box-sizing: border-box;
+  min-height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+/* 텍스트 스타일 */
+.title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: #3d5a40;
+  font-weight: bold;
+}
+
+.filters {
+  margin-bottom: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.row label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* 폼 요소 스타일 */
+.row input[type="date"],
+.row input[type="text"],
+.row select {
+  padding: 5px 8px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 160px;
+  box-sizing: border-box;
+}
+
+/* 버튼 스타일 */
+.row button {
+  padding: 5px 12px;
+  font-size: 13px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.row button:hover {
+  opacity: 0.9;
+}
+
+.btnSmall {
+  background-color: #eee;
+  color: #333;
+}
+
+.search {
+  background-color: #4d774e;
+  color: white;
+}
+
+.reset {
+  background-color: #aaa;
+  color: white;
+}
+
+/* 액션 버튼 그룹 */
+.actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+
+.add {
+  background-color: #2196f3;
+  color: white;
+}
+
+.edit {
+  background-color: #607d8b;
+  color: white;
+}
+
+.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+/* 테이블 스타일 */
+.table {
+  width: 100%;
+  min-width: 1200px;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 16px;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.table th {
+  background-color: #f6f6f6;
+  font-weight: 600;
+  color: #3d5a40;
+}
+
+.checkbox {
+  width: 36px;
+  padding: 3px;
+}
+
+.noData {
+  padding: 24px 0;
+  color: #777;
+  font-style: italic;
+}
+
+/* 편집용 인풋 스타일 */
+.editable {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  background: #fff;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+
+.editable:focus {
+  outline: none;
+  background: #e3f2fd;
+}
+
+/* ------------------- 모달 스타일 ------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 10px;
+}
+
+.modalBox {
+  position: relative;
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  width: 750px;
+  max-width: 95vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
+  font-family: 'Pretendard', sans-serif;
+  color: #3d5a40;
+}
+
+.modalBox h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-size: 20px;
+  font-weight: 700;
+  user-select: none;
+}
+
+.modalTableWrapper {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.modalTableWrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+}
+
+.modalTableWrapper th,
+.modalTableWrapper td {
+  padding: 4px 5px;
+  border: 1px solid #ccc;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* 컬럼별 너비 지정 */
+.modalTableWrapper th:nth-child(1),
+.modalTableWrapper td:nth-child(1) {
+  width: 22%;
+}
+
+.modalTableWrapper th:nth-child(2),
+.modalTableWrapper td:nth-child(2) {
+  width: 14%;
+}
+
+.modalTableWrapper th:nth-child(3),
+.modalTableWrapper td:nth-child(3) {
+  width: 10%;
+}
+
+.modalTableWrapper th:nth-child(4),
+.modalTableWrapper td:nth-child(4) {
+  width: 14%;
+}
+
+.modalTableWrapper th:nth-child(5),
+.modalTableWrapper td:nth-child(5) {
+  width: 14%;
+}
+
+.modalTableWrapper th:nth-child(6),
+.modalTableWrapper td:nth-child(6) {
+  width: 14%;
+}
+
+.modalTableWrapper th:nth-child(7),
+.modalTableWrapper td:nth-child(7) {
+  width: 12%;
+}
+
+/* 삭제 버튼 셀 너비 작게 */
+.modalTableWrapper td:last-child {
+  padding: 0;
+}
+
+/* 삭제 버튼 */
+.modalTableWrapper button {
+  background: transparent;
+  border: none;
+  color: #f44336;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  user-select: none;
+  padding: 0;
+}
+
+.modalTableWrapper button:hover {
+  color: #d32f2f;
+}
+
+/* 인풋, 셀렉트 크기 작게 */
+.modalTableWrapper input.editable,
+.modalTableWrapper select {
+  width: 88%;
+  padding: 3px 5px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #4d774e;
+  box-sizing: border-box;
+}
+
+/* 모달 액션 버튼 */
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.modalActions button {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.modalActions button:nth-child(1) {
+  background-color: #2196f3;
+  color: white;
+}
+
+.modalActions button:nth-child(1):hover {
+  background-color: #1976d2;
+}
+
+.modalActions button:nth-child(2) {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modalActions button:nth-child(2):hover {
+  background-color: #388e3c;
+}
+
+.modalActions button:nth-child(3) {
+  background-color: #f44336;
+  color: white;
+}
+
+.modalActions button:nth-child(3):hover {
+  background-color: #d32f2f;
+}
+
+/* 반응형 */
+@media (max-width: 700px) {
+  .modalBox {
+    width: 95vw;
+    padding: 12px 15px;
+    max-height: 80vh;
+  }
+
+  .modalTableWrapper table,
+  .modalTableWrapper th,
+  .modalTableWrapper td {
+    font-size: 10px;
+  }
+
+  .modalActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modalActions button {
+    width: 100%;
+    padding: 10px;
+  }
+}

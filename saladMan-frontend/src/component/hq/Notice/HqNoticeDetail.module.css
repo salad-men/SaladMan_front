@@ -1,0 +1,224 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #f9fafb;
+}
+
+.content {
+  flex: 1;
+  padding: 40px 40px 60px;
+  background-color: white;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #3d5a40;
+  margin-bottom: 24px;
+  user-select: none;
+}
+
+.detailMeta {
+  text-align: right;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: #666;
+  font-weight: 500;
+}
+
+.detailTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  color: #444;
+  table-layout: fixed;
+  flex-grow: 1;
+}
+
+.detailTable tr:nth-child(1) th,
+.detailTable tr:nth-child(1) td,
+.detailTable tr:nth-child(2) th,
+.detailTable tr:nth-child(2) td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.detailTable th {
+  background-color: #f4f4f4;
+  padding: 12px 20px;
+  vertical-align: top;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  width: 110px;
+  word-break: keep-all;
+}
+
+.detailTable tr:nth-child(2) th {
+  width: 100px;
+}
+
+.detailTable td {
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+  word-break: break-word;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  max-width: 700px;
+}
+
+.authorCell {
+  font-weight: 600;
+  color: #3d5a40;
+  user-select: none;
+}
+
+.contentCell p {
+  margin: 12px 0;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.inputText {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Pretendard', sans-serif;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  color: #333;
+}
+
+.inputText:focus {
+  border-color: #4a6a39;
+  outline: none;
+  box-shadow: 0 0 6px rgba(74,106,57,0.4);
+}
+
+.inputTextarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Pretendard', sans-serif;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 320px;
+  transition: border-color 0.3s ease;
+  color: #333;
+}
+
+.inputTextarea:focus {
+  border-color: #4a6a39;
+  outline: none;
+  box-shadow: 0 0 6px rgba(74,106,57,0.4);
+}
+
+.buttonGroup {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.btn {
+  padding: 10px 26px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.25s ease;
+}
+
+.btn.cancel {
+  background-color: #ddd;
+  color: #333;
+}
+
+.btn.cancel:hover:not(:disabled) {
+  background-color: #ccc;
+}
+
+.btn.cancel:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.btn.submit {
+  background-color: #4a6a39;
+  color: #fff;
+  box-shadow: 0 3px 6px rgba(74,106,57,0.3);
+}
+
+.btn.submit:hover {
+  background-color: #3d5630;
+  box-shadow: 0 4px 10px rgba(61,86,48,0.4);
+}
+
+/* 목록 버튼 스타일 */
+.back {
+  background-color: #9ea79a;
+  color: #3d5a40;
+  padding: 10px 24px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  user-select: none;
+  transition: background-color 0.25s ease;
+}
+
+.back:hover {
+  background-color: #7f8d7e;
+}
+
+/* 반응형 */
+@media (max-width: 700px) {
+  .content {
+    padding: 20px 25px 40px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .detailMeta {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .detailTable th,
+  .detailTable td {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn,
+  .back {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+  }
+
+  .inputText,
+  .inputTextarea {
+    font-size: 14px;
+  }
+}

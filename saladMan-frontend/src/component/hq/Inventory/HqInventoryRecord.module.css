@@ -1,0 +1,305 @@
+/* 레이아웃 */
+.container {
+  display: flex;
+}
+
+.content {
+  position: absolute;
+  top: 62px;
+  left: 200px;
+  width: calc(100% - 200px);
+  padding: 40px;
+  background-color: #f9fafb;
+  border-left: 1px solid #ddd;
+  box-sizing: border-box;
+  min-height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+/* 텍스트 스타일 */
+.title {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #3d5a40;
+  font-weight: bold;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.row label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* 폼 요소 스타일 */
+.row input[type="date"],
+.row input[type="text"],
+.row select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+/* 버튼 스타일 */
+.row button {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.row button:hover {
+  opacity: 0.9;
+}
+
+.btnSmall {
+  background-color: #eee;
+  color: #333;
+}
+
+.search {
+  background-color: #4d774e;
+  color: white;
+}
+
+.reset {
+  background-color: #aaa;
+  color: white;
+}
+
+/* 액션 버튼 그룹 */
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.add {
+  background-color: #2196f3;
+  color: white;
+}
+
+.edit {
+  background-color: #607d8b;
+  color: white;
+}
+
+.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+/* 테이블 스타일 */
+.table {
+  width: 100%;
+  min-width: 1400px;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 20px;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.table th {
+  background-color: #f6f6f6;
+  font-weight: bold;
+  color: #3d5a40;
+}
+
+.checkbox {
+  width: 40px;
+  padding: 4px;
+}
+
+.noData {
+  padding: 30px 0;
+  color: #777;
+  font-style: italic;
+}
+
+/* 편집용 인풋 스타일 */
+.editable {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.editable:focus {
+  outline: none;
+  background: #e3f2fd;
+}
+
+/* ------------------- 모달 스타일 ------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modalBox {
+  position: relative;
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  width: 1000px;
+  max-width: 98vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+  font-family: 'Pretendard', sans-serif;
+  color: #3d5a40;
+}
+
+.modalBox h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  user-select: none;
+}
+
+/* 모달 내 폼 레이아웃 */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* label과 input/textarea 수평 정렬 */
+.form label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  user-select: none;
+}
+
+/* select, input, textarea 공통 스타일 */
+.form select,
+.form input[type="number"],
+.form textarea {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline-color: #3d5a40;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form select:focus,
+.form input[type="number"]:focus,
+.form textarea:focus {
+  border-color: #3d5a40;
+  outline: none;
+}
+
+.form textarea {
+  min-height: 70px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* 모달 액션 버튼 그룹 */
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.modalActions button {
+  padding: 8px 20px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.modalActions button.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+.modalActions button.cancel:hover {
+  background-color: #d32f2f;
+}
+
+.modalActions button.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modalActions button.save:hover {
+  background-color: #388e3c;
+}
+
+/* 반응형: 모바일에서 폼 요소 수직 배치 */
+@media (max-width: 700px) {
+  .modalBox {
+    width: 95vw;
+    padding: 20px;
+  }
+
+  .form label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  .modalActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modalActions button {
+    width: 100%;
+  }
+}

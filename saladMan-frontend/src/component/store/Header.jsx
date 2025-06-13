@@ -35,9 +35,9 @@ const Header = () => {
                         <a href="#">메뉴</a>
                         <div className="dropdown">
                             <ul>
-                                <li><a href="/AllMenus">전메뉴 조회</a></li>
-                                <li><a href="/UpdateMenu">메뉴 등록</a></li>
-                                <li><a href="#">레시피 조회</a></li>
+                                <li><a href="/store/allMenus">전메뉴 조회</a></li>
+                                <li><a href="/store/updateMenu">메뉴 등록</a></li>
+                                <li><a href="/store/recipe">레시피 조회</a></li>
                             </ul>
                         </div>  
                     </div>
@@ -45,8 +45,8 @@ const Header = () => {
                         <a href="#">매출</a>
                         <div className="dropdown">
                             <ul>
-                                <li><a href="#">매출 조회(전사)</a></li>
-                                <li><a href="#">매출 조회(매장)</a></li>
+                                <li><a href="#">매출 조회</a></li>
+                                <li><a href="#">주문내역 조회</a></li>
                             </ul>
                         </div>  
                     </div>
@@ -62,7 +62,7 @@ const Header = () => {
                         </div> 
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">점포조회</a>
+                        <a href="#">점포 조회</a>
                         <div className="dropdown">
                             <ul>
                                 <li><a href="#">매장 위치 조회</a></li>
@@ -77,7 +77,7 @@ const Header = () => {
                                 <li><a href="#">공지사항 조회</a></li>
                                 <li><a href="#">불편사항 조회</a></li>
                                 <li><a href="#">쪽지</a></li>
-                                <li><a href="#">알림 목록</a></li>
+                                <li><a href="/store/notification">알림 목록</a></li>
                             </ul>
                         </div> 
                     </div>
