@@ -24,6 +24,7 @@ import HqUpdateMenu from './component/hq/Menus/HqUpdateMenu';
 import HqRecipe from './component/hq/Menus/HqRecipe';
 import HqTotalSales from './component/hq/Sales/HqTotalSales';
 import HqStoreSales from './component/hq/Sales/HqStoreSales';
+import HqFindStore from './component/hq/StoreInquiry/HqFindStore';
 import HqStoreStock from './component/hq/StoreInquiry/HqStoreStock';
 import HqNotification from './component/hq/Notice/HqNotification';
 import Login from './component/common/Login';
@@ -31,6 +32,8 @@ import StoreLayout from './component/store/StoreLayout';
 import AllMenus from './component/store/Menus/AllMenus';
 import MenuStatus from './component/store/Menus/MenuStatus';
 import Recipe from './component/store/Menus/Recipe';
+import StoreSales from './component/store/Sales/StoreSales';
+import PaymentList from './component/store/Sales/PaymentList';
 import OtherStoreInven from './component/store/StoreInquiry/OtherStoreInven';
 import FindOtherStore from './component/store/StoreInquiry/FindOtherStore';
 
@@ -153,6 +156,9 @@ function App() {
           <Route path='/hq/totalSales' element={<HqTotalSales />} />
           <Route path='/hq/storeSales' element={<HqStoreSales />} />
           <Route path='/hq/storeStock' element={<HqStoreStock />} />
+          {/* 점포 조회 */}
+          <Route path='/hq/findStore' element={<HqFindStore />} />
+          <Route path='/hq/storeStock' element={<HqStoreStock />} />
           {/* 공지사항 */}
           <Route path='/hq/notification' element={<HqNotification />} />
         </Route>
@@ -163,6 +169,8 @@ function App() {
           <Route path='/store/findOtherStore' element={<FindOtherStore/>}/>
           <Route path='/store/otherStoreInven' element={<OtherStoreInven/>}/>
           <Route path='/store/notification' element={<Notification/>}/>
+          <Route path='/store/storeSales' element={<StoreSales/>}/>
+          <Route path='/store/paymentList' element={<PaymentList/>}/>
         </Route>
 
         <Route path='/' element={<Login />} />

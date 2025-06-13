@@ -60,6 +60,7 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: 0.2s;
+  background-color: #4D774E;
 }
 
 .login-button:hover {

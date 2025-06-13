@@ -1,47 +1,124 @@
-import { useEffect, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import './HqStoreStock.css'
+import React, { useEffect, useState } from "react";
+import styles from "./HqFindStore.module.css";
 
-const HqStoreStock = () => {
-    const [coords, setCoords] = useState({ lat: 37.5665, lng: 126.9780 });
-    const [isMapReady, setIsMapReady] = useState(true);
+const storeData = [
+  {
+    id: 1,
+    name: "샐러드맨 낙성대점",
+    address: "서울 관악구 남부순환로 1946 건도빌딩",
+    lat: 37.4781,
+    lng: 126.9637,
+  },
+  {
+    id: 2,
+    name: "샐러드맨 신월중점",
+    address: "서울 양천구 신월동",
+    lat: 37.5312,
+    lng: 126.8462,
+  },
+  {
+    id: 3,
+    name: "샐러드맨 서울대입구점",
+    address: "서울 관악구 관악로 144-1",
+    lat: 37.4786,
+    lng: 126.9526,
+  },
+  {
+    id: 4,
+    name: "샐러드맨 선유도역점",
+    address: "서울 영등포구 양평로21길 4",
+    lat: 37.5371,
+    lng: 126.8939,
+  },
+];
 
-    useEffect(() => {
-        let retryCount = 0;
-        const maxRetries = 20;
+const FindStore = () => {
+  const [search, setSearch] = useState("");
+  const [map, setMap] = useState(null);
 
-        const checkKakaoLoaded = () => {
-            if (window.kakao && window.kakao.maps) {
-                console.log('API 로드 완료');
-                setIsMapReady(true);
-            } else if (retryCount < maxRetries) {
-                console.log('API 로드 실패');
-                retryCount++;
-                if (retryCount > maxRetries) {
-                    console.warn("카카오 지도 로딩 실패: 최대 재시도 초과");
-                    return;
-                }
-                setTimeout(checkKakaoLoaded, 100);
-            }
+  const filteredStores = storeData.filter((store) =>
+    store.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  useEffect(() => {
+    const container = document.getElementById("kakao-map");
+
+    const waitForKakao = setInterval(() => {
+      if (window.kakao && window.kakao.maps) {
+        const options = {
+          center: new window.kakao.maps.LatLng(37.4812, 126.9526),
+          level: 6,
         };
-        checkKakaoLoaded();
-    }, []);
+        const kakaoMap = new window.kakao.maps.Map(container, options);
+        setMap(kakaoMap);
+        clearInterval(waitForKakao);
+      }
+    }, 300);
 
-    return (
-        <>
-            <div className="mapBox">
-                {isMapReady && (
-                    <Map
-                        center={coords}
-                        style={{ width: "500px", height: "400px" }}
-                        level={3}
-                    >
-                        <MapMarker position={coords} />
-                    </Map>
-                )}
-            </div>
-        </>
-    )
-}
+    return () => clearInterval(waitForKakao);
+  }, []);
 
-export default HqStoreStock;
+  useEffect(() => {
+    if (map) {
+      filteredStores.forEach((store) => {
+        new window.kakao.maps.Marker({
+          map,
+          position: new window.kakao.maps.LatLng(store.lat, store.lng),
+          title: store.name,
+        });
+      });
+    }
+  }, [map, filteredStores]);
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.leftPanel}>
+        <h2 className={styles.title}>타매장 재고 조회</h2>
+
+        <div className={styles.filters}>
+          <div className={styles.filterRow}>
+            <label>점포 선택</label>
+            <select><option>전체</option></select>
+            <select><option>전체품목</option></select>
+          </div>
+          <div className={styles.filterRow}>
+            <input
+              type="text"
+              placeholder="재료명"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <button>검색</button>
+          </div>
+        </div>
+
+        <table className={styles.inventoryTable}>
+          <thead>
+            <tr>
+              <th>점포명</th>
+              <th>재료명</th>
+              <th>단위</th>
+              <th>재고량</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredStores.map((store, i) => (
+              <tr key={store.id}>
+                <td>{store.name}</td>
+                <td>로메인</td>
+                <td>g</td>
+                <td>{(i % 2 === 0 ? 400 : 1200)}g</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className={styles.rightPanel}>
+        <div id="kakao-map" className={styles.mapArea}></div>
+      </div>
+    </div>
+  );
+};
+
+export default FindStore;
