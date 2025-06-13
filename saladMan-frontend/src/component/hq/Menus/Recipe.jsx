@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SidebarMenus from './Menus/SidebarMenus'
+import SidebarMenus from './SidebarMenus'
 import './Recipe.css';
 
 const Recipe = () => {
