@@ -1,4 +1,4 @@
-import './HqAllMenus.css'
+import './HqAllMenus.module.css'
 import HqSidebarMenus from './HqSidebarMenus'
 
 const HqAllMenus = () => {
