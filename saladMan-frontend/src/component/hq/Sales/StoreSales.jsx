@@ -1,6 +1,6 @@
 import './TotalSales.css'
 import { useEffect, useRef } from 'react';
-import SidebarSales from './SidebarSales'
+import SidebarSales from './Sales/SidebarSales'
 import Chart from 'chart.js/auto';
 
 const TotalSales = () => {
