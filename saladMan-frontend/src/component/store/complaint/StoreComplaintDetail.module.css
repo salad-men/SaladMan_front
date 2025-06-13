@@ -24,14 +24,6 @@
   user-select: none;
 }
 
-.branchName {
-  font-size: 18px;
-  font-weight: 600;
-  color: #2f4f27;
-  margin-bottom: 8px;
-  user-select: none;
-}
-
 .writeDate {
   font-size: 14px;
   color: #555;
@@ -96,21 +88,4 @@
 
 .listButton:hover {
   background-color: #bfbfbf;
-}
-
-.sendButton {
-  padding: 10px 20px;
-  font-weight: 700;
-  font-size: 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  user-select: none;
-  border: none;
-  background-color: #2f4f27;
-  color: white;
-  transition: background-color 0.3s ease;
-}
-
-.sendButton:hover {
-  background-color: #225121;
 }

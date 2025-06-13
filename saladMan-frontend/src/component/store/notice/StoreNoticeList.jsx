@@ -1,6 +1,6 @@
 import React from "react";
 import NoticeSidebar from "./NoticeSidebar";
-import styles from "./HqNoticeList.module.css";
+import styles from "./StoreNoticeList.module.css";
 
 const notices = [
   { id: 1, title: "[공지] 샐러드 배송 지역 확대 안내", author: "관리자", date: "2025-05-21" },
@@ -15,7 +15,7 @@ const notices = [
   { id: 10, title: "[공지] 향후 거래 내역 저장 안내", author: "관리자", date: "2025-05-21" },
 ];
 
-export default function HqNoticeList() {
+export default function StoreNoticeList() {
   return (
     <div className={styles.container}>
       <NoticeSidebar />
@@ -26,8 +26,8 @@ export default function HqNoticeList() {
             <tr>
               <th style={{ width: "5%" }}>번호</th>
               <th style={{ width: "65%" }}>제목</th>
-              <th style={{ width: "15%" }}>작성자</th>
-              <th style={{ width: "15%" }}>작성일</th>
+              <th style={{ width: "12.5%" }}>작성자</th>
+              <th style={{ width: "12.5%" }}>작성일</th>
             </tr>
           </thead>
           <tbody>

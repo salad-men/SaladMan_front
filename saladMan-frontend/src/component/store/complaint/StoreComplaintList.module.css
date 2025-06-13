@@ -22,40 +22,13 @@
   user-select: none;
 }
 
-.actions {
-  margin-bottom: 16px;
-  display: flex;
-  justify-content: flex-end; /* 오른쪽 정렬 */
-}
-
-.forwardSelectedBtn {
-  padding: 8px 20px;
-  background-color: #4d774e;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.3s ease;
-}
-
-.forwardSelectedBtn:disabled {
-  background-color: #a0a0a0;
-  cursor: default;
-}
-
-.forwardSelectedBtn:not(:disabled):hover {
-  background-color: #3f6940;
-}
-
 .detailTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 15px;
   margin-bottom: 32px;
   color: #3b4263;
-  min-width: 900px;
+  min-width: 600px;
 }
 
 .detailTable th,
@@ -87,12 +60,8 @@
   color: #2563eb; /* 열람: 파랑 */
 }
 
-.statusCell.jeondalwanryo {
-  color: #16a34a; /* 전달완료: 초록 */
-}
-
 .unread {
-  background-color: transparent; /* 배경색 제거 */
+  background-color: transparent;
 }
 
 .clickable {
@@ -102,5 +71,5 @@
 }
 
 .clickable:hover {
-  text-decoration: none; /* hover 음영 제거 */
+  text-decoration: none;
 }

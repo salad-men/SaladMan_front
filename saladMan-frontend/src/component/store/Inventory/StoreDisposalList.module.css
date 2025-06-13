@@ -1,268 +1,152 @@
-/* body, html 기본 초기화 */
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Pretendard', sans-serif;
+.container {
+  display: flex;
+}
+
+.content {
+  position: absolute;
+  top: 62px;
+  left: 200px;
+  width: calc(100% - 200px);
+  padding: 40px;
   background-color: #f9fafb;
-  height: 100%;
-  width: 100%;
-  user-select: none;
-}
-
-/* 전체 래퍼 */
-.inventory-wrap {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 20px 40px;
-  background-color: #fff;
+  border-left: 1px solid #ddd;
   box-sizing: border-box;
-  color: #2e3e2f;
-  user-select: text;
+  min-height: calc(100vh - 60px);
+  overflow: auto;
 }
 
-/* 제목 */
-h2 {
-  font-size: 24px;
-  margin-bottom: 24px;
-  color: #3D5A40;
-  user-select: none;
+.title {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #3d5a40;
+  font-weight: bold;
 }
 
-/* 기간조회 필터 컨테이너 */
-.period-filter {
+.filters {
+  margin-bottom: 20px;
+}
+
+.row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-/* 날짜 입력들 */
-.date-inputs {
-  display: flex;
-  gap: 8px;
+.row label {
+  font-weight: bold;
+  font-size: 14px;
+  min-width: 30px;
 }
 
-.date-input {
+.row input[type="date"],
+.row input[type="text"],
+.row select {
   padding: 6px 10px;
   font-size: 14px;
-  border-radius: 6px;
   border: 1px solid #ccc;
-  outline-color: #3D5A40;
-  transition: border-color 0.3s;
+  border-radius: 4px;
+  width: 200px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
-.date-input:focus {
-  border-color: #3D5A40;
+.row input[type="date"]:focus,
+.row input[type="text"]:focus,
+.row select:focus {
+  border-color: #3d5a40;
+  outline: none;
 }
 
-/* 기간조회 텍스트 */
-.period-label {
-  font-weight: 600;
-  color: #3D5A40;
-  user-select: none;
-}
-
-/* 기타 필터들 */
-.other-filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-  align-items: center;
-}
-
-.other-filters select,
-.other-filters input[type="text"] {
-  padding: 8px 12px;
+.row button {
+  padding: 6px 14px;
   font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  outline-color: #3D5A40;
-  transition: border-color 0.3s;
-  min-width: 120px;
-}
-
-.other-filters select:focus,
-.other-filters input[type="text"]:focus {
-  border-color: #3D5A40;
-}
-
-/* 검색 버튼 */
-.btn-search {
-  cursor: pointer;
   border: none;
   border-radius: 6px;
-  font-weight: 600;
-  transition: background-color 0.3s;
-  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: #3d5a40;
   color: white;
-  background-color: #3D5A40;
-  user-select: none;
-  min-width: 80px;
 }
 
-.btn-search:hover {
+.row button:hover {
   background-color: #2f4a31;
 }
 
-/* 액션 버튼 */
-.action-buttons {
-  margin-bottom: 20px;
+.resetButton {
+  background-color: #777;
 }
 
-.btn {
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  transition: background-color 0.3s;
-  padding: 8px 16px;
+.resetButton:hover {
+  background-color: #555;
+}
+
+.searchButton {
+  background-color: #3d5a40;
   color: white;
-  user-select: none;
-  font-size: 14px;
-  margin-right: 8px;
 }
 
-.save {
-  background-color: #2a9d8f;
+.searchButton:hover {
+  background-color: #2f4a31;
 }
 
-.save:hover {
-  background-color: #20776b;
-}
-
-.cancel,
-.btn-cancel {
-  background-color: #e76f51;
-}
-
-.cancel:hover,
-.btn-cancel:hover {
-  background-color: #bf533c;
-}
-
-/* 테이블 */
-.inventory-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 15px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-  background: white;
-  user-select: none;
-}
-
-.inventory-table thead {
-  background-color: #f3f4f6;
-  font-weight: 700;
-}
-
-.inventory-table th,
-.inventory-table td {
-  padding: 12px 10px;
-  text-align: center;
-  border: 1px solid #ddd;
-  vertical-align: middle;
-  white-space: nowrap;
-  user-select: text;
-}
-
-.inventory-table tbody tr:hover {
-  background-color: #f2f7f2;
-}
-
-.status {
-  font-weight: 700;
-  color: #3D5A40;
-}
-
-.remark {
-  color: #555;
+.noData {
+  padding: 30px 0;
+  color: #777;
   font-style: italic;
 }
 
-/* 모달 */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 30px 40px;
-  border-radius: 8px;
-  width: 90vw;
-  max-width: 900px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-content h3 {
-  font-size: 20px;
-  margin-bottom: 20px;
-  color: #3D5A40;
-}
-
-.modal-actions {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-/* input number in modal */
-.modal-content input[type="text"],
-.modal-content input[type="number"],
-.modal-content select {
-  padding: 6px 8px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.table {
   width: 100%;
-  min-width: 80px;
-  outline-color: #3D5A40;
-  transition: border-color 0.3s;
+  min-width: 1100px;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 20px;
+  table-layout: fixed;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
-.modal-content input[type="text"]:focus,
-.modal-content input[type="number"]:focus,
-.modal-content select:focus {
-  border-color: #3D5A40;
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
 }
 
-/* 반응형 */
-@media (max-width: 900px) {
-  .inventory-wrap {
-    padding: 20px 15px;
-  }
+.table th {
+  background-color: #f6f6f6;
+  font-weight: bold;
+  color: #3d5a40;
+}
 
-  .other-filters {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* 기간 버튼 그룹 스타일 변경 */
+.periodButtons {
+  display: flex;
+  gap: 8px;
+  margin-left: 12px;
+}
 
-  .other-filters select,
-  .other-filters input[type="text"],
-  .btn-search {
-    width: 100%;
-    max-width: none;
-    margin-bottom: 10px;
-  }
+.periodButtons button {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 5px;
+  background-color: #f0f0f0; /* 연한 회색 */
+  color: #606060;            /* 진한 회색 */
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: none;
+}
 
-  .inventory-table th,
-  .inventory-table td {
-    font-size: 13px;
-    padding: 8px 6px;
-  }
-
-  .modal-content {
-    width: 95vw;
-  }
+.periodButtons button:hover,
+.periodButtons button:focus {
+  background-color: #f0f0f0;
+  color: #606060;
+  outline: none;
 }
