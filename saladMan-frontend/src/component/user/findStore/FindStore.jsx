@@ -1,4 +1,3 @@
-// src/components/FindStore.jsx
 import React, { useState, useEffect } from "react";
 import styles from "./FindStore.module.css";
 
@@ -41,18 +40,36 @@ const FindStore = () => {
     store.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  // ✅ Kakao SDK 로드될 때까지 기다리기
   useEffect(() => {
-    if (window.kakao && window.kakao.maps) {
-      const container = document.getElementById("kakao-map");
-      const options = {
-        center: new window.kakao.maps.LatLng(37.4812, 126.9526),
-        level: 6,
-      };
-      const kakaoMap = new window.kakao.maps.Map(container, options);
-      setMap(kakaoMap);
+    const container = document.getElementById("kakao-map");
+
+    if (!container) {
+      console.error("❌ #kakao-map 요소를 찾을 수 없습니다.");
+      return;
     }
+
+    const waitForKakao = setInterval(() => {
+      if (window.kakao && window.kakao.maps) {
+        console.log("✅ Kakao SDK 로드됨");
+
+        const options = {
+          center: new window.kakao.maps.LatLng(37.4812, 126.9526),
+          level: 6,
+        };
+        const kakaoMap = new window.kakao.maps.Map(container, options);
+        setMap(kakaoMap);
+
+        clearInterval(waitForKakao);
+      } else {
+        console.log("⏳ Kakao SDK 로딩 대기 중...");
+      }
+    }, 300);
+
+    return () => clearInterval(waitForKakao);
   }, []);
 
+  // ✅ 마커 생성
   useEffect(() => {
     if (map) {
       filteredStores.forEach((store) => {
