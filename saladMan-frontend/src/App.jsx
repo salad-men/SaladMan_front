@@ -110,7 +110,6 @@ function App() {
         <Route path="/SloganIntro" element={<SloganIntro />} />
         <Route path="/MenuPage" element={<MenuPage />} />
         <Route path="/NutritionPage" element={<Nutrition />} />
-        <Route path="/FindStore" element={<FindStorePage />} />
         <Route path="/News" element={<NewsPage />} />
         <Route path="/NewsDetail" element={<NewsDetailPage />} />
         <Route path="/PraiseStore" element={<PraiseStorePage />} />
