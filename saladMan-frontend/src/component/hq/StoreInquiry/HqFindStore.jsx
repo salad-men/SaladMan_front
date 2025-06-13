@@ -1,8 +1,8 @@
-const FindStore = () => {
+const HqFindStore = () => {
     return(
         <>
             <div className="mapBox"></div>
         </>
     )
 }
-export default FindStore;
+export default HqFindStore;

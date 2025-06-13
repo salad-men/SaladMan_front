@@ -1,10 +1,10 @@
 import { Outlet } from "react-router"
-import Header from "./Header";
+import HqHeader from "./HqHeader";
 
 const HqLayout = () => {
     return(
         <>
-            <Header/>
+            <HqHeader/>
             <Outlet/>
         </>
     )

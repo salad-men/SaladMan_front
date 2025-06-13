@@ -1,7 +1,7 @@
-import './AllMenus.css'
-import SidebarMenus from './SidebarMenus'
+import './HqAllMenus.css'
+import HqSidebarMenus from './HqSidebarMenus'
 
-const AllMenus = () => {
+const HqAllMenus = () => {
     const dummyMenus = [
     { id: 1, name: '치킨 시저 샐러드', price: '12,000원', imageUrl: '/img1.png', badge: '신메뉴' },
     { id: 2, name: '그릴드 스테이크 샐러드', price: '12,000원', imageUrl: '/img2.png' },
@@ -17,7 +17,7 @@ const AllMenus = () => {
     return (
         <>
             <div className="wrapper">
-                <SidebarMenus />
+                <HqSidebarMenus />
                 <div className="content">
                     <header className="page-header">
                         <h2>전체 메뉴 조회</h2>
@@ -53,4 +53,4 @@ const AllMenus = () => {
     )
 }
 
-export default AllMenus;
+export default HqAllMenus;

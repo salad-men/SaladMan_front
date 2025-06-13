@@ -1,11 +1,11 @@
-import './UpdateMenu.css'
-import SidebarMenus from './SidebarMenus'
+import './HqUpdateMenu.css'
+import HqSidebarMenus from './HqSidebarMenus'
 
-const AllMenus = () => {
+const HqAllMenus = () => {
     return (
         <>
             <div className="wrapper">
-                <SidebarMenus />
+                <HqSidebarMenus />
                 <div className="content">
                     <header className="page-header">
                         <h2> 메뉴 등록</h2>
@@ -107,4 +107,4 @@ const AllMenus = () => {
     )
 }
 
-export default AllMenus;
+export default HqAllMenus;

@@ -1,6 +1,6 @@
-import './Header.css'
+import './HqHeader.css'
 
-const Header = () => {
+const HqHeader = () => {
 
     return(
         <>
@@ -91,4 +91,4 @@ const Header = () => {
     )
 } 
 
-export default Header;
+export default HqHeader;

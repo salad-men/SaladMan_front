@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-import './StoreStock.css'
+import './HqStoreStock.css'
 
-const StoreStock = () => {
+const HqStoreStock = () => {
     const [coords, setCoords] = useState({ lat: 37.5665, lng: 126.9780 });
     const [isMapReady, setIsMapReady] = useState(true);
 
@@ -44,4 +44,4 @@ const StoreStock = () => {
     )
 }
 
-export default StoreStock;
+export default HqStoreStock;

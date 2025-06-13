@@ -1,9 +1,9 @@
-import './TotalSales.css'
+import './HqTotalSales.css'
 import { useEffect, useRef } from 'react';
-import SidebarSales from './SidebarSales'
+import HqSidebarSales from './HqSidebarSales';
 import Chart from 'chart.js/auto';
 
-const TotalSales = () => {
+const HqTotalSales = () => {
     const barChartRef = useRef(null);
     const donutChartRef = useRef(null);
 
@@ -67,7 +67,7 @@ const TotalSales = () => {
 
     return (
         <div className='wrapper'>
-        <SidebarSales />
+        <HqSidebarSales />
         <div className="content">
             <header className="page-header">
                 <h2>통합 매출 조회</h2>
@@ -139,4 +139,4 @@ const TotalSales = () => {
     )
 }
 
-export default TotalSales;
+export default HqTotalSales;

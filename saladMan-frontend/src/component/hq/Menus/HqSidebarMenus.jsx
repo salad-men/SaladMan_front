@@ -1,6 +1,6 @@
-import '../Sidebar.css'
+import '../HqSidebar.css'
 
-export default function SidebarMenus() {
+export default function HqSidebarMenus() {
     return(
         <>
             <div className="sidebar">
