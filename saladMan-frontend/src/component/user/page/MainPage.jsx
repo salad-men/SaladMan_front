@@ -1,14 +1,5 @@
 import React from 'react';
 
-import '../common/Header.module.css';
-import '../common/Footer.css';
-import '../mainPage/BestMenuSection.css';
-import '../mainPage/SearchStore.css';
-import '../mainPage/IntroSection1.css';
-import '../mainPage/IntroSection2.css';
-import '../mainPage/HeroSection.css';
-import '../mainPage/Layout.css';
-
 import Layout from '../mainPage/Layout';
 import Header from '../common/Header';
 import Herosection from '../mainPage/Herosection';

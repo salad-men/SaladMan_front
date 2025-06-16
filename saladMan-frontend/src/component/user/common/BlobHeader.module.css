@@ -1,0 +1,53 @@
+.headerWrapper {
+  position: relative;
+  width: 100%;
+  z-index: 10;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.header {
+  background-color: #4D774E;
+  padding: 24px 48px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 8px 12px;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+  color: #d5f7de;
+}
+
+.blobSvg {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  z-index: 1;
+  pointer-events: none;
+}
