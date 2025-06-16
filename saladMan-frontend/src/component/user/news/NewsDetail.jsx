@@ -27,7 +27,7 @@ const NewsDetail = () => {
         </p>
 
         <p>이번 개편을 통해</p>
-        <ul>
+        <ul className={styles.ultag}>
           <li>신선한 재료의 비중 확대</li>
           <li>고단백·저탄수 메뉴 구성 강화</li>
           <li>시즌 한정 메뉴 신규 도입</li>

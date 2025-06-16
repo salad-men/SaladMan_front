@@ -20,12 +20,12 @@ const Header = ({ staticScrolled = false }) => {
       <div className={`${styles.layoutContainer} ${styles.headerContent}`}>
         <a href="/mainPage" className={styles.logo}>Saladman</a>
         <nav className={styles.nav}>
-          <a href="/brandIntro">브랜드</a>
-          <a href="/menuPage">메뉴</a>
-          <a href="/nutritionPage">영양표</a>
-          <a href="/findStore">매장</a>
-          <a href="/news">새소식</a>
-          <a href="/">문의하기</a>
+          <a href="/brandIntro"  className={styles.atag}>브랜드</a>
+          <a href="/menuPage" className={styles.atag}>메뉴</a>
+          <a href="/nutritionPage" className={styles.atag}>영양표</a>
+          <a href="/findStore" className={styles.atag}>매장</a>
+          <a href="/news" className={styles.atag}>새소식</a>
+          <a href="/" className={styles.atag}>문의하기</a>
         </nav>
       </div>
     </header>

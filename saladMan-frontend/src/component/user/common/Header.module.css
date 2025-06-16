@@ -39,13 +39,13 @@
   text-decoration: none;
 }
 
-.nav a {
+.atag {
   margin-left: 35px;
   color: white;
   text-decoration: none;
   font-size: 16px;
 }
 
-.nav a:hover {
+.atag:hover {
   text-decoration: underline;
 }
