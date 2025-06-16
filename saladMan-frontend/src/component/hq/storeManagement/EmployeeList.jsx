@@ -1,4 +1,4 @@
-import "./EmployeeList.css";
+import styles from "./EmployeeList.module.css";
 import { useState } from "react";
 import EmpSidebar from "./EmpSidebar";
 
@@ -26,31 +26,30 @@ export default function EmployeeList() {
             joinDate: "2023-03-15",
             schedule: "주~금 14:00~19:00"
         }
-        // 나머지 직원들 추가 가능
     ];
 
     return (
         <>
-            <EmpSidebar />
+            <div className={styles.employeeListContainer}>
+                            <EmpSidebar />
 
-            <div className="employeeListContainer">
-                <div className="employeeListContent">
+                <div className={styles.employeeListContent}>
                     <h2>직원 목록</h2>
 
-                    <div className="topBar">
-                        <button className="registerButton">직원 등록</button>
-                        <div className="searchGroup">
+                    <div className={styles.topBar}>
+                        <button className={styles.registerButton}>직원 등록</button>
+                        <div className={styles.searchGroup}>
                             <input
                                 type="text"
                                 placeholder="이름 또는 직책명 검색"
                                 value={searchKeyword}
                                 onChange={(e) => setSearchKeyword(e.target.value)}
                             />
-                            <button className="searchButton">검색</button>
+                            <button className={styles.searchButton}>검색</button>
                         </div>
                     </div>
 
-                    <table className="employeeTable">
+                    <table className={styles.employeeTable}>
                         <thead>
                             <tr>
                                 <th>사원번호</th>
@@ -72,7 +71,7 @@ export default function EmployeeList() {
                                         <img
                                             src="/images/profile-placeholder.png"
                                             alt="profile"
-                                            className="tableProfile"
+                                            className={styles.tableProfile}
                                         />
                                     </td>
                                     <td>{emp.name}</td>

@@ -1,88 +1,140 @@
-// src/components/FindStore.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./FindStore.module.css";
-
-const storeData = [
-  {
-    id: 1,
-    name: "샐러드맨 낙성대점",
-    address: "서울 관악구 남부순환로 1946 건도빌딩",
-    lat: 37.4781,
-    lng: 126.9637,
-  },
-  {
-    id: 2,
-    name: "샐러드맨 신월중점",
-    address: "서울 양천구 신월동",
-    lat: 37.5312,
-    lng: 126.8462,
-  },
-  {
-    id: 3,
-    name: "샐러드맨 서울대입구점",
-    address: "서울 관악구 관악로 144-1",
-    lat: 37.4786,
-    lng: 126.9526,
-  },
-  {
-    id: 4,
-    name: "샐러드맨 선유도역점",
-    address: "서울 영등포구 양평로21길 4",
-    lat: 37.5371,
-    lng: 126.8939,
-  },
-];
 
 const FindStore = () => {
   const [search, setSearch] = useState("");
+  const [map, setMap] = useState(null);
+  const [stores, setStores] = useState([]); // 페이징된 매장 리스트
+  const [allStores, setAllStores] = useState([]); // 전체 매장 마커용
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const filteredStores = storeData.filter((store) =>
+  // 페이지별 매장 불러오기 (오른쪽 리스트용)
+  useEffect(() => {
+    fetch(`http://localhost:8090/api/stores?page=${page}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setStores(data.content);
+        setTotalPages(data.totalPages);
+      })
+      .catch((err) => console.error("❌ 매장 데이터 불러오기 실패:", err));
+  }, [page]);
+
+  // 전체 매장 가져오기 (지도 마커용)
+  useEffect(() => {
+    fetch("http://localhost:8090/api/stores/all")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllStores(data);
+      })
+      .catch((err) => console.error("❌ 전체 매장 마커 데이터 실패:", err));
+  }, []);
+
+  // 검색 필터 (리스트에만 적용)
+  const filteredStores = stores.filter((store) =>
     store.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  // 카카오맵 초기화
+  useEffect(() => {
+    const container = document.getElementById("kakao-map");
+    const waitForKakao = setInterval(() => {
+      if (window.kakao && window.kakao.maps) {
+        const options = {
+          center: new window.kakao.maps.LatLng(37.554722, 126.970833),
+          level: 6,
+        };
+        const kakaoMap = new window.kakao.maps.Map(container, options);
+        setMap(kakaoMap);
+        clearInterval(waitForKakao);
+      }
+    }, 300);
+    return () => clearInterval(waitForKakao);
+  }, []);
+
+  // 전체 매장 마커 찍기
+  useEffect(() => {
+    if (!map) return;
+
+    const newMarkers = [];
+
+    allStores.forEach((store) => {
+      const marker = new window.kakao.maps.Marker({
+        map,
+        position: new window.kakao.maps.LatLng(store.latitude, store.longitude),
+        title: store.name,
+      });
+      newMarkers.push(marker);
+    });
+
+    return () => {
+      newMarkers.forEach((marker) => marker.setMap(null));
+    };
+  }, [map, allStores]);
+
+  // 리스트 항목 클릭 시 지도 이동
+  const handleClickStore = (store) => {
+    if (map) {
+      const moveLatLng = new window.kakao.maps.LatLng(
+        store.latitude,
+        store.longitude
+      );
+      map.panTo(moveLatLng);
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      {/* 지도 영역 */}
-      <div className={styles.mapSection}>
-        <Map
-          center={{ lat: 37.4812, lng: 126.9526 }}
-          style={{ width: "100%", height: "100%" }}
-          level={6}
-          id="kakao-map"
-        >
-          {filteredStores.map((store) => (
-            <MapMarker
-              key={store.id}
-              position={{ lat: store.lat, lng: store.lng }}
-              title={store.name}
-            />
-          ))}
-        </Map>
-        
+    <div className={styles.wrapper}>
+      <div className={styles.left}>
+        <div id="kakao-map" className={styles.map}></div>
       </div>
 
-      {/* 리스트 영역 */}
-      <div className={styles.listSection}>
+      <div className={styles.right}>
         <h2 className={styles.title}>매장 검색</h2>
         <input
           type="text"
-          placeholder="지역 또는 매장 이름을 검색해 주세요"
+          placeholder="매장 이름 또는 지역 검색"
           className={styles.searchInput}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <ul>
+        <ul className={styles.storeList}>
           {filteredStores.map((store) => (
-            <li key={store.id} className={styles.storeItem}>
+            <li
+              key={store.id}
+              className={styles.storeItem}
+              onClick={() => handleClickStore(store)}
+            >
               <div className={styles.storeTitle}>{store.name}</div>
               <div className={styles.storeAddress}>{store.address}</div>
-              <button className={styles.directionsButton}>길찾기</button>
+              <button
+                className={styles.directionsButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(
+                    `https://map.kakao.com/link/to/${store.name},${store.latitude},${store.longitude}`,
+                    "_blank"
+                  );
+                }}
+              >
+                길찾기
+              </button>
             </li>
           ))}
         </ul>
+        <div className={styles.pagination}>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={i === page ? styles.activePage : ""}
+              onClick={() => setPage(i)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
-    
   );
 };
 

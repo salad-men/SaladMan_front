@@ -1,165 +1,184 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MainPage from './component/user/page/MainPage';
-import BrandIntro from './component/user/page/BrandIntro';
-import SloganIntro from './component/user/page/SloganIntro';
-import MenuPage from './component/user/page/Menu';
-import Nutrition from './component/user/page/Nutrition';
-import FindStorePage from './component/user/page/FindStore';
-import NewsPage from './component/user/page/NewsPage';
-import PraiseStorePage from './component/user/page/PraiseStorePage';
-import EventPage from './component/user/page/EventPage';
+import MainPage from '@user/page/MainPage';
+import BrandIntro from '@user/page/BrandIntro';
+import SloganIntro from '@user/page/SloganIntro';
+import MenuPage from '@user/page/Menu';
+import Nutrition from '@user/page/Nutrition';
+import FindStorePage from '@user/page/FindStore';
+import NewsPage from '@user/page/NewsPage';
+import PraiseStorePage from '@user/page/PraiseStorePage';
+import EventPage from '@user/page/EventPage';
 
 
 
-import HqInventoryList from './component/hq/Inventory/HqInventoryList';
-import HqInventoryExpiration from './component/hq/Inventory/HqInventoryExpiration';
-import HqDisposalList from './component/hq/Inventory/HqDisposalList';
-import HqIngredientSetting from './component/hq/Inventory/HqIngredientSetting';
-import HqInventoryRecord from './component/hq/Inventory/HqInventoryRecord';
+import HqInventoryList from '@hq/Inventory/HqInventoryList';
+import HqInventoryExpiration from '@hq/Inventory/HqInventoryExpiration';
+import HqDisposalList from '@hq/Inventory/HqDisposalList';
+import HqIngredientSetting from '@hq/Inventory/HqIngredientSetting';
+import HqInventoryRecord from '@hq/Inventory/HqInventoryRecord';
+
+// 지현
+import HqLayout from '@hq/HqLayout';
+import HqAllMenus from '@hq/Menus/HqAllMenus';
+import HqUpdateMenu from '@hq/Menus/HqUpdateMenu';
+import HqRecipe from '@hq/Menus/HqRecipe';
+import HqTotalSales from '@hq/Sales/HqTotalSales';
+import HqStoreSales from '@hq/Sales/HqStoreSales';
+import HqStoreStock from '@hq/StoreInquiry/HqStoreStock';
+import HqNotification from '@hq/Notice/HqNotification';
+
+import StoreLayout from '@store/StoreLayout';
+import AllMenus from '@store/Menus/AllMenus';
+import MenuStatus from '@store/Menus/MenuStatus';
+import Recipe from '@store/Menus/Recipe';
+import OtherStoreInven from '@store/StoreInquiry/OtherStoreInven';
+import FindOtherStore from '@store/StoreInquiry/FindOtherStore';
+
+import StoreInventoryList from '@store/Inventory/StoreInventoryList';
+import StoreInventoryExpiration from '@store/Inventory/StoreInventoryExpiration';
+import StoreDisposalList from '@store/Inventory/StoreDisposalList';
+import StoreIngredientSetting from '@store/Inventory/StoreIngredientSetting';
+import StoreInventoryRecord from '@store/Inventory/StoreInventoryRecord';
+
+import HqNoticeList from '@hq/Notice/HqNoticeList';
+import HqNoticeDetail from '@hq/Notice/HqNoticeDetail';
+import NewsDetailPage from '@user/page/NewDetailPage';
+import KioskPage from '@user/page/KioskPage';
+import KioskMenuPage from '@user/page/KioskMenuPage';
+
+import StoreRegister from '@hq/storeManagement/StoreRegister'
+import EmployeeRegister from '@hq/storeManagement/EmployeeRegister'
+import EmployeeList from '@hq/storeManagement/EmployeeList'
+import StoreAccountList from '@hq/storeManagement/StoreAccountList'
+import OrderRequestList from '@hq/order/OrderRequestList'
+import OrderRequestDetail from '@hq/order/OrderRequestDetail'
+import OrderItemManage from '@hq/order/OrderItemManage'
+import OrderList from '@store/order/OrderList';
+import OrderApply from '@store/order/OrderApply';
+import OrderDetail from '@store/order/OrderDetail';
+import StockInspection from '@store/order/StockInspection';
+import OrderSettings from '@store/order/OrderSettings';
+import StockLog from '@store/order/StockLog';
+import EmpSchedule from '@store/storeManagement/empSchedule';
 
 
-import HqLayout from './component/hq/HqLayout';
-import AllMenus from './component/hq/Menus/AllMenus';
-import UpdateMenu from './component/hq/Menus/UpdateMenu';
-import Recipe from './component/hq/Menus/Recipe';
+import HqComplaintList from '@hq/Complaint/HqComplaintList';
+import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
+import Notification from '@hq/Notice/HqNotification';
+import StoreNoticeList from '@store/notice/StoreNoticeList';
+import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
+import StoreComplaintList from '@store/complaint/StoreComplaintList';
+import StoreComplaintDetail from '@store/complaint/StoreComplaintDetail';
+
 import Login from './component/common/Login';
-import TotalSales from './component/hq/Sales/TotalSales';
-import StoreSales from './component/hq/Sales/Storesales';
-import StoreStock from './component/hq/StoreInquiry/StoreStock';
-
-
-import StoreInventoryList from './component/store/Inventory/StoreInventoryList';
-import StoreInventoryExpiration from './component/store/Inventory/StoreInventoryExpiration';
-import StoreDisposalList from './component/store/Inventory/StoreDisposalList';
-import StoreIngredientSetting from './component/store/Inventory/StoreIngredientSetting';
-import StoreInventoryRecord from './component/store/Inventory/StoreInventoryRecord';
-
-import HqNoticeList from './component/hq/Notice/HqNoticeList';
-import HqNoticeDetail from './component/hq/Notice/HqNoticeDetail';
-import NewsDetailPage from './component/user/page/NewDetailPage';
-import KioskPage from './component/user/page/KioskPage';
-import KioskMenuPage from './component/user/page/KioskMenuPage';
-
-import StoreRegister from './component/hq/storeManagement/StoreRegister'
-import EmployeeRegister from './component/hq/storeManagement/EmployeeRegister'
-import EmployeeList from './component/hq/storeManagement/EmployeeList'
-import StoreAccountList from './component/hq/storeManagement/StoreAccountList'
-import OrderRequestList from './component/hq/order/OrderRequestList'
-import OrderRequestDetail from './component/hq/order/OrderRequestDetail'
-import OrderItemManage from './component/hq/order/OrderItemManage'
-import OrderList from './component/store/order/OrderList';
-import OrderApply from './component/store/order/OrderApply';
-import OrderDetail from './component/store/order/OrderDetail';
-import StockInspection from './component/store/order/StockInspection';
-import OrderSettings from './component/store/order/OrderSettings';
-import StockLog from './component/store/order/StockLog';
-import EmpSchedule from './component/store/storeManagement/empSchedule';
-
-
-import HqComplaintList from './component/hq/Complaint/HqComplaintList';
-import HqComplaintDetail from './component/hq/Complaint/HqComplaintDetail';
-
-import StoreNoticeList from './component/store/notice/StoreNoticeList';
-import StoreNoticeDetail from './component/store/notice/StoreNoticeDetail';
-import StoreComplaintList from './component/store/complaint/StoreComplaintList';
-import StoreComplaintDetail from './component/store/complaint/StoreComplaintDetail';
-
-import Header from './component/hq/Header';
 
 function App() {
 
   return (
     <>
-
-      <Header/>
-
       <Routes>
-        <Route path='/AllMenus' element={<AllMenus />} />
 
-        <Route path='/hq/HqInventoryList' element={<HqInventoryList />} />
-        <Route path='/hq/HqInventoryExpiration' element={<HqInventoryExpiration />} />
-        <Route path='/hq/HqDisposalList' element={<HqDisposalList />} />
-        <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting />} />
-        <Route path='/hq/HqInventoryRecord' element={<HqInventoryRecord />} />
+        <Route element={<HqLayout />}>
 
-        <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
-        <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
-        <Route path='/store/StoreDisposalList' element={<StoreDisposalList />} />
-        <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting />} />
-        <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord />} />
+          {/* 재고 */}
+          <Route path='/hq/HqInventoryList' element={<HqInventoryList />} />
+          <Route path='/hq/HqInventoryExpiration' element={<HqInventoryExpiration />} />
+          <Route path='/hq/HqDisposalList' element={<HqDisposalList />} />
+          <Route path='/hq/HqIngredientSetting' element={<HqIngredientSetting />} />
+          <Route path='/hq/HqInventoryRecord' element={<HqInventoryRecord />} />
 
-        <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
-        <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
+          {/*발주*/}
+          <Route path="/hq/orderRequest" element={<OrderRequestList />} />
+          <Route path="/hq/orderRequestDetail" element={<OrderRequestDetail />} />
+          <Route path="/hq/orderItemManage" element={<OrderItemManage />} />
 
-        <Route path='/store/StoreNoticeList' element={<StoreNoticeList />} />
-        <Route path='/store/StoreNoticeDetail' element={<StoreNoticeDetail />} />
+          {/* 메뉴 */}
+          <Route path='/hq/allMenus' element={<HqAllMenus />} />
+          <Route path='/hq/updateMenu' element={<HqUpdateMenu />} />
+          <Route path='/hq/recipe' element={<HqRecipe />} />
 
-        <Route path='/hq/HqComplaintList' element={<HqComplaintList />} />
-        <Route path='/hq/HqComplaintDetail' element={<HqComplaintDetail />} />
+          {/* 매출 */}
+          <Route path='/hq/totalSales' element={<HqTotalSales />} />
+          <Route path='/hq/storeSales' element={<HqStoreSales />} />
 
-        <Route path='/store/StoreComplaintList' element={<StoreComplaintList />} />
-        <Route path='/store/StoreComplaintDetail' element={<StoreComplaintDetail />} /> 
+          {/*매장관리 */}
+          <Route path="/hq/storeRegister" element={<StoreRegister />} />
+          <Route path="/hq/storeAccount" element={<StoreAccountList />} />
+          <Route path="/hq/empRegister" element={<EmployeeRegister />} />
+          <Route path="/hq/empList" element={<EmployeeList />} />
 
+          {/* 점포조회 */}
+          <Route path='/hq/storeStock' element={<HqStoreStock />} />
+
+          {/* 공지- 공지 */}
+          <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
+          <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
+          {/* 공지-불만 */}
+          <Route path='/hq/HqComplaintList' element={<HqComplaintList />} />
+          <Route path='/hq/HqComplaintDetail' element={<HqComplaintDetail />} />
+          {/* 공지-알림목록 */}
+          <Route path='/hq/notification' element={<HqNotification />} />
+
+        </Route>
+
+        <Route element={<StoreLayout />}>
+
+          {/* 재고 */}
+          <Route path='/store/StoreInventoryList' element={<StoreInventoryList />} />
+          <Route path='/store/StoreInventoryExpiration' element={<StoreInventoryExpiration />} />
+          <Route path='/store/StoreDisposalList' element={<StoreDisposalList />} />
+          <Route path='/store/StoreIngredientSetting' element={<StoreIngredientSetting />} />
+          <Route path='/store/StoreInventoryRecord' element={<StoreInventoryRecord />} />
+          
+          {/*매장 발주*/}
+          <Route path="/store/orderList" element={<OrderList />} />
+          <Route path="/store/orderApply" element={<OrderApply />} />
+          <Route path="/store/orderDetail" element={<OrderDetail />} />
+          <Route path="/store/stockInspection" element={<StockInspection />} />
+          <Route path="/store/orderSettings" element={<OrderSettings />} />
+          <Route path="/store/stockLog" element={<StockLog />} />
+          
+          {/* 메뉴 */}
+          <Route path='/store/allMenus' element={<AllMenus />} />
+          <Route path='/store/menuStatus' element={<MenuStatus />} />
+          <Route path='/store/recipe' element={<Recipe />} />
+
+          {/*매장관리*/}
+          <Route path="/store/empSchedule" element={<EmpSchedule />} />
+          
+          {/* 매출 */}
+
+          {/* 점포조회 */}
+          <Route path='/store/findOtherStore' element={<FindOtherStore />} />
+          <Route path='/store/otherStoreInven' element={<OtherStoreInven />} />
+
+          {/* 공지사항 */}
+          <Route path='/store/StoreNoticeList' element={<StoreNoticeList />} />
+          <Route path='/store/StoreNoticeDetail' element={<StoreNoticeDetail />} />
+          <Route path='/store/notification' element={<Notification />} />
+
+          {/* 공지 -고객불만사항 */}
+          <Route path='/store/StoreComplaintList' element={<StoreComplaintList />} />
+          <Route path='/store/StoreComplaintDetail' element={<StoreComplaintDetail />} />
+
+        </Route>
+
+        {/* 로그인페이지 */}
+        <Route path='/' element={<Login />} />
+
+        {/* 소비자 메인 페이지 */}
         <Route path="/mainPage" element={<MainPage />} />
-
-
         <Route path="/brandIntro" element={<BrandIntro />} />
         <Route path="/sloganIntro" element={<SloganIntro />} />
         <Route path="/menuPage" element={<MenuPage />} />
         <Route path="/nutritionPage" element={<Nutrition />} />
+        <Route path="/news" element={<NewsPage />} />
+        <Route path="/newsDetail" element={<NewsDetailPage />} />
+        <Route path="/praiseStore" element={<PraiseStorePage />} />
+        <Route path="/event" element={<EventPage />} />
         <Route path="/findStore" element={<FindStorePage />} />
-
-
-
-
-
-
-
-
-        <Route path="/MainPage" element={<MainPage />} />
-        <Route path="/BrandIntro" element={<BrandIntro />} />
-        <Route path="/SloganIntro" element={<SloganIntro />} />
-        <Route path="/MenuPage" element={<MenuPage />} />
-        <Route path="/NutritionPage" element={<Nutrition />} />
-        <Route path="/FindStore" element={<FindStorePage />} />
-        <Route path="/News" element={<NewsPage />} />
-        <Route path="/NewsDetail" element={<NewsDetailPage />} />
-        <Route path="/PraiseStore" element={<PraiseStorePage />} />
-        <Route path="/Event" element={<EventPage />} />
-        <Route path="/FindStore" element={<FindStorePage />} />
-        <Route path="/Kiosk" element={<KioskPage />} />
-        <Route path="/KioskMenu" element={<KioskMenuPage />} />
-
-        {/*본사 매장관리 */}
-        <Route path="/hq/storeRegister" element={<StoreRegister />} />
-        <Route path="/hq/storeAccount" element={<StoreAccountList />} />
-        <Route path="/hq/empRegister" element={<EmployeeRegister />} />
-        <Route path="/hq/empList" element={<EmployeeList />} />
-        {/*매장 매장관리*/}
-        <Route path="/store/empSchedule" element={<EmpSchedule />} />
-
-        {/*본사 발주*/}
-        <Route path="/hq/orderRequest" element={<OrderRequestList />} />
-        <Route path="/hq/orderRequestDetail" element={<OrderRequestDetail />} />
-        <Route path="/hq/orderItemManage" element={<OrderItemManage />} />
-        {/*매장 발주*/}
-        <Route path="/store/orderList" element={<OrderList />} />
-        <Route path="/store/orderApply" element={<OrderApply />} />
-        <Route path="/store/orderDetail" element={<OrderDetail />} />
-        <Route path="/store/stockInspection" element={<StockInspection />} />
-        <Route path="/store/orderSettings" element={<OrderSettings />} />
-        <Route path="/store/stockLog" element={<StockLog />} />
-
-        <Route element={<HqLayout />}>
-          <Route path='/hq/allMenus' element={<AllMenus />} />
-          <Route path='/hq/updateMenu' element={<UpdateMenu />} />
-          <Route path='/hq/recipe' element={<Recipe />} />
-          <Route path='/hq/totalSales' element={<TotalSales />} />
-          <Route path='/hq/storeSales' element={<StoreSales />} />
-          <Route path='/hq/storeStock' element={<StoreStock />} />
-        </Route>
-
-        <Route path='/' element={<Login />} />
+        <Route path="/kiosk" element={<KioskPage />} />
+        <Route path="/kioskMenu" element={<KioskMenuPage />} />
 
       </Routes>
     </>

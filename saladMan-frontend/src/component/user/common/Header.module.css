@@ -2,7 +2,6 @@
   position: fixed;
   top: 0;
   width: 100%;
-  height: auto;
   padding: 12px 48px;
   background: transparent;
   display: flex;
@@ -11,10 +10,11 @@
   transition: background 0.7s ease;
   z-index: 1000;
   font-family: 'Noto Sans KR', sans-serif;
+
 }
 
 .layoutContainer {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
@@ -23,6 +23,10 @@
 }
 
 .headerContent {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .scrolled {
@@ -34,18 +38,82 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: white;
-  margin-right: 250px;
-  margin-left: -120px;
+  margin-right: 0px;
+  margin-left: 0px;
   text-decoration: none;
 }
 
-.nav a {
-  margin-left: 35px;
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+}
+
+.menuItem {
+  position: relative;
+  cursor: pointer;
+}
+
+.atag {
   color: white;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 17px;
+  padding: 10px 12px;
+  font-weight: 500;
+  display: inline-block;
+  transition: color 0.3s ease;
 }
 
-.nav a:hover {
+.atag:hover {
   text-decoration: underline;
+  color: #acccb5;
+}
+
+.subMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 160px;
+  z-index: 10;
+  animation: fadeIn 0.25s ease;
+}
+
+.subMenuItem {
+  display: block;
+  padding: 10px 16px;
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.subMenuItem:hover {
+  background-color: #f4f4f4;
+  color: #4D774E;
+}
+
+.subMenuWrapper {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 999;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -17,9 +17,10 @@ export default function StoreAccountList() {
 
     return (
         <>
-            <EmpSidebar />
 
             <div className="storeAccountContainer">
+                            <EmpSidebar />
+
                 <div className="storeAccountContent">
                     <h2>매장/계정 목록</h2>
 

@@ -7,8 +7,8 @@ const Login = () => {
                 <div className='login-box'>
                     <h2>로그인</h2>
                     <form action="" className='loginform'>
-                        <input type="text" placeholder="아이디"/>
-                        <input type="text" placeholder="비밀번호"/>
+                        <input type="text" id='id' placeholder="아이디"/>
+                        <input type="text" id='password' placeholder="비밀번호"/>
                         <button className='login-button'>로그인</button>
                     </form>
                 </div>
