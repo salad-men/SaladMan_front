@@ -1,14 +1,14 @@
-import './Header.css'
+import styles from './Header.module.css';
 
 const Header = () => {
 
     return(
         <>
-            <div className="header">
-                <div className="nav">
-                    <div className="dropdown-container">
+            <div className={styles.header}>
+                <div className={styles.nav}>
+                    <div className={styles.dropdownContainer}>
                         <a href="#">재고</a>
-                        <div className="dropdown">
+                        <div className={styles.dropdown}>
                             <ul>
                                 <li><a href="#">전체 재고 조회</a></li>
                                 <li><a href="#">재고 입출고 내역</a></li>
@@ -18,9 +18,9 @@ const Header = () => {
                             </ul>
                         </div>  
                     </div>
-                    <div className="dropdown-container">
+                    <div className={styles.dropdownContainer}>
                         <a href="#">발주</a>
-                        <div className="dropdown">
+                        <div className={styles.dropdown}>
                             <ul>
                                 <li><a href="#">발주목록조회</a></li>
                                 <li><a href="#">발주목록상세</a></li>
@@ -31,9 +31,9 @@ const Header = () => {
                             </ul>
                         </div>  
                     </div>
-                    <div className="dropdown-container">
+                    <div className={styles.dropdownContainer}>
                         <a href="#">메뉴</a>
-                        <div className="dropdown">
+                        <div className={styles.dropdown}>
                             <ul>
                                 <li><a href="/store/allMenus">전메뉴 조회</a></li>
                                 <li><a href="/store/updateMenu">메뉴 등록</a></li>
@@ -41,18 +41,18 @@ const Header = () => {
                             </ul>
                         </div>  
                     </div>
-                    <div className="dropdown-container">
+                    <div className={styles.dropdownContainer}>
                         <a href="#">매출</a>
-                        <div className="dropdown">
+                        <div className={styles.dropdown}>
                             <ul>
                                 <li><a href="#">매출 조회</a></li>
                                 <li><a href="#">주문내역 조회</a></li>
                             </ul>
                         </div>  
                     </div>
-                    <div className="dropdown-container">
+                    <div className={styles.dropdownContainer}>
                         <a href="#">매장관리</a>
-                        <div className="dropdown">
+                        <div className={styles.dropdown}>
                             <ul>
                                 <li><a href="#">직원등록</a></li>
                                 <li><a href="#">직원조회</a></li>
@@ -61,18 +61,18 @@ const Header = () => {
                             </ul>
                         </div> 
                     </div>
-                    <div className="dropdown-container">
+                    <div className={styles.dropdownContainer}>
                         <a href="#">점포 조회</a>
-                        <div className="dropdown">
+                        <div className={styles.dropdown}>
                             <ul>
                                 <li><a href="#">매장 위치 조회</a></li>
                                 <li><a href="#">매장 재고 조회</a></li>
                             </ul>
                         </div> 
                     </div>
-                    <div className="dropdown-container">
+                    <div className={styles.dropdownContainer}>
                         <a href="#">공지사항</a>
-                        <div className="dropdown">
+                        <div className={styles.dropdown}>
                             <ul>
                                 <li><a href="#">공지사항 조회</a></li>
                                 <li><a href="#">불편사항 조회</a></li>
@@ -82,8 +82,8 @@ const Header = () => {
                         </div> 
                     </div>
                 </div>
-                <div className="user-info">
-                00지점 | 홍길동 👤
+                <div className={styles.userInfo}>
+                    00지점 | 홍길동 👤
                 </div>
             </div>
         </>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./EmployeeRegister.css";
+import styles from "./EmployeeRegister.module.css";
 import EmpSidebar from "./EmpSidebar";
 
 export default function EmployeeRegister() {
@@ -33,13 +33,11 @@ export default function EmployeeRegister() {
 
     return (
         <>
-            <EmpSidebar />
-
-            <div className="employeeRegisterContainer">
-
-                <div className="empRegContent">
+            <div className={styles.employeeRegisterContainer}>
+                <EmpSidebar />
+                <div className={styles.empRegContent}>
                     <h2>매장 직원</h2>
-                    <div className="searchBar">
+                    <div className={styles.searchBar}>
                         <select name="store" value={search.store} onChange={handleSearchChange}>
                             <option>전체</option>
                             <option>강남점</option>
@@ -49,11 +47,17 @@ export default function EmployeeRegister() {
                             <option>이름</option>
                             <option>사원번호</option>
                         </select>
-                        <input type="text" name="keyword" placeholder="검색어 입력" value={search.keyword} onChange={handleSearchChange} />
-                        <button className="searchButton">검색</button>
+                        <input
+                            type="text"
+                            name="keyword"
+                            placeholder="검색어 입력"
+                            value={search.keyword}
+                            onChange={handleSearchChange}
+                        />
+                        <button className={styles.searchButton}>검색</button>
                     </div>
 
-                    <table className="employeeTable">
+                    <table className={styles.employeeTable}>
                         <thead>
                             <tr>
                                 <th>사원번호</th>
@@ -77,30 +81,30 @@ export default function EmployeeRegister() {
                             ))}
                         </tbody>
                     </table>
-                    <h2>직원 등록</h2>
-                    <div className="formSection">
 
-                        <div className="profileBox">
-                            <img src="/images/profile-sample.jpg" alt="profile" className="profileImage" />
-                            <input type="file" className="fileInput" />
+                    <h2>직원 등록</h2>
+                    <div className={styles.formSection}>
+                        <div className={styles.profileBox}>
+                            <img src="/images/profile-sample.jpg" alt="profile" className={styles.profileImage} />
+                            <input type="file" className={styles.fileInput} />
                         </div>
 
-                        <div className="formBox">
-                            <div className="formRow">
+                        <div className={styles.formBox}>
+                            <div className={styles.formRow}>
                                 <label>사원번호</label>
                                 <input type="text" name="empNo" onChange={handleChange} />
                                 <label>이름</label>
                                 <input type="text" name="name" onChange={handleChange} />
                             </div>
 
-                            <div className="formRow">
+                            <div className={styles.formRow}>
                                 <label>생년월일</label>
                                 <input type="text" name="birth" placeholder="예: 901010" onChange={handleChange} />
                                 <label>연락처</label>
                                 <input type="text" name="phone" placeholder="예: 010-0000-0000" onChange={handleChange} />
                             </div>
 
-                            <div className="formRow">
+                            <div className={styles.formRow}>
                                 <label>직책</label>
                                 <select name="position" onChange={handleChange}>
                                     <option value="">선택</option>
@@ -109,29 +113,28 @@ export default function EmployeeRegister() {
                                     <option value="파트타이머">파트타이머</option>
                                 </select>
                                 <label>성별</label>
-                                <div className="radioGroup">
+                                <div className={styles.radioGroup}>
                                     <label><input type="radio" name="gender" value="남" onChange={handleChange} /> 남</label>
                                     <label><input type="radio" name="gender" value="여" onChange={handleChange} /> 여</label>
                                 </div>
                             </div>
 
-                            <div className="formRow fullRow">
+                            <div className={`${styles.formRow} ${styles.fullRow}`}>
                                 <label>주소</label>
                                 <input type="text" name="address" onChange={handleChange} />
                             </div>
 
-                            <div className="formRow fullRow">
+                            <div className={`${styles.formRow} ${styles.fullRow}`}>
                                 <label>입사일</label>
                                 <input type="date" name="joinDate" onChange={handleChange} />
                             </div>
 
-                            <div className="submitRow">
-                                <button className="submitButton">저장</button>
+                            <div className={styles.submitRow}>
+                                <button className={styles.submitButton}>저장</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </>
     );
