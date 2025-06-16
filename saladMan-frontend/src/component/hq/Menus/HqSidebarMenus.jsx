@@ -1,4 +1,4 @@
-import '../HqSidebar.css'
+import'../HqSidebar.css'
 
 export default function HqSidebarMenus() {
     return(

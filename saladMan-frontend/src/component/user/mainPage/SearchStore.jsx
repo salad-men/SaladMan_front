@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import './SearchStore.css';
+import styles from './SearchStore.module.css';
 
 const SearchStore = () => {
   const [keyword, setKeyword] = useState('');
 
-  const handleSearch = () => {
-    alert(`"${keyword}"로 매장을 검색합니다.`);
-  };
 
   return (
-    <section className="search-section">
+    <section className={styles.searchSection}>
+      <a href="/findStore" className={styles.atag}>
       <h2>Search Store</h2>
       <p>가까운 샐러드맨 매장을 검색해보세요!</p>
-      <div className="searchBox">
+      <div className={styles.searchBox}>
         <input
+          className={styles.inputbox}
           type="text"
           placeholder="매장명을 입력하세요"
           value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
+          onChange={(e) => setKeyword(e.target.value) 
+            
+          }
         />
-        <button onClick={handleSearch}>매장 찾으러 가기</button>
       </div>
+      </a>
     </section>
   );
 };

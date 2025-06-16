@@ -7,11 +7,11 @@ const MenuHeroSection= () =>{
         <h1 className= {styles.title}>메뉴</h1>
         <br />
             <p className={styles.subtitle}>
-                <a href='/brandIntro'>샐러볼</a> 
+                <a href='/brandIntro' className={styles.atag}>샐러볼</a> 
                 <span className={styles.divider}>ㅣ</span> 
-                <a href='/sloganIntro'>포케볼</a>
+                <a href='/sloganIntro' className={styles.atag}>포케볼</a>
                 <span className={styles.divider}>ㅣ</span> 
-                <a href='/sloganIntro'>비건볼</a>
+                <a href='/sloganIntro' className={styles.atag}>비건볼</a>
             </p>
         <div className={styles.imageBanner}>
             <img src="/Menu.jpg" alt="메뉴" />

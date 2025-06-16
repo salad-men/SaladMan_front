@@ -1,29 +1,32 @@
-import './HqAllMenus.css'
-import HqSidebarMenus from './HqSidebarMenus'
+import { useEffect, useState } from 'react';
+import styles from './HqAllMenus.module.css';
+import { myAxios } from '/src/config.jsx';
+import HqSidebarMenus from './HqSidebarMenus';
 
 const HqAllMenus = () => {
-    const dummyMenus = [
-    { id: 1, name: '치킨 시저 샐러드', price: '12,000원', imageUrl: '/img1.png', badge: '신메뉴' },
-    { id: 2, name: '그릴드 스테이크 샐러드', price: '12,000원', imageUrl: '/img2.png' },
-    { id: 3, name: '연어 아보카도 샐러드', price: '12,000원', imageUrl: '/img2.png' },
-    { id: 4, name: '단호박 닭가슴살 샐러드', price: '12,000원', imageUrl: '/img2.png' },
-    { id: 5, name: '리코타 치즈 샐러드', price: '12,000원', imageUrl: '/img1.png' },
-    { id: 6, name: '참치 곡물 샐러드', price: '12,000원', imageUrl: '/img2.png' },
-    { id: 7, name: '훈제 오리 샐러드', price: '12,000원', imageUrl: '/img3.png' },
-    { id: 8, name: '두부 아보카도 샐러드', price: '12,000원', imageUrl: '/img1.png' },
-    { id: 9, name: '닭가슴살 퀴노아 샐러드', price: '12,000원', imageUrl: '/img2.png' },
-    ];
+    const [menus, setMenus] = useState([]);
+    const [sort, setSort] = useState('release_desc');
+
+    useEffect(() => {
+        const axiosInstance = myAxios();
+
+        axiosInstance.get(`/hq/allMenus?sort=${sort}`)
+            .then(res => {
+                console.log(res);
+                setMenus(res.data);
+            })
+            .catch(err => console.error(err));
+    }, [sort]);
 
     return (
         <>
-            <div className="wrapper">
+            <div className={styles.wrapper}>
                 <HqSidebarMenus />
-                <div className="content">
-                    <header className="page-header">
+                <div className={styles.content}>
+                    <header className={styles.pageHeader}>
                         <h2>전체 메뉴 조회</h2>
-                        <div className="controls">
-                            <input type="text" id="searchInput" placeholder="메뉴명을 검색하세요" />
-                            <select id="sortSelect">
+                        <div className={styles.controls}>
+                            <select id="sortSelect" value={sort} onChange={(e) => setSort(e.target.value)}>
                                 <option value="release_desc">출시일 순 (최신순)</option>
                                 <option value="release_asc">출시일 순 (오래된순)</option>
                                 <option value="name_asc">이름순 (가나다)</option>
@@ -31,26 +34,25 @@ const HqAllMenus = () => {
                                 <option value="price_asc">가격순 (낮은 가격)</option>
                                 <option value="price_desc">가격순 (높은 가격)</option>
                             </select>
-                            <button>검색</button>
                         </div>
                     </header>
 
-                    <section className="menu-grid">
-                        {dummyMenus.map(menu => (
-                            <div className="menu-card" key={menu.id}>
-                            <div className="image-wrapper">
-                                <img src={menu.imageUrl} alt={menu.name} />
-                                {menu.badge && <span className="badge">{menu.badge}</span>}
-                            </div>
-                            <h3>{menu.name}</h3>
-                            <p>{menu.price}</p>
+                    <section className={styles.menuGrid}>
+                        {menus.map(menu => (
+                            <div className={styles.menuCard} key={menu.id}>
+                                <div className={styles.imageWrapper}>
+                                    {/* {menu.badge && <span className="badge">{menu.badge}</span>} */}
+                                    <img src='/img1.png' alt={menu.name} />
+                                </div>
+                                <h3>{menu.name}</h3>
+                                <p>{menu.salePrice.toLocaleString()}원</p>
                             </div>
                         ))}
                     </section>
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default HqAllMenus;

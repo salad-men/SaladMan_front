@@ -1,7 +1,6 @@
-import './HqHeader.css'
+import './HqHeader.css';
 
 const HqHeader = () => {
-
     return (
         <>
             <div className="header">
@@ -85,6 +84,6 @@ const HqHeader = () => {
 
         </>
     )
-}
+};
 
 export default HqHeader;
