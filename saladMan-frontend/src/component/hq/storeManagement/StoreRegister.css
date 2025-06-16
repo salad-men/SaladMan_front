@@ -32,6 +32,8 @@
   border-collapse: collapse;
   width: 100%;
   max-width: 500px;
+  border-radius:8px ;
+  border: 1px solid #ccc;
 }
 
 .registerTable td {
@@ -40,14 +42,25 @@
 }
 
 .registerTable td:first-child {
-  width: 130px;
+  width: 80px;
   font-weight: bold;
-  text-align: right;
+  text-align: center;
   white-space: nowrap;
   color: #333;
 }
 
 .registerTable input[type="text"],
+.registerTable input[type="text"]:focus{
+  background: none !important; /* ← 여기 추가 */
+  width: 200px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
 .registerTable input[type="password"] {
   width: 100%;
   padding: 10px 12px;
@@ -68,12 +81,12 @@
   transition: background-color 0.2s;
   margin-top: 6px;
   margin-bottom: 6px;
+  margin-left: 6px;
 }
 
 .registerTable input[type="button"]:hover {
-  background-color: #3a5e3b;
+  background-color: #226236;
 }
-
 .mapBox {
   width: 500px;
   height: 400px;
@@ -106,4 +119,57 @@
 
 .submitButton:hover {
   background-color: #333;
+}
+
+.checkButton {
+  margin-top: 6px;
+  margin-left: 6px;
+  padding: 8px 14px;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.checkButton:hover {
+  background-color: #226236;
+}
+
+input.inputFalse:focus {
+  background-color: #ffe5e5 !important;
+  border: 1px solid #ff4d4f !important;
+  outline: none;
+  box-shadow: none;
+}
+
+input.inputSuccess:focus {
+  background-color: #e5ffe6 !important;
+  border: 1px solid #51f759 !important;
+  outline: none;
+  box-shadow: none;
+}
+
+input[type="text"].inputFalse {
+  background-color: #ffe5e5 !important;
+  border: 1px solid #ff4d4f !important;
+}
+
+input[type="text"].inputSuccess {
+  background-color: #e5ffe6 !important;
+  border: 1px solid #51f759 !important;
+}
+
+input.inputFalse:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
+  box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
+  border: 1px solid #ff4d4f !important;
+}
+
+input.inputSuccess:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
+  box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
+  border: 1px solid #51f759 !important;
 }

@@ -139,8 +139,8 @@
     text-align: right;
 }
 
-input[type="text"],
-input[type="date"],
+.searchBar input[type="text"],
+.searchBar input[type="date"],
 select {
     padding: 8px;
     font-size: 14px;
