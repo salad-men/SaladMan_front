@@ -71,6 +71,7 @@ import StoreComplaintList from '@store/complaint/StoreComplaintList';
 import StoreComplaintDetail from '@store/complaint/StoreComplaintDetail';
 
 import Login from './component/common/Login';
+import StoreAccountDetail from '@hq/storeManagement/StoreAccountDetail';
 
 function App() {
 
@@ -104,6 +105,7 @@ function App() {
           {/*매장관리 */}
           <Route path="/hq/storeRegister" element={<StoreRegister />} />
           <Route path="/hq/storeAccount" element={<StoreAccountList />} />
+          <Route path="/hq/storeAccountDetail" element={<StoreAccountDetail/>}/>
           <Route path="/hq/empRegister" element={<EmployeeRegister />} />
           <Route path="/hq/empList" element={<EmployeeList />} />
 

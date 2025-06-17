@@ -114,3 +114,35 @@
 .editButton:hover {
     background-color: #555;
 }
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #76c3c5;
+    color: white;
+    font-weight: bold;
+}
+
+.status-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #333;
+}
+
+.status-text {
+    vertical-align: middle;
+}
