@@ -37,7 +37,7 @@ export default function StoreAccountList() {
         }
     };
     const navigateToDetail = (id) => {
-        navigate(`/emp/storeAccountDetail?id=${id}`);
+        navigate(`/hq/storeAccountDetail?id=${id}`);
     };
     useEffect(() => {
         fetchStores();

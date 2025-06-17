@@ -15,21 +15,63 @@
     min-width: 0;
     position: relative;
 }
+.detailLayout {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+    justify-content: center; /* 전체를 가운데 정렬 */
+  padding: 20px 40px;
 
-.storeDetailBox {
-    border: 1px solid #ccc;
-    padding: 20px;
+}
+.detailGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 30px;
+    background-color: #fff;
+    padding: 30px;
     border-radius: 12px;
-    background-color: #f9f9f9;
-    line-height: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 1000px;
+}
+.mapBox {
+  width: 400px;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+    .item {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.value {
+    font-size: 16px;
+    color: #222;
+    font-weight: 500;
 }
 
 .backButton {
-    margin-top: 20px;
+    display: block;
+    margin: 30px auto 0;
     padding: 10px 20px;
     background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 6px;
+    font-size: 15px;
     cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.backButton:hover {
+    background-color: #388e3c;
 }
