@@ -4,17 +4,17 @@ import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqInventoryList.module.css";
 
-// atoms
-const pageInfoAtom    = atom({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
-const inventoryAtom   = atom([]);
-const filtersAtom     = atom({ scope: "hq", store: "all", category: "all", name: "" });
-const categoriesAtom  = atom([]);
-const storesAtom      = atom([]);
-const ingredientsAtom = atom([]);
-const isEditModeAtom  = atom(false);
-const isAddModeAtom   = atom(false);
-const newItemsAtom    = atom([
-  {
+export default function HqInventoryList() {
+
+  const [inventory, setInventory]       = useState([]);
+  const [filters, setFilters]           = useState({ scope: "hq", store: "all", category: "all", name: "" });
+  const [pageInfo, setPageInfo]         = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+  const [categories, setCategories]     = useState([]);
+  const [stores, setStores]             = useState([]);
+  const [ingredients, setIngredients]   = useState([]);
+  const [isEditMode, setIsEditMode]     = useState(false);
+  const [isAddMode, setIsAddMode]       = useState(false);
+  const [newItems, setNewItems]         = useState([{
     store: "본사",
     category: "",
     ingredientId: "",
@@ -25,35 +25,24 @@ const newItemsAtom    = atom([
     minimumOrderUnit: 0,
     expiredQuantity: 0,
     expiredDate: ""
-  }
-]);
+  }]);
+  const [pageNums, setPageNums]         = useState([]);
 
-export default function HqInventoryList() {
-  const [inventory, setInventory]     = useAtom(inventoryAtom);
-  const [filters, setFilters]         = useAtom(filtersAtom);
-  const [pageInfo, setPageInfo]       = useAtom(pageInfoAtom);
-  const [categories, setCategories]   = useAtom(categoriesAtom);
-  const [stores, setStores]           = useAtom(storesAtom);
-  const [ingredients, setIngredients] = useAtom(ingredientsAtom);
-  const [isEditMode, setIsEditMode]   = useAtom(isEditModeAtom);
-  const [isAddMode, setIsAddMode]     = useAtom(isAddModeAtom);
-  const [newItems, setNewItems]       = useAtom(newItemsAtom);
-  const [pageNums, setPageNums]       = useState([]);
-
-  // 초기 메타데이터 조회
-  useEffect(() => {
+  // 초기 카테고리, 지점명, 재료명 조회
+ useEffect(() => {
     myAxios().get("/hq/inventory/categories").then(res => setCategories(res.data.categories));
     myAxios().get("/hq/inventory/stores").then(res => setStores(res.data.stores));
     myAxios().get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients));
   }, []);
 
-  // 재고 목록 조회 (flat)
-  const fetchInventory = (page = 1) => {
-          
+  useEffect(() => { fetchInventory(1); }, [filters.scope, filters.store]);
 
+
+  // 재고 목록 조회
+  const fetchInventory = (page = 1) => {
     const param = { ...filters, page };
     myAxios().post("/hq/inventory/list", param).then(res => {
-            console.log("백엔드 응답 전체 데이터:", res.data);  // 여기서 전체 응답 데이터 확인
+            console.log("백엔드 응답 전체 데이터:", res.data); 
 
       const hqList = (res.data.hqInventory || []).map(x => ({ ...x, store: "본사" }));
       const storeList = res.data.storeInventory || [];
@@ -63,20 +52,19 @@ export default function HqInventoryList() {
           ? storeList
           : [...hqList, ...storeList];
 
-      // flat 구조로 재구성: ingredient, category 객체에서 필요한 필드 꺼내기
+      //ingredient, category 객체에서 필요한 필드 꺼내기
       const flatList = list.map(x => ({
         id: x.id,
         store: x.store,
-        name: x.ingredientName || "",  // DTO에서 받은 이름
-        unit: x.ingredient?.unit || "", // unit이 엔티티에서 필요하면 추가
-        category: x.categoryName || "", // DTO에서 받은 분류명
+        name: x.ingredientName || "",  
+        unit: x.unit || "",
+        category: x.categoryName || "",
         unitCost: x.unitCost,
         quantity: x.quantity,
         minimumOrderUnit: x.minimumOrderUnit,
         expiredQuantity: x.expiredQuantity,
         expiredDate: x.expiredDate
       }));
-
 
       setInventory(flatList);
       const pi = res.data.pageInfo;
