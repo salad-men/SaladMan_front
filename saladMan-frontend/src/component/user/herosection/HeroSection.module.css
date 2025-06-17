@@ -47,8 +47,18 @@
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
-.atag{
+.atag {
   color: #4D774E;
   font-weight: 500;
-  text-decoration: none
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.active {
+  font-weight: 700;
+  border-bottom: 2px solid #4D774E;
 }

@@ -11,7 +11,7 @@
 
 .left {
   width: 70%;
-  height: 630px;
+  height: 600px;
   padding: 0px 20px;
   /* background-color: #fff; */
   /* overflow-y: auto; */
@@ -37,7 +37,7 @@
 }
 
 .searchInput {
-  width: 100%;
+  width: 95%;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 6px;

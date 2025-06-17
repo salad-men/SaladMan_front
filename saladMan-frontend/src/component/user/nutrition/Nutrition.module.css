@@ -1,5 +1,6 @@
 .container {
-  padding: 24px;
+  padding: 35px;
+  padding-bottom: 200px;
 }
 
 .tabs {
@@ -40,3 +41,4 @@
 .table th {
   background-color: #f4f4f4;
 }
+

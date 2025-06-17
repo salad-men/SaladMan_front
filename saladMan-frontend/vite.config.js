@@ -10,7 +10,15 @@ export default defineConfig({
       '@hq': path.resolve(__dirname, 'src/component/hq'),
       '@store': path.resolve(__dirname, 'src/component/store'),
       '@user': path.resolve(__dirname, 'src/component/user'),
-      '@components': path.resolve(__dirname, 'src/component'), // 선택 사항
+      '@components': path.resolve(__dirname, 'src/component'),
+    }
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8090', // ✅ Spring 서버 주소
+        changeOrigin: true,
+      }
     }
   }
 })
