@@ -1,6 +1,18 @@
+import { useAtomValue } from 'jotai';
+import { userAtom } from "/src/atoms";
+import { useNavigate } from "react-router";
 import './HqHeader.css';
 
 const HqHeader = () => {
+    const store = useAtomValue(userAtom);
+    const navigate = useNavigate();
+
+    const logout = (e) => {
+        e.preventDefault();
+        sessionStorage.clear();
+        navigate("/");
+    }
+
     return (
         <>
             <div className="header">
@@ -77,9 +89,8 @@ const HqHeader = () => {
                         </div>
                     </div>
                 </div>
-                <div className="user-info">
-                    00지점 | 홍길동 👤
-                </div>
+                <div className="user-info">{store.name}</div>
+                <div onClick={logout}>로그아웃</div>
             </div>
 
         </>

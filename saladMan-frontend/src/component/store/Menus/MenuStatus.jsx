@@ -1,5 +1,5 @@
 import './MenuStatus.css'
-import SidebarMenus from './SidebarMenus';
+import SidebarMenus from './SidebarMenu';
 
 const menus = [
   { id: 1, name: '치킨 시저 샐러드', price: 12000, image: 'img1.png', registered: true, status: '판매중' },

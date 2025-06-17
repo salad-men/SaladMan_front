@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from './HqAllMenus.module.css';
+import styles from './HqTotalMenu.module.css';
 import { myAxios } from '/src/config.jsx';
 import HqSidebarMenus from './HqSidebarMenus';
 
@@ -8,9 +8,9 @@ const HqAllMenus = () => {
     const [sort, setSort] = useState('release_desc');
 
     useEffect(() => {
-        const axiosInstance = myAxios();
+        const axios = myAxios();
 
-        axiosInstance.get(`/hq/allMenus?sort=${sort}`)
+        axios.get(`/hq/allMenus?sort=${sort}`)
             .then(res => {
                 console.log(res);
                 setMenus(res.data);

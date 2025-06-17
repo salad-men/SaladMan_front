@@ -1,5 +1,5 @@
-import styles from './AllMenus.module.css';
-import SidebarMenus from './SidebarMenus'
+import styles from './TotalMenu.module.css';
+import SidebarMenus from './SidebarMenu'
 
 const AllMenus = () => {
     const dummyMenus = [

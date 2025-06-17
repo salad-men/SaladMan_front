@@ -1,7 +1,7 @@
 .login-background {
     min-height: 100vh;
     width: 100vw;
-    background-image: url('/loginback.jpg');
+    background-image: url('/public/loginback.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -39,7 +39,8 @@
   gap: 10px;
 }
 
-.loginform  input[type="text"] {
+.loginform input[type="text"],
+.loginform input[type="password"] {
   padding: 8px 10px;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -48,7 +49,8 @@
   transition: border 0.2s;
 }
 
-.loginform input[type="text"]:focus {
+.loginform input[type="text"]:focus,
+.loginform input[type="password"]:focus {
   border-color: #809781;
   background: #fff;
 }
@@ -57,6 +59,8 @@
   color: #fff;
   border: none;
   border-radius: 5px;
+  margin-top: 10px;
+  padding: 4px;
   font-size: 1.1rem;
   cursor: pointer;
   transition: 0.2s;

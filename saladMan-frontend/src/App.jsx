@@ -19,7 +19,7 @@ import HqInventoryRecord from '@hq/Inventory/HqInventoryRecord';
 
 // 지현
 import HqLayout from '@hq/HqLayout';
-import HqAllMenus from '@hq/Menus/HqAllMenus';
+import HqTotalMenu from '@hq/Menus/HqTotalMenu';
 import HqUpdateMenu from '@hq/Menus/HqUpdateMenu';
 import HqRecipe from '@hq/Menus/HqRecipe';
 import HqTotalSales from '@hq/Sales/HqTotalSales';
@@ -28,7 +28,7 @@ import HqStoreStock from '@hq/StoreInquiry/HqStoreStock';
 import HqNotification from '@hq/Notice/HqNotification';
 
 import StoreLayout from '@store/StoreLayout';
-import AllMenus from '@store/Menus/AllMenus';
+import TotalMenu from '@store/Menus/TotalMenu';
 import MenuStatus from '@store/Menus/MenuStatus';
 import Recipe from '@store/Menus/Recipe';
 import OtherStoreInven from '@store/StoreInquiry/OtherStoreInven';
@@ -93,7 +93,7 @@ function App() {
           <Route path="/hq/orderItemManage" element={<OrderItemManage />} />
 
           {/* 메뉴 */}
-          <Route path='/hq/allMenus' element={<HqAllMenus />} />
+          <Route path='/hq/totalMenu' element={<HqTotalMenu />} />
           <Route path='/hq/updateMenu' element={<HqUpdateMenu />} />
           <Route path='/hq/recipe' element={<HqRecipe />} />
 
@@ -139,7 +139,7 @@ function App() {
           <Route path="/store/stockLog" element={<StockLog />} />
           
           {/* 메뉴 */}
-          <Route path='/store/allMenus' element={<AllMenus />} />
+          <Route path='/store/TotalMenu' element={<TotalMenu />} />
           <Route path='/store/menuStatus' element={<MenuStatus />} />
           <Route path='/store/recipe' element={<Recipe />} />
 
