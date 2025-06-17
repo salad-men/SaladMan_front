@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
-import styles from "./menu.module.css"; // CSS 모듈 import
+import styles from "./menu.module.css";
 
-const mockMenus = [
-  { id: 1, titleKor: "직화 닭다리살 포케", imageSrc: "/1.png" },
-  { id: 2, titleKor: "단호박 치킨볼", imageSrc: "/2.png" },
-  { id: 3, titleKor: "리코타 프레쉬볼", imageSrc: "/3.png" },
-];
-
-
-
-export default function Menu() {
+export default function Menu({ categoryId }) {
   const [menus, setMenus] = useState([]);
 
   useEffect(() => {
-    setMenus(mockMenus);
-  }, []);
+    fetch(`/api/menus?categoryId=${categoryId}`)
+      .then((res) => res.json())
+      .then((data) => setMenus(data))
+      .catch((err) => console.error("❌ 메뉴 불러오기 실패:", err));
+  }, [categoryId]);
 
   return (
     <div className={styles.container}>
@@ -27,11 +22,41 @@ export default function Menu() {
   );
 }
 
-function MenuCard({ imageSrc, titleKor }) {
+function MenuCard({ img, name, salePrice, ingredients }) {
+  const [showIngredients, setShowIngredients] = useState(false);
+
+  // 총 중량 계산
+  const totalWeight = ingredients?.reduce(
+    (sum, i) => sum + (Number(i.quantity) || 0),
+    0
+  );
+
   return (
-    <div className={styles.card}>
-      <img src={imageSrc} alt={titleKor} className={styles.image} />
-      <h3 className={styles.title}>{titleKor}</h3>
+    <div
+      className={styles.card}
+      onMouseEnter={() => setShowIngredients(true)}
+      onMouseLeave={() => setShowIngredients(false)}
+    >
+      <img src={`/${img}`} alt={name} className={styles.image} />
+      <h3 className={styles.title}>{name}</h3>
+      <p className={styles.price}>{salePrice?.toLocaleString()}원</p>
+
+      <div
+        className={`${styles.ingredientOverlay} ${
+          showIngredients ? styles.show : ""
+        }`}
+      >
+        <h3>{name}</h3>
+        {ingredients?.map((i, idx) => (
+          <div key={idx} className={styles.ingredientItem}>
+            {i.name} - {i.quantity}g
+          </div>
+        ))}
+        <br />
+        <div className={styles.totalWeight}>
+          총 중량: {totalWeight}g
+        </div>
+      </div>
     </div>
   );
 }

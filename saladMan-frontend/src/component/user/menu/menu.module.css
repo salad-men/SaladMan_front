@@ -1,24 +1,26 @@
 .container {
-  min-height: 100vh;
+  min-height: 1000px;
   background-color: #ffffff;
-  padding: 2rem;
+  padding: 0px 250px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개 고정 */
-  gap: 2rem;
+  gap: 35px;
   justify-items: center;
 }
 
 .card {
+  position: relative; /* 자식 absolute 위치 기준 */
   background: #ffffff;
   border-radius: 0.75rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
   padding: 1.25rem;
-  width: 280px; /* 고정된 카드 너비 */
+  width: 280px;
   transition: box-shadow 0.3s ease;
+  overflow: hidden; /* 내용 넘치지 않도록 */
 }
 
 .card:hover {
@@ -27,14 +29,66 @@
 
 .image {
   width: 100%;
-  height: 11rem; /* 높이 키움 */
+  height: auto;
   object-fit: cover;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 
 .title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #111827;
+}
+
+.ingredientBox {
+  background-color: #4D774E;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  transition: opacity 1s ease;
+}
+
+.ingredientItem {
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+.ingredientOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #4D774E;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+  z-index: 10;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(100px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.show {
+  opacity: 1;
+  pointer-events: auto; 
+  transform: translateY(0);
+}
+
+.totalWeight{
+  font-size: 18px;
+  font-weight: 500;
+
+}
+.menuName{
+  font-size: 20px;
+  font-weight: 500;
 }
