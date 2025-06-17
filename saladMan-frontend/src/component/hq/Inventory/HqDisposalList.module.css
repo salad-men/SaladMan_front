@@ -177,61 +177,6 @@
   justify-content: center;
   align-items: center;
   z-index: 3000;
-}
-
-/* 모달 박스 */
-.modalBox {
-  position: relative;
-  background: #fff;
-  padding: 30px 40px;
-  border-radius: 10px;
-  width: 900px;
-  max-width: 95vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-sizing: border-box;
-  box-shadow: 0 0 30px rgba(0,0,0,0.2);
-}
-
-/* 모달 제목 */
-.modalBox h3 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  color: #3d5a40;
-  font-weight: bold;
-}
-
-/* 모달 테이블 */
-.reject-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.reject-table th,
-.reject-table td {
-  border: 1px solid #ccc;
-  padding: 10px 12px;
-  text-align: center;
-  vertical-align: middle;
-  box-sizing: border-box;
-}
-
-.reject-table th {
-  background-color: #f6f6f6;
-  font-weight: 600;
-  color: #3d5a40;
-}
-
-/* 모달 배경 */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
   padding: 20px; /* 모바일에서 패딩 추가 */
 }
 
@@ -348,4 +293,3 @@
     padding: 20px 25px;
   }
 }
-

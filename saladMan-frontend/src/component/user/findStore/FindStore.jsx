@@ -12,23 +12,39 @@ const FindStore = () => {
   // 페이지별 매장 불러오기 (오른쪽 리스트용)
   useEffect(() => {
     fetch(`http://localhost:8090/api/stores?page=${page}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setStores(data.content);
-        setTotalPages(data.totalPages);
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`서버 오류: ${res.status}`);
+        }
+        return res.json();
       })
-      .catch((err) => console.error("❌ 매장 데이터 불러오기 실패:", err));
+      .then((data) => {
+        setStores(data.content || []); // 방어 코드
+        setTotalPages(data.totalPages || 0);
+      })
+      .catch((err) => {
+        console.error("❌ 매장 데이터 불러오기 실패:", err);
+        setStores([]); // 실패 시 빈 배열로 설정
+        setTotalPages(0);
+      });
   }, [page]);
 
   // 전체 매장 가져오기 (지도 마커용)
-  useEffect(() => {
-    fetch("http://localhost:8090/api/stores/all")
-      .then((res) => res.json())
-      .then((data) => {
-        setAllStores(data);
-      })
-      .catch((err) => console.error("❌ 전체 매장 마커 데이터 실패:", err));
-  }, []);
+useEffect(() => {
+  fetch("http://localhost:8090/api/stores/all")
+    .then((res) => {
+      if (!res.ok) throw new Error(`서버 오류: ${res.status}`);
+      return res.json();
+    })
+    .then((data) => {
+      if (!Array.isArray(data)) throw new Error("잘못된 데이터 형식");
+      setAllStores(data);
+    })
+    .catch((err) => {
+      console.error("❌ 전체 매장 마커 데이터 실패:", err);
+      setAllStores([]); // 빈 배열로 fallback
+    });
+}, []);
 
   // 검색 필터 (리스트에만 적용)
   const filteredStores = stores.filter((store) =>
