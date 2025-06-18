@@ -36,7 +36,7 @@ export default function HqInventoryList() {
     myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients));
   }, [token]);
 
-  useEffect(() => { fetchInventory(1); }, [filters.scope, filters.store]);
+  useEffect(() => { fetchInventory(1); }, [token, filters.scope, filters.store]);
 
   const fetchInventory = (page = 1) => {
     const param = { ...filters, page };
