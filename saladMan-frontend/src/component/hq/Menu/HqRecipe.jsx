@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import HqSidebarMenus from './HqSidebarMenus'
+import HqSidebarMenu from './HqSidebarMenu'
 import './HqRecipe.css';
 
 const HqRecipe = () => {
@@ -51,7 +51,7 @@ const HqRecipe = () => {
 
   return (
     <div className='wrapper'>
-      <HqSidebarMenus />
+      <HqSidebarMenu />
       <div className="content">
         <header className="page-header">
           <h2>레시피 조회</h2>

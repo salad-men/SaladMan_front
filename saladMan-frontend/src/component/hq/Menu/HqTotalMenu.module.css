@@ -1,6 +1,8 @@
 .wrapper {
   display: flex;
+  height: calc(100vh - 64px);
   background-color: #f9fafb;
+  overflow: hidden;
 }
 
 .content {
@@ -68,6 +70,11 @@
   width: 100%;
 }
 
+.menuCard h3,
+.menuCard p {
+  margin: 0;
+}
+
 .badge {
   position: absolute;
   top: 8px;
@@ -77,4 +84,36 @@
   font-size: 12px;
   padding: 3px 8px;
   border-radius: 5px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 4px;
+}
+
+.pagination button {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.active {
+  background-color: #2a9497;
+  color: white;
+  font-weight: bold;
 }

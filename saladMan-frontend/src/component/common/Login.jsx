@@ -25,8 +25,7 @@ const Login = () => {
                 setToken(res.headers.authorization);
                 const store = res.data;
                 setStore({...store})
-                navigate("/hq/totalMenu")
-                // navigate(userInfo.role === "ROLE_HQ" ? `${url}/hq/totalMenu` : `${url}/store/totalMenu`);
+                navigate(store.role === "ROLE_HQ" ? "/hq/totalMenu" : "/store/totalMenu");
             })
             .catch(err=> {
                 console.log(err)

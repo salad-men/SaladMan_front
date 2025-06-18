@@ -46,7 +46,7 @@ function MenuCard({ img, name, salePrice, ingredients }) {
           showIngredients ? styles.show : ""
         }`}
       >
-        <h3>{name}</h3>
+        <h3 className={styles.menuName}>{name}</h3>
         {ingredients?.map((i, idx) => (
           <div key={idx} className={styles.ingredientItem}>
             {i.name} - {i.quantity}g

@@ -69,3 +69,9 @@ body {
     font-size: 0.9rem;
     color: #666;
 }
+
+.user-info a {
+    text-decoration: underline;
+    color: #666;
+    cursor: pointer;
+}
