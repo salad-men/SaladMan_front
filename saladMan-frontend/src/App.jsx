@@ -72,6 +72,7 @@ import StoreComplaintDetail from '@store/complaint/StoreComplaintDetail';
 
 import Login from './component/common/Login';
 import StoreAccountDetail from '@hq/storeManagement/StoreAccountDetail';
+import StoreAccountModify from '@hq/storeManagement/StoreAccountModify';
 
 function App() {
 
@@ -106,6 +107,7 @@ function App() {
           <Route path="/hq/storeRegister" element={<StoreRegister />} />
           <Route path="/hq/storeAccount" element={<StoreAccountList />} />
           <Route path="/hq/storeAccountDetail" element={<StoreAccountDetail/>}/>
+          <Route path="/hq/storeAccountModify" element={<StoreAccountModify/>}/>
           <Route path="/hq/empRegister" element={<EmployeeRegister />} />
           <Route path="/hq/empList" element={<EmployeeList />} />
 

@@ -4,19 +4,22 @@ import { myAxios } from "/src/config";
 import EmpSidebar from "./EmpSidebar";
 import styles from "./StoreAccountDetail.module.css";
 import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
+import { useAtomValue } from "jotai";
+import { tokenAtom } from "/src/atoms";
 
 export default function StoreAccountDetail() {
     const [store, setStore] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
-    const token = localStorage.getItem("accessToken");
+    
+    const token = useAtomValue(tokenAtom);
 
     useEffect(() => {
         const id = new URLSearchParams(location.search).get("id");
 
         const fetchStoreDetail = async () => {
             try {
-                const res = await myAxios(null).get("/hq/storeAccountDetail", {
+                const res = await myAxios(token).get("/hq/storeAccountDetail", {
                     params: { id }
                 });
                 setStore(res.data);
@@ -26,7 +29,7 @@ export default function StoreAccountDetail() {
         };
 
         fetchStoreDetail();
-    }, []);
+    }, [token]);
 
     if (!store) return <div>로딩 중...</div>;
 
