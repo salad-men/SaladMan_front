@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { atom, useAtom } from "jotai";
+import { useAtomValue} from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqInventoryList.module.css";
-import { tokenAtom } from '../../../atoms';
+import { tokenAtom } from "/src/atoms";
 
 export default function HqInventoryList() {
-  const [token] = useAtom(tokenAtom);
+  const token = useAtomValue(tokenAtom);
+
   const [inventory, setInventory] = useState([]);
   const [filters, setFilters] = useState({ scope: "hq", store: "all", category: "all", name: "" });
   const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
@@ -33,7 +34,7 @@ export default function HqInventoryList() {
     myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories));
     myAxios(token).get("/hq/inventory/stores").then(res => setStores(res.data.stores));
     myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients));
-  }, []);
+  }, [token]);
 
   useEffect(() => { fetchInventory(1); }, [filters.scope, filters.store]);
 
