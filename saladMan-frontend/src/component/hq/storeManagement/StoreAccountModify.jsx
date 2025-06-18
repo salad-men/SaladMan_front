@@ -1,5 +1,5 @@
 import EmpSidebar from "./EmpSidebar"
-import styles from "./StoreRegister.module.css" // ← 변경
+import styles from "./StoreAccountModify.module.css" // ← 변경
 import { useEffect, useRef, useState } from "react";
 import DaumPostcode from "react-daum-postcode";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
@@ -7,8 +7,7 @@ import { Modal, Button } from "antd";
 import { useNavigate } from "react-router";
 import { myAxios } from "/src/config.jsx";
 
-export default function StoreRegister() {
-
+export default function StoreAccountModify() {
     const mapContainerRef = useRef();
     const [isOpen, setIsOpen] = useState(false);
     const [store, setStore] = useState({ storeName: '', address: '', detailAddress: '', phoneNumber: '', storeAccount: '', storePassword: '', region: '' });
@@ -212,12 +211,12 @@ export default function StoreRegister() {
     }
 
 
- return (
+    return (
         <>
             <div className={styles.storeRegisterContainer}>
                 <EmpSidebar />
                 <div className={styles.mainContent}>
-                    <h2>매장 등록</h2>
+                    <h2>매장 정보 수정</h2>
                     <div className={styles.formSection}>
                         <table className={styles.registerTable}>
                             <tbody>
@@ -230,8 +229,8 @@ export default function StoreRegister() {
                                             onChange={edit}
                                             className={
                                                 isStoreNameValid === false ? styles.inputFalse :
-                                                isStoreNameValid === true ? styles.inputSuccess :
-                                                ""
+                                                    isStoreNameValid === true ? styles.inputSuccess :
+                                                        ""
                                             }
                                         />
                                         <button type="button" className={styles.checkButton} onClick={checkStoreName}>중복확인</button>
@@ -259,8 +258,8 @@ export default function StoreRegister() {
                                             onChange={edit}
                                             className={
                                                 isUsernameValid === false ? styles.inputFalse :
-                                                isUsernameValid === true ? styles.inputSuccess :
-                                                ""
+                                                    isUsernameValid === true ? styles.inputSuccess :
+                                                        ""
                                             }
                                         />
                                         <button type="button" className={styles.checkButton} onClick={checkUsername}>중복확인</button>
