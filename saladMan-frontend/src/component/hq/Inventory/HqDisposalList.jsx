@@ -84,7 +84,6 @@ export default function HqDisposalList() {
     setRejectModalOpen(true);
   };
   const confirmReject = () => {
-    // DisposalDto 배열: {id, memo(반려사유)}
     const req = selectedIds.map((id) => ({
       id,
       memo: rejectReasons[id] || "",
