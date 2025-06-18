@@ -3,8 +3,11 @@ import { atom, useAtom } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqInventoryList.module.css";
+import { tokenAtom } from '../../../atoms';
 
 export default function HqInventoryList() {
+
+  const [token] = useAtom(tokenAtom);
 
   const [inventory, setInventory]       = useState([]);
   const [filters, setFilters]           = useState({ scope: "hq", store: "all", category: "all", name: "" });
@@ -30,9 +33,9 @@ export default function HqInventoryList() {
 
   // 초기 카테고리, 지점명, 재료명 조회
  useEffect(() => {
-    myAxios().get("/hq/inventory/categories").then(res => setCategories(res.data.categories));
-    myAxios().get("/hq/inventory/stores").then(res => setStores(res.data.stores));
-    myAxios().get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients));
+    myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories));
+    myAxios(token).get("/hq/inventory/stores").then(res => setStores(res.data.stores));
+    myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients));
   }, []);
 
   useEffect(() => { fetchInventory(1); }, [filters.scope, filters.store]);
@@ -41,7 +44,7 @@ export default function HqInventoryList() {
   // 재고 목록 조회
   const fetchInventory = (page = 1) => {
     const param = { ...filters, page };
-    myAxios().post("/hq/inventory/list", param).then(res => {
+    myAxios(token).post("/hq/inventory/list", param).then(res => {
             console.log("백엔드 응답 전체 데이터:", res.data); 
 
       const hqList = (res.data.hqInventory || []).map(x => ({ ...x, store: "본사" }));
@@ -61,7 +64,8 @@ export default function HqInventoryList() {
         category: x.categoryName || "",
         unitCost: x.unitCost,
         quantity: x.quantity,
-        minimumOrderUnit: x.minimumOrderUnit,
+        // minimumOrderUnit: x.minimumOrderUnit,
+        minimumOrderUnit: x.minQuantity ?? 0,
         expiredQuantity: x.expiredQuantity,
         expiredDate: x.expiredDate
       }));
@@ -144,7 +148,7 @@ export default function HqInventoryList() {
   // 신규 등록 (본사 전용)
   const saveNewItems = () => {
     Promise.all(newItems.map(row =>
-      myAxios().post("/hq/inventory/add", {
+      myAxios(token).post("/hq/inventory/add", {
         store: "본사", // 본사 고정
         categoryId: categories.find(c => c.name === row.category)?.id,
         ingredientId: Number(row.ingredientId),
@@ -173,7 +177,7 @@ export default function HqInventoryList() {
   // 수정 저장
   const saveEdit = () => {
     Promise.all(inventory.map(item =>
-      myAxios().post("/hq/inventory/update", {
+      myAxios(token).post("/hq/inventory/update", {
         id: item.id,
         quantity: item.quantity,
         minimumOrderUnit: item.minimumOrderUnit,
