@@ -89,8 +89,7 @@ const HqHeader = () => {
                         </div>
                     </div>
                 </div>
-                <div className="user-info">{store.name}</div>
-                <div onClick={logout}>로그아웃</div>
+                <div className="user-info">{store.name} | <a onClick={logout}>로그아웃</a></div>
             </div>
 
         </>

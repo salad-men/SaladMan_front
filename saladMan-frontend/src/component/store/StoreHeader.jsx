@@ -1,6 +1,18 @@
-import './StoreHeader.css'; // 이제 객체 접근이 아니므로 import만
+import { useAtomValue } from 'jotai';
+import { userAtom } from "/src/atoms";
+import { useNavigate } from "react-router";
+import './StoreHeader.css';
 
 const StoreHeader = () => {
+    const store = useAtomValue(userAtom);
+    const navigate = useNavigate();
+
+    const logout = (e) => {
+        e.preventDefault();
+        sessionStorage.clear();
+        navigate("/");
+    }
+    
     return (
         <>
             <div className="storeHeader">
@@ -78,9 +90,7 @@ const StoreHeader = () => {
                         </div>
                     </div>
                 </div>
-                <div className="storeUserInfo">
-                    00지점 | 홍길동 👤
-                </div>
+                <div className="user-info">{store.name} | <a onClick={logout}>로그아웃</a></div>
             </div>
         </>
     );

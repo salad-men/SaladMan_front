@@ -19,18 +19,18 @@ import HqInventoryRecord from '@hq/Inventory/HqInventoryRecord';
 
 // 지현
 import HqLayout from '@hq/HqLayout';
-import HqTotalMenu from '@hq/Menus/HqTotalMenu';
-import HqUpdateMenu from '@hq/Menus/HqUpdateMenu';
-import HqRecipe from '@hq/Menus/HqRecipe';
+import HqTotalMenu from '@hq/Menu/HqTotalMenu';
+import HqUpdateMenu from '@hq/Menu/HqUpdateMenu';
+import HqRecipe from '@hq/Menu/HqRecipe';
 import HqTotalSales from '@hq/Sales/HqTotalSales';
 import HqStoreSales from '@hq/Sales/HqStoreSales';
 import HqStoreStock from '@hq/StoreInquiry/HqStoreStock';
 import HqNotification from '@hq/Notice/HqNotification';
 
 import StoreLayout from '@store/StoreLayout';
-import TotalMenu from '@store/Menus/TotalMenu';
-import MenuStatus from '@store/Menus/MenuStatus';
-import Recipe from '@store/Menus/Recipe';
+import TotalMenu from '@store/Menu/TotalMenu';
+import MenuStatus from '@store/Menu/MenuStatus';
+import Recipe from '@store/Menu/Recipe';
 import OtherStoreInven from '@store/StoreInquiry/OtherStoreInven';
 import FindOtherStore from '@store/StoreInquiry/FindOtherStore';
 
