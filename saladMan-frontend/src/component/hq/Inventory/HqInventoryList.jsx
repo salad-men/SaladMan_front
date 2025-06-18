@@ -192,10 +192,12 @@ export default function HqInventoryList() {
             {filters.scope === "store" && (
               <>
                 <label>지점</label>
-                <select name="store" value={filters.store} onChange={onFilterChange}>
-                  <option value="all">전체지점</option>
-                  {stores.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
-                </select>
+                  <select name="store" value={filters.store} onChange={onFilterChange}>
+                    <option value="all">전체지점</option>
+                    {stores.map(s => (
+                      <option key={s.id} value={s.id}>{s.name}</option>
+                    ))}
+                  </select>
               </>
             )}
 
