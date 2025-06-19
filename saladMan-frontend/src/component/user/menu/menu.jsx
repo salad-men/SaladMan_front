@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "./menu.module.css";
 
 export default function Menu({ categoryId }) {
   const [menus, setMenus] = useState([]);
 
   useEffect(() => {
-    fetch(`/api/menus?categoryId=${categoryId}`)
-      .then((res) => res.json())
-      .then((data) => setMenus(data))
+    axios
+      .get(`http://localhost:8090/user/menus?categoryId=${categoryId}`)
+      .then((res) => setMenus(res.data))
       .catch((err) => console.error("❌ 메뉴 불러오기 실패:", err));
   }, [categoryId]);
 
@@ -25,7 +26,6 @@ export default function Menu({ categoryId }) {
 function MenuCard({ img, name, salePrice, ingredients }) {
   const [showIngredients, setShowIngredients] = useState(false);
 
-  // 총 중량 계산
   const totalWeight = ingredients?.reduce(
     (sum, i) => sum + (Number(i.quantity) || 0),
     0
@@ -53,9 +53,7 @@ function MenuCard({ img, name, salePrice, ingredients }) {
           </div>
         ))}
         <br />
-        <div className={styles.totalWeight}>
-          총 중량: {totalWeight}g
-        </div>
+        <div className={styles.totalWeight}>총 중량: {totalWeight}g</div>
       </div>
     </div>
   );

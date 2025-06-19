@@ -1,10 +1,11 @@
-// ChatbotWidget.jsx
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import styles from "./Chatbot.module.css";
+import { myAxios } from "../../../config";
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState(null); // 'menu' | 'store' | 'complaint'
+  const [mode, setMode] = useState(null);
   const [step, setStep] = useState(1);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -19,6 +20,16 @@ export default function ChatbotWidget() {
     }
   }, [isOpen]);
 
+  const resetChat = () => {
+    setMode(null);
+    setStep(1);
+    setComplaintStore("");
+    setComplaintText("");
+    addMessage("bot", "처음으로 돌아갑니다. 무엇을 도와드릴까요?");
+    addMessage("bot", "[메뉴], [매장], [불편사항] 중 하나를 입력해보세요");
+  };
+
+  //스크롤 밑으로 내려가게 하는 코드
   const messagesEndRef = useRef(null);
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -26,29 +37,39 @@ export default function ChatbotWidget() {
     }
   }, [messages]);
 
+
   const addMessage = (from, text) => {
     setMessages((prev) => [...prev, { from, text }]);
   };
-
-  const fetchStoreByKeyword = async (keyword) => {
+  // 매장 검색
+const fetchStoreByKeyword = async (keyword) => {
+  try {
+    const res = await myAxios().get("/user/chatbot/stores", {
+      params: { keyword }
+    });
+    return res.data;
+  } catch (err) {
+    console.error("❌ 매장 검색 실패:", err);
+    return [];
+  }
+};
+  //메뉴 검색
+  const fetchMenusByKeyword = async (keyword) => {
     try {
-      const res = await fetch(`/api/chatbot/stores?keyword=${keyword}`);
-      if (!res.ok) throw new Error("검색 실패");
-      return await res.json();
+      const res = await  myAxios().get(`/user/chatbot/menus`, {
+        params: { keyword }
+      });
+      return res.data;
     } catch (err) {
-      console.error("❌ 매장 검색 실패:", err);
+      console.error("❌ 메뉴 검색 실패:", err);
       return null;
     }
   };
 
-  const resetChat = () => {
-    setMode(null);
-    setStep(1);
-    setComplaintStore("");
-    setComplaintText({});
-    addMessage("bot", "처음으로 돌아갑니다. 무엇을 도와드릴까요?");
-    addMessage("bot", "[메뉴], [매장], [불편사항] 중 하나를 입력해보세요");
-  };
+
+
+
+
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -84,17 +105,6 @@ export default function ChatbotWidget() {
     if (mode === "complaint") handleComplaintFlow(text);
   };
 
-  const fetchMenusByKeyword = async (keyword) => {
-    try {
-      const res = await fetch(`/api/chatbot/menus?keyword=${keyword}`);
-      if (!res.ok) throw new Error("메뉴 검색 실패");
-      return await res.json();
-    } catch (err) {
-      console.error("❌ 메뉴 검색 실패:", err);
-      return null;
-    }
-  };
-
   const handleMenuFlow = async (text) => {
     if (step === 1) {
       const result = await fetchMenusByKeyword(text);
@@ -112,6 +122,7 @@ export default function ChatbotWidget() {
   const handleStoreFlow = async (text) => {
     if (step === 1) {
       const result = await fetchStoreByKeyword(text);
+        console.log("🔍 매장 검색 결과:", result); 
       if (!result || result.length === 0) {
         addMessage("bot", `'${text}' 지역의 매장을 찾을 수 없습니다.`);
         resetChat();
@@ -123,53 +134,51 @@ export default function ChatbotWidget() {
   };
 
   const handleComplaintFlow = async (text) => {
-  if (step === 1) {
-    setComplaintStore(text);
-    addMessage("bot", `${text} 관련 매장을 선택해주세요 (예: 독산역점)`);
-    setStep(2);
-  } else if (step === 2) {
-    setComplaintStore(text);
-    addMessage("bot", `${text} 매장의 어떤 점이 불편하셨나요?`);
-    setStep(3);
-  } else if (step === 3) {
-    setComplaintText(text);
-    addMessage("bot", "작성자 이름을 입력해주세요.");
-    setStep(4);
-  } else if (step === 4) {
-    setWriterNickname(text);
-    addMessage("bot", "작성자 이메일을 입력해주세요.");
-    setStep(5);
-  } else if (step === 5) {
-    const writerEmail = text;
+    if (step === 1) {
+      setComplaintStore(text);
+      addMessage("bot", `${text} 관련 매장을 선택해주세요 (예: 독산역점)`);
+      setStep(2);
+    } else if (step === 2) {
+      setComplaintStore(text);
+      addMessage("bot", `${text} 매장의 어떤 점이 불편하셨나요?`);
+      setStep(3);
+    } else if (step === 3) {
+      setComplaintText(text);
+      addMessage("bot", "작성자 이름을 입력해주세요.");
+      setStep(4);
+    } else if (step === 4) {
+      setWriterNickname(text);
+      addMessage("bot", "작성자 이메일을 입력해주세요.");
+      setStep(5);
+    } else if (step === 5) {
+      const writerEmail = text;
 
-    const dto = {
-      storeId: 1, // TODO: 실제 매장 id 매핑 필요
-      title: complaintText.slice(0, 20), // 👉 content 앞 20자 자동 생성
-      content: complaintText,
-      writerDate: new Date().toISOString().split("T")[0],
-      writerEmail: writerEmail,
-      writerNickname: writerNickname,
-    };
+      const dto = {
+        storeId: 1, // TODO: 실제 매장 id 매핑 필요
+        title: complaintText.slice(0, 20),
+        content: complaintText,
+        writerDate: new Date().toISOString().split("T")[0],
+        writerEmail: writerEmail,
+        writerNickname: writerNickname,
+      };
 
-    try {
-      const res = await fetch("/api/chatbot/complaints", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dto),
-      });
-      if (res.ok) {
-        addMessage("bot", "접수되었습니다. 감사합니다!");
-      } else {
-        addMessage("bot", "접수에 실패했습니다. 다시 시도해주세요.");
+      try {
+        const res = await axios.post("/user/chatbot/complaints", dto, {
+          headers: { "Content-Type": "application/json" }
+        });
+        if (res.status === 200 || res.status === 201) {
+          addMessage("bot", "접수되었습니다. 감사합니다!");
+        } else {
+          addMessage("bot", "접수에 실패했습니다. 다시 시도해주세요.");
+        }
+      } catch (err) {
+        console.error("❌ 불편사항 접수 실패:", err);
+        addMessage("bot", "서버 오류로 접수에 실패했습니다.");
       }
-    } catch (err) {
-      console.error("❌ 불편사항 접수 실패:", err);
-      addMessage("bot", "서버 오류로 접수에 실패했습니다.");
-    }
 
-    resetChat();
-  }
-};
+      resetChat();
+    }
+  };
 
   return (
     <>

@@ -1,52 +1,45 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "./FindStore.module.css";
 
 const FindStore = () => {
   const [search, setSearch] = useState("");
   const [map, setMap] = useState(null);
-  const [stores, setStores] = useState([]); // 페이징된 매장 리스트
-  const [allStores, setAllStores] = useState([]); // 전체 매장 마커용
+  const [stores, setStores] = useState([]);
+  const [allStores, setAllStores] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
   // 페이지별 매장 불러오기 (오른쪽 리스트용)
   useEffect(() => {
-    fetch(`http://localhost:8090/api/stores?page=${page}`)
+    axios
+      .get(`http://localhost:8090/user/stores?page=${page}`)
       .then((res) => {
-        if (!res.ok) {
-          throw new Error(`서버 오류: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setStores(data.content || []); // 방어 코드
-        setTotalPages(data.totalPages || 0);
+        setStores(res.data.content || []);
+        setTotalPages(res.data.totalPages || 0);
       })
       .catch((err) => {
         console.error("❌ 매장 데이터 불러오기 실패:", err);
-        setStores([]); // 실패 시 빈 배열로 설정
+        setStores([]);
         setTotalPages(0);
       });
   }, [page]);
 
   // 전체 매장 가져오기 (지도 마커용)
-useEffect(() => {
-  fetch("http://localhost:8090/api/stores/all")
-    .then((res) => {
-      if (!res.ok) throw new Error(`서버 오류: ${res.status}`);
-      return res.json();
-    })
-    .then((data) => {
-      if (!Array.isArray(data)) throw new Error("잘못된 데이터 형식");
-      setAllStores(data);
-    })
-    .catch((err) => {
-      console.error("❌ 전체 매장 마커 데이터 실패:", err);
-      setAllStores([]); // 빈 배열로 fallback
-    });
-}, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8090/user/stores/all")
+      .then((res) => {
+        if (!Array.isArray(res.data)) throw new Error("잘못된 데이터 형식");
+        setAllStores(res.data);
+      })
+      .catch((err) => {
+        console.error("❌ 전체 매장 마커 데이터 실패:", err);
+        setAllStores([]);
+      });
+  }, []);
 
-  // 검색 필터 (리스트에만 적용)
+  // 검색 필터
   const filteredStores = stores.filter((store) =>
     store.name.toLowerCase().includes(search.toLowerCase())
   );
