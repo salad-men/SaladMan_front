@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { myAxios } from "../../../config";
 import styles from "./FindStore.module.css";
 
 const FindStore = () => {
@@ -12,8 +12,8 @@ const FindStore = () => {
 
   // 페이지별 매장 불러오기 (오른쪽 리스트용)
   useEffect(() => {
-    axios
-      .get(`http://localhost:8090/user/stores?page=${page}`)
+    myAxios()
+      .get(`/user/stores?page=${page}`)
       .then((res) => {
         setStores(res.data.content || []);
         setTotalPages(res.data.totalPages || 0);
@@ -27,8 +27,8 @@ const FindStore = () => {
 
   // 전체 매장 가져오기 (지도 마커용)
   useEffect(() => {
-    axios
-      .get("http://localhost:8090/user/stores/all")
+    myAxios()
+      .get("/user/stores/all")
       .then((res) => {
         if (!Array.isArray(res.data)) throw new Error("잘못된 데이터 형식");
         setAllStores(res.data);
