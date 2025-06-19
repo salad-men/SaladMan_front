@@ -155,7 +155,25 @@ export default function HqDisposalList() {
               ? <tr><td colSpan={11}>데이터가 없습니다.</td></tr>
               : data.map(row => (
                 <tr key={row.id}>
-                  <td><input type="checkbox" checked={selectedIds.includes(row.id)} onChange={() => setSelectedIds(ids => ids.includes(row.id) ? ids.filter(id => id !== row.id) : [...ids, row.id])} /></td>
+                  <td>
+                    {/* 본사 계정이면 체크박스 없이 */}
+                    {(row.storeId === 1 || row.store === 1 || row.storeName === "본사계정")
+                      ? null
+                      : (
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.includes(row.id)}
+                          onChange={() =>
+                            setSelectedIds(ids =>
+                              ids.includes(row.id)
+                                ? ids.filter(id => id !== row.id)
+                                : [...ids, row.id]
+                            )
+                          }
+                        />
+                      )
+                    }
+                  </td>
                   <td>{row.storeName || row.store || ""}</td>
                   <td>{row.ingredientName || row.name || ""}</td>
                   <td>{row.categoryName || row.category || ""}</td>
@@ -169,6 +187,7 @@ export default function HqDisposalList() {
                 </tr>
               ))}
           </tbody>
+
         </table>
         {/* 페이지네이션 */}
         <div>
