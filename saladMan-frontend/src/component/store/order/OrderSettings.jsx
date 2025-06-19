@@ -29,8 +29,9 @@ export default function OrderSettings() {
 
     return (
         <>
-            <OrderSidebar />
             <div className={styles.orderSettingContainer}>
+                            <OrderSidebar />
+
                 <div className={styles.orderSettingContent}>
                     <h2 className={styles.title}>발주 설정</h2>
 

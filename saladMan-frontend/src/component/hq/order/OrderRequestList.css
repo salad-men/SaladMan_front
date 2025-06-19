@@ -1,17 +1,21 @@
 /* OrderRequestList.css */
 .orderRequestContainer {
     display: flex;
-    padding: 30px;
-    font-family: "Arial", sans-serif;
+    height: calc(100vh - 64px);
+    background-color: #f9fafb;
+    overflow: hidden;
 }
 
 .orderRequestContent {
-    position: absolute;
-    top: 0;
-    left: 200px;
-    width: calc(100% - 200px);
-    padding: 40px;
-    margin-left: 100px;
+    flex: 1;
+    padding: 40px 40px 60px;
+    background-color: white;
+    box-sizing: border-box;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
 }
 
 .orderRequestContent h2 {
@@ -89,7 +93,10 @@
 
 .orderTable th.checkboxColumn,
 .orderTable td.checkboxColumn {
-    width: 40px;           /* 원하는 폭 */
-    text-align: center;    /* 혹은 left/right 조정 가능 */
-    padding: 4px;          /* 좌우 여백 줄임 */
+    width: 40px;
+    /* 원하는 폭 */
+    text-align: center;
+    /* 혹은 left/right 조정 가능 */
+    padding: 4px;
+    /* 좌우 여백 줄임 */
 }

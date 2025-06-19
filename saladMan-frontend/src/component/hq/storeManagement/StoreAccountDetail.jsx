@@ -11,11 +11,11 @@ export default function StoreAccountDetail() {
     const [store, setStore] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
-    
+
     const token = useAtomValue(tokenAtom);
+    const id = new URLSearchParams(location.search).get("id");
 
     useEffect(() => {
-        const id = new URLSearchParams(location.search).get("id");
 
         const fetchStoreDetail = async () => {
             try {
@@ -106,7 +106,7 @@ export default function StoreAccountDetail() {
                                     position={{ lat: store.latitude, lng: store.longitude }}
 
                                 />
-                                <CustomOverlayMap
+                                {/* <CustomOverlayMap
                                     position={{ lat: store.latitude, lng: store.longitude }}
                                     yAnchor={1}
                                 >
@@ -144,12 +144,15 @@ export default function StoreAccountDetail() {
                                             zIndex: 1
                                         }}></div>
                                     </div>
-                                </CustomOverlayMap>
+                                </CustomOverlayMap> */}
                             </Map>
                         </div>
                     )}
                 </div>
-                <button className={styles.backButton} onClick={() => navigate(-1)}>목록으로</button>
+                <div className={styles.buttonGroup}>
+                    <button className={styles.modifyButton} onClick={() => navigate(`/hq/storeModify?id=${id}`)}>수정</button>
+                    <button className={styles.backButton} onClick={() => navigate(-1)}>목록으로</button>
+                </div>
             </div>
         </div>
     );

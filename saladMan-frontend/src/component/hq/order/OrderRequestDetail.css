@@ -1,7 +1,9 @@
 /* OrderRequestDetail.css */
 .orderDetailContainer {
-    padding: 40px;
-    font-family: Arial, sans-serif;
+    display: flex;
+    height: calc(100vh - 64px);
+    background-color: #f9fafb;
+    overflow: hidden;
 }
 
 
@@ -10,13 +12,16 @@
     font-size: 20px;
 }
 
-.orderDetailContent{
-        position: absolute;
-    top: 0;
-    left: 200px;
-    width: calc(100% - 200px);
-    padding: 40px;
-    margin-left: 100px;
+.orderDetailContent {
+    flex: 1;
+    padding: 40px 40px 60px;
+    background-color: white;
+    box-sizing: border-box;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
 }
 
 .orderInfo {

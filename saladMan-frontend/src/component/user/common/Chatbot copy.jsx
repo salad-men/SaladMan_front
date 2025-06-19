@@ -41,21 +41,13 @@ export default function ChatbotWidget() {
     }
   }, [isOpen, messages, showMenuButtons]);
 
-const addMessage = (from, content) => {
-  if (typeof content === "string") {
-    const text = content.trim();
-    if (!text) {
-      console.warn("⚠️ 빈 문자열이므로 메시지 추가 안 함");
-      return;
+  const addMessage = (from, content) => {
+    if (typeof content === "string") {
+      setMessages((prev) => [...prev, { from, text: content }]);
+    } else {
+      setMessages((prev) => [...prev, { from, ...content }]);
     }
-    setMessages((prev) => [...prev, { from, text }]);
-  } else if (content && content.type === "buttons") {
-    setMessages((prev) => [...prev, { from, ...content }]);
-  } else {
-    console.warn("⚠️ 알 수 없는 메시지 형식:", content);
-  }
-};
-
+  };
 
   const resetChat = () => {
     setMode(null);
@@ -79,19 +71,17 @@ const addMessage = (from, content) => {
     }
   };
 
-const fetchAnswerByValueKey = async (valueKey) => {
-  try {
-    const res = await myAxios().get("/user/chatbot/answer-by-value", {
-      params: { valueKey },
-    });
-    console.log("서버에서 받은 answer:", res.data); // 문자열이어야 함
-    return res.data;
-  } catch (err) {
-    console.error("❌ 답변 불러오기 실패:", err);
-    return "답변을 불러오는 데 실패했습니다.";
-  }
-};
-
+  const fetchAnswerByValueKey = async (valueKey) => {
+    try {
+      const res = await myAxios().get("/user/chatbot/answer", {
+        params: { valueKey },
+      });
+      return res.data.answer;
+    } catch (err) {
+      console.error("❌ 답변 불러오기 실패:", err);
+      return "답변을 불러오는 데 실패했습니다.";
+    }
+  };
 
   const fetchStoreByKeyword = async (keyword) => {
     try {

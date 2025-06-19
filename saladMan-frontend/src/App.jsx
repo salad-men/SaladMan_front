@@ -107,7 +107,7 @@ function App() {
           <Route path="/hq/storeRegister" element={<StoreRegister />} />
           <Route path="/hq/storeAccount" element={<StoreAccountList />} />
           <Route path="/hq/storeAccountDetail" element={<StoreAccountDetail/>}/>
-          <Route path="/hq/storeAccountModify" element={<StoreAccountModify/>}/>
+          <Route path="/hq/storeModify" element={<StoreAccountModify/>}/>
           <Route path="/hq/empRegister" element={<EmployeeRegister />} />
           <Route path="/hq/empList" element={<EmployeeList />} />
 

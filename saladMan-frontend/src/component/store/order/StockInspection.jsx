@@ -34,8 +34,9 @@ export default function StockInspection() {
 
     return (
         <>
-            <OrderSidebar />
             <div className={styles.stockInspectionContainer}>
+                            <OrderSidebar />
+
                 <div className={styles.stockInspectionContent}>
                     <h2 className={styles.title}>입고검수</h2>
 

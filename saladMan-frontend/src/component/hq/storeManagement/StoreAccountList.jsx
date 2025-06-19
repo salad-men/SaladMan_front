@@ -45,6 +45,10 @@ export default function StoreAccountList() {
         navigate(`/hq/storeAccountDetail?id=${id}`);
     };
 
+    const navigateToModify = (id) => {
+        navigate(`/hq/storeModify?id=${id}`);
+    };
+
     const handleSearch = () => {
         fetchStores(0);
     };
@@ -81,11 +85,11 @@ export default function StoreAccountList() {
                                 <option>세종</option>
                             </select>
 
-                            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                            {/* <select value={status} onChange={(e) => setStatus(e.target.value)}>
                                 <option>매장 상태</option>
                                 <option value="true">운영</option>
                                 <option value="false">폐점</option>
-                            </select>
+                            </select> */}
 
                             <input type="text" placeholder="검색어 입력" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
                             <button className={styles.searchButton} onClick={handleSearch}>검색</button>
@@ -143,7 +147,10 @@ export default function StoreAccountList() {
                                         )}
                                     </td>
                                     <td>
-                                        <button className={styles.editButton}>수정</button>
+                                        <button className={styles.editButton} onClick={(e) => {
+            e.stopPropagation(); // ← 중요! tr 클릭 이벤트 방지
+            navigateToModify(store.id); // 수정 페이지로 이동
+        }}>수정</button>
                                     </td>
                                 </tr>
                             ))}

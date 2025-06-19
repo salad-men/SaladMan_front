@@ -6,12 +6,14 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { Modal, Button } from "antd";
 import { useNavigate } from "react-router";
 import { myAxios } from "/src/config.jsx";
+import { useAtomValue } from 'jotai';
+import { tokenAtom } from "/src/atoms";
 
 export default function StoreRegister() {
 
     const mapContainerRef = useRef();
     const [isOpen, setIsOpen] = useState(false);
-    const [store, setStore] = useState({ storeName: '', address: '', detailAddress: '', phoneNumber: '', storeAccount: '', storePassword: '', region: '' });
+    const [store, setStore] = useState({ storeName: '', address: '', detailAddress: '', phoneNumber: '', storeAccount: '', storePassword: '', region: '',deliveryDay:'' });
     const [coords, setCoords] = useState({ lat: 37.5665, lng: 126.9780 }); // 기본값: 서울시청
 
     const [storeNameChecked, setStoreNameChecked] = useState(false);
@@ -21,6 +23,7 @@ export default function StoreRegister() {
     const [isUsernameValid, setIsUsernameValid] = useState(null);
 
     const [isMapReady, setIsMapReady] = useState(false);
+    const token = useAtomValue(tokenAtom);
 
     const simplifySidoToRegion = (sido) => {
         const map = {
@@ -83,6 +86,8 @@ export default function StoreRegister() {
 
     }, [store.storeAccount]);
 
+
+
     const completeHandler = (data) => {
         const { address, sido } = data;
         const region = simplifySidoToRegion(sido);
@@ -118,7 +123,7 @@ export default function StoreRegister() {
         }
 
         try {
-            const axiosInstance = myAxios(null);
+            const axiosInstance = myAxios(token);
             const res = await axiosInstance.get(`/hq/checkStorename`, {
                 params: { name: store.storeName }
             });
@@ -141,7 +146,16 @@ export default function StoreRegister() {
 
         }
     };
+    // ✅ 여기에 추가
+    useEffect(() => {
+        if (!token) return;
 
+        // token이 있을 때 실행할 로직
+        console.log("토큰이 준비되어 실행됩니다.", token);
+
+        // 예시: 매장 초기 데이터 불러오기
+        // fetchStoreDefaults();
+    }, [token]);
     const checkUsername = async () => {
         if (!store.storeAccount) {
             alert("아이디를 입력해주세요.");
@@ -149,7 +163,7 @@ export default function StoreRegister() {
         }
 
         try {
-            const axiosInstance = myAxios(null);
+            const axiosInstance = myAxios(token);
             const res = await axiosInstance.get(`/hq/checkUsername`, {
                 params: { username: store.storeAccount }
             });
@@ -193,10 +207,11 @@ export default function StoreRegister() {
             password: store.storePassword,
             location: store.region,
             latitude: coords.lat,
-            longitude: coords.lng
+            longitude: coords.lng,
+            deliveryDay:store.deliveryDay
         };
         try {
-            const axiosInstance = myAxios(null); // 토큰 없으면 null
+            const axiosInstance = myAxios(token); // 토큰 없으면 null
             const response = await axiosInstance.post("/hq/storeRegister", payload);
 
             if (response.data === true) {
@@ -248,6 +263,10 @@ export default function StoreRegister() {
                                 <tr>
                                     <td>매장 전화번호</td>
                                     <td><input type="text" name="phoneNumber" placeholder="예: 02-123-4567" onChange={edit} /></td>
+                                </tr>
+                                <tr>
+                                    <td>배송소요일자</td>
+                                    <td><input type="text" name="deliveryDay" value={store.deliveryDay} onChange={edit} />일</td>
                                 </tr>
                                 <tr>
                                     <td>매장 계정</td>

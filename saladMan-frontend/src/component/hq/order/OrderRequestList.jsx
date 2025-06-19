@@ -15,8 +15,9 @@ export default function OrderRequestList() {
 
     return (
         <>
-            <OrderSidebar/>
+
             <div className="orderRequestContainer">
+                <OrderSidebar/>
                 <div className="orderRequestContent">
                     <h2>발주 신청 목록</h2>
 
