@@ -38,8 +38,8 @@ export default function OrderApply() {
 
     return (
         <>
-            <OrderSidebar />
             <div className={styles.orderApplyContainer}>
+            <OrderSidebar />
 
                 <div className={styles.orderApplyContent}>
 

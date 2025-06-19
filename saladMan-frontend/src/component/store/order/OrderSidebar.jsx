@@ -1,10 +1,10 @@
 import { Link, Outlet } from "react-router";
-import styles from './orderSidebar.module.css'
+import '../Sidebar.css'
 
 export default function OrderSidebar() {
     return (
         <>
-            <div className={styles.orderSidebar}>
+            <div className="sidebar">
                 <h3>발주</h3>
                 <ul>
                     <li><a href="/store/orderList">발주목록</a></li>                

@@ -84,7 +84,8 @@
 
 .storeAccountTable {
     width: 100%;
-    max-width: 1100px;
+    max-width: 1200px;
+    width: 1100px;
     border-collapse: collapse;
     font-size: 14px;
 }
