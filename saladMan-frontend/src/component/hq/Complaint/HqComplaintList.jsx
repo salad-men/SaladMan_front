@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NoticeSidebar from "../notice/NoticeSidebar";
+import NoticeSidebar from "../Notice/NoticeSidebar";
 import styles from "./HqComplaintList.module.css";
 
 const initialComplaints = [

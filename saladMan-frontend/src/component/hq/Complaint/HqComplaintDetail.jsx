@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import NoticeSidebar from "../notice/NoticeSidebar";
+import NoticeSidebar from "../Notice/NoticeSidebar";
 import styles from "./HqComplaintDetail.module.css";
 
 export default function HqComplaintDetail() {
