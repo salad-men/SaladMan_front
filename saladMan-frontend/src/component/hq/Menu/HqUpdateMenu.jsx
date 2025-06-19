@@ -10,7 +10,7 @@ const HqAllMenus = () => {
                     <header className={styles.pageHeader}>
                         <h2> 메뉴 등록</h2>
                     </header>
-                    <form>
+                    <form className={styles.updateMenu}>
                         <table>
                             <tbody>
                             <tr>

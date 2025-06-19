@@ -13,12 +13,13 @@
   position: relative;
 }
 
-table {
+.updateMenu table {
     width: 100%;
     border-collapse: collapse;
 }
 
-td, th {
+.updateMenu td, 
+.updateMenu th {
     padding: 8px;
     vertical-align: top;
     font-size: 14px;
