@@ -11,11 +11,11 @@ import EventPage from '@user/page/EventPage';
 
 
 
-import HqInventoryList from '@hq/Inventory/HqInventoryList';
-import HqInventoryExpiration from '@hq/Inventory/HqInventoryExpiration';
-import HqDisposalList from '@hq/Inventory/HqDisposalList';
-import HqIngredientSetting from '@hq/Inventory/HqIngredientSetting';
-import HqInventoryRecord from '@hq/Inventory/HqInventoryRecord';
+import HqInventoryList from '@hq/inventory/HqInventoryList';
+import HqInventoryExpiration from '@hq/inventory/HqInventoryExpiration';
+import HqDisposalList from '@hq/inventory/HqDisposalList';
+import HqIngredientSetting from '@hq/inventory/HqIngredientSetting';
+import HqInventoryRecord from '@hq/inventory/HqInventoryRecord';
 
 // 지현
 import HqLayout from '@hq/HqLayout';
@@ -25,7 +25,7 @@ import HqRecipe from '@hq/Menu/HqRecipe';
 import HqTotalSales from '@hq/Sales/HqTotalSales';
 import HqStoreSales from '@hq/Sales/HqStoreSales';
 import HqStoreStock from '@hq/StoreInquiry/HqStoreStock';
-import HqNotification from '@hq/Notice/HqNotification';
+import HqNotification from '@hq/notice/HqNotification';
 
 import StoreLayout from '@store/StoreLayout';
 import TotalMenu from '@store/Menu/TotalMenu';
@@ -40,8 +40,8 @@ import StoreDisposalList from '@store/Inventory/StoreDisposalList';
 import StoreIngredientSetting from '@store/Inventory/StoreIngredientSetting';
 import StoreInventoryRecord from '@store/Inventory/StoreInventoryRecord';
 
-import HqNoticeList from '@hq/Notice/HqNoticeList';
-import HqNoticeDetail from '@hq/Notice/HqNoticeDetail';
+import HqNoticeList from '@hq/notice/HqNoticeList';
+import HqNoticeDetail from '@hq/notice/HqNoticeDetail';
 import NewsDetailPage from '@user/page/NewDetailPage';
 import KioskPage from '@user/page/KioskPage';
 import KioskMenuPage from '@user/page/KioskMenuPage';
@@ -62,9 +62,9 @@ import StockLog from '@store/order/StockLog';
 import EmpSchedule from '@store/storeManagement/empSchedule';
 
 
-import HqComplaintList from '@hq/Complaint/HqComplaintList';
-import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
-import Notification from '@hq/Notice/HqNotification';
+import HqComplaintList from '@hq/complaint/HqComplaintList';
+import HqComplaintDetail from '@hq/complaint/HqComplaintDetail';
+import Notification from '@hq/notice/HqNotification';
 import StoreNoticeList from '@store/notice/StoreNoticeList';
 import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
 import StoreComplaintList from '@store/complaint/StoreComplaintList';
