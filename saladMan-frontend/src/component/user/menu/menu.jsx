@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import styles from "./menu.module.css";
+import { myAxios } from "../../../config";
 
 export default function Menu({ categoryId }) {
   const [menus, setMenus] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8090/user/menus?categoryId=${categoryId}`)
+    myAxios()
+      .get(`/user/menus?categoryId=${categoryId}`)
       .then((res) => setMenus(res.data))
       .catch((err) => console.error("❌ 메뉴 불러오기 실패:", err));
   }, [categoryId]);
