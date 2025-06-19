@@ -19,8 +19,9 @@ export default function StockLog() {
 
     return (
         <>
-            <OrderSidebar />
             <div className={styles.stockHistoryContainer}>
+                            <OrderSidebar />
+
                 <div className={styles.stockHistoryContent}>
                     <h2 className={styles.title}>입고 / 재고 사용 리스트</h2>
 

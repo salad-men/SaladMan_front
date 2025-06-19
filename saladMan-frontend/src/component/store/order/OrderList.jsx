@@ -56,8 +56,9 @@ export default function OrderList() {
 
     return (
         <>
-            <OrderSidebar />
             <div className={styles.orderListContainer}>
+                            <OrderSidebar />
+
                 <div className={styles.orderListContent}>
                     <h2>발주 목록</h2>
 
