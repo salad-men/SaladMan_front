@@ -2,9 +2,9 @@ name: React Build & Deploy To S3
 
 on:
   push:
-    branches:
-      - main
-      - dev
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
 
 jobs:
   deploy:
@@ -53,3 +53,39 @@ jobs:
       # 8) CloudFront 캐시 무효화
       - name: Invalidate CloudFront cache
         run: aws cloudfront create-invalidation --distribution-id E3P9MO1X33X9JJ --paths "/*"
+
+      # 9) 빌드 성공 Slack 알림
+      - name: 빌드 성공 Slack 알림
+        if: success()  # 빌드 성공 시에만 실행
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": ":white_check_mark: *빌드 성공!* `${{ github.workflow }}`\n브랜치: `${{ github.ref_name }}`\n커밋: `${{ github.sha }}`\n작성자: `${{ github.actor }}`"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # 10) 배포 성공 Slack 알림
+      - name: 배포 성공 Slack 알림
+        if: success()
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": ":rocket: *배포 성공!* `${{ github.workflow }}`\n브랜치: `${{ github.ref_name }}`\n커밋: `${{ github.sha }}`\n작성자: `${{ github.actor }}`"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # 11) 실패 시 Slack 알림
+      - name: 실패 Slack 알림
+        if: failure()
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": ":x: *실패!* `${{ github.workflow }}`\n브랜치: `${{ github.ref_name }}`\n커밋: `${{ github.sha }}`\n작성자: `${{ github.actor }}`"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
