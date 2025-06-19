@@ -24,38 +24,22 @@ export default function ChatbotWidget() {
 
   useEffect(() => {
     if (isOpen && messages.length === 0 && showMenuButtons) {
-      myAxios()
-        .get("/user/chatbot/main-options")
-        .then((res) => {
-          addMessage("bot", "신선한 채소로 하루를 책임지는 샐러드맨이에요!\n무엇을 도와드릴까요?");
-          addMessage("bot", {
-            type: "buttons",
-            buttons: res.data.map((opt) => ({
-              label: opt.label,
-              value: opt.valueKey,
-            })),
-          });
-          setShowMenuButtons(false);
-        })
-        .catch((err) => console.error("❌ 메인 옵션 불러오기 실패:", err));
+      addMessage("bot", "신선한 채소로 하루를 책임지는 샐러드맨이에요!\n무엇을 도와드릴까요?");
+      addMessage("bot", {
+        type: "buttons",
+        buttons: ["메뉴 🥗", "매장 🏪", "자주 묻는 질문 🤔", "불편사항 😥", "새로운 소식 🥳"],
+      });
+      setShowMenuButtons(false);
     }
   }, [isOpen, messages, showMenuButtons]);
 
-const addMessage = (from, content) => {
-  if (typeof content === "string") {
-    const text = content.trim();
-    if (!text) {
-      console.warn("⚠️ 빈 문자열이므로 메시지 추가 안 함");
-      return;
+  const addMessage = (from, content) => {
+    if (typeof content === "string") {
+      setMessages((prev) => [...prev, { from, text: content }]);
+    } else {
+      setMessages((prev) => [...prev, { from, ...content }]);
     }
-    setMessages((prev) => [...prev, { from, text }]);
-  } else if (content && content.type === "buttons") {
-    setMessages((prev) => [...prev, { from, ...content }]);
-  } else {
-    console.warn("⚠️ 알 수 없는 메시지 형식:", content);
-  }
-};
-
+  };
 
   const resetChat = () => {
     setMode(null);
@@ -63,35 +47,9 @@ const addMessage = (from, content) => {
     setComplaintStore("");
     setComplaintText("");
     setWriterNickname("");
-    setShowMenuButtons(true);
+    setShowMenuButtons(true); // 초기 버튼 다시 보이게
     setMessages([]);
   };
-
-  const fetchQuestionsByMainOptionId = async (mainOptionId) => {
-    try {
-      const res = await myAxios().get("/user/chatbot/question", {
-        params: { mainOptionId },
-      });
-      return res.data;
-    } catch (err) {
-      console.error("❌ 질문 목록 불러오기 실패:", err);
-      return [];
-    }
-  };
-
-const fetchAnswerByValueKey = async (valueKey) => {
-  try {
-    const res = await myAxios().get("/user/chatbot/answer-by-value", {
-      params: { valueKey },
-    });
-    console.log("서버에서 받은 answer:", res.data); // 문자열이어야 함
-    return res.data;
-  } catch (err) {
-    console.error("❌ 답변 불러오기 실패:", err);
-    return "답변을 불러오는 데 실패했습니다.";
-  }
-};
-
 
   const fetchStoreByKeyword = async (keyword) => {
     try {
@@ -105,6 +63,18 @@ const fetchAnswerByValueKey = async (valueKey) => {
     }
   };
 
+  const fetchMenusByKeyword = async (keyword) => {
+    try {
+      const res = await myAxios().get("/user/chatbot/menus", {
+        params: { keyword },
+      });
+      return res.data;
+    } catch (err) {
+      console.error("❌ 메뉴 검색 실패:", err);
+      return null;
+    }
+  };
+
   const handleSend = () => {
     if (!input.trim()) return;
     addMessage("user", input);
@@ -112,84 +82,47 @@ const fetchAnswerByValueKey = async (valueKey) => {
     setInput("");
   };
 
-  const handleUserInput = async (text) => {
+  const handleUserInput = (text) => {
     const cleaned = text.toLowerCase();
 
-    if (text === "reset") {
-      resetChat();
+    if (!mode) {
+      if (cleaned.includes("메뉴")) {
+        setMode("menu");
+        setStep(1);
+        addMessage("bot", "샐러드맨의 메뉴를 알려드릴게요!");
+      } else if (cleaned.includes("매장")) {
+        setMode("store");
+        setStep(1);
+        addMessage("bot", "찾고 싶은 지역을 입력해주세요.");
+      } else if (cleaned.includes("불편") || cleaned.includes("신고")) {
+        setMode("complaint");
+        setStep(1);
+        addMessage("bot", "어느 지역 매장에 불편사항이 있었나요?");
+      } else {
+        addMessage("bot", "‘메뉴’, ‘매장’, ‘불편사항’ 중 하나를 입력해주세요 😊");
+      }
       return;
     }
 
-    if (!mode) {
-      switch (cleaned) {
-        case "menu": {
-          const questions = await fetchQuestionsByMainOptionId(1);
-          if (questions.length > 0) {
-            addMessage("bot", "메뉴관련 질문들을 모아놨어요!\n아래 버튼 중 하나를 선택해주세요.");
-            addMessage("bot", {
-              type: "buttons",
-              buttons: questions.map((q) => ({
-                label: q.question,
-                value: q.valueKey,
-              })),
-            });
-            addMessage("bot", {
-              type: "buttons",
-              buttons: [{ label: "처음으로", value: "reset" }],
-            });
-          } else {
-            addMessage("bot", "메뉴관련질문이 아직 등록되어 있지 않습니다.");
-          }
-          return;
-        }
-
-        case "store":
-          setMode("store");
-          setStep(1);
-          addMessage("bot", "찾고 싶은 지역을 입력해주세요.");
-          return;
-
-        case "complaint":
-          setMode("complaint");
-          setStep(1);
-          addMessage("bot", "어느 지역 매장에 불편사항이 있었나요?");
-          return;
-
-        case "faq": {
-          const questions = await fetchQuestionsByMainOptionId(3);
-          if (questions.length > 0) {
-            addMessage("bot", "고객님들의 자주 묻는 질문들을 모아놨어요!\n아래 버튼 중 하나를 선택해주세요.");
-            addMessage("bot", {
-              type: "buttons",
-              buttons: questions.map((q) => ({
-                label: q.question,
-                value: q.valueKey,
-              })),
-            });
-            addMessage("bot", {
-              type: "buttons",
-              buttons: [{ label: "처음으로", value: "reset" }],
-            });
-          } else {
-            addMessage("bot", "자주 묻는 질문이 아직 등록되어 있지 않습니다.");
-          }
-          return;
-        }
-
-        default: {
-          const answer = await fetchAnswerByValueKey(text);
-          addMessage("bot", answer);
-          addMessage("bot", {
-            type: "buttons",
-            buttons: [{ label: "처음으로", value: "reset" }],
-          });
-          return;
-        }
-      }
-    }
-
+    if (mode === "menu") handleMenuFlow(text);
     if (mode === "store") handleStoreFlow(text);
     if (mode === "complaint") handleComplaintFlow(text);
+  };
+
+  const handleMenuFlow = async (text) => {
+    if (step === 1) {
+      const result = await fetchMenusByKeyword(text);
+      if (!result || result.length === 0) {
+        addMessage("bot", `'${text}' 관련 샐러드 메뉴를 찾을 수 없습니다.`);
+        resetChat();
+        return;
+      }
+      const menuList = result
+        .map((menu) => `- ${menu.name} (${menu.salePrice.toLocaleString()}원)`)
+        .join("\n");
+      addMessage("bot", `'${text}' 관련 추천 메뉴입니다:\n${menuList}`);
+      resetChat();
+    }
   };
 
   const handleStoreFlow = async (text) => {
@@ -273,8 +206,8 @@ const fetchAnswerByValueKey = async (valueKey) => {
                 {msg.type === "buttons" ? (
                   <div className={styles.buttons}>
                     {msg.buttons.map((btn, i) => (
-                      <button key={i} onClick={() => handleUserInput(btn.value)}>
-                        {btn.label}
+                      <button key={i} onClick={() => handleUserInput(btn)}>
+                        {btn}
                       </button>
                     ))}
                   </div>
