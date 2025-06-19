@@ -4,14 +4,31 @@ import { useEffect, useRef, useState } from "react";
 import DaumPostcode from "react-daum-postcode";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { Modal, Button } from "antd";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 import { myAxios } from "/src/config.jsx";
+import { tokenAtom } from "/src/atoms";
+import { useAtomValue } from "jotai";
+
 
 export default function StoreAccountModify() {
     const mapContainerRef = useRef();
     const [isOpen, setIsOpen] = useState(false);
-    const [store, setStore] = useState({ storeName: '', address: '', detailAddress: '', phoneNumber: '', storeAccount: '', storePassword: '', region: '' });
-    const [coords, setCoords] = useState({ lat: 37.5665, lng: 126.9780 }); // 기본값: 서울시청
+    const [store, setStore] = useState({
+        storeName: '',
+        address: '',
+        detailAddress: '',
+        phoneNumber: '',
+        storeAccount: '',
+        storePassword: '',
+        region: '',
+        openTime: '',
+        closeTime: '',
+        breakDay: '',
+        deliveryDay: '',
+        username: ''
+    }); const [coords, setCoords] = useState({ lat: 37.5665, lng: 126.9780 }); // 기본값: 서울시청
+    const location = useLocation();
+    const token = useAtomValue(tokenAtom);
 
     const [storeNameChecked, setStoreNameChecked] = useState(false);
     const [usernameChecked, setUsernameChecked] = useState(false);
@@ -20,6 +37,47 @@ export default function StoreAccountModify() {
     const [isUsernameValid, setIsUsernameValid] = useState(null);
 
     const [isMapReady, setIsMapReady] = useState(false);
+
+    const id = new URLSearchParams(location.search).get("id");
+    useEffect(() => {
+        if (!token || !id) return;
+
+        const fetchStoreDetail = async () => {
+            try {
+                const res = await myAxios(token).get("/hq/storeAccountDetail", {
+                    params: { id }
+                });
+
+                const data = res.data;
+                console.log("받은 데이터:", data); // ✅ 여기서 콘솔 찍어보세요
+
+                setStore({
+                    id: data.id || "",
+                    storeName: data.name || "",
+                    address: data.address || "",
+                    detailAddress: "",
+                    phoneNumber: data.phoneNumber || "",
+                    storePassword: "", // 수정 시 비우기
+                    region: data.location || "",
+                    openTime: data.openTime || "",
+                    closeTime: data.closeTime || "",
+                    breakDay: data.breakDay || "",
+                    deliveryDay: data.deliveryDay || "",
+                    username: data.username || ""
+
+                });
+
+                setCoords({
+                    lat: data.latitude || 37.5665,
+                    lng: data.longitude || 126.9780
+                });
+            } catch (err) {
+                console.error("매장 정보 가져오기 실패:", err);
+            }
+        };
+
+        fetchStoreDetail();
+    }, [token, id]);
 
     const simplifySidoToRegion = (sido) => {
         const map = {
@@ -171,41 +229,39 @@ export default function StoreAccountModify() {
         }
     };
 
-    const registerStore = async (e) => {
+
+    const updateStore = async (e) => {
 
         e.preventDefault();
 
-        if (!storeNameChecked) {
-            alert("매장이름 중복 확인을 해주세요.");
-            return;
-        }
 
-        if (!usernameChecked) {
-            alert("아이디 중복 확인을 해주세요.");
-            return;
-        }
+
         const payload = {
+            id: store.id, // 수정할 매장 ID
             name: store.storeName,
             address: store.address + ' ' + store.detailAddress,
             phoneNumber: store.phoneNumber,
-            username: store.storeAccount,
-            password: store.storePassword,
+            username: store.username,
             location: store.region,
             latitude: coords.lat,
-            longitude: coords.lng
+            longitude: coords.lng,
+            openTime: store.openTime,
+            closeTime: store.closeTime,
+            breakDay: store.breakDay,
+            deliveryDay: store.deliveryDay
         };
         try {
-            const axiosInstance = myAxios(null); // 토큰 없으면 null
-            const response = await axiosInstance.post("/hq/storeRegister", payload);
+            const axiosInstance = myAxios(token); // 토큰 없으면 null
+            const response = await axiosInstance.post("/hq/storeUpdate", payload);
 
             if (response.data === true) {
-                alert("매장 등록 완료");
-                navigate("/hq/storeAccount");
+                alert("매장 수정 완료");
+                navigate(`/hq/storeAccountDetail?id=${id}`);
             } else {
-                alert("등록 실패");
+                alert("수정 실패");
             }
         } catch (error) {
-            console.error("등록 오류:", error);
+            console.error("수정 오류:", error);
             alert("서버 오류 발생");
         }
     }
@@ -221,6 +277,22 @@ export default function StoreAccountModify() {
                         <table className={styles.registerTable}>
                             <tbody>
                                 <tr>
+                                    <td>매장 계정</td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            placeholder="아이디"
+                                            onChange={edit}
+                                            disabled
+                                            className={
+                                                styles.disabledInput
+                                            }
+                                            value={store.username}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>매장이름</td>
                                     <td>
                                         <input
@@ -232,6 +304,7 @@ export default function StoreAccountModify() {
                                                     isStoreNameValid === true ? styles.inputSuccess :
                                                         ""
                                             }
+                                            value={store.storeName}
                                         />
                                         <button type="button" className={styles.checkButton} onClick={checkStoreName}>중복확인</button>
                                     </td>
@@ -241,30 +314,26 @@ export default function StoreAccountModify() {
                                     <td>
                                         <input type="text" id="address" name="address" placeholder="주소" value={store.address} onChange={edit} />
                                         <input type="button" value="검색" onClick={() => setIsOpen(!isOpen)} /><br />
-                                        <input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소" onChange={edit} />
+                                        <input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소" onChange={edit} value={store.detailAddress} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>매장 전화번호</td>
-                                    <td><input type="text" name="phoneNumber" placeholder="예: 02-123-4567" onChange={edit} /></td>
+                                    <td><input type="text" name="phoneNumber" value={store.phoneNumber} placeholder="예: 02-123-4567" onChange={edit} /></td>
+                                </tr>
+
+                                <tr>
+                                    <td>오픈시간</td>
+                                    <td><input type="text" name="openTime" value={store.openTime} onChange={edit} /></td>
+                                </tr>
+
+                                <tr>
+                                    <td>마감시간</td>
+                                    <td><input type="text" name="closeTime" value={store.closeTime} onChange={edit} /></td>
                                 </tr>
                                 <tr>
-                                    <td>매장 계정</td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            name="storeAccount"
-                                            placeholder="아이디"
-                                            onChange={edit}
-                                            className={
-                                                isUsernameValid === false ? styles.inputFalse :
-                                                    isUsernameValid === true ? styles.inputSuccess :
-                                                        ""
-                                            }
-                                        />
-                                        <button type="button" className={styles.checkButton} onClick={checkUsername}>중복확인</button>
-                                        <input type="password" name="storePassword" placeholder="비밀번호" onChange={edit} />
-                                    </td>
+                                    <td>배송소요일자</td>
+                                    <td><input type="text" name="deliveryDay" value={store.deliveryDay} onChange={edit} />일</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -276,8 +345,10 @@ export default function StoreAccountModify() {
                         </div>
                     </div>
 
-                    <div className={styles.submitSection}>
-                        <button className={styles.submitButton} onClick={registerStore}>저장</button>
+                    <div className={styles.buttonGroup}>
+                        <button className={styles.backButton} onClick={() => navigate(-1)}>뒤로가기</button>
+
+                        <button className={styles.submitButton} onClick={updateStore}>수정하기</button>
                     </div>
                 </div>
             </div>

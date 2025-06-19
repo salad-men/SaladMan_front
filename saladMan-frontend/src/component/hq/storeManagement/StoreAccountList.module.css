@@ -146,3 +146,13 @@
 .status-text {
     vertical-align: middle;
 }
+
+.clickableRow {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clickableRow:hover {
+    background-color: #f5f7fa;
+    /* 밝은 회색으로 hover 효과 */
+}

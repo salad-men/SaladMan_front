@@ -62,7 +62,7 @@ const HqHeader = () => {
                         <div className="dropdown">
                             <ul>
                                 <li><a href="/hq/storeRegister">매장등록</a></li>
-                                <li><a href="/hq/storeAccount">매장계정</a></li>
+                                <li><a href="/hq/storeAccount">매장정보</a></li>
                                 <li><a href="/hq/empList">직원조회</a></li>
                                 <li><a href="/hq/empRegister">직원등록</a></li>
                             </ul>
