@@ -2,13 +2,20 @@ import React, { useState, useEffect } from "react";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqIngredientSetting.module.css";
+import { tokenAtom } from "/src/atoms";
+import {useAtomValue } from "jotai";
+
 
 export default function HqIngredientSetting() {
+
+  const token = useAtomValue(tokenAtom);
+  
+
   const [settings, setSettings] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const [filterCategory, setFilterCategory] = useState(""); // 전체는 빈 문자열
+  const [filterCategory, setFilterCategory] = useState(""); 
   const [filterName, setFilterName] = useState("");
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -24,17 +31,17 @@ export default function HqIngredientSetting() {
   const STORE_ID = 1; // 본사 고정
 
   useEffect(() => {
-    myAxios().get("/hq/inventory/categories").then(res => {
+    myAxios(token).get("/hq/inventory/categories").then(res => {
       setCategories(res.data.categories || []);
     });
-    myAxios().get("/hq/inventory/ingredients").then(res => {
+    myAxios(token).get("/hq/inventory/ingredients").then(res => {
       setIngredients(res.data.ingredients || []);
     });
     fetchSettings();
-  }, []);
+  }, [token]);
 
   const fetchSettings = () => {
-    myAxios()
+    myAxios(token)
       .get("/hq/inventory/settings", { params: { storeId: STORE_ID } })
       .then(res => setSettings(res.data || []))
       .catch(() => setSettings([]));
@@ -62,7 +69,7 @@ export default function HqIngredientSetting() {
     try {
       await Promise.all(
         settings.map(row =>
-          myAxios().post("/hq/inventory/settings-save", {
+          myAxios(token).post("/hq/inventory/settings-save", {
             id: row.id,
             storeId: STORE_ID,
             ingredientId: row.ingredientId,

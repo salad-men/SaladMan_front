@@ -36,18 +36,18 @@ export default function HqInventoryList() {
     myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients));
   }, [token]);
 
-  useEffect(() => { fetchInventory(1); }, [filters.scope, filters.store]);
+  useEffect(() => { fetchInventory(1); }, [token, filters.scope, filters.store]);
 
   const fetchInventory = (page = 1) => {
     const param = { ...filters, page };
     myAxios(token).post("/hq/inventory/list", param).then(res => {
-      const hqList = (res.data.hqInventory || []).map(x => ({ ...x, store: "본사" }));
+      const hqList = res.data.hqInventory || [];
       const storeList = res.data.storeInventory || [];
       const list = filters.scope === "hq" ? hqList : filters.scope === "store" ? storeList : [...hqList, ...storeList];
 
       const flatList = list.map(x => ({
         id: x.id,
-        store: x.store,
+        store: x.storeName || "",  // storeName 필드 사용
         name: x.ingredientName || "",
         unit: x.unit || "",
         category: x.categoryName || "",

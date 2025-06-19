@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { atom, useAtom } from "jotai";
+import {useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqDisposalList.module.css";
-
-const dataAtom = atom([]);
+import { tokenAtom } from "/src/atoms";
 
 const initialFilters = {
   store: "all",
@@ -17,7 +16,7 @@ const initialFilters = {
 export default function HqDisposalList() {
   const [filters, setFilters] = useState(initialFilters);
   const [tempFilters, setTempFilters] = useState(initialFilters);
-  const [data, setData] = useAtom(dataAtom);
+  const [data, setData] = useState([]);
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -26,23 +25,26 @@ export default function HqDisposalList() {
   const [rejectReasons, setRejectReasons] = useState({});
   const [pageInfo, setPageInfo] = useState({});
 
+  const token = useAtomValue(tokenAtom);
+  
+
   // 지점 목록 호출
-  useEffect(() => {
-    myAxios()
+  useEffect((token) => {
+    myAxios(token)
       .get("/hq/inventory/stores")
       .then((res) => setStores(res.data.stores || []));
-  }, []);
+  }, [token]);
 
   // 분류 목록 호출
   useEffect(() => {
-    myAxios()
+    myAxios(token)
       .get("/hq/inventory/categories")
       .then((res) => setCategories(res.data.categories || []));
-  }, []);
+  }, [token]);
 
   // 폐기 목록 호출
   const fetchDisposalList = (page = 1) => {
-    myAxios()
+    myAxios(token)
       .post("/hq/inventory/disposal-list", { ...filters, page })
       .then((res) => {
         setData(res.data.disposals || []);
@@ -54,7 +56,7 @@ export default function HqDisposalList() {
 
   useEffect(() => {
     fetchDisposalList();
-  }, [filters]);
+  }, [token,filters]);
 
   // 필터 적용
   const applyFilters = () => setFilters(tempFilters);
@@ -70,7 +72,7 @@ export default function HqDisposalList() {
   // 승인
   const approveSelected = () => {
     if (!selectedIds.length) return alert("선택된 항목이 없습니다.");
-    myAxios()
+    myAxios(token)
       .post("/hq/inventory/disposal/approve", selectedIds)
       .then(() => fetchDisposalList(pageInfo.curPage));
   };
@@ -82,13 +84,12 @@ export default function HqDisposalList() {
     setRejectModalOpen(true);
   };
   const confirmReject = () => {
-    // DisposalDto 배열: {id, memo(반려사유)}
     const req = selectedIds.map((id) => ({
       id,
       memo: rejectReasons[id] || "",
     }));
     if (req.some((r) => !r.memo.trim())) return alert("모든 항목에 사유 입력!");
-    myAxios().post("/hq/inventory/disposal/reject", req).then(() => {
+    myAxios(token).post("/hq/inventory/disposal/reject", req).then(() => {
       setRejectModalOpen(false);
       fetchDisposalList(pageInfo.curPage);
     });

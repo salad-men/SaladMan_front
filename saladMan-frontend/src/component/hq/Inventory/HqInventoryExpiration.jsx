@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqInventoryExpiration.module.css";
+import { tokenAtom } from "/src/atoms";
 
 export default function HqInventoryExpiration() {
+  const token = useAtomValue(tokenAtom);
+
   const [store, setStore] = useState("all");
   const [category, setCategory] = useState("all");
   const [keyword, setKeyword] = useState("");
@@ -13,6 +17,7 @@ export default function HqInventoryExpiration() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [disposalAmounts, setDisposalAmounts] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [scope, setScope] = useState("all"); // hq, store, all
 
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -24,20 +29,20 @@ export default function HqInventoryExpiration() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [token]);
 
   // 지점, 카테고리 리스트 API 호출
   useEffect(() => {
-    myAxios()
+    myAxios(token)
       .get("/hq/inventory/stores")
       .then((res) => setStores(res.data.stores || []))
       .catch(console.error);
 
-    myAxios()
+    myAxios(token)
       .get("/hq/inventory/categories")
       .then((res) => setCategories(res.data.categories || []))
       .catch(console.error);
-  }, []);
+  }, [token]);
 
   // 날짜 문자열을 Date 객체로 변환
   const parseDate = (str) => {
@@ -65,22 +70,32 @@ export default function HqInventoryExpiration() {
     return `D-${diff}`;
   };
 
-  // 백엔드에서 재고 데이터 불러오기
-  const fetchInventory = () => {
+  // 재고 데이터 불러오기 (페이징 포함)
+  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+  const [pageNums, setPageNums] = useState([]);
+
+  const fetchInventory = (page = 1) => {
     const params = {
+      scope, // "hq", "store", "all"
       store: store === "all" ? "all" : store,
       category: category === "all" ? "" : category,
       keyword: keyword || "",
       startDate: startDate || "",
       endDate: endDate || "",
+      page,
     };
 
-    myAxios()
+    myAxios(token)
       .post("/hq/inventory/expiration-list", params)
       .then((res) => {
+        // 본사재고에 store 명 강제 할당
         const hqList = res.data.hqInventory || [];
         const storeList = res.data.storeInventory || [];
-        const combined = [...hqList, ...storeList];
+
+        let combined = [];
+        if (scope === "hq") combined = hqList;
+        else if (scope === "store") combined = storeList;
+        else combined = [...hqList, ...storeList];
 
         const transformed = combined.map((item) => ({
           id: item.id,
@@ -91,12 +106,19 @@ export default function HqInventoryExpiration() {
           quantity: item.quantity || 0,
           price: item.unitCost || 0,
           expiry: item.expiredDate ? item.expiredDate.slice(0, 10) : "",
+          receivedDate: item.receivedDate || "",
           dday: calcDday(item.expiredDate ? item.expiredDate.slice(0, 10) : ""),
         }));
 
         setInventory(transformed);
         setSelectedIds([]);
         setDisposalAmounts({});
+
+        const pi = res.data.pageInfo;
+        if (pi) {
+          setPageInfo(pi);
+          setPageNums(Array.from({ length: pi.endPage - pi.startPage + 1 }, (_, i) => pi.startPage + i));
+        }
       })
       .catch((err) => {
         console.error("재고 조회 실패:", err);
@@ -106,25 +128,8 @@ export default function HqInventoryExpiration() {
 
   // 초기 및 필터 변경 시 재고 불러오기
   useEffect(() => {
-    fetchInventory();
-  }, [store, category, keyword, startDate, endDate]);
-
-  // 필터별 재고 필터링 및 정렬 (백엔드 필터 중복일 수 있음)
-  const filteredSorted = inventory
-    .filter((it) => {
-      const mStore = store === "all" || it.store === store;
-      const mCat = category === "all" || it.category === category;
-      const mKey = (it.name || "").toLowerCase().includes((keyword || "").toLowerCase());
-      const exp = parseDate(it.expiry);
-      const mStart = !startDate || !exp || exp >= parseDate(startDate);
-      const mEnd = !endDate || !exp || exp <= parseDate(endDate);
-      return mStore && mCat && mKey && mStart && mEnd;
-    })
-    .sort((a, b) => {
-      if (a.store === "본사" && b.store !== "본사") return -1;
-      if (a.store !== "본사" && b.store === "본사") return 1;
-      return parseDate(a.expiry) - parseDate(b.expiry);
-    });
+    fetchInventory(1);
+  }, [token, store, category, keyword, startDate, endDate, scope]);
 
   // 단일 선택 토글 (본사 품목만)
   const toggleSelect = (id) => {
@@ -138,7 +143,7 @@ export default function HqInventoryExpiration() {
 
   // 전체 선택/해제
   const toggleAll = () => {
-    const avail = filteredSorted.filter((x) => x.store === "본사").map((x) => x.id);
+    const avail = inventory.filter((x) => x.store === "본사").map((x) => x.id);
     const allSel = avail.every((id) => selectedIds.includes(id));
 
     setSelectedIds((prev) =>
@@ -148,7 +153,10 @@ export default function HqInventoryExpiration() {
 
   // 폐기량 변경 처리 (0 ~ 재고수량 사이로 제한)
   const onAmount = (id, val) => {
-    const num = Math.max(0, Math.min(Number(val) || 0, inventory.find((i) => i.id === id)?.quantity || 0));
+    const num = Math.max(
+      0,
+      Math.min(Number(val) || 0, inventory.find((i) => i.id === id)?.quantity || 0)
+    );
     setDisposalAmounts((prev) => ({ ...prev, [id]: num }));
   };
 
@@ -171,14 +179,14 @@ export default function HqInventoryExpiration() {
 
     if (items.length === 0) return alert("폐기량을 입력하세요.");
 
-    myAxios()
+    myAxios(token)
       .post("/hq/inventory/disposal-request", items)
       .then(() => {
         alert(`총 ${items.length}건 폐기 신청 완료!`);
         setIsModalOpen(false);
         setSelectedIds([]);
         setDisposalAmounts({});
-        fetchInventory();
+        fetchInventory(pageInfo.curPage);
       })
       .catch((err) => {
         console.error("폐기 신청 실패:", err);
@@ -192,52 +200,49 @@ export default function HqInventoryExpiration() {
       <div className={styles.content}>
         <h2 className={styles.title}>유통기한 조회</h2>
 
-        {/* 기간 입력 + 버튼 */}
+        {/* 필터 영역 */}
         <div className={styles.row} style={{ justifyContent: "flex-start", alignItems: "center", gap: 12, marginBottom: 10 }}>
-          <label>기간</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-          <span>~</span>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          <label>대상</label>
+          <select value={scope} onChange={(e) => setScope(e.target.value)}>
+            <option value="all">전체</option>
+            <option value="hq">본사</option>
+            <option value="store">지점</option>
+          </select>
 
-          <div className={styles.periodButtons}>
-            <button onClick={() => { setStartDate(""); setEndDate(""); }}>전체</button>
-            <button onClick={() => setPeriod(0)}>오늘</button>
-            <button onClick={() => setPeriod(7)}>1주</button>
-            <button onClick={() => setPeriod(14)}>2주</button>
-            <button onClick={() => setPeriod(30)}>1달</button>
-          </div>
-        </div>
+          {scope === "store" && (
+            <>
+              <label>지점</label>
+              <select value={store} onChange={(e) => setStore(e.target.value)}>
+                <option value="all">전체지점</option>
+                {stores.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
 
-        {/* 지점, 분류, 검색 + 폐기 신청 버튼 */}
-        <div className={styles.row} style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <label>지점</label>
-            <select value={store} onChange={(e) => setStore(e.target.value)}>
-              <option value="all">전체지점</option>
-              {stores.map((s) => (
-                <option key={s.id} value={s.id}>{s.name}</option>
-              ))}
-            </select>
+          <label>분류</label>
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="all">전체</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+          </select>
 
-            <label>분류</label>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="all">전체</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.name}>{c.name}</option>
-              ))}
-            </select>
+          <input
+            type="text"
+            placeholder="재료명 검색"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
 
-            <input
-              type="text"
-              placeholder="재료명 검색"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
-
-            <button className={styles.search} onClick={fetchInventory}>검색</button>
-          </div>
-
-          <button className={styles.disposalBtn} onClick={openModal}>폐기 신청</button>
+          <button className={styles.search} onClick={() => fetchInventory(1)}>
+            검색
+          </button>
         </div>
 
         {/* 목록 테이블 */}
@@ -247,7 +252,10 @@ export default function HqInventoryExpiration() {
               <th className={styles.checkbox}>
                 <input
                   type="checkbox"
-                  checked={filteredSorted.filter((i) => i.store === "본사").every((i) => selectedIds.includes(i.id)) && filteredSorted.some((i) => i.store === "본사")}
+                  checked={
+                    inventory.filter((i) => i.store === "본사").every((i) => selectedIds.includes(i.id)) &&
+                    inventory.some((i) => i.store === "본사")
+                  }
                   onChange={toggleAll}
                 />
               </th>
@@ -262,12 +270,14 @@ export default function HqInventoryExpiration() {
             </tr>
           </thead>
           <tbody>
-            {filteredSorted.length === 0 ? (
+            {inventory.length === 0 ? (
               <tr>
-                <td colSpan={10} className={styles.noData}>데이터가 없습니다.</td>
+                <td colSpan={10} className={styles.noData}>
+                  데이터가 없습니다.
+                </td>
               </tr>
             ) : (
-              filteredSorted.map((it) => (
+              inventory.map((it) => (
                 <tr key={it.id} className={typeof it.dday === "string" && it.dday.includes("D+") ? styles.expired : ""}>
                   <td className={styles.checkbox}>
                     <input
@@ -291,14 +301,37 @@ export default function HqInventoryExpiration() {
           </tbody>
         </table>
 
-        {/* 모달 */}
+        {/* 페이지네이션 */}
+        <div className={styles.pagination}>
+          <button onClick={() => fetchInventory(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
+            &lt;
+          </button>
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              className={p === pageInfo.curPage ? styles.active : ""}
+              onClick={() => fetchInventory(p)}
+            >
+              {p}
+            </button>
+          ))}
+          <button onClick={() => fetchInventory(pageInfo.curPage + 1)} disabled={pageInfo.curPage >= pageInfo.allPage}>
+            &gt;
+          </button>
+        </div>
+
+        {/* 폐기 신청 모달 (생략 가능) */}
         {isModalOpen && (
           <div className={styles.modal} onClick={closeModal}>
             <div className={styles.modalBox} onClick={(e) => e.stopPropagation()}>
-              <button className={styles.modalClose} onClick={closeModal}>&times;</button>
+              <button className={styles.modalClose} onClick={closeModal}>
+                &times;
+              </button>
               <h3>폐기 신청</h3>
               <div className={styles.modalTopActions}>
-                <button className={styles.save} onClick={submit}>신청</button>
+                <button className={styles.save} onClick={submit}>
+                  신청
+                </button>
               </div>
               <div className={styles.modalTableWrapper}>
                 <table className={styles.table}>
