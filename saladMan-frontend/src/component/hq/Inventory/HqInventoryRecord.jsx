@@ -26,6 +26,19 @@ export default function HqInventoryRecord() {
 
   const [categories, setCategories] = useState([]);
 
+  const formatDate = (dateStr) => {
+  if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+
   // 초기 데이터 로딩
   useEffect(() => {
     myAxios(token).get("/hq/inventory/ingredients")
@@ -174,7 +187,7 @@ export default function HqInventoryRecord() {
                   <td>{r.categoryName}</td>
                   <td>{r.quantity}</td>
                   <td>{r.memo || "-"}</td>
-                  <td>{r.date}</td>
+                  <td>{formatDate(r.date)}</td>
                 </tr>
               ))
             ) : (

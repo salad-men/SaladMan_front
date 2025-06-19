@@ -39,15 +39,19 @@ export default function HqInventoryList() {
   useEffect(() => { fetchInventory(1); }, [token, filters.scope, filters.store]);
 
   const fetchInventory = (page = 1) => {
-    const param = { ...filters, page };
-    myAxios(token).post("/hq/inventory/list", param).then(res => {
+    const param = {
+       ...filters, 
+       page,
+       store: filters.store !== "all" ? Number(filters.store) : "all",};
+    
+       myAxios(token).post("/hq/inventory/list", param).then(res => {
       const hqList = res.data.hqInventory || [];
       const storeList = res.data.storeInventory || [];
       const list = filters.scope === "hq" ? hqList : filters.scope === "store" ? storeList : [...hqList, ...storeList];
 
       const flatList = list.map(x => ({
         id: x.id,
-        store: x.storeName || "",  // storeName 필드 사용
+        store: x.storeName || "",  
         name: x.ingredientName || "",
         unit: x.unit || "",
         category: x.categoryName || "",
@@ -67,6 +71,11 @@ export default function HqInventoryList() {
       console.error("재고 목록 조회 실패", e);
       setInventory([]);
     });
+  };
+
+    // 검색 버튼 클릭 시 강제로 fetchInventory 실행
+  const handleSearchClick = () => {
+    fetchInventory(1);
   };
 
   const onFilterChange = e => {
@@ -195,8 +204,12 @@ export default function HqInventoryList() {
                 <label>지점</label>
                   <select name="store" value={filters.store} onChange={onFilterChange}>
                     <option value="all">전체지점</option>
-                    {stores.map(s => (
-                      <option key={s.id} value={s.id}>{s.name}</option>
+                    {stores
+                      .filter(s => s.id !== 1)
+                      .map(s => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
                     ))}
                   </select>
               </>
@@ -215,7 +228,7 @@ export default function HqInventoryList() {
               onChange={onFilterChange}
               placeholder="재료명 검색"
             />
-            <button className={styles.search} onClick={() => fetchInventory(1)}>
+            <button className={styles.search} onClick={() => handleSearchClick}>
               검색
             </button>
           </div>
