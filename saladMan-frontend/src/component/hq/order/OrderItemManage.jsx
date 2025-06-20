@@ -153,6 +153,7 @@ export default function OrderItemManage() {
                         </tbody>
                     </table>
                     <div className={styles.ordItemManagePagination}>
+                        
                         {[...Array(totalPages)].map((_, idx) => (
                             <button
                                 key={idx}
