@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { myAxios } from "../../../config";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 import NoticeSidebar from "./NoticeSidebar";
 import styles from "./HqNoticeWrite.module.css";
 
 export default function HqNoticeWrite() {
   const navigate = useNavigate();
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -91,45 +91,20 @@ export default function HqNoticeWrite() {
               <tr>
                 <th>이미지</th>
                 <td>
-                    <div className={styles.fileInputWrapper}>
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
-                    {(imgPreview || imgUrl) && (
-                        <div>
-                        <img
-                            src={imgPreview || imgUrl}
-                            alt="미리보기"
-                            className={styles.filePreview}
-                        />
-                        {imgUrl && (
-                            <div className={styles.fileActions}>
-                            <button type="button" onClick={handleImgDelete}>
-                                이미지 삭제
-                            </button>
-                            </div>
-                        )}
-                        </div>
-                    )}
+                  <input type="file" accept="image/*" onChange={handleImageChange} />
+                  {imgPreview && (
+                    <div>
+                      <img src={imgPreview} alt="미리보기" style={{ maxWidth: 200, marginTop: 10 }} />
                     </div>
+                  )}
                 </td>
-                </tr>
-                <tr>
+              </tr>
+              <tr>
                 <th>첨부파일</th>
                 <td>
-                    <div className={styles.fileInputWrapper}>
-                    <input type="file" onChange={handleFileChange} />
-                    {fileUrl && (
-                        <div className={styles.fileActions}>
-                        <a href={fileUrl} download className={styles.fileLink}>
-                            {fileOriginName || getFileNameFromUrl(fileUrl)}
-                        </a>
-                        <button type="button" onClick={handleFileDelete}>
-                            첨부파일 삭제
-                        </button>
-                        </div>
-                    )}
-                    </div>
+                  <input type="file" onChange={handleFileChange} />
                 </td>
-                </tr>
+              </tr>
             </tbody>
           </table>
           <div>
