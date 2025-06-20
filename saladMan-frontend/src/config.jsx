@@ -2,11 +2,12 @@ import axios from "axios";
 
 console.log("현재 Vite 모드:", import.meta.env.MODE);
 
-export const url = import.meta.env.VITE_API_URL || "http://localhost:8090";
+export const API_BASE = import.meta.env.VITE_API_URL;
+export const CF_BASE  = import.meta.env.VITE_CLOUDFRONT_URL || '';
 
 export const myAxios = (token) => {
    var instance = axios.create({
-      baseURL: url,
+      baseURL: API_BASE,
       timeout: 5000,
    })
 

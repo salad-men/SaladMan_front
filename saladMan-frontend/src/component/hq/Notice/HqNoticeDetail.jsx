@@ -1,120 +1,97 @@
-import React, { useState } from "react";
-import NoticeSidebar from "./NoticeSidebar";
+import React, { useEffect, useState } from "react";
+import { useAtomValue } from "jotai";
+import { useNavigate, useParams } from "react-router-dom";
+import { myAxios } from "../../../config";
+import { tokenAtom } from "/src/atoms";
 import styles from "./HqNoticeDetail.module.css";
+import NoticeSidebar from "./NoticeSidebar";
 
 export default function HqNoticeDetail() {
-  const initialNotice = {
-    title: "[공지] 샐러드 배송 지역 확대 안내",
-    author: "관리자",
-    date: "2025-05-21",
-    content: `고객 여러분의 많은 관심과 사랑에 힘입어 샐러드 배송 가능 지역이 확대되었습니다.
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const token = useAtomValue(tokenAtom);
 
-기존 지역에 더해 ○○지역에서도 신선한 샐러드를 빠르게 받아보실 수 있게 되었습니다.
+  const [notice, setNotice] = useState({
+    title: "",
+    content: "",
+    imgFileName: "",
+    fileName: "",
+    fileOriginName: ""
+  });
 
-앞으로도 더 많은 지역에서 만날 수 있도록 최선을 다하겠습니다. 감사합니다.`,
+  useEffect(() => {
+    if (id) {
+      myAxios(token).get("/hq/notice/detail", { params: { id } })
+        .then(res => setNotice(res.data.notice))
+        .catch((err) =>console.error("공지 불러오기 실패:", err));
+    }
+  }, [id, token]);
+
+  const getFileNameFromUrl = (url) => {
+    if (!url) return "";
+    return url.substring(url.lastIndexOf("/") + 1);
   };
 
-  const [notice, setNotice] = useState(initialNotice);
-  const [isEditing, setIsEditing] = useState(false);
+  // 공지 삭제 함수
+  const handleDelete = async () => {
+    if (!window.confirm("정말 이 공지를 삭제하시겠습니까?")) return;
 
-  const [editTitle, setEditTitle] = useState(notice.title);
-  const [editContent, setEditContent] = useState(notice.content);
-
-  const handleEditClick = () => setIsEditing(true);
-
-  const handleSubmitClick = () => {
-    setNotice({
-      ...notice,
-      title: editTitle,
-      content: editContent,
-    });
-    setIsEditing(false);
-  };
-
-  const handleCancelClick = () => {
-    setEditTitle(notice.title);
-    setEditContent(notice.content);
-    setIsEditing(false);
-  };
-
-  const handleBackClick = () => {
-    window.history.back();
+    try {
+      await myAxios(token).delete("/hq/notice/delete", { params: { id } });
+      alert("공지 삭제 완료!");
+      navigate("/hq/HqNoticeList");
+    } catch (err) {
+      alert("공지 삭제 실패!");
+      console.error(err);
+    }
   };
 
   return (
     <div className={styles.container}>
       <NoticeSidebar />
       <main className={styles.content}>
-        <h2 className={styles.title}>공지사항</h2>
-
-        <div className={styles.detailMeta}>
-          <span>작성일 {notice.date}</span>
-        </div>
-
-        <table className={styles.detailTable}>
+        <div className={styles.title}>공지사항 상세</div>
+        <table className={styles.table}>
           <tbody>
             <tr>
-              <th>제목</th>
-              <td>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                    className={styles.inputText}
-                  />
-                ) : (
-                  notice.title
-                )}
+              <th className={styles.label}>제목</th>
+              <td className={styles.value}>{notice.title}</td>
+            </tr>
+            <tr>
+              <th className={styles.label}>내용</th>
+              <td className={styles.value} style={{ whiteSpace: "pre-line" }}>{notice.content}</td>
+            </tr>
+            <tr>
+              <th className={styles.label}>이미지</th>
+              <td className={styles.value}>
+                {notice.imgFileName
+                  ? <>
+                      <img src={notice.imgFileName} alt="공지이미지" className={styles.image} />
+                    </>
+                  : "없음"
+                }
               </td>
             </tr>
             <tr>
-              <th>작성자</th>
-              <td className={styles.authorCell}>{notice.author}</td>
-            </tr>
-            <tr>
-              <th>내용</th>
-              <td className={styles.contentCell}>
-                {isEditing ? (
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    className={styles.inputTextarea}
-                    rows={20}
-                  />
-                ) : (
-                  notice.content.split("\n").map((line, idx) => <p key={idx}>{line}</p>)
-                )}
+              <th className={styles.label}>첨부파일</th>
+              <td className={styles.value}>
+                {notice.fileName
+                  ? <>
+                      <a href={notice.fileName} download style={{ marginRight: 10 }}>
+                        {notice.fileOriginName || getFileNameFromUrl(notice.fileName)}
+                      </a>
+                    </>
+                  : "없음"
+                }
               </td>
             </tr>
           </tbody>
         </table>
 
         <div className={styles.buttonGroup}>
-          <button
-            className={styles.back}
-            onClick={handleBackClick}
-            type="button"
-          >
-            목록
-          </button>
-
-          {isEditing && (
-            <button
-              className={`${styles.btn} ${styles.cancel}`}
-              onClick={handleCancelClick}
-              type="button"
-            >
-              취소
-            </button>
-          )}
-          <button
-            className={`${styles.btn} ${styles.submit}`}
-            onClick={isEditing ? handleSubmitClick : handleEditClick}
-            type="button"
-          >
-            {isEditing ? "등록" : "수정"}
-          </button>
+          <button className={styles.backBtn} onClick={() => navigate("/hq/HqNoticeList")}>목록</button>
+          <button className={styles.modifyBtn} onClick={() => navigate(`/hq/HqNoticeModify/${id}`)}>수정</button>
+          <button className={styles.deleteBtn} onClick={handleDelete}>삭제</button>
         </div>
       </main>
     </div>

@@ -42,6 +42,8 @@ import StoreInventoryRecord from '@store/Inventory/StoreInventoryRecord';
 
 import HqNoticeList from '@hq/Notice/HqNoticeList';
 import HqNoticeDetail from '@hq/Notice/HqNoticeDetail';
+import HqNoticeWrite from "@hq/Notice/HqNoticeWrite";
+import HqNoticeModify from "@hq/Notice/HqNoticeModify";
 import NewsDetailPage from '@user/page/NewDetailPage';
 import KioskPage from '@user/page/KioskPage';
 import KioskMenuPage from '@user/page/KioskMenuPage';
@@ -73,6 +75,7 @@ import StoreComplaintDetail from '@store/complaint/StoreComplaintDetail';
 import Login from './component/common/Login';
 import StoreAccountDetail from '@hq/storeManagement/StoreAccountDetail';
 import StoreAccountModify from '@hq/storeManagement/StoreAccountModify';
+
 
 function App() {
 
@@ -116,10 +119,12 @@ function App() {
 
           {/* 공지- 공지 */}
           <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
-          <Route path='/hq/HqNoticeDetail' element={<HqNoticeDetail />} />
+          <Route path='/hq/HqNoticeDetail/:id' element={<HqNoticeDetail />} />
+          <Route path="/hq/HqNoticeWrite" element={<HqNoticeWrite />} />
+          <Route path="/hq/HqNoticeModify/:id" element={<HqNoticeModify />} />
           {/* 공지-불만 */}
           <Route path='/hq/HqComplaintList' element={<HqComplaintList />} />
-          <Route path='/hq/HqComplaintDetail' element={<HqComplaintDetail />} />
+          <Route path='/hq/HqComplaintDetail/:id' element={<HqComplaintDetail />} />
           {/* 공지-알림목록 */}
           <Route path='/hq/notification' element={<HqNotification />} />
 

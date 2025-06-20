@@ -24,14 +24,6 @@
   user-select: none;
 }
 
-.branchName {
-  font-size: 18px;
-  font-weight: 600;
-  color: #2f4f27;
-  margin-bottom: 8px;
-  user-select: none;
-}
-
 .writeDate {
   font-size: 14px;
   color: #555;

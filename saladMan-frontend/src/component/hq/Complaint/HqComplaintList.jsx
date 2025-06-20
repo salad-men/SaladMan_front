@@ -1,32 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAtomValue } from "jotai";
+import { useNavigate } from "react-router-dom";
 import NoticeSidebar from "../Notice/NoticeSidebar";
 import styles from "./HqComplaintList.module.css";
-
-const initialComplaints = [
-  { id: 1, title: "[불편사항] 강남점 매장이 더러워요.", author: "관리자", date: "2025-05-21", store: "강남점", status: "미열람" },
-  { id: 2, title: "[전달사항] 고객 불편사항 공유 및 개선 요청", author: "관리자", date: "2025-05-21", store: "강남점", status: "미열람" },
-  { id: 3, title: "[전달사항] 고객 불편사항 공유 및 개선 요청", author: "관리자", date: "2025-05-21", store: "강남점", status: "미열람" },
-  // ... 추가 데이터 생략
-];
+import { myAxios } from "../../../config";
+import { tokenAtom } from "/src/atoms";
 
 export default function HqComplaintList() {
-  const [complaints, setComplaints] = useState(initialComplaints);
+  const token = useAtomValue(tokenAtom);
+  const navigate = useNavigate();
+
+  const [complaints, setComplaints] = useState([]);
+  const [stores, setStores] = useState([]);
+
   const [selectedIds, setSelectedIds] = useState([]);
 
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const size = 10;
+
+  // 필터 상태
+  const [storeFilter, setStoreFilter] = useState("all");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all"); // all, 미열람, 열람, 전달완료
+
+  const mapStatus = (isRead, isRelay) => {
+    if (isRelay) return "전달완료";
+    if (isRead) return "열람";
+    return "미열람";
+  };
+
+  // 점포 리스트 API 호출
+  useEffect(() => {
+    myAxios(token)
+      .get("/hq/store/list")
+      .then(res => {
+        setStores(res.data.storeList);
+      })
+      .catch(err => console.error("점포목록 조회 실패:", err));
+  }, [token]);
+
+  // 불편사항 리스트 API 호출
+  const fetchComplaintList = (pageParam = 0) => {
+    myAxios(token)
+      .post("/hq/complaint/list", {
+        page: pageParam,
+        size,
+        storeId: storeFilter === "all" ? null : Number(storeFilter),
+        keyword: searchKeyword,
+        status: statusFilter === "all" ? null : statusFilter,
+      })
+      .then(res => {
+        const list = (res.data.complaintList || []).map(c => ({
+          ...c,
+          status: mapStatus(c.isRead, c.isRelay),
+        }));
+
+        const order = { "미열람": 0, "열람": 1, "전달완료": 2 };
+        list.sort((a, b) => order[a.status] - order[b.status]);
+
+        setComplaints(list);
+        setPage(res.data.page ?? pageParam);
+        setTotalPages(res.data.totalPages ?? 1);
+        setSelectedIds([]);
+      })
+      .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchComplaintList(0);
+  }, [token, storeFilter, searchKeyword, statusFilter]);
+
   const handleView = (id) => {
-    setComplaints((prev) =>
-      prev.map((item) =>
+    setComplaints(prev =>
+      prev.map(item =>
         item.id === id && item.status === "미열람"
           ? { ...item, status: "열람" }
           : item
       )
     );
+    navigate(`/hq/HqComplaintDetail/${id}`);
   };
 
-  // 체크박스 토글
   const toggleSelect = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
     );
   };
 
@@ -34,22 +92,38 @@ export default function HqComplaintList() {
     if (selectedIds.length === complaints.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(complaints.map((c) => c.id));
+      setSelectedIds(complaints.map(c => c.id));
     }
   };
 
-  // 선택한 항목 한꺼번에 전달 처리
   const handleForwardSelected = () => {
     if (selectedIds.length === 0) {
       alert("전달할 항목을 선택하세요.");
       return;
     }
-    setComplaints((prev) =>
-      prev.map((item) =>
+    setComplaints(prev =>
+      prev.map(item =>
         selectedIds.includes(item.id) ? { ...item, status: "전달완료" } : item
       )
     );
     setSelectedIds([]);
+  };
+
+  const renderPageButtons = () => {
+    const buttons = [];
+    for (let i = 0; i < totalPages; i++) {
+      buttons.push(
+        <button
+          key={i}
+          className={page === i ? styles.activePageButton : ""}
+          onClick={() => fetchComplaintList(i)}
+          aria-current={page === i ? "page" : undefined}
+        >
+          {i + 1}
+        </button>
+      );
+    }
+    return buttons;
   };
 
   return (
@@ -58,7 +132,34 @@ export default function HqComplaintList() {
       <main className={styles.content}>
         <h2 className={styles.title}>불편사항 목록</h2>
 
-        {/* 선택 전달 버튼 */}
+        <div className={styles.filters}>
+          <select value={storeFilter} onChange={e => setStoreFilter(e.target.value)}>
+            <option value="all">전체 점포</option>
+            {stores.map(store => (
+              <option key={store.id} value={store.id}>
+                {store.name}
+              </option>
+            ))}
+          </select>
+
+          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+            <option value="all">전체 상태</option>
+            <option value="미열람">미열람</option>
+            <option value="열람">열람</option>
+            <option value="전달완료">전달완료</option>
+          </select>
+
+          <input
+            type="text"
+            placeholder="제목 검색"
+            value={searchKeyword}
+            onChange={e => setSearchKeyword(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && fetchComplaintList(0)}
+          />
+
+          <button onClick={() => fetchComplaintList(0)}>검색</button>
+        </div>
+
         <div className={styles.actions}>
           <button
             className={styles.forwardSelectedBtn}
@@ -88,33 +189,39 @@ export default function HqComplaintList() {
             </tr>
           </thead>
           <tbody>
-            {complaints.map(({ id, title, author, date, store, status }) => (
-              <tr key={id} className={status === "미열람" ? styles.unread : ""}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(id)}
-                    onChange={() => toggleSelect(id)}
-                    aria-label={`선택 ${title}`}
-                  />
-                </td>
-                <td
-                  className={styles.clickable}
-                  onClick={() => handleView(id)}
-                  title="상세보기(열람처리)"
-                >
-                  {title}
-                </td>
-                <td>{author}</td>
-                <td>{date}</td>
-                <td>{store}</td>
-                <td className={`${styles.statusCell} ${styles[status.replace(" ", "").toLowerCase()]}`}>
-                  {status}
-                </td>
+            {complaints.length === 0 ? (
+              <tr>
+                <td colSpan={6} className={styles.noData}>데이터가 없습니다.</td>
               </tr>
-            ))}
+            ) : (
+              complaints.map(({ id, title, writerNickname, writerDate, storeName, status }) => (
+                <tr key={id} className={status === "미열람" ? styles.unread : ""}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(id)}
+                      onChange={() => toggleSelect(id)}
+                      aria-label={`선택 ${title}`}
+                    />
+                  </td>
+                  <td className={styles.clickable} onClick={() => handleView(id)}>{title}</td>
+                  <td>{writerNickname ?? "관리자"}</td>
+                  <td>{writerDate}</td>
+                  <td>{storeName ?? "알 수 없음"}</td>
+                  <td className={`${styles.statusCell} ${status ? styles[status.replace(" ", "").toLowerCase()] : ""}`}>
+                    {status}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
+
+        <div className={styles.paging}>
+          <button disabled={page === 0} onClick={() => fetchComplaintList(page - 1)}>이전</button>
+          {renderPageButtons()}
+          <button disabled={page === totalPages - 1} onClick={() => fetchComplaintList(page + 1)}>다음</button>
+        </div>
       </main>
     </div>
   );
