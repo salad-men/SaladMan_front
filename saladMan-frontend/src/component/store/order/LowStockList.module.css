@@ -1,0 +1,24 @@
+.shortageBox {
+  flex: 1;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: rgb(255, 255, 255);
+}
+
+.shortageTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.shortageTable th, .shortageTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.shortageTable th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+}
