@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./OrderApply.module.css";
 import OrderSidebar from "./OrderSidebar";
+import LowStockList from "./LowStockList";
 
 export default function OrderApply() {
     const [orderItems, setOrderItems] = useState([]); // 실제 신청할 품목
@@ -46,24 +47,7 @@ export default function OrderApply() {
                     <h2>발주신청</h2>
                     <div className={styles.contentBox}>
 
-                        <div className={styles.shortageBox}>
-                            <h4>수량미달품목 <span>(총 {shortages.length}개)</span></h4>
-                            <table className={styles.shortageTable}>
-                                <thead>
-                                    <tr><th>품명</th><th>구분</th><th>현재량</th></tr>
-                                </thead>
-                                <tbody>
-                                    {shortages.map((item, i) => (
-                                        <tr key={i}>
-                                            <td>{item.name}</td>
-                                            <td>{item.category}</td>
-                                            <td>{item.current}g</td>
-
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                    <LowStockList />
 
                         <div className={styles.stockTableBox}>
                             <h4>품목 선택</h4>
