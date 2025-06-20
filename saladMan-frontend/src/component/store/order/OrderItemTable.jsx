@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./OrderItemTable.module.css";
 import { myAxios } from "/src/config"; // ← 유틸 함수
 import { useAtomValue } from "jotai";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function OrderItemTable() {
 
@@ -14,7 +14,7 @@ export default function OrderItemTable() {
     const [category, setCategory] = useState("전체");
     const [keyword, setKeyword] = useState("");
 
-    const token = useAtomValue(tokenAtom);
+    const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
         if (!showModal) return;
