@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { myAxios } from '/src/config.jsx';
 import { useSetAtom } from 'jotai';
-import { userAtom,tokenAtom } from "/src/atoms";
+import { userAtom,accessTokenAtom,refreshTokenAtom } from "/src/atoms";
 import './Login.css'
 
 const Login = () => {
     const [login, setLogin] = useState({username:'',password:''})
     const setStore = useSetAtom(userAtom);
-    const setToken = useSetAtom(tokenAtom);
+    const setAccessToken = useSetAtom(accessTokenAtom);
+    const setRefreshToken = useSetAtom(refreshTokenAtom);
     const navigate = useNavigate();
     const edit = (e) => {
         setLogin({...login, [e.target.name]:e.target.value});
@@ -20,9 +21,14 @@ const Login = () => {
         e.preventDefault();
         axios.post("/login", login)
             .then(res=>{
-                console.log(res)
-                console.log(res.headers.authorization)
-                setToken(res.headers.authorization);
+                const token = JSON.parse(res.headers.authorization);
+                console.log("✅ access:", token.access_token);
+                console.log("✅ refresh:", token.refresh_token);
+
+                // ✅ 각각 분리 저장
+                setAccessToken(token.access_token);
+                setRefreshToken(token.refresh_token);
+
                 const store = res.data;
                 setStore({...store})
                 navigate(store.role === "ROLE_HQ" ? "/hq/totalMenu" : "/store/totalMenu");

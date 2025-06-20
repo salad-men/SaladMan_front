@@ -3,7 +3,7 @@ import {useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqDisposalList.module.css";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 const initialFilters = {
   store: "all",
@@ -25,7 +25,7 @@ export default function HqDisposalList() {
   const [rejectReasons, setRejectReasons] = useState({});
   const [pageInfo, setPageInfo] = useState({});
 
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
   
 
   // 지점 목록 호출

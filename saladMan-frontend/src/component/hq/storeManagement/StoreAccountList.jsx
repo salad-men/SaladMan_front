@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { myAxios } from "/src/config";
 import { useNavigate } from "react-router";
 import { useAtomValue } from 'jotai';
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function StoreAccountList() {
     const [location, setLocation] = useState("전체 지역");
@@ -13,7 +13,7 @@ export default function StoreAccountList() {
     const [keyword, setKeyword] = useState("");
     const [stores, setStores] = useState([]);
     const navigate = useNavigate();
-    const token = useAtomValue(tokenAtom);
+    const token = useAtomValue(accessTokenAtom);
 
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);

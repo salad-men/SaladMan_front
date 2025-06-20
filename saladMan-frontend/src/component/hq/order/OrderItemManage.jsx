@@ -3,7 +3,7 @@ import OrderSidebar from "./OrderSidebar";
 import { useEffect, useState } from "react";
 import { myAxios } from "/src/config";
 import { useAtomValue } from "jotai";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function OrderItemManage() {
     const [items, setItems] = useState([]);
@@ -18,7 +18,7 @@ export default function OrderItemManage() {
     const [selectedId, setSelectedId] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    const token = useAtomValue(tokenAtom);
+    const token = useAtomValue(tokenaccessTokenAtomAtom);
 
     useEffect(() => {
         fetchItems();

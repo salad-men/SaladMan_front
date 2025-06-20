@@ -2,14 +2,14 @@ import './MenuStatus.module.css';
 import SidebarMenus from './SidebarMenu';
 import { useState, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
-import { tokenAtom } from '/src/atoms';
+import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config';
 
 const MenuStatus = () => {
   const [menus, setMenus] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
 
   useEffect(() => {
     const fetchMenus = async () => {

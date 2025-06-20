@@ -7,7 +7,7 @@ import { Modal, Button } from "antd";
 import { useNavigate } from "react-router";
 import { myAxios } from "/src/config.jsx";
 import { useAtomValue } from 'jotai';
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function StoreRegister() {
 
@@ -23,7 +23,7 @@ export default function StoreRegister() {
     const [isUsernameValid, setIsUsernameValid] = useState(null);
 
     const [isMapReady, setIsMapReady] = useState(false);
-    const token = useAtomValue(tokenAtom);
+    const token = useAtomValue(accessTokenAtom);
 
     const simplifySidoToRegion = (sido) => {
         const map = {

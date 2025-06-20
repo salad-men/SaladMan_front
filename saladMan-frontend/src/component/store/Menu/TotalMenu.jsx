@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
-import { tokenAtom } from '/src/atoms';
+import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config.jsx';
 import styles from './TotalMenu.module.css';
 import SidebarMenu from './SidebarMenu';
@@ -10,7 +10,7 @@ const TotalMenu = () => {
     const [pageInfo, setPageInfo] = useState({curPage:1, allPage:1, startPage:1, endPage:1});
     const [sort, setSort] = useState({page: 1, type: 'release_desc'});
     const [pageNums, setPageNums] = useState([]);
-    const [token] = useAtom(tokenAtom);
+    const [token] = useAtom(accessTokenAtom);
 
     const submit = (page) => {
         if (!token) return;

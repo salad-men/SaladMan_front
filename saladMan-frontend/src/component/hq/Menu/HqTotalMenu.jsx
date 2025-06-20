@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
-import { tokenAtom } from '/src/atoms';
+import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config.jsx';
 import styles from './HqTotalMenu.module.css';
 import HqSidebarMenu from './HqSidebarMenu';
@@ -10,7 +10,7 @@ const HqAllMenus = () => {
     const [pageInfo, setPageInfo] = useState({curPage:1, allPage:1, startPage:1, endPage:1});
     const [sort, setSort] = useState({page: 1, type: 'release_desc'});
     const [pageNums, setPageNums] = useState([]);
-    const [token] = useAtom(tokenAtom);
+    const [token] = useAtom(accessTokenAtom);
 
     const submit = (page) => {
         if (!token) return;
@@ -51,12 +51,12 @@ const HqAllMenus = () => {
                     <h2>전체 메뉴 조회</h2>
                     <div className={styles.controls}>
                         <select id="sortSelect" value={sort.type} onChange={handleSortChange}>
-                            <option value="release_desc">출시일 순 (최신순)</option>
-                            <option value="release_asc">출시일 순 (오래된순)</option>
+                            <option value="release_asc">출시일 순 (최신순)</option>
+                            <option value="release_desc">출시일 순 (오래된순)</option>
                             <option value="name_asc">이름순 (가나다)</option>
                             <option value="name_desc">이름순 (역순)</option>
-                            <option value="price_asc">가격순 (낮은 가격)</option>
-                            <option value="price_desc">가격순 (높은 가격)</option>
+                            <option value="price_desc">가격순 (낮은 가격)</option>
+                            <option value="price_asc">가격순 (높은 가격)</option>
                         </select>
                     </div>
                 </header>
