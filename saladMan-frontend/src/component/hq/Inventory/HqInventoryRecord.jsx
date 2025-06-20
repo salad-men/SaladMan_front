@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 import styles from "./HqInventoryRecord.module.css";
 
 export default function HqInventoryRecord() {
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
 
   const [ingredients, setIngredients] = useState([]);
   const [records, setRecords] = useState([]);

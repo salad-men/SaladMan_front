@@ -6,7 +6,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { Modal, Button } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { myAxios } from "/src/config.jsx";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 import { useAtomValue } from "jotai";
 
 
@@ -28,7 +28,7 @@ export default function StoreAccountModify() {
         username: ''
     }); const [coords, setCoords] = useState({ lat: 37.5665, lng: 126.9780 }); // 기본값: 서울시청
     const location = useLocation();
-    const token = useAtomValue(tokenAtom);
+    const token = useAtomValue(accessTokenAtom);
 
     const [storeNameChecked, setStoreNameChecked] = useState(false);
     const [usernameChecked, setUsernameChecked] = useState(false);

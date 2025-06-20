@@ -1,5 +1,8 @@
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
+export const accessTokenAtom = atomWithStorage("access_token", '', createJSONStorage(() => sessionStorage));
+export const refreshTokenAtom = atomWithStorage("refresh_token", '', createJSONStorage(() => sessionStorage));
+
 export const initStore = {
     username:'',
     id:'',
@@ -8,4 +11,3 @@ export const initStore = {
 }
 
 export const userAtom = atomWithStorage("store", initStore, createJSONStorage(()=>sessionStorage));
-export const tokenAtom = atomWithStorage("token", '', createJSONStorage(()=>sessionStorage));

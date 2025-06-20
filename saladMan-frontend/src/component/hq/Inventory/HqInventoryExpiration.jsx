@@ -3,10 +3,10 @@ import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqInventoryExpiration.module.css";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function HqInventoryExpiration() {
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
 
   const [store, setStore] = useState("all");
   const [category, setCategory] = useState("all");

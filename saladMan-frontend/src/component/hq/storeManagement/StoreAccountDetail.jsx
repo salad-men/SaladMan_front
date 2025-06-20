@@ -5,14 +5,14 @@ import EmpSidebar from "./EmpSidebar";
 import styles from "./StoreAccountDetail.module.css";
 import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
 import { useAtomValue } from "jotai";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function StoreAccountDetail() {
     const [store, setStore] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
 
-    const token = useAtomValue(tokenAtom);
+    const token = useAtomValue(accessTokenAtom);
     const id = new URLSearchParams(location.search).get("id");
 
     useEffect(() => {

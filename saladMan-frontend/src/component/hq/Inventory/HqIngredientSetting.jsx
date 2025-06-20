@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqIngredientSetting.module.css";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 import {useAtomValue } from "jotai";
 
 
 export default function HqIngredientSetting() {
 
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
   
 
   const [settings, setSettings] = useState([]);

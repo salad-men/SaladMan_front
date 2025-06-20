@@ -1,4 +1,6 @@
 import axios from "axios";
+import { accessTokenAtom, refreshTokenAtom } from "./atoms";
+import { getDefaultStore } from "jotai";
 
 console.log("현재 Vite 모드:", import.meta.env.MODE);
 
@@ -15,6 +17,25 @@ export const myAxios = (token) => {
       config.headers.Authorization = token;
       return config;
    });
+
+   // ✅ 응답 에러 처리 인터셉터 추가
+   instance.interceptors.response.use(
+      response => response,
+      error => {
+         const code = error.response?.status;
+
+         if (code === 401 || code === 403) {
+            alert("접근 권한이 없습니다. 다시 로그인해주세요.");
+
+            store.set(accessTokenAtom, '');
+            store.set(refreshTokenAtom, '');
+
+            window.location.href = "/";
+         }
+
+         return Promise.reject(error);
+      }
+   );
 
    return instance;
 }
