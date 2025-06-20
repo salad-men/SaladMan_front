@@ -1,4 +1,4 @@
-/* .container {
+.container {
   display: flex;
   min-height: 100vh;
   font-family: 'Pretendard', sans-serif;
@@ -13,8 +13,6 @@
   border-left: 1px solid #ddd;
   min-width: 900px;
 }
-
-
 
 .table {
   width: 100%;
@@ -59,8 +57,6 @@
   box-shadow: 0 0 6px rgba(90, 129, 88, 0.6);
 }
 
-
-
 .fileInputWrapper {
   display: flex;
   align-items: center;
@@ -97,7 +93,8 @@
   margin-top: 6px;
 }
 
-button {
+/* 버튼 공통 스타일 */
+.btn {
   padding: 8px 20px;
   border-radius: 6px;
   border: none;
@@ -110,21 +107,25 @@ button {
   min-width: 80px;
 }
 
-button[type="submit"] {
+/* 등록 버튼 */
+.btnSubmit {
   background-color: #5a8158;
   color: white;
 }
 
-button[type="submit"]:hover {
+/* 등록 버튼 hover */
+.btnSubmit:hover {
   background-color: #4a6848;
 }
 
-button[type="button"] {
+/* 목록 버튼 */
+.btnCancel {
   background-color: #dedede;
   color: #333;
 }
 
-button[type="button"]:hover {
+/* 목록 버튼 hover */
+.btnCancel:hover {
   background-color: #c0c0c0;
 }
 
@@ -143,9 +144,9 @@ button[type="button"]:hover {
     align-items: flex-start;
   }
 
-  button {
+  .btn {
     min-width: auto;
     padding: 7px 16px;
     font-size: 14px;
   }
-} */
+}
