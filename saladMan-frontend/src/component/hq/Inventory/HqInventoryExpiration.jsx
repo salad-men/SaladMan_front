@@ -21,6 +21,8 @@ export default function HqInventoryExpiration() {
 
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+  const [pageNums, setPageNums] = useState([]);
 
   // Escape 키로 모달 닫기
   useEffect(() => {
@@ -29,7 +31,7 @@ export default function HqInventoryExpiration() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [token]);
+  }, []);
 
   // 지점, 카테고리 리스트 API 호출
   useEffect(() => {
@@ -44,22 +46,6 @@ export default function HqInventoryExpiration() {
       .catch(console.error);
   }, [token]);
 
-  // 날짜 문자열을 Date 객체로 변환
-  const parseDate = (str) => {
-    if (!str) return null;
-    const [y, m, d] = str.split("-");
-    return new Date(y, m - 1, d);
-  };
-
-  // 기간 설정 (days: 0=오늘, 7=1주일 등)
-  const setPeriod = (days) => {
-    const today = new Date();
-    const end = today.toISOString().slice(0, 10);
-    const startObj = days === 0 ? null : new Date(today.getTime() - days * 86400000);
-    setStartDate(startObj ? startObj.toISOString().slice(0, 10) : "");
-    setEndDate(end);
-  };
-
   // 남은 날짜 계산 함수
   const calcDday = (expiry) => {
     if (!expiry) return "";
@@ -71,27 +57,21 @@ export default function HqInventoryExpiration() {
   };
 
   // 재고 데이터 불러오기 (페이징 포함)
-  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
-  const [pageNums, setPageNums] = useState([]);
-
   const fetchInventory = (page = 1) => {
     const params = {
-      scope, // "hq", "store", "all"
-      store: store === "all" ? "all" : store,
-      category: category === "all" ? "" : category,
+      scope,
+      store: store !== "all" ? Number(store) : "all",
+      category: category === "all" ? "all" : category,
       keyword: keyword || "",
       startDate: startDate || "",
       endDate: endDate || "",
       page,
     };
-
     myAxios(token)
       .post("/hq/inventory/expiration-list", params)
       .then((res) => {
-        // 본사재고에 store 명 강제 할당
         const hqList = res.data.hqInventory || [];
         const storeList = res.data.storeInventory || [];
-
         let combined = [];
         if (scope === "hq") combined = hqList;
         else if (scope === "store") combined = storeList;
@@ -100,6 +80,8 @@ export default function HqInventoryExpiration() {
         const transformed = combined.map((item) => ({
           id: item.id,
           store: item.storeName || "",
+          storeId: item.storeId,
+          storeName: item.storeName,
           name: item.ingredientName || "",
           category: item.categoryName || "",
           unit: item.unit || "",
@@ -129,26 +111,32 @@ export default function HqInventoryExpiration() {
   // 초기 및 필터 변경 시 재고 불러오기
   useEffect(() => {
     fetchInventory(1);
+    // eslint-disable-next-line
   }, [token, store, category, keyword, startDate, endDate, scope]);
+
+  // 본사 품목 판별 함수
+  function isHq(item) {
+    return (
+      item.store === "본사" ||
+      item.storeName === "본사계정" ||
+      item.storeId === 1
+    );
+  }
 
   // 단일 선택 토글 (본사 품목만)
   const toggleSelect = (id) => {
     const it = inventory.find((x) => x.id === id);
-    if (!it || it.store !== "본사") return;
-
+    if (!it || !isHq(it)) return;
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
-  // 전체 선택/해제
+  // 전체 선택/해제 (본사 품목만)
   const toggleAll = () => {
-    const avail = inventory.filter((x) => x.store === "본사").map((x) => x.id);
-    const allSel = avail.every((id) => selectedIds.includes(id));
-
-    setSelectedIds((prev) =>
-      allSel ? prev.filter((id) => !avail.includes(id)) : Array.from(new Set([...prev, ...avail]))
-    );
+    const avail = inventory.filter(isHq).map((x) => x.id);
+    const allSel = avail.length > 0 && avail.every((id) => selectedIds.includes(id));
+    setSelectedIds(allSel ? [] : avail);
   };
 
   // 폐기량 변경 처리 (0 ~ 재고수량 사이로 제한)
@@ -165,17 +153,21 @@ export default function HqInventoryExpiration() {
     if (selectedIds.length === 0) return alert("본사 품목을 하나 이상 선택하세요.");
     setIsModalOpen(true);
   };
-
   const closeModal = () => setIsModalOpen(false);
 
-  // 폐기 신청 제출
+  // 폐기 신청 제출 (본사 품목만 보내기)
   const submit = () => {
     const items = selectedIds
-      .map((id) => ({
-        id,
-        quantity: disposalAmounts[id] || 0,
-      }))
-      .filter((i) => i.quantity > 0);
+      .map((id) => {
+        const it = inventory.find((x) => x.id === id);
+        if (!isHq(it)) return null;
+        return {
+          id,
+          quantity: disposalAmounts[id] || 0,
+          storeId: 1,
+        };
+      })
+      .filter((i) => i && i.quantity > 0);
 
     if (items.length === 0) return alert("폐기량을 입력하세요.");
 
@@ -201,47 +193,56 @@ export default function HqInventoryExpiration() {
         <h2 className={styles.title}>유통기한 조회</h2>
 
         {/* 필터 영역 */}
-        <div className={styles.row} style={{ justifyContent: "flex-start", alignItems: "center", gap: 12, marginBottom: 10 }}>
-          <label>대상</label>
-          <select value={scope} onChange={(e) => setScope(e.target.value)}>
-            <option value="all">전체</option>
-            <option value="hq">본사</option>
-            <option value="store">지점</option>
-          </select>
+        <div
+          className={styles.row}
+          style={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 12,
+            marginBottom: 10,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {/* 대상, 지점, 분류, 재료명, 검색 버튼 */}
+            <label>대상</label>
+            <select value={scope} onChange={(e) => setScope(e.target.value)}>
+              <option value="all">전체</option>
+              <option value="hq">본사</option>
+              <option value="store">지점</option>
+            </select>
 
-          {scope === "store" && (
-            <>
-              <label>지점</label>
-              <select value={store} onChange={(e) => setStore(e.target.value)}>
-                <option value="all">전체지점</option>
-                {stores.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </>
-          )}
+            {scope === "store" && (
+              <>
+                <label>지점</label>
+                <select value={store} onChange={(e) => setStore(e.target.value)}>
+                  <option value="all">전체지점</option>
+                  {stores.map((s) => (
+                    <option key={s.id} value={s.id}>{s.name}</option>
+                  ))}
+                </select>
+              </>
+            )}
 
-          <label>분류</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="all">전체</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.name}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+            <label>분류</label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="all">전체</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.name}>{c.name}</option>
+              ))}
+            </select>
 
-          <input
-            type="text"
-            placeholder="재료명 검색"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
+            <input
+              type="text"
+              placeholder="재료명 검색"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
 
-          <button className={styles.search} onClick={() => fetchInventory(1)}>
-            검색
+            <button className={styles.search} onClick={() => fetchInventory(1)}>검색</button>
+          </div>
+
+          <button className={styles.disposalBtn} onClick={openModal}>
+            폐기 신청
           </button>
         </div>
 
@@ -253,8 +254,8 @@ export default function HqInventoryExpiration() {
                 <input
                   type="checkbox"
                   checked={
-                    inventory.filter((i) => i.store === "본사").every((i) => selectedIds.includes(i.id)) &&
-                    inventory.some((i) => i.store === "본사")
+                    inventory.filter(isHq).length > 0 &&
+                    inventory.filter(isHq).every((i) => selectedIds.includes(i.id))
                   }
                   onChange={toggleAll}
                 />
@@ -272,20 +273,19 @@ export default function HqInventoryExpiration() {
           <tbody>
             {inventory.length === 0 ? (
               <tr>
-                <td colSpan={10} className={styles.noData}>
-                  데이터가 없습니다.
-                </td>
+                <td colSpan={10} className={styles.noData}>데이터가 없습니다.</td>
               </tr>
             ) : (
               inventory.map((it) => (
                 <tr key={it.id} className={typeof it.dday === "string" && it.dday.includes("D+") ? styles.expired : ""}>
                   <td className={styles.checkbox}>
-                    <input
-                      type="checkbox"
-                      disabled={it.store !== "본사"}
-                      checked={selectedIds.includes(it.id)}
-                      onChange={() => toggleSelect(it.id)}
-                    />
+                    {isHq(it) ? (
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(it.id)}
+                        onChange={() => toggleSelect(it.id)}
+                      />
+                    ) : null}
                   </td>
                   <td>{it.store}</td>
                   <td>{it.name}</td>
@@ -320,7 +320,7 @@ export default function HqInventoryExpiration() {
           </button>
         </div>
 
-        {/* 폐기 신청 모달 (생략 가능) */}
+        {/* 폐기 신청 모달 */}
         {isModalOpen && (
           <div className={styles.modal} onClick={closeModal}>
             <div className={styles.modalBox} onClick={(e) => e.stopPropagation()}>
@@ -350,16 +350,16 @@ export default function HqInventoryExpiration() {
                       const it = inventory.find((x) => x.id === id);
                       return (
                         <tr key={id}>
-                          <td>{it.name}</td>
-                          <td>{it.category}</td>
-                          <td>{it.unit}</td>
-                          <td>{it.quantity}</td>
-                          <td>{it.price}</td>
+                          <td>{it?.name}</td>
+                          <td>{it?.category}</td>
+                          <td>{it?.unit}</td>
+                          <td>{it?.quantity}</td>
+                          <td>{it?.price}</td>
                           <td>
                             <input
                               type="number"
                               min={0}
-                              max={it.quantity}
+                              max={it?.quantity}
                               value={disposalAmounts[id] || 0}
                               onChange={(e) => onAmount(id, e.target.value)}
                               className={styles.editable}
