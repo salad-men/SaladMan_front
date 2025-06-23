@@ -26,19 +26,26 @@
 }
 
 .table { 
-  width: 50%;
+  width: 1000px;
   border-collapse: collapse;
   margin: 0 auto;
+  table-layout: fixed;
 }
 
 .table th,
 .table td {
-  border: 1px solid #ddd;
+  border: 1px solid #d8e0d7;
   padding: 8px;
   text-align: center;
 }
 
 .table th {
-  background-color: #f4f4f4;
+  background-color: #e3eae3;
 }
 
+.infoText {
+  text-align: center;
+  font-size: 14px;
+  color: #8e8e8e;
+  margin-top: 20px;
+}

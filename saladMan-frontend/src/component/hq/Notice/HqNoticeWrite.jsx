@@ -17,20 +17,20 @@ export default function HqNoticeWrite() {
   const [imgPreview, setImgPreview] = useState(null);
 
   // 이미지 미리보기 설정
-  const handleImageChange = e => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImgFile(file);
     if (file) {
       const reader = new FileReader();
-      reader.onload = e => setImgPreview(e.target.result);
+      reader.onload = (e) => setImgPreview(e.target.result);
       reader.readAsDataURL(file);
     }
   };
 
-  const handleFileChange = e => setFileFile(e.target.files[0]);
+  const handleFileChange = (e) => setFileFile(e.target.files[0]);
 
   // 등록 함수
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title.trim() || !content.trim()) {
@@ -45,7 +45,7 @@ export default function HqNoticeWrite() {
     if (fileFile) formData.append("file", fileFile);
 
     try {
-        myAxios(token).post("/hq/notice/write", formData, {
+      await myAxios(token).post("/hq/notice/write", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("공지 등록 완료!");
@@ -62,7 +62,7 @@ export default function HqNoticeWrite() {
       <main className={styles.content}>
         <h2>공지 등록</h2>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <table>
+          <table className={styles.table}>
             <tbody>
               <tr>
                 <th>제목</th>
@@ -70,7 +70,7 @@ export default function HqNoticeWrite() {
                   <input
                     type="text"
                     value={title}
-                    onChange={e => setTitle(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                     className={styles.input}
                     required
                   />
@@ -81,7 +81,7 @@ export default function HqNoticeWrite() {
                 <td>
                   <textarea
                     value={content}
-                    onChange={e => setContent(e.target.value)}
+                    onChange={(e) => setContent(e.target.value)}
                     rows={10}
                     className={styles.input}
                     required
@@ -91,50 +91,41 @@ export default function HqNoticeWrite() {
               <tr>
                 <th>이미지</th>
                 <td>
-                    <div className={styles.fileInputWrapper}>
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
-                    {(imgPreview || imgUrl) && (
-                        <div>
-                        <img
-                            src={imgPreview || imgUrl}
-                            alt="미리보기"
-                            className={styles.filePreview}
-                        />
-                        {imgUrl && (
-                            <div className={styles.fileActions}>
-                            <button type="button" onClick={handleImgDelete}>
-                                이미지 삭제
-                            </button>
-                            </div>
-                        )}
-                        </div>
-                    )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                  {imgPreview && (
+                    <div>
+                      <img
+                        src={imgPreview}
+                        alt="미리보기"
+                        style={{ maxWidth: 200, marginTop: 10 }}
+                      />
                     </div>
+                  )}
                 </td>
-                </tr>
-                <tr>
+              </tr>
+              <tr>
                 <th>첨부파일</th>
                 <td>
-                    <div className={styles.fileInputWrapper}>
-                    <input type="file" onChange={handleFileChange} />
-                    {fileUrl && (
-                        <div className={styles.fileActions}>
-                        <a href={fileUrl} download className={styles.fileLink}>
-                            {fileOriginName || getFileNameFromUrl(fileUrl)}
-                        </a>
-                        <button type="button" onClick={handleFileDelete}>
-                            첨부파일 삭제
-                        </button>
-                        </div>
-                    )}
-                    </div>
+                  <input type="file" onChange={handleFileChange} />
                 </td>
-                </tr>
+              </tr>
             </tbody>
           </table>
           <div>
-            <button type="submit">등록</button>
-            <button type="button" onClick={() => navigate("/hq/HqNoticeList")}>목록</button>
+            <button type="submit" className={styles.btnSubmit}>
+              등록
+            </button>
+            <button
+              type="button"
+              className={styles.btnCancel}
+              onClick={() => navigate("/hq/HqNoticeList")}
+            >
+              목록
+            </button>
           </div>
         </form>
       </main>

@@ -14,21 +14,6 @@
   min-width: 900px;
 }
 
-/* h2 {
-  font-size: 24px;
-  font-weight: 700;
-  color: #3d5a40;
-  margin-bottom: 32px;
-  user-select: none;
-  text-align: center;
-}
-
-form {
-  width: 100%;
-  max-width: 720px;
-  margin: 0 auto;
-} */
-
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -72,12 +57,6 @@ form {
   box-shadow: 0 0 6px rgba(90, 129, 88, 0.6);
 }
 
-textarea.input {
-  min-height: 160px;
-  resize: vertical;
-  font-family: inherit;
-}
-
 .fileInputWrapper {
   display: flex;
   align-items: center;
@@ -114,7 +93,8 @@ textarea.input {
   margin-top: 6px;
 }
 
-/* button {
+/* 버튼 공통 스타일 */
+.btn {
   padding: 8px 20px;
   border-radius: 6px;
   border: none;
@@ -127,23 +107,27 @@ textarea.input {
   min-width: 80px;
 }
 
-button[type="submit"] {
+/* 등록 버튼 */
+.btnSubmit {
   background-color: #5a8158;
   color: white;
 }
 
-button[type="submit"]:hover {
+/* 등록 버튼 hover */
+.btnSubmit:hover {
   background-color: #4a6848;
 }
 
-button[type="button"] {
+/* 목록 버튼 */
+.btnCancel {
   background-color: #dedede;
   color: #333;
 }
 
-button[type="button"]:hover {
+/* 목록 버튼 hover */
+.btnCancel:hover {
   background-color: #c0c0c0;
-} */
+}
 
 @media screen and (max-width: 960px) {
   .content {
@@ -160,7 +144,7 @@ button[type="button"]:hover {
     align-items: flex-start;
   }
 
-  button {
+  .btn {
     min-width: auto;
     padding: 7px 16px;
     font-size: 14px;
