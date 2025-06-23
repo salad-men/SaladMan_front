@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { myAxios } from "../../../config";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 import NoticeSidebar from "./NoticeSidebar";
 import styles from "./HqNoticeWrite.module.css";
 
 export default function HqNoticeWrite() {
   const navigate = useNavigate();
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

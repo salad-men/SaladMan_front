@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import NoticeSidebar from "../Notice/NoticeSidebar";
 import styles from "./HqComplaintList.module.css";
 import { myAxios } from "../../../config";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function HqComplaintList() {
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
   const navigate = useNavigate();
 
   const [complaints, setComplaints] = useState([]);

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAtomValue } from 'jotai';
-import { tokenAtom } from '/src/atoms';
+import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config';
 import styles from './LowStockList.module.css';
 
 
 export default function LowStockList() {
-    const token = useAtomValue(tokenAtom);
+    const token = useAtomValue(accessTokenAtom);
     const [shortages, setShortages] = useState([]);
 
     useEffect(() => {

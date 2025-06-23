@@ -1,47 +1,72 @@
-.recipe-body {
+.wrapper {
+  display: flex;
+  height: calc(100vh - 64px);
+  background-color: #f9fafb;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.content {
+  flex: 1;
+  align-self: flex-start;
+  padding: 30px 0 0 0;
+  overflow-y: auto;
+  max-width: 1500px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.recipeBody {
   display: flex;
   gap: 24px;
 }
 
-.menu-list {
+.menuList {
   width: 250px;
+  height: 500px;
   background: #f9f9f9;
   border-right: 1px solid #ddd;
+  overflow-y: scroll;
 }
 
-.menu-list ul {
+.menuList ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.menu-list li {
+.menuList li {
   padding: 15px 20px;
   cursor: pointer;
   border-bottom: 1px solid #eee;
 }
 
-.menu-list li.active {
+.menuList li.active {
   background: #e0f2ff;
   font-weight: bold;
 }
 
-.menu-detail {
+.menuDetail {
   flex: 1;
   padding: 30px;
 }
 
-.menu-detail h2 {
+.menuDetail h2 {
   margin-top: 0;
 }
 
-.menu-detail img {
+.menuDetail img {
   max-width: 100%;
   height: auto;
   margin-bottom: 20px;
   border-radius: 10px;
 }
-.menu-info {
+.menuInfo {
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -49,33 +74,33 @@
   margin-bottom: 24px;
 }
 
-.menu-info img {
+.menuInfo img {
   width: 250px;
   height: auto;
   object-fit: cover;
 }
 
-.menu-info table {
+.menuInfo table {
   border-collapse: collapse;
   width: 100%;
   max-width: 400px;
 }
 
-.menu-info th,
-.menu-info td {
+.menuInfo th,
+.menuInfo td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
 }
 
-.recipe-detail {
+.recipeDetail {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
 }
 
-.recipe-detail th, 
-.recipe-detail td {
+.recipeDetail th, 
+.recipeDetail td {
   border: 1px solid #ccc;
   padding: 10px;
 }

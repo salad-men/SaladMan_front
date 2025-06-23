@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import NoticeSidebar from "./NoticeSidebar";
 import styles from "./HqNoticeList.module.css";
 import { myAxios } from "../../../config";
-import { tokenAtom } from "/src/atoms";
+import { accessTokenAtom } from "/src/atoms";
 
 export default function HqNoticeList() {
-  const token = useAtomValue(tokenAtom);
+  const token = useAtomValue(accessTokenAtom);
   const [notices, setNotices] = useState([]);
   const [filters, setFilters] = useState({ keyword: "", field: "title" });
   const [page, setPage] = useState(0);
