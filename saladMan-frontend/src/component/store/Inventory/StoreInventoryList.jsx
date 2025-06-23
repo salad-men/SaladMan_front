@@ -218,8 +218,7 @@ export default function StoreInventoryList() {
                       <input
                         type="number"
                         value={r.unitCost}
-                        disabled={!isEditMode}
-                        onChange={(e) => onInvChange(i, "unitCost", e.target.value)}
+                        disabled={true} 
                       />
                     </td>
                     <td>
@@ -234,24 +233,21 @@ export default function StoreInventoryList() {
                       <input
                         type="number"
                         value={r.minimumOrderUnit}
-                        disabled={!isEditMode}
-                        onChange={(e) => onInvChange(i, "minimumOrderUnit", e.target.value)}
+                        disabled={true} 
                       />
                     </td>
                     <td>
                       <input
                         type="date"
                         value={r.expiredDate ? r.expiredDate.substring(0, 10) : ""}
-                        disabled={!isEditMode}
-                        onChange={(e) => onInvChange(i, "expiredDate", e.target.value)}
+                        disabled={true} 
                       />
                     </td>
                     <td>
                       <input
                         type="date"
                         value={r.receivedDate ? r.receivedDate.substring(0, 10) : ""}
-                        disabled={!isEditMode}
-                        onChange={(e) => onInvChange(i, "receivedDate", e.target.value)}
+                        disabled={true} 
                       />
                     </td>
                   </tr>

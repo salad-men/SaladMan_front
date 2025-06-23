@@ -11,11 +11,6 @@ export default function StoreInventorySidebar() {
             재고 조회
           </a>
         </li>
-        <li className={styles.listItem}>
-          <a href="/store/StoreInventoryRecord" className={styles.link}>
-            재고 기록
-          </a>
-        </li>
 
         <li className={styles.listItem}>
           <a href="/store/StoreInventoryExpiration" className={styles.link}>
@@ -33,6 +28,13 @@ export default function StoreInventorySidebar() {
             재료 설정
           </a>
         </li>
+        
+        <li className={styles.listItem}>
+          <a href="/store/StoreInventoryRecord" className={styles.link}>
+            재고 기록
+          </a>
+        </li>
+
       </ul>
     </div>
   );
