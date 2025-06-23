@@ -7,7 +7,9 @@ export const initStore = {
     username:'',
     id:'',
     name:'',
-    role:''
+    role:'',
+    storeId: null,
+    storeName: '',
 }
 
 export const userAtom = atomWithStorage("store", initStore, createJSONStorage(()=>sessionStorage));

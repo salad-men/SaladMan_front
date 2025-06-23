@@ -19,7 +19,8 @@ export default function HqInventoryRecord() {
   const [changeQuantity, setChangeQuantity] = useState("");
   const [memo, setMemo] = useState("");
 
-  const [filterCategory, setFilterCategory] = useState("전체");
+  // filterCategory 초기값을 빈 문자열로 변경
+  const [filterCategory, setFilterCategory] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterStartDate, setFilterStartDate] = useState("");
   const [filterEndDate, setFilterEndDate] = useState("");
@@ -27,7 +28,7 @@ export default function HqInventoryRecord() {
   const [categories, setCategories] = useState([]);
 
   const formatDate = (dateStr) => {
-  if (!dateStr) return "-";
+    if (!dateStr) return "-";
     return new Date(dateStr).toLocaleString("ko-KR", {
       year: "numeric",
       month: "2-digit",
@@ -38,23 +39,23 @@ export default function HqInventoryRecord() {
     });
   };
 
-
-  // 초기 데이터 로딩
   useEffect(() => {
-    myAxios(token).get("/hq/inventory/ingredients")
-    .then(res => {
+    // 카테고리 API 호출 후 “전체” 옵션 직접 추가
+    myAxios(token).get("/hq/inventory/categories").then(res => {
+      const cats = res.data.categories || [];
+      setCategories(cats);
+      setFilterCategory("");  // 초기값 빈 문자열 (전체 선택 의미)
+    });
+
+    myAxios(token).get("/hq/inventory/ingredients").then(res => {
       const list = res.data.ingredients || [];
       setIngredients(list);
       setSelectedIngredient(list[0]?.id || "");
-      const uniqueCategories = Array.from(new Set(list.map(i => i.categoryName)));
-      setCategories(["전체", ...uniqueCategories]);
     });
 
-  myAxios(token).get("/hq/inventory/record",{
-    params: { storeId: 1, type: activeTab }
-    })
-    .then(res => {
-      console.log(res.data);
+    myAxios(token).get("/hq/inventory/record", {
+      params: { storeId: 1, type: activeTab }
+    }).then(res => {
       setRecords(res.data.records || []);
     });
   }, [token]);
@@ -62,7 +63,7 @@ export default function HqInventoryRecord() {
   // 필터 적용
   useEffect(() => {
     let temp = records.filter(r => r.changeType.trim() === activeTab.trim());
-    if (filterCategory !== "전체") temp = temp.filter(r => r.categoryName === filterCategory);
+    if (filterCategory !== "") temp = temp.filter(r => r.categoryName === filterCategory);
     if (filterName) temp = temp.filter(r => r.ingredientName.includes(filterName));
     if (filterStartDate) temp = temp.filter(r => new Date(r.date) >= new Date(filterStartDate));
     if (filterEndDate) {
@@ -71,7 +72,7 @@ export default function HqInventoryRecord() {
       temp = temp.filter(r => new Date(r.date) <= end);
     }
     setFilteredRecords(temp);
-  }, [token,records, activeTab, filterCategory, filterName, filterStartDate, filterEndDate]);
+  }, [records, activeTab, filterCategory, filterName, filterStartDate, filterEndDate]);
 
   const openModal = () => {
     setSelectedIngredient(ingredients[0]?.id || "");
@@ -91,14 +92,16 @@ export default function HqInventoryRecord() {
 
     myAxios(token).post("/hq/inventory/record-add", {
       ingredientId: Number(selectedIngredient),
-      storeId: 1, 
+      storeId: 1,
       quantity: Number(changeQuantity),
       memo,
       changeType: activeTab,
     }).then(() => {
       alert("저장 완료!");
       closeModal();
-      return myAxios(token).get("/hq/inventory/record");
+      return myAxios(token).get("/hq/inventory/record", {
+        params: { storeId: 1, type: activeTab }
+      });
     }).then(res => {
       setRecords(res.data.records || []);
     }).catch(err => {
@@ -145,7 +148,13 @@ export default function HqInventoryRecord() {
           <div className={styles.row}>
             <label>분류</label>
             <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-              {categories.map((cat, idx) => (<option key={`${cat}-${idx}`} value={cat}>{cat}</option>))}
+              {/* "전체" 옵션 직접 추가 */}
+              <option value="">전체</option>
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.name}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
             <input
               type="text"
@@ -153,10 +162,10 @@ export default function HqInventoryRecord() {
               value={filterName}
               onChange={e => setFilterName(e.target.value)}
             />
-            <button onClick={() => {}}>검색</button>
+            <button onClick={() => { /* 필요 시 검색 함수 추가 */ }}>검색</button>
             <button onClick={() => {
               setFilterStartDate(""); setFilterEndDate("");
-              setFilterCategory("전체"); setFilterName("");
+              setFilterCategory(""); setFilterName("");
             }}>초기화</button>
           </div>
         </div>

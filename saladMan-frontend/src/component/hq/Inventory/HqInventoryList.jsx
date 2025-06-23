@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAtomValue} from "jotai";
+import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
 import styles from "./HqInventoryList.module.css";
@@ -9,95 +9,25 @@ export default function HqInventoryList() {
   const token = useAtomValue(accessTokenAtom);
 
   const [inventory, setInventory] = useState([]);
-  const [filters, setFilters] = useState({ scope: "hq", store: "all", category: "all", name: "" });
-  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+  const [filters, setFilters] = useState({
+    scope: "hq",
+    store: "all",
+    category: "all",
+    name: "",
+  });
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1,
+    allPage: 1,
+    startPage: 1,
+    endPage: 1,
+  });
   const [categories, setCategories] = useState([]);
   const [stores, setStores] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isAddMode, setIsAddMode] = useState(false);
-  const [newItems, setNewItems] = useState([{
-    store: "본사",
-    category: "",
-    ingredientId: "",
-    name: "",
-    unit: "",
-    unitCost: 0,
-    quantity: 0,
-    minimumOrderUnit: 0,
-    expiredDate: "",
-    receivedDate: ""
-  }]);
-  const [pageNums, setPageNums] = useState([]);
-
-  useEffect(() => {
-    myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories));
-    myAxios(token).get("/hq/inventory/stores").then(res => setStores(res.data.stores));
-    myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients));
-  }, [token]);
-
-  useEffect(() => { fetchInventory(1); }, [token, filters.scope, filters.store]);
-
-  const fetchInventory = (page = 1) => {
-    const param = {
-       ...filters, 
-       page,
-       store: filters.store !== "all" ? Number(filters.store) : "all",};
-    
-       myAxios(token).post("/hq/inventory/list", param).then(res => {
-      const hqList = res.data.hqInventory || [];
-      const storeList = res.data.storeInventory || [];
-      const list = filters.scope === "hq" ? hqList : filters.scope === "store" ? storeList : [...hqList, ...storeList];
-
-      const flatList = list.map(x => ({
-        id: x.id,
-        store: x.storeName || "",  
-        name: x.ingredientName || "",
-        unit: x.unit || "",
-        category: x.categoryName || "",
-        unitCost: x.unitCost,
-        quantity: x.quantity,
-        minimumOrderUnit: x.minimumOrderUnit,
-        minquantity: x.minquantity ?? 0,
-        expiredDate: x.expiredDate,
-        receivedDate: x.receivedDate || ""
-      }));
-
-      setInventory(flatList);
-      const pi = res.data.pageInfo;
-      setPageInfo(pi);
-      setPageNums(Array.from({ length: pi.endPage - pi.startPage + 1 }, (_, i) => pi.startPage + i));
-    }).catch(e => {
-      console.error("재고 목록 조회 실패", e);
-      setInventory([]);
-    });
-  };
-
-    // 검색 버튼 클릭 시 강제로 fetchInventory 실행
-  const handleSearchClick = () => {
-    fetchInventory(1);
-  };
-
-  const onFilterChange = e => {
-    const { name, value } = e.target;
-    setFilters(f => ({ ...f, [name]: value }));
-  };
-
-  const onInvChange = (idx, field, value) => {
-    setInventory(items => items.map((item, i) => {
-      if (i !== idx) return item;
-      if (["unitCost", "quantity", "minimumOrderUnit"].includes(field)) {
-        return { ...item, [field]: Number(value) };
-      }
-      if (field === "expiredDate" || field === "receivedDate") {
-        return { ...item, [field]: value };
-      }
-      return { ...item, [field]: value };
-    }));
-  };
-
-  const addRow = () => {
-    setNewItems(items => items.concat({
+  const [newItems, setNewItems] = useState([
+    {
       store: "본사",
       category: "",
       ingredientId: "",
@@ -107,81 +37,206 @@ export default function HqInventoryList() {
       quantity: 0,
       minimumOrderUnit: 0,
       expiredDate: "",
-      receivedDate: ""
+      receivedDate: "",
+    },
+  ]);
+  const [pageNums, setPageNums] = useState([]);
+
+  useEffect(() => {
+    myAxios(token)
+      .get("/hq/inventory/categories")
+      .then((res) => setCategories(res.data.categories));
+    myAxios(token)
+      .get("/hq/inventory/stores")
+      .then((res) => setStores(res.data.stores));
+    myAxios(token)
+      .get("/hq/inventory/ingredients")
+      .then((res) => setIngredients(res.data.ingredients));
+  }, [token]);
+
+  useEffect(() => {
+    fetchInventory(1);
+  }, [token, filters.scope, filters.store, filters.category, filters.name]);
+
+  const fetchInventory = (page = 1) => {
+    const param = {
+      ...filters,
+      page,
+      store: filters.store !== "all" ? Number(filters.store) : "all",
+      category: filters.category === "all" ? "all" : Number(filters.category),
+    };
+
+    myAxios(token)
+      .post("/hq/inventory/list", param)
+      .then((res) => {
+        console.log(res.data);
+        const hqList = res.data.hqInventory || [];
+        const storeList = res.data.storeInventory || [];
+        const list =
+          filters.scope === "hq"
+            ? hqList
+            : filters.scope === "store"
+            ? storeList
+            : [...hqList, ...storeList];
+
+        const flatList = list.map((x) => ({
+          id: x.id,
+          store: x.storeName || "",
+          name: x.ingredientName || "",
+          unit: x.unit || "",
+          category: x.categoryName || "",
+          unitCost: x.unitCost,
+          quantity: Number(x.quantity),
+          minimumOrderUnit: Number(x.minimumOrderUnit),
+          minquantity: x.minquantity ?? 0,
+          expiredDate: x.expiredDate,
+          receivedDate: x.receivedDate || "",
+        }));
+
+        setInventory(flatList);
+        const pi = res.data.pageInfo;
+        setPageInfo(pi);
+        setPageNums(
+          Array.from({ length: pi.endPage - pi.startPage + 1 }, (_, i) => pi.startPage + i)
+        );
+      })
+      .catch((e) => {
+        console.error("재고 목록 조회 실패", e);
+        setInventory([]);
+      });
+  };
+
+  // 검색 버튼 클릭 시 강제로 fetchInventory 실행
+  const handleSearchClick = () => {
+    fetchInventory(1);
+  };
+
+  const onFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((f) => ({
+      ...f,
+      [name]: name === "category" && value !== "all" ? Number(value) : value,
     }));
+  };
+
+  const onInvChange = (idx, field, value) => {
+    setInventory((items) =>
+      items.map((item, i) => {
+        if (i !== idx) return item;
+        if (["unitCost", "quantity", "minimumOrderUnit"].includes(field)) {
+          return { ...item, [field]: Number(value) };
+        }
+        if (field === "expiredDate" || field === "receivedDate") {
+          return { ...item, [field]: value };
+        }
+        return { ...item, [field]: value };
+      })
+    );
+  };
+
+  const addRow = () => {
+    setNewItems((items) =>
+      items.concat({
+        store: "본사",
+        category: "",
+        ingredientId: "",
+        name: "",
+        unit: "",
+        unitCost: 0,
+        quantity: 0,
+        minimumOrderUnit: 0,
+        expiredDate: "",
+        receivedDate: "",
+      })
+    );
   };
 
   const onNewItemChange = (idx, field, value) => {
-    setNewItems(items => items.map((row, i) => {
-      if (i !== idx) return row;
-      if (field === "category") {
-        return { ...row, category: value, ingredientId: "", name: "", unit: "" };
-      }
-      if (field === "ingredientId") {
-        const ing = ingredients.find(x => x.id === Number(value));
-        return {
-          ...row,
-          ingredientId: value,
-          name: ing?.name || "",
-          unit: ing?.unit || ""
-        };
-      }
-      if (["unitCost", "quantity", "minimumOrderUnit"].includes(field)) {
-        return { ...row, [field]: Number(value) };
-      }
-      if (field === "expiredDate" || field === "receivedDate") {
+    setNewItems((items) =>
+      items.map((row, i) => {
+        if (i !== idx) return row;
+        if (field === "category") {
+          return { ...row, category: value, ingredientId: "", name: "", unit: "" };
+        }
+        if (field === "ingredientId") {
+          const ing = ingredients.find((x) => x.id === Number(value));
+          return {
+            ...row,
+            ingredientId: value,
+            name: ing?.name || "",
+            unit: ing?.unit || "",
+          };
+        }
+        if (["unitCost", "quantity", "minimumOrderUnit"].includes(field)) {
+          return { ...row, [field]: Number(value) };
+        }
+        if (field === "expiredDate" || field === "receivedDate") {
+          return { ...row, [field]: value };
+        }
         return { ...row, [field]: value };
-      }
-      return { ...row, [field]: value };
-    }));
+      })
+    );
   };
 
-  const saveNewItems = () => {
-    Promise.all(newItems.map(row =>
-      myAxios(token).post("/hq/inventory/add", {
-        store: "본사",
-        categoryId: categories.find(c => c.name === row.category)?.id,
-        ingredientId: Number(row.ingredientId),
-        name: row.name,
-        unit: row.unit,
-        unitCost: row.unitCost,
-        quantity: row.quantity,
-        minimumOrderUnit: row.minimumOrderUnit,
-        expiredDate: row.expiredDate,
-        receivedDate: row.receivedDate
-      })
-    )).then(() => {
+  const saveNewItems = async () => {
+    try {
+      for (const row of newItems) {
+        await myAxios(token).post("/hq/inventory/add", {
+          store: "본사",
+          storeId: 1, 
+          categoryId: categories.find((c) => c.name === row.category)?.id,
+          ingredientId: Number(row.ingredientId),
+          name: row.name,
+          unit: row.unit,
+          unitCost: row.unitCost,
+          quantity: row.quantity,
+          minimumOrderUnit: row.minimumOrderUnit,
+          expiredDate: row.expiredDate === "" ? null : row.expiredDate,
+          receivedDate: row.receivedDate === "" ? null : row.receivedDate,
+        });
+      }
       alert("등록 완료!");
       setIsAddMode(false);
-      setNewItems([{
-        store: "본사", category: "", ingredientId: "", name: "", unit: "",
-        unitCost: 0, quantity: 0, minimumOrderUnit: 0, expiredDate: "", receivedDate: ""
-      }]);
+      setNewItems([
+        {
+          store: "본사",
+          category: "",
+          ingredientId: "",
+          name: "",
+          unit: "",
+          unitCost: 0,
+          quantity: 0,
+          minimumOrderUnit: 0,
+          expiredDate: "",
+          receivedDate: "",
+        },
+      ]);
       fetchInventory(pageInfo.curPage);
-    }).catch(e => {
+    } catch (e) {
       console.error("등록 실패", e);
       alert("등록 실패했습니다.");
-    });
+    }
   };
 
-  const saveEdit = () => {
-    Promise.all(inventory.map(item =>
-      myAxios(token).post("/hq/inventory/update", {
-        id: item.id,
-        quantity: item.quantity,
-        minimumOrderUnit: item.minimumOrderUnit,
-        unitCost: item.unitCost,
-        expiredDate: item.expiredDate || null,
-        receivedDate: item.receivedDate || null
-      })
-    )).then(() => {
+  const saveEdit = async () => {
+    try {
+      for (const item of inventory) {
+        await myAxios(token).post("/hq/inventory/update", {
+          id: item.id,
+          quantity: item.quantity,
+          minimumOrderUnit: item.minimumOrderUnit,
+          unitCost: item.unitCost,
+          expiredDate: item.expiredDate || null,
+          receivedDate: item.receivedDate || null,
+        });
+      }
       alert("저장되었습니다.");
       setIsEditMode(false);
       fetchInventory(pageInfo.curPage);
-    }).catch(e => {
+    } catch (e) {
       console.error("수정 실패", e);
       alert("수정 실패했습니다.");
-    });
+    }
   };
 
   return (
@@ -202,23 +257,27 @@ export default function HqInventoryList() {
             {filters.scope === "store" && (
               <>
                 <label>지점</label>
-                  <select name="store" value={filters.store} onChange={onFilterChange}>
-                    <option value="all">전체지점</option>
-                    {stores
-                      .filter(s => s.id !== 1)
-                      .map(s => (
+                <select name="store" value={filters.store} onChange={onFilterChange}>
+                  <option value="all">전체지점</option>
+                  {stores
+                    .filter((s) => s.id !== 1)
+                    .map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name}
                       </option>
                     ))}
-                  </select>
+                </select>
               </>
             )}
 
             <label>분류</label>
             <select name="category" value={filters.category} onChange={onFilterChange}>
               <option value="all">전체</option>
-              {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
             </select>
 
             <input
@@ -228,7 +287,7 @@ export default function HqInventoryList() {
               onChange={onFilterChange}
               placeholder="재료명 검색"
             />
-            <button className={styles.search} onClick={() => handleSearchClick}>
+            <button className={styles.search} onClick={handleSearchClick}>
               검색
             </button>
           </div>
@@ -261,7 +320,7 @@ export default function HqInventoryList() {
           {isEditMode && (
             <>
               <button className={styles.save} onClick={saveEdit}>
-                등록하기
+                저장하기
               </button>
               <button className={styles.cancel} onClick={() => setIsEditMode(false)}>
                 취소
@@ -270,6 +329,7 @@ export default function HqInventoryList() {
           )}
         </div>
 
+        {/* 신규 추가 입력폼 테이블 */}
         {isAddMode && (
           <table className={styles.table}>
             <thead>
@@ -286,16 +346,16 @@ export default function HqInventoryList() {
               </tr>
             </thead>
             <tbody>
-              {newItems.map((row, i) => (
-                <tr key={i}>
-                  <td>본사</td>
+              {newItems.map((row, idx) => (
+                <tr key={idx}>
+                  <td>{row.store}</td>
                   <td>
                     <select
                       value={row.category}
-                      onChange={e => onNewItemChange(i, "category", e.target.value)}
+                      onChange={(e) => onNewItemChange(idx, "category", e.target.value)}
                     >
                       <option value="">선택</option>
-                      {categories.map(c => (
+                      {categories.map((c) => (
                         <option key={c.id} value={c.name}>
                           {c.name}
                         </option>
@@ -305,12 +365,15 @@ export default function HqInventoryList() {
                   <td>
                     <select
                       value={row.ingredientId}
-                      onChange={e => onNewItemChange(i, "ingredientId", e.target.value)}
+                      onChange={(e) => onNewItemChange(idx, "ingredientId", e.target.value)}
                     >
                       <option value="">선택</option>
                       {ingredients
-                        .filter(ing => ing.categoryId === categories.find(c => c.name === row.category)?.id)
-                        .map(ing => (
+                        .filter(
+                          (ing) =>
+                            ing.categoryId === categories.find((c) => c.name === row.category)?.id
+                        )
+                        .map((ing) => (
                           <option key={ing.id} value={ing.id}>
                             {ing.name}
                           </option>
@@ -318,41 +381,41 @@ export default function HqInventoryList() {
                     </select>
                   </td>
                   <td>
-                    <input value={row.unit} disabled />
+                    <input type="text" value={row.unit} readOnly />
                   </td>
                   <td>
                     <input
                       type="number"
                       value={row.unitCost}
-                      onChange={e => onNewItemChange(i, "unitCost", e.target.value)}
+                      onChange={(e) => onNewItemChange(idx, "unitCost", e.target.value)}
                     />
                   </td>
                   <td>
                     <input
                       type="number"
                       value={row.quantity}
-                      onChange={e => onNewItemChange(i, "quantity", e.target.value)}
+                      onChange={(e) => onNewItemChange(idx, "quantity", e.target.value)}
                     />
                   </td>
                   <td>
                     <input
                       type="number"
                       value={row.minimumOrderUnit}
-                      onChange={e => onNewItemChange(i, "minimumOrderUnit", e.target.value)}
+                      onChange={(e) => onNewItemChange(idx, "minimumOrderUnit", e.target.value)}
                     />
                   </td>
                   <td>
                     <input
                       type="date"
                       value={row.expiredDate}
-                      onChange={e => onNewItemChange(i, "expiredDate", e.target.value)}
+                      onChange={(e) => onNewItemChange(idx, "expiredDate", e.target.value)}
                     />
                   </td>
                   <td>
                     <input
                       type="date"
                       value={row.receivedDate}
-                      onChange={e => onNewItemChange(i, "receivedDate", e.target.value)}
+                      onChange={(e) => onNewItemChange(idx, "receivedDate", e.target.value)}
                     />
                   </td>
                 </tr>
@@ -361,6 +424,7 @@ export default function HqInventoryList() {
           </table>
         )}
 
+        {/* 기존 재고 리스트 테이블 (항상 노출) */}
         <table className={styles.table}>
           <thead>
             <tr>
@@ -377,83 +441,31 @@ export default function HqInventoryList() {
             </tr>
           </thead>
           <tbody>
-            {inventory.length > 0
-              ? inventory.map((r, i) => (
-                  <tr key={i}>
+            {inventory.length === 0 ? (
+              <tr>
+                <td colSpan={10} className={styles.noData}>
+                  데이터가 없습니다.
+                </td>
+              </tr>
+            ) : (
+              inventory.map((r, i) => {
+                const isLowStock = r.quantity < r.minimumOrderUnit;
+                return (
+                  <tr key={i} className={isLowStock ? styles.lowStockRow : ""}>
                     <td>{r.store}</td>
                     <td>{r.name}</td>
                     <td>{r.category}</td>
                     <td>{r.unit}</td>
-                    <td>
-                      {isEditMode ? (
-                        <input
-                          type="number"
-                          value={r.unitCost}
-                          onChange={e => onInvChange(i, "unitCost", e.target.value)}
-                          className={styles.editable}
-                        />
-                      ) : (
-                        r.unitCost
-                      )}
-                    </td>
-                    <td>
-                      {isEditMode ? (
-                        <input
-                          type="number"
-                          value={r.quantity}
-                          onChange={e => onInvChange(i, "quantity", e.target.value)}
-                          className={styles.editable}
-                        />
-                      ) : (
-                        r.quantity
-                      )}
-                    </td>
-                    <td>
-                      {isEditMode ? (
-                        <input
-                          type="number"
-                          value={r.minimumOrderUnit}
-                          onChange={e => onInvChange(i, "minimumOrderUnit", e.target.value)}
-                          className={styles.editable}
-                        />
-                      ) : (
-                        r.minimumOrderUnit
-                      )}
-                    </td>
+                    <td>{r.unitCost}</td>
+                    <td>{r.quantity}</td>
+                    <td>{r.minimumOrderUnit}</td>
                     <td>{r.minquantity ?? 0}</td>
-                    <td>
-                      {isEditMode ? (
-                        <input
-                          type="date"
-                          value={r.expiredDate || ""}
-                          onChange={e => onInvChange(i, "expiredDate", e.target.value)}
-                          className={styles.editable}
-                        />
-                      ) : (
-                        r.expiredDate || ""
-                      )}
-                    </td>
-                    <td>
-                      {isEditMode ? (
-                        <input
-                          type="date"
-                          value={r.receivedDate || ""}
-                          onChange={e => onInvChange(i, "receivedDate", e.target.value)}
-                          className={styles.editable}
-                        />
-                      ) : (
-                        r.receivedDate || ""
-                      )}
-                    </td>
+                    <td>{r.expiredDate || ""}</td>
+                    <td>{r.receivedDate || ""}</td>
                   </tr>
-                ))
-              : (
-                <tr>
-                  <td colSpan={10} className={styles.noData}>
-                    데이터가 없습니다.
-                  </td>
-                </tr>
-              )}
+                );
+              })
+            )}
           </tbody>
         </table>
 
@@ -461,7 +473,7 @@ export default function HqInventoryList() {
           <button onClick={() => fetchInventory(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
             &lt;
           </button>
-          {pageNums.map(p => (
+          {pageNums.map((p) => (
             <button
               key={p}
               onClick={() => fetchInventory(p)}

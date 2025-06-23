@@ -1,64 +1,136 @@
-import React from "react";
-import { atom, useAtom } from "jotai";
+import React, { useState, useEffect } from "react";
+import { useAtomValue } from "jotai";
 import StoreInventorySidebar from "./StoreInventorySidebar";
+import { myAxios } from "../../../config";
 import styles from "./StoreInventoryList.module.css";
-
-// 자기 매장 이름 지정
-const MY_STORE = "강남점";
-
-const inventoryAtom = atom([
-  { store: "본사", name: "로메인", category: "베이스채소", unit: "kg", stock: 200, min: 100, price: 180 },
-  { store: "강남점", name: "상추", category: "베이스채소", unit: "kg", stock: 150, min: 80, price: 120 },
-  { store: "강남점", name: "닭가슴살", category: "단백질", unit: "kg", stock: 90, min: 50, price: 900 },
-]);
-
-const isEditModeAtom = atom(false);
-const filtersAtom = atom({ category: "all", name: "" });
-
-const categories = ["all", "베이스채소", "단백질", "토핑", "드레싱"];
+import { userAtom, accessTokenAtom } from "/src/atoms";
 
 export default function StoreInventoryList() {
-  const [inventory, setInventory] = useAtom(inventoryAtom);
-  const [isEditMode, setIsEditMode] = useAtom(isEditModeAtom);
-  const [filters, setFilters] = useAtom(filtersAtom);
+  const token = useAtomValue(accessTokenAtom);
+  const user = useAtomValue(userAtom);
 
-  // 자기 매장 필터링
-  let storeInventory = inventory.filter(r => r.store === MY_STORE);
+  const [inventory, setInventory] = useState([]);
+  const [filters, setFilters] = useState({
+    category: "all",
+    name: "",
+  });
+  const [categories, setCategories] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1,
+    allPage: 1,
+    startPage: 1,
+    endPage: 1,
+  });
+  const [pageNums, setPageNums] = useState([]);
 
-  // 분류, 재료명 필터링
-  storeInventory = storeInventory.filter(r =>
-    (filters.category === "all" || r.category === filters.category) &&
-    (!filters.name || r.name.includes(filters.name))
-  );
-
-  // 재고 - 최소수량 차이 정렬
-  const sorted = [...storeInventory].sort((a, b) => (a.stock - a.min) - (b.stock - b.min));
-
-  const onFilterChange = e => {
-    const { name, value } = e.target;
-    setFilters(f => ({ ...f, [name]: value }));
+  // 날짜를 YYYY-MM-DD 형식으로 포맷팅
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    return dateStr.length > 10 ? dateStr.slice(0, 10) : dateStr;
   };
 
-  const clearAll = () => {
-    setFilters({ category: "all", name: "" });
-  };
+  // 분류 가져오기
+  useEffect(() => {
+    myAxios(token)
+      .get("/store/inventory/categories")
+      .then((res) => setCategories(res.data.categories))
+      .catch(() => setCategories([]));
+  }, [token]);
 
-  const startEdit = () => setIsEditMode(true);
-  const cancelEdit = () => setIsEditMode(false);
-  const saveEdit = () => {
-    setIsEditMode(false);
-    alert("저장되었습니다.");
-  };
+  // 재고 리스트 조회 (자기 매장만)
+  useEffect(() => {
+    fetchInventory(1);
+  }, [token, filters.category, filters.name, user.id]);
 
-  const onInv = (i, field, v) => {
-    setInventory(cur =>
-      cur.map(r => {
-        if (r.store === MY_STORE && r.name === sorted[i].name) {
-          return { ...r, [field]: v ? Number(v) : "" };
+  const fetchInventory = (page = 1) => {
+    if (!user.id) return; // 매장 아이디 없으면 실행 안 함
+
+    const param = {
+      storeId: user.id,
+      page,
+      category: filters.category === "all" ? "all" : Number(filters.category),
+      name: filters.name,
+    };
+
+    myAxios(token)
+      .post("/store/inventory/list", param)
+      .then((res) => {
+        const list = res.data.storeInventory || [];
+        console.log(res.data);
+        const flatList = list.map((x) => ({
+          id: x.id,
+          store: x.storeName || "",
+          name: x.ingredientName || "",
+          unit: x.unit || "",
+          category: x.categoryName || "",
+          unitCost: x.unitCost,
+          quantity: Number(x.quantity),
+          minimumOrderUnit: Number(x.minimumOrderUnit),
+          expiredDate: x.expiredDate,
+          receivedDate: x.receivedDate || "",
+        }));
+
+        setInventory(flatList);
+
+        const pi = res.data.pageInfo;
+        setPageInfo(pi);
+        const nums = [];
+        for (let i = pi.startPage; i <= pi.endPage; i++) {
+          nums.push(i);
         }
-        return r;
+        setPageNums(nums);
+      })
+      .catch(() => {
+        setInventory([]);
+      });
+  };
+
+  const handleSearchClick = () => {
+    fetchInventory(1);
+  };
+
+  const onFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((f) => ({
+      ...f,
+      [name]: name === "category" && value !== "all" ? Number(value) : value,
+    }));
+  };
+
+  const onInvChange = (idx, field, value) => {
+    setInventory((items) =>
+      items.map((item, i) => {
+        if (i !== idx) return item;
+        if (["unitCost", "quantity", "minimumOrderUnit"].includes(field)) {
+          return { ...item, [field]: Number(value) };
+        }
+        if (field === "expiredDate" || field === "receivedDate") {
+          return { ...item, [field]: value };
+        }
+        return { ...item, [field]: value };
       })
     );
+  };
+
+  const saveEdit = async () => {
+    try {
+      for (const item of inventory) {
+        await myAxios(token).post("/store/inventory/update", {
+          id: item.id,
+          quantity: item.quantity,
+          minimumOrderUnit: item.minimumOrderUnit,
+          unitCost: item.unitCost,
+          expiredDate: item.expiredDate || null,
+          receivedDate: item.receivedDate || null,
+        });
+      }
+      alert("저장되었습니다.");
+      setIsEditMode(false);
+      fetchInventory(pageInfo.curPage);
+    } catch (e) {
+      alert("수정 실패했습니다.");
+    }
   };
 
   return (
@@ -66,21 +138,17 @@ export default function StoreInventoryList() {
       <StoreInventorySidebar />
 
       <div className={styles.content}>
-        <h2 className={styles.title}>{MY_STORE} 재고 조회</h2>
+        <h2 className={styles.title}>{user.name} 재고 조회</h2>
 
         {/* 필터 영역 */}
         <div className={styles.filters}>
-          <label className={styles.filterLabel}>
+          <label>
             분류
-            <select
-              name="category"
-              value={filters.category}
-              onChange={onFilterChange}
-              className={styles.filterSelect}
-            >
-              {categories.map(c => (
-                <option key={c} value={c}>
-                  {c === "all" ? "전체" : c}
+            <select name="category" value={filters.category} onChange={onFilterChange}>
+              <option value="all">전체</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
                 </option>
               ))}
             </select>
@@ -92,31 +160,26 @@ export default function StoreInventoryList() {
             value={filters.name}
             placeholder="재료명 검색"
             onChange={onFilterChange}
-            className={styles.filterInput}
           />
 
-          <button className={styles.searchButton} onClick={() => { /* 검색은 onChange로 필터 적용됨 */ }}>
+          <button className={styles.search} onClick={handleSearchClick}>
             검색
-          </button>
-
-          <button className={styles.resetButton} onClick={clearAll}>
-            초기화
           </button>
         </div>
 
         {/* 수정 버튼 */}
         <div className={styles.actions}>
           {!isEditMode ? (
-            <button className={styles.edit} onClick={startEdit}>
+            <button className={styles.edit} onClick={() => setIsEditMode(true)}>
               수정입력
             </button>
           ) : (
             <>
               <button className={styles.save} onClick={saveEdit}>
-                등록하기
+                저장하기
               </button>
-              <button className={styles.cancel} onClick={cancelEdit}>
-                취소하기
+              <button className={styles.cancel} onClick={() => setIsEditMode(false)}>
+                취소
               </button>
             </>
           )}
@@ -126,53 +189,102 @@ export default function StoreInventoryList() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th style={{ width: "40px" }}></th>
+              <th>지점</th>
               <th>재료명</th>
               <th>분류</th>
               <th>단위</th>
               <th>단위가격</th>
               <th>재고량</th>
-              <th>최소수량</th>
+              <th>최소주문단위</th>
+              <th>유통기한</th>
+              <th>입고날짜</th>
             </tr>
           </thead>
           <tbody>
-            {sorted.length === 0 ? (
+            {inventory.length === 0 ? (
               <tr>
-                <td colSpan={7} className={styles.noData}>
-                  데이터가 없습니다.
-                </td>
+                <td colSpan={9}>데이터가 없습니다.</td>
               </tr>
             ) : (
-              sorted.map((r, i) => (
-                <tr key={i}>
-                  <td>{i + 1}</td>
-                  <td>{r.name}</td>
-                  <td>{r.category}</td>
-                  <td>{r.unit}</td>
-                  <td>{r.price}</td>
-                  <td>
-                    <input
-                      type="number"
-                      value={r.stock}
-                      disabled={!isEditMode}
-                      className={styles.editable}
-                      onChange={e => onInv(i, "stock", e.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={r.min}
-                      disabled={!isEditMode}
-                      className={styles.editable}
-                      onChange={e => onInv(i, "min", e.target.value)}
-                    />
-                  </td>
-                </tr>
-              ))
+              inventory.map((r, i) => {
+                const isLowStock = r.quantity < r.minimumOrderUnit;
+                return (
+                  <tr key={r.id} className={isLowStock ? styles.lowStockRow : ""}>
+                    <td>{r.store}</td>
+                    <td>{r.name}</td>
+                    <td>{r.category}</td>
+                    <td>{r.unit}</td>
+                    <td>
+                      <input
+                        type="number"
+                        value={r.unitCost}
+                        disabled={!isEditMode}
+                        onChange={(e) => onInvChange(i, "unitCost", e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value={r.quantity}
+                        disabled={!isEditMode}
+                        onChange={(e) => onInvChange(i, "quantity", e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value={r.minimumOrderUnit}
+                        disabled={!isEditMode}
+                        onChange={(e) => onInvChange(i, "minimumOrderUnit", e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        value={r.expiredDate ? r.expiredDate.substring(0, 10) : ""}
+                        disabled={!isEditMode}
+                        onChange={(e) => onInvChange(i, "expiredDate", e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        value={r.receivedDate ? r.receivedDate.substring(0, 10) : ""}
+                        disabled={!isEditMode}
+                        onChange={(e) => onInvChange(i, "receivedDate", e.target.value)}
+                      />
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
+
+        {/* 페이징 */}
+        <div className={styles.pagination}>
+          <button
+            onClick={() => fetchInventory(pageInfo.curPage - 1)}
+            disabled={pageInfo.curPage === 1}
+          >
+            &lt;
+          </button>
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              onClick={() => fetchInventory(p)}
+              className={p === pageInfo.curPage ? styles.active : ""}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            onClick={() => fetchInventory(pageInfo.curPage + 1)}
+            disabled={pageInfo.curPage >= pageInfo.allPage}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
     </div>
   );

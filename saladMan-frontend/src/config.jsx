@@ -18,7 +18,6 @@ export const myAxios = (token) => {
       return config;
    });
 
-   // ✅ 응답 에러 처리 인터셉터 추가
    instance.interceptors.response.use(
       response => response,
       error => {

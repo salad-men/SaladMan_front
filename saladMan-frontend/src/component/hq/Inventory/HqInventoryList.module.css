@@ -362,4 +362,7 @@
     width: 100%;
     padding: 10px;
   }
+  .lowStockRow {
+  background-color: #ffe5e5; 
+  } 
 }

@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "../../../config";
-import styles from "./HqIngredientSetting.module.css";
 import { accessTokenAtom } from "/src/atoms";
-import {useAtomValue } from "jotai";
-
+import { useAtomValue } from "jotai";
+import styles from "./HqIngredientSetting.module.css";
 
 export default function HqIngredientSetting() {
-
   const token = useAtomValue(accessTokenAtom);
-  
 
   const [settings, setSettings] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const [filterCategory, setFilterCategory] = useState(""); 
+  const [filterCategory, setFilterCategory] = useState("");
   const [filterName, setFilterName] = useState("");
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -30,6 +27,7 @@ export default function HqIngredientSetting() {
 
   const STORE_ID = 1; // 본사 고정
 
+  // 분류, 재료 리스트 초기 로드
   useEffect(() => {
     myAxios(token).get("/hq/inventory/categories").then(res => {
       setCategories(res.data.categories || []);
@@ -37,31 +35,30 @@ export default function HqIngredientSetting() {
     myAxios(token).get("/hq/inventory/ingredients").then(res => {
       setIngredients(res.data.ingredients || []);
     });
-    fetchSettings();
   }, [token]);
+
+  // 필터 변경 시, 재고 설정 목록 호출
+  useEffect(() => {
+    fetchSettings();
+  }, [token, filterCategory, filterName]);
 
   const fetchSettings = () => {
     myAxios(token)
-      .get("/hq/inventory/settings", { params: { storeId: STORE_ID } })
-      .then(res => setSettings(res.data || []))
+      .get("/hq/inventory/settings", {
+        params: {
+          storeId: STORE_ID,
+          categoryId: filterCategory || undefined,
+          keyword: filterName || undefined,
+          page: 1,  // 현재 페이지 고정 또는 상태로 관리 가능
+        }
+      })
+      .then(res => setSettings(res.data.settings || []))
       .catch(() => setSettings([]));
   };
 
-  const getFilteredSettings = () => {
-    return settings.filter(row => {
-      const categoryMatch =
-        filterCategory === "" ||
-        row.categoryName === categories.find(c => String(c.id) === String(filterCategory))?.name;
-      const ing = ingredients.find(ing => ing.id === Number(row.ingredientId));
-      const nameMatch =
-        !filterName || (ing && ing.name && ing.name.includes(filterName));
-      return categoryMatch && nameMatch;
-    });
-  };
-
   const handleInputChange = (idx, field, value) => {
-    setSettings(cur =>
-      cur.map((row, i) => (i === idx ? { ...row, [field]: value === "" ? "" : Number(value) } : row))
+    setSettings(current =>
+      current.map((row, i) => (i === idx ? { ...row, [field]: value === "" ? "" : Number(value) } : row))
     );
   };
 
@@ -113,7 +110,7 @@ export default function HqIngredientSetting() {
       return;
     }
     try {
-      await myAxios().post("/hq/inventory/settings-save", {
+      await myAxios(token).post("/hq/inventory/settings-save", {
         storeId: STORE_ID,
         ingredientId: Number(newSetting.ingredientId),
         minQuantity: Number(newSetting.minQuantity),
@@ -165,48 +162,30 @@ export default function HqIngredientSetting() {
             onChange={e => setFilterName(e.target.value)}
             placeholder="재료명 검색"
             style={{ width: 160, marginRight: 12 }}
-            className={styles.inputText}
           />
-          <button type="submit" className={styles.search}>
-            조회
-          </button>
+          <button type="submit" className={styles.search}>조회</button>
         </form>
 
         <div className={styles.actions}>
           {!isEditMode && !isAddMode && (
             <>
-              <button className={styles.edit} onClick={() => setIsEditMode(true)}>
-                수정모드
-              </button>
-              <button className={styles.add} onClick={() => setIsAddMode(true)}>
-                추가
-              </button>
+              <button className={styles.edit} onClick={() => setIsEditMode(true)}>수정모드</button>
+              <button className={styles.add} onClick={() => setIsAddMode(true)}>추가</button>
             </>
           )}
           {isEditMode && (
             <>
-              <button className={styles.cancel} onClick={() => setIsEditMode(false)}>
-                취소
-              </button>
-              <button className={styles.save} onClick={handleSaveEdit}>
-                저장
-              </button>
+              <button className={styles.cancel} onClick={() => setIsEditMode(false)}>취소</button>
+              <button className={styles.save} onClick={handleSaveEdit}>저장</button>
             </>
           )}
           {isAddMode && (
             <>
-              <button
-                className={styles.cancel}
-                onClick={() => {
-                  setIsAddMode(false);
-                  setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
-                }}
-              >
-                취소
-              </button>
-              <button className={styles.save} onClick={handleAddSave}>
-                추가 저장
-              </button>
+              <button className={styles.cancel} onClick={() => {
+                setIsAddMode(false);
+                setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
+              }}>취소</button>
+              <button className={styles.save} onClick={handleAddSave}>추가 저장</button>
             </>
           )}
         </div>
@@ -221,14 +200,12 @@ export default function HqIngredientSetting() {
             </tr>
           </thead>
           <tbody>
-            {getFilteredSettings().length === 0 ? (
+            {settings.length === 0 ? (
               <tr>
-                <td colSpan={4} className={styles.noData}>
-                  설정된 재료가 없습니다.
-                </td>
+                <td colSpan={4} className={styles.noData}>설정된 재료가 없습니다.</td>
               </tr>
             ) : (
-              getFilteredSettings().map((row, idx) => (
+              settings.map((row, idx) => (
                 <tr key={row.id || idx}>
                   <td>{row.categoryName || "-"}</td>
                   <td>{getIngredientName(row.ingredientId)}</td>

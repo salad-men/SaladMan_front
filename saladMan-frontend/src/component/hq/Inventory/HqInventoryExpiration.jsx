@@ -14,7 +14,7 @@ export default function HqInventoryExpiration() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [inventory, setInventory] = useState([]);
-  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]); 
   const [disposalAmounts, setDisposalAmounts] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scope, setScope] = useState("all"); // hq, store, all
@@ -61,7 +61,7 @@ export default function HqInventoryExpiration() {
     const params = {
       scope,
       store: store !== "all" ? Number(store) : "all",
-      category: category === "all" ? "all" : category,
+      category: category === "all" ? "all" : Number(category),
       keyword: keyword || "",
       startDate: startDate || "",
       endDate: endDate || "",
@@ -227,7 +227,7 @@ export default function HqInventoryExpiration() {
             <select value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="all">전체</option>
               {categories.map((c) => (
-                <option key={c.id} value={c.name}>{c.name}</option>
+                  <option key={c.id} value={c.id}>{c.name}</option> 
               ))}
             </select>
 
