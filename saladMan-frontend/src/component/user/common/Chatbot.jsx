@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import styles from "./Chatbot.module.css";
 import { myAxios } from "../../../config";
 
@@ -13,6 +12,7 @@ export default function ChatbotWidget() {
   const [complaintStore, setComplaintStore] = useState("");
   const [complaintText, setComplaintText] = useState("");
   const [writerNickname, setWriterNickname] = useState("");
+  const [activeMainOption, setActiveMainOption] = useState(null);
 
   const messagesEndRef = useRef(null);
 
@@ -286,7 +286,10 @@ export default function ChatbotWidget() {
       const result = await fetchStoreByKeyword(text);
       if (!result || result.length === 0) {
         addMessage("bot", `'${text}' 지역의 매장을 찾을 수 없습니다.`);
-        resetChat();
+        addMessage("bot", {
+          type: "buttons",
+          buttons: [{ label: "처음으로", value: "reset" }],
+        });
         return;
       }
       const storeList = result
@@ -442,7 +445,6 @@ export default function ChatbotWidget() {
         type: "buttons",
         buttons: [{ label: "처음으로", value: "reset" }],
       });
-      resetChat();
     }
   };
 
@@ -474,14 +476,58 @@ export default function ChatbotWidget() {
                 )}
                 {msg.type === "buttons" ? (
                   <div className={styles.buttons}>
-                    {msg.buttons.map((btn, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleUserInput(btn.value)}
-                      >
-                        {btn.label}
-                      </button>
-                    ))}
+                    {msg.buttons.map((btn, i) => {
+                      const mainOptions = [
+                        "menu",
+                        "store_time",
+                        "store",
+                        "complaint",
+                        "ingredient",
+                        "faq",
+                      ];
+                      const isReset = btn.value === "reset";
+
+                      // "이 메시지가 메인 옵션 메시지인지?" 판단
+                      const isMainOptionMessage =
+                        msg.buttons.length > 0 &&
+                        msg.buttons.every((b) => mainOptions.includes(b.value));
+
+                      const isActive =
+                        isMainOptionMessage && activeMainOption === btn.value;
+                      const shouldDisable =
+                        isMainOptionMessage &&
+                        activeMainOption &&
+                        activeMainOption !== btn.value;
+
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => {
+                            if (isReset) {
+                              setActiveMainOption(null);
+                              handleUserInput(btn.value);
+                              return;
+                            }
+
+                            if (isMainOptionMessage && !activeMainOption) {
+                              setActiveMainOption(btn.value);
+                            }
+
+                            if (
+                              !shouldDisable ||
+                              isReset ||
+                              !isMainOptionMessage
+                            ) {
+                              handleUserInput(btn.value);
+                            }
+                          }}
+                          className={isActive ? styles.activeBtn : ""}
+                          disabled={shouldDisable}
+                        >
+                          {btn.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className={styles.bubble}>{msg.text}</div>
