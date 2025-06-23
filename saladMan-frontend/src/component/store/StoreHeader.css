@@ -20,10 +20,14 @@
     font-weight: bold;
     position: relative;
     text-align: center;
+    padding: 5px;
 }
 
 .storeDropdownContainer{
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .storeDropdownContainer:hover .storeDropdown {
@@ -34,8 +38,7 @@
     display: none;
     width: 170px;
     position: absolute;
-    top: 30px;
-    left: -50px;
+    top: 100%;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;

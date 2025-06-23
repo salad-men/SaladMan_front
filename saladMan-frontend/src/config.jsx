@@ -24,7 +24,7 @@ export const myAxios = (token) => {
          const code = error.response?.status;
 
          if (code === 401 || code === 403) {
-            alert("접근 권한이 없습니다. 다시 로그인해주세요.");
+            alert("접근 권한이 없습니다.");
 
             store.set(accessTokenAtom, '');
             store.set(refreshTokenAtom, '');

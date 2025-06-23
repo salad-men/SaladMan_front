@@ -18,7 +18,7 @@ export default function OrderItemManage() {
     const [selectedId, setSelectedId] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    const token = useAtomValue(tokenaccessTokenAtomAtom);
+    const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
         fetchItems();

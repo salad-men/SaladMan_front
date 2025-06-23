@@ -176,3 +176,13 @@
   background-color: #f4f4f4;
 }
 
+.buttons button.activeBtn {
+  background-color: #4D774E;
+  color: white;
+  font-weight: bold;
+}
+
+.buttons button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
