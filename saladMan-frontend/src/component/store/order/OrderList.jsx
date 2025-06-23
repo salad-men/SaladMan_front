@@ -1,63 +1,68 @@
 import styles from "./OrderList.module.css";
 import OrderSidebar from "./OrderSidebar";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { accessTokenAtom } from '/src/atoms';
+import { myAxios } from '/src/config';
+
 
 export default function OrderList() {
- const [filters, setFilters] = useState({
+
+    const [filters, setFilters] = useState({
         productName: '',
         orderType: ''
     });
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [orderData, setOrderData] = useState([]);
+    const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
+    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+
+    const token = useAtomValue(accessTokenAtom);
+
+    useEffect(() => {
+        handleSearch(1);
+    }, [token]);
+
+    const handleSearch = async (page = 1) => {
+        const validPage = Number.isNaN(page) || page < 1 ? 1 : page;
+
+        try {
+            const res = await myAxios(token).get("/store/orderList", {
+                params: {
+                    page: validPage - 1, // Spring은 0부터
+                    size: 10,
+                    startDate: startDate || null,
+                    endDate: endDate || null,
+                    orderType: filters.orderType,
+                    productName: filters.productName,
+                },
+            });
+
+            setOrderData(res.data.content);
+            setTotalPages(res.data.totalPages);
+            setCurrentPage(validPage);
+        } catch (err) {
+            console.error("발주 목록 조회 실패", err);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFilters(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSearch = () => {
-        console.log('검색 요청', filters);
-    };
-
     const handleReset = () => {
         setFilters({ productName: '', orderType: '' });
+        setStartDate('');
+        setEndDate('');
     };
 
-    const orderData = [
-        {
-            id: 1,
-            orderType: '자동발주',
-            productName: '양상추 외 9',
-            date: '2025-05-11',
-            status: '대기중',
-            quantity: '0/10',
-            total: '0원',
-            receiptAvailable: false
-        },
-        {
-            id: 2,
-            orderType: '일반발주',
-            productName: '양상추 외 8',
-            date: '2025-05-10',
-            status: '검수완료',
-            quantity: '9/9',
-            total: '0원',
-            receiptAvailable: true
-        },
-        {
-            id: 3,
-            orderType: '일반발주',
-            productName: '양상추 외 8',
-            date: '2025-05-09',
-            status: '입고완료',
-            quantity: '0/8',
-            total: '0원',
-            receiptAvailable: true
-        },
-    ];
 
     return (
         <>
             <div className={styles.orderListContainer}>
-                            <OrderSidebar />
+                <OrderSidebar />
 
                 <div className={styles.orderListContent}>
                     <h2>발주 목록</h2>
@@ -65,12 +70,14 @@ export default function OrderList() {
                     <div className={styles.filters}>
                         <div className={styles.row}>
                             <label>기간</label>
-                            <input type="date" />
+                            <input type="date" value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)} />
                             <span>~</span>
-                            <input type="date" />
+                            <input type="date" value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)} />
                         </div>
                         <div className={styles.row}>
-                                                        <label htmlFor="orderType">발주유형</label>
+                            <label htmlFor="orderType">발주유형</label>
                             <select
                                 id="orderType"
                                 name="orderType"
@@ -79,7 +86,7 @@ export default function OrderList() {
                             >
                                 <option value="">전체</option>
                                 <option value="auto">자동발주</option>
-                                <option value="manual">일반발주</option>
+                                <option value="manual">수기발주</option>
                             </select>
                             <label htmlFor="productName">품명</label>
                             <input
@@ -91,13 +98,13 @@ export default function OrderList() {
                             />
 
 
-                             <button className={styles.searchButton} onClick={handleSearch}>검색</button>
+                            <button className={styles.searchButton} onClick={handleSearch}>검색</button>
                             <button className={styles.resetButton} onClick={handleReset}>초기화</button>
                         </div>
                     </div>
 
                     <table className={styles.orderTable}>
-   <thead>
+                        <thead>
                             <tr>
                                 <th>no</th>
                                 <th>발주유형</th>
@@ -113,12 +120,12 @@ export default function OrderList() {
                             {orderData.map((order, index) => (
                                 <tr key={order.id}>
                                     <td>{index + 1}</td>
-                                    <td>{order.orderType}</td>
-                                    <td>{order.productName}</td>
-                                    <td>{order.date}</td>
+                                    <td>{order.purType}</td>
+                                    <td>{order.productNameSummary}</td>
+                                    <td>{order.orderDateTime}</td>
                                     <td>{order.status}</td>
-                                    <td>{order.quantity}</td>
-                                    <td>{order.total}</td>
+                                    <td>{order.quantitySummary}</td>
+                                    <td>{order.totalPrice} 원</td>
                                     <td>
                                         <button
                                             disabled={!order.receiptAvailable}
@@ -133,12 +140,19 @@ export default function OrderList() {
                     </table>
 
                     <div className={styles.pagination}>
-                        <button>{"<"}</button>
-                        <button className={styles.active}>1</button>
-                        <button>2</button>
-                        <button>3</button>
-                        <button>{">"}</button>
+                        <button onClick={() => handleSearch(currentPage - 1)} disabled={currentPage === 1}>{"<"}</button>
+                        {Array.from({ length: totalPages }, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => handleSearch(i + 1)}
+                                className={currentPage === i + 1 ? styles.active : ""}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                        <button onClick={() => handleSearch(currentPage + 1)} disabled={currentPage === totalPages}>{">"}</button>
                     </div>
+
                 </div>
             </div>
         </>

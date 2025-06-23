@@ -62,7 +62,30 @@
     margin-left: auto;
 }
 
-/* ========== 모달 영역 ========== */
+.disabledText {
+    color: gray;
+    font-weight: bold;
+}
+
+.submitBtn {
+    margin-top: 10px;
+    padding: 8px 20px;
+    font-size: 14px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 auto;
+
+}
+
+.submitBtn:hover {
+
+    background-color: #45a049;
+}
+
+/* ========== 모달 ========== */
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -144,3 +167,4 @@
 .modalActions button:hover {
     background-color: #45a049;
 }
+

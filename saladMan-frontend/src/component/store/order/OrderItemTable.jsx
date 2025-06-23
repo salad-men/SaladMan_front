@@ -3,6 +3,7 @@ import styles from "./OrderItemTable.module.css";
 import { myAxios } from "/src/config"; // ← 유틸 함수
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
+import { TestTube } from "lucide-react";
 
 export default function OrderItemTable() {
 
@@ -28,6 +29,7 @@ export default function OrderItemTable() {
                     }
                 });
                 setModalItems(res.data);
+                console.log(res.data);
             } catch (err) {
                 console.error("품목 목록 조회 실패:", err);
             }
@@ -41,11 +43,15 @@ export default function OrderItemTable() {
         // 중복 방지
         if (stockList.find((s) => s.ingredientId === item.ingredientId)) return;
 
+        const orderQty = item.minimumOrderUnit;
+        const itemPrice = (orderQty / item.minimumOrderUnit) * item.unitCost;
+
         setStockList([
             ...stockList,
             {
                 ...item,
-                orderQty: item.minimumOrderUnit
+                orderQty,
+                itemPrice,
             }
         ]);
         setShowModal(false);
@@ -54,6 +60,7 @@ export default function OrderItemTable() {
     const handlePlus = (i) => {
         const updated = [...stockList];
         updated[i].orderQty += updated[i].minimumOrderUnit;
+        updated[i].itemPrice = (updated[i].orderQty / updated[i].minimumOrderUnit) * updated[i].unitCost;
         setStockList(updated);
     };
 
@@ -62,6 +69,7 @@ export default function OrderItemTable() {
         const min = updated[i].minimumOrderUnit;
         if (updated[i].orderQty > min) {
             updated[i].orderQty -= min;
+            updated[i].itemPrice = (updated[i].orderQty / updated[i].minimumOrderUnit) * updated[i].unitCost;
             setStockList(updated);
         }
     };
@@ -72,9 +80,26 @@ export default function OrderItemTable() {
     };
 
     const totalAmount = stockList.reduce(
-        (acc, item) => acc + item.orderQty * item.unitCost,
-        0
+        (acc, item) => acc + item.itemPrice, 0
     );
+
+    const handleSubmit = async () => {
+        try {
+            const payload = stockList.map((item) => ({
+                ingredientId: item.ingredientId,
+                quantity: item.orderQty,
+                unitCost: item.unitCost,
+                itemPrice: item.itemPrice
+            }));
+
+            const res = await myAxios(token).post("/store/orderApply", payload);
+            alert("발주 신청이 완료되었습니다.");
+            setStockList([]); // 초기화
+        } catch (err) {
+            console.error("발주 신청 실패", err);
+            alert("신청에 실패했습니다.");
+        }
+    };
 
     return (
         <div className={styles.stockTableBox}>
@@ -97,7 +122,7 @@ export default function OrderItemTable() {
                                 <button onClick={() => handlePlus(i)} className={styles.qtyBtn}>+</button>
                             </td>
                             <td>{item.unitCost.toLocaleString()}원</td>
-                            <td>{(item.orderQty * item.unitCost).toLocaleString()}원</td>
+                            <td>{((item.orderQty / item.minimumOrderUnit) * item.unitCost).toLocaleString()}원</td>
                             <td><button onClick={() => handleRemove(i)}>X</button></td>
 
                         </tr>
@@ -113,7 +138,10 @@ export default function OrderItemTable() {
             </table>
 
             <div className={styles.summary}>
-                <div className={styles.total}>총계 : {totalAmount.toLocaleString()}원</div>
+                <div className={styles.total}>총계 : {totalAmount.toLocaleString()}원</div><br />
+            </div>
+            <div className={styles.summary}>
+                <button className={styles.submitBtn} onClick={handleSubmit}>신청하기</button>
             </div>
 
             {/* 🔽 모달 내부 포함 */}
@@ -122,8 +150,8 @@ export default function OrderItemTable() {
                     <div className={styles.modalContent}>
                         <h4>품목 선택</h4>
                         <div className={styles.modalHeader}>
-                            <select className={styles.modalSelect} value={category} onChange={(e)=>setCategory(e.target.value)}>
-                                <option>카테고리 전체</option>
+                            <select className={styles.modalSelect} value={category} onChange={(e) => setCategory(e.target.value)}>
+                                <option>전체</option>
                                 <option>단백질</option>
                                 <option>채소</option>
                             </select>
@@ -142,7 +170,15 @@ export default function OrderItemTable() {
                                         <td>{item.unit}</td>
                                         <td>{item.quantity}</td>
                                         <td>{item.incoming}</td>
-                                        <td><button onClick={() => handleAddItem(item)}>추가</button></td>
+                                        <td>
+                                            {!item.available ? (
+                                                <span className={styles.disabledText}>주문 불가</span>
+                                            ) : !item.unitCost || item.hqStock < item.minimumOrderUnit ? (
+                                                <span className={styles.disabledText}>본사 품절</span>
+                                            ) : (
+                                                <button onClick={() => handleAddItem(item)}>추가</button>
+                                            )}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
