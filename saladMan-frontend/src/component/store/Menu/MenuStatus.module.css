@@ -3,6 +3,7 @@
   height: calc(100vh - 64px);
   background-color: #f9fafb;
   overflow: hidden;
+  overflow-y: auto;
 }
 
 .content {
@@ -15,41 +16,31 @@
   position: relative;
 }
 
-.add-product-btn {
-  background-color: #4D774E;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.product-list-header {
-  display: grid;
-  background-color: #f9f9f9;
-  grid-template-columns: 1fr 2fr 1fr 1fr;
-  padding: 12px 0;
-  font-weight: bold;
-  border-bottom: 2px solid #ccc;
-  text-align: center;
-}
-
-.product-list .product-row {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr 1fr ;
-  align-items: center;
-  padding: 4px 0;
-  border-bottom: 1px solid #e0e0e0;
+.menuTable {
+  width: 100%;
+  min-width: 1100px;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 55px;
+  table-layout: fixed;
   background-color: white;
-  text-align: center;
 }
 
-.product-img img{
+.menuTable th,
+.menuTable td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
   text-align: center;
-  width: 50px;
-  margin: 0 20px;
-  
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.menuTable th {
+  background-color: #f6f6f6;
+  font-weight: bold;
 }
 
 #state {
@@ -94,14 +85,14 @@
 }
 
 input:checked + .slider {
-  background-color: #4CAF50;
+  background-color: #4D774E;
 }
 
 input:checked + .slider:before {
   transform: translateX(21px);
 }
 
-.modal-overlay {
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -114,7 +105,7 @@ input:checked + .slider:before {
   z-index: 1000;
 }
 
-.modal-content {
+.modalContent {
   background: white;
   padding: 20px 30px;
   border-radius: 8px;
@@ -122,7 +113,7 @@ input:checked + .slider:before {
   min-width: 300px;
 }
 
-.modal-buttons {
+.modalButtons {
   margin-top: 20px;
   display: flex;
   justify-content: center;
@@ -130,7 +121,7 @@ input:checked + .slider:before {
 }
 
 button.confirm {
-  background-color: #4CAF50;
+  background-color: #4D774E;
   color: white;
   padding: 6px 16px;
   border: none;

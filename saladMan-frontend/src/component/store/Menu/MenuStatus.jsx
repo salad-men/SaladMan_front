@@ -1,4 +1,4 @@
-import './MenuStatus.module.css';
+import styles from './MenuStatus.module.css';
 import SidebarMenus from './SidebarMenu';
 import { useState, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
@@ -10,11 +10,15 @@ const MenuStatus = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
   const token = useAtomValue(accessTokenAtom);
+  console.log("토큰:", token);
 
   useEffect(() => {
+    if (!token) return;
+    
     const fetchMenus = async () => {
       try {
-        const res = await myAxios(token).get('/hq/store-menu/status');
+        const res = await myAxios(token).get('/store/menuStatus');
+        console.log(res);
         setMenus(res.data);
       } catch (err) {
         console.error('메뉴 조회 실패', err);
@@ -38,7 +42,7 @@ const MenuStatus = () => {
     if (!selectedMenu) return;
 
     try {
-      await myAxios(token).patch('/hq/store-menu/toggle', {
+      await myAxios(token).patch('/store/menuStatus/toggle', {
         menuId: selectedMenu.id,
       });
 
@@ -56,51 +60,56 @@ const MenuStatus = () => {
   };
 
   return (
-    <div className="wrapper">
+    <div className={styles.wrapper}>
       <SidebarMenus />
-      <div className='content'>
-        <div className="page-header">
+      <div className={styles.content}>
+        <div className={styles.pageHeader}>
           <h2>점포 메뉴 관리</h2>
         </div>
+        
+        <table className={styles.menuTable}>
+          <thead>
+            <tr>
+              <th>상품 이미지</th>
+              <th>상품명</th>
+              <th>판매가</th>
+              <th>등록여부</th>
+            </tr>
+          </thead>
 
-        <div className="product-list-header">
-          <span>상품 이미지</span>
-          <span>상품명</span>
-          <span>판매가</span>
-          <span>등록여부</span>
-        </div>
-
-        <div className="product-list">
-          {menus.map(menu => (
-            <div className="product-row" key={menu.id}>
-              <div className="product-img"><img src='/' alt={menu.name} /></div>
-              <div className="product-name">{menu.name}</div>
-              <div className="product-price">{menu.price.toLocaleString()}원</div>
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={menu.status}
-                  onChange={() => openModal(menu)}
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-          ))}
-        </div>
+          <tbody>
+            {menus.map(menu => (
+              <tr key={menu.id}>
+                <td>
+                  <img src={menu.img || '/에그 베지 포케.png'} alt={menu.name} style={{ width: '60px', height: '60px' }} />
+                </td>
+                <td>{menu.name}</td>
+                <td>{menu.salePrice.toLocaleString()}원</td>
+                <td>
+                  <label className={styles.switch}>
+                    <input type="checkbox" checked={!!menu.status} onChange={() => openModal(menu)}/>
+                    <span className={`${styles.slider} ${styles.round}`}></span>
+                  </label>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* 모달 */}
       {modalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
             <p>
-              {selectedMenu?.status
-                ? `"${selectedMenu.name}" 메뉴의 등록을 해제하시겠습니까?`
-                : `"${selectedMenu.name}" 메뉴를 등록하시겠습니까?`}
+              {selectedMenu?.status === true
+              ? `"${selectedMenu.name}" 메뉴의 등록을 해제하시겠습니까?`
+              : `"${selectedMenu.name}" 메뉴를 ${selectedMenu?.status === null
+              ? '등록하시겠습니까?' : '활성화하시겠습니까?'}`}
             </p>
-            <div className="modal-buttons">
-              <button className="confirm" onClick={confirmToggle}>확인</button>
-              <button className="cancel" onClick={closeModal}>취소</button>
+            <div className={styles.modalButtons}>
+              <button className={styles.confirm} onClick={confirmToggle}>확인</button>
+              <button className={styles.cancel} onClick={closeModal}>취소</button>
             </div>
           </div>
         </div>
