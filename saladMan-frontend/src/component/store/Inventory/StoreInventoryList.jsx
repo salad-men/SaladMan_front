@@ -59,14 +59,13 @@ export default function StoreInventoryList() {
         const list = res.data.storeInventory || [];
         console.log(res.data.minQuantity);
         const flatList = list.map((x) => ({
-          
           id: x.id,
           store: x.storeName || "",
           name: x.ingredientName || "",
           unit: x.unit || "",
           category: x.categoryName || "",
           unitCost: x.unitCost,
-          quantity: Number(x.minQuantity),
+          quantity: Number(x.quantity),
           minimumOrderUnit: Number(x.minimumOrderUnit),
           minQuantity: Number(x.minQuantity), // 추가
           expiredDate: x.expiredDate,
@@ -115,24 +114,20 @@ export default function StoreInventoryList() {
     );
   };
 
-  const saveEdit = async () => {
-    try {
-      for (const item of inventory) {
-        await myAxios(token).post("/store/inventory/update", {
-          id: item.id,
-          quantity: item.quantity,
-          minimumOrderUnit: item.minimumOrderUnit,
-          unitCost: item.unitCost,
-          expiredDate: item.expiredDate || null,
-          receivedDate: item.receivedDate || null,
-        });
-      }
-      alert("저장되었습니다.");
-      setIsEditMode(false);
-      fetchInventory(pageInfo.curPage);
-    } catch (e) {
-      alert("수정 실패했습니다.");
-    }
+    const saveEdit = () => {
+    inventory.forEach(item => {
+      myAxios(token).post("/store/inventory/update", {
+        id: item.id,
+        quantity: item.quantity,
+        minimumOrderUnit: item.minimumOrderUnit,
+        unitCost: item.unitCost,
+        expiredDate: item.expiredDate || null,
+        receivedDate: item.receivedDate || null,
+      });
+    });
+    alert("저장되었습니다.");
+    setIsEditMode(false);
+    fetchInventory(pageInfo.curPage);
   };
 
   return (

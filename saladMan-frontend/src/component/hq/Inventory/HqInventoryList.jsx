@@ -69,7 +69,6 @@ export default function HqInventoryList() {
     myAxios(token)
       .post("/hq/inventory/list", param)
       .then((res) => {
-        console.log(res.data);
         const hqList = res.data.hqInventory || [];
         const storeList = res.data.storeInventory || [];
         const list =
@@ -101,12 +100,10 @@ export default function HqInventoryList() {
         );
       })
       .catch((e) => {
-        console.error("재고 목록 조회 실패", e);
         setInventory([]);
       });
   };
 
-  // 검색 버튼 클릭 시 강제로 fetchInventory 실행
   const handleSearchClick = () => {
     fetchInventory(1);
   };
@@ -181,9 +178,9 @@ export default function HqInventoryList() {
   const saveNewItems = async () => {
     try {
       for (const row of newItems) {
-        await myAxios(token).post("/hq/inventory/add", {
+        myAxios(token).post("/hq/inventory/add", {
           store: "본사",
-          storeId: 1, 
+          storeId: 1,
           categoryId: categories.find((c) => c.name === row.category)?.id,
           ingredientId: Number(row.ingredientId),
           name: row.name,
@@ -213,7 +210,6 @@ export default function HqInventoryList() {
       ]);
       fetchInventory(pageInfo.curPage);
     } catch (e) {
-      console.error("등록 실패", e);
       alert("등록 실패했습니다.");
     }
   };
@@ -221,20 +217,19 @@ export default function HqInventoryList() {
   const saveEdit = async () => {
     try {
       for (const item of inventory) {
-        await myAxios(token).post("/hq/inventory/update", {
+        myAxios(token).post("/hq/inventory/update", {
           id: item.id,
           quantity: item.quantity,
-          minimumOrderUnit: item.minimumOrderUnit,
-          unitCost: item.unitCost,
-          expiredDate: item.expiredDate || null,
-          receivedDate: item.receivedDate || null,
+          minimumOrderUnit: item.minimumOrderUnit, 
+          unitCost: item.unitCost,                 
+          expiredDate: item.expiredDate || null,   
+          receivedDate: item.receivedDate || null, 
         });
       }
       alert("저장되었습니다.");
       setIsEditMode(false);
       fetchInventory(pageInfo.curPage);
     } catch (e) {
-      console.error("수정 실패", e);
       alert("수정 실패했습니다.");
     }
   };
@@ -329,7 +324,7 @@ export default function HqInventoryList() {
           )}
         </div>
 
-        {/* 신규 추가 입력폼 테이블 */}
+        {/* 신규 추가 입력폼 */}
         {isAddMode && (
           <table className={styles.table}>
             <thead>
@@ -371,7 +366,8 @@ export default function HqInventoryList() {
                       {ingredients
                         .filter(
                           (ing) =>
-                            ing.categoryId === categories.find((c) => c.name === row.category)?.id
+                            ing.categoryId ===
+                            categories.find((c) => c.name === row.category)?.id
                         )
                         .map((ing) => (
                           <option key={ing.id} value={ing.id}>
@@ -424,7 +420,7 @@ export default function HqInventoryList() {
           </table>
         )}
 
-        {/* 기존 재고 리스트 테이블 (항상 노출) */}
+        {/* 재고 리스트 테이블 */}
         <table className={styles.table}>
           <thead>
             <tr>
@@ -451,17 +447,61 @@ export default function HqInventoryList() {
               inventory.map((r, i) => {
                 const isLowStock = r.quantity < r.minimumOrderUnit;
                 return (
-                  <tr key={i} className={isLowStock ? styles.lowStockRow : ""}>
+                  <tr key={r.id} className={isLowStock ? styles.lowStockRow : ""}>
                     <td>{r.store}</td>
                     <td>{r.name}</td>
                     <td>{r.category}</td>
                     <td>{r.unit}</td>
-                    <td>{r.unitCost}</td>
-                    <td>{r.quantity}</td>
-                    <td>{r.minimumOrderUnit}</td>
-                    <td>{r.minquantity ?? 0}</td>
-                    <td>{r.expiredDate || ""}</td>
-                    <td>{r.receivedDate || ""}</td>
+                    <td>
+                      <input
+                        type="number"
+                        value={r.unitCost}
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      {isEditMode ? (
+                        <input
+                          type="number"
+                          value={r.quantity}
+                          onChange={(e) => onInvChange(i, "quantity", e.target.value)}
+                        />
+                      ) : (
+                        <input
+                          type="number"
+                          value={r.quantity}
+                          disabled
+                        />
+                      )}
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value={r.minimumOrderUnit}
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value={r.minquantity ?? 0}
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        value={r.expiredDate ? r.expiredDate.substring(0, 10) : ""}
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        value={r.receivedDate ? r.receivedDate.substring(0, 10) : ""}
+                        disabled={true}
+                      />
+                    </td>
                   </tr>
                 );
               })

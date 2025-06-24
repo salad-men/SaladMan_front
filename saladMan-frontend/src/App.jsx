@@ -163,7 +163,7 @@ function App() {
 
           {/* 공지사항 */}
           <Route path='/store/StoreNoticeList' element={<StoreNoticeList />} />
-          <Route path='/store/StoreNoticeDetail' element={<StoreNoticeDetail />} />
+          <Route path='/store/StoreNoticeDetail/:id' element={<StoreNoticeDetail />} />
           <Route path='/store/notification' element={<Notification />} />
 
           {/* 공지 -고객불만사항 */}

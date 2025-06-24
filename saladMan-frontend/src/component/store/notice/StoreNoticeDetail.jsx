@@ -1,58 +1,77 @@
-import React from "react";
-import NoticeSidebar from "./NoticeSidebar";
+import React, { useEffect, useState } from "react";
+import { useAtomValue } from "jotai";
+import { useNavigate, useParams } from "react-router-dom";
+import { myAxios } from "../../../config";
+import { accessTokenAtom } from "/src/atoms";
 import styles from "./StoreNoticeDetail.module.css";
+import NoticeSidebar from "./NoticeSidebar";
 
 export default function StoreNoticeDetail() {
-  const notice = {
-    title: "[공지] 샐러드 배송 지역 확대 안내",
-    author: "관리자",
-    date: "2025-05-21",
-    content: `고객 여러분의 많은 관심과 사랑에 힘입어 샐러드 배송 가능 지역이 확대되었습니다.
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const token = useAtomValue(accessTokenAtom);
 
-기존 지역에 더해 ○○지역에서도 신선한 샐러드를 빠르게 받아보실 수 있게 되었습니다.
+  const [notice, setNotice] = useState({
+    title: "",
+    content: "",
+    imgFileName: "",
+    fileName: "",
+    fileOriginName: ""
+  });
 
-앞으로도 더 많은 지역에서 만날 수 있도록 최선을 다하겠습니다. 감사합니다.`,
-  };
+  useEffect(() => {
+    if (id) {
+      myAxios(token).get("/hq/notice/detail", { params: { id } })
+        .then(res => setNotice(res.data.notice))
+        .catch((err) =>console.error("공지 불러오기 실패:", err));
+    }
+  }, [id, token]);
 
-  const handleBackClick = () => {
-    window.history.back();
+  const getFileNameFromUrl = (url) => {
+    if (!url) return "";
+    return url.substring(url.lastIndexOf("/") + 1);
   };
 
   return (
     <div className={styles.container}>
       <NoticeSidebar />
       <main className={styles.content}>
-        <h2 className={styles.title}>공지사항</h2>
-
-        <div className={styles.detailMeta}>
-          <span>작성일 {notice.date}</span>
-        </div>
-
-        <table className={styles.detailTable}>
+        <div className={styles.title}>공지사항 상세</div>
+        <table className={styles.table}>
           <tbody>
             <tr>
-              <th>제목</th>
-              <td>{notice.title}</td>
+              <th className={styles.label}>제목</th>
+              <td className={styles.value}>{notice.title}</td>
             </tr>
             <tr>
-              <th>작성자</th>
-              <td className={styles.authorCell}>{notice.author}</td>
+              <th className={styles.label}>내용</th>
+              <td className={styles.value} style={{ whiteSpace: "pre-line" }}>{notice.content}</td>
             </tr>
             <tr>
-              <th>내용</th>
-              <td className={styles.contentCell}>
-                {notice.content.split("\n").map((line, idx) => (
-                  <p key={idx}>{line}</p>
-                ))}
+              <th className={styles.label}>이미지</th>
+              <td className={styles.value}>
+                {notice.imgFileName
+                  ? <img src={notice.imgFileName} alt="공지이미지" className={styles.image} />
+                  : "없음"
+                }
+              </td>
+            </tr>
+            <tr>
+              <th className={styles.label}>첨부파일</th>
+              <td className={styles.value}>
+                {notice.fileName
+                  ? <a href={notice.fileName} download style={{ marginRight: 10 }}>
+                      {notice.fileOriginName || getFileNameFromUrl(notice.fileName)}
+                    </a>
+                  : "없음"
+                }
               </td>
             </tr>
           </tbody>
         </table>
-
         <div className={styles.buttonGroup}>
-          <button className={styles.back} onClick={handleBackClick} type="button">
-            목록
-          </button>
+          <button className={styles.backBtn} onClick={() => navigate("/store/StoreNoticeList")}>목록</button>
+          {/* 수정/삭제 버튼 없음 */}
         </div>
       </main>
     </div>
