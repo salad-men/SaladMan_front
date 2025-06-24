@@ -21,8 +21,11 @@ export default function StoreNoticeDetail() {
 
   useEffect(() => {
     if (id) {
-      myAxios(token).get("/hq/notice/detail", { params: { id } })
-        .then(res => setNotice(res.data.notice))
+      myAxios(token).get("/store/notice/detail", { params: { id } })
+        .then(res => {
+          setNotice(res.data.notice),
+          console.log(res.data);
+        })
         .catch((err) =>console.error("공지 불러오기 실패:", err));
     }
   }, [id, token]);
@@ -71,7 +74,6 @@ export default function StoreNoticeDetail() {
         </table>
         <div className={styles.buttonGroup}>
           <button className={styles.backBtn} onClick={() => navigate("/store/StoreNoticeList")}>목록</button>
-          {/* 수정/삭제 버튼 없음 */}
         </div>
       </main>
     </div>

@@ -168,7 +168,7 @@ function App() {
 
           {/* 공지 -고객불만사항 */}
           <Route path='/store/StoreComplaintList' element={<StoreComplaintList />} />
-          <Route path='/store/StoreComplaintDetail' element={<StoreComplaintDetail />} />
+          <Route path='/store/StoreComplaintDetail/:id' element={<StoreComplaintDetail />} />
 
         </Route>
 
