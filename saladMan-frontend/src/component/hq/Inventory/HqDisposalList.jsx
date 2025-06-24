@@ -149,9 +149,7 @@ export default function HqDisposalList() {
       <div className={styles.content}>
         <h2 className={styles.title}>폐기 목록</h2>
 
-        {/* 필터 - 2줄 정렬, 기간 버튼 추가 */}
         <div className={styles.filters}>
-          {/* 1행: 기간 */}
           <div className={styles.row}>
             <label>기간</label>
             <input
@@ -209,9 +207,8 @@ export default function HqDisposalList() {
               placeholder="재료명"
               value={tempFilters.keyword}
               onChange={e => setTempFilters(f => ({ ...f, keyword: e.target.value }))}
-              style={{ marginLeft: "8px" }}
             />
-            <button type="button" onClick={applyFilters} style={{ marginLeft: "8px" }}>검색</button>
+            <button type="button" onClick={applyFilters}>검색</button>
             <button type="button" onClick={resetFilters}>초기화</button>
           </div>
         </div>

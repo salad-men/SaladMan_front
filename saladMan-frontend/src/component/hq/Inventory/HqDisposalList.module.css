@@ -6,8 +6,8 @@
 /* 콘텐츠 영역 */
 .content {
   position: absolute;
-  top: 62px;
-  left: 200px;
+  top: 46px;
+  left: 230px;
   width: calc(100% - 200px);
   padding: 40px;
   background-color: #f9fafb;

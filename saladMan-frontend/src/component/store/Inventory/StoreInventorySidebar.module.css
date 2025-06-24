@@ -1,38 +1,51 @@
 .sidebar {
-  background-color: #4d774e;
-  color: white;
+  background: linear-gradient(135deg, #4d774e 0%, #284830 100%);
+  color: #fff;
   height: 100vh;
-  width: 230px;
-  margin: 0;
-  padding: 20px;
+  width: 200px;
+  min-width: 200px;
   box-sizing: border-box;
+  padding: 38px 0 18px 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  box-shadow: 4px 0 18px 0 rgba(77, 119, 78, 0.08);
 }
 
 .title {
-  margin: 10px 0 20px 20px;
-  font-size: 28px;
-  font-weight: bold;
+  margin: 0 0 32px 0;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-align: center;
+  color: #f3f8f2;
+  user-select: none;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
 }
 
 .list {
-  padding: 0 10px;
+  padding: 0;
   margin: 0;
+  width: 100%;
   list-style: none;
   flex-grow: 1;
 }
 
 .listItem {
-  font-size: 20px;
-  padding: 10px 20px;
+  font-size: 1.06rem;
+  padding: 13px 24px 13px 24px;
+  border-radius: 8px;
+  margin: 3px 0;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.3s;
+  transition: background 0.18s, color 0.16s;
+  font-weight: 500;
+  color: #eaf6ee;
 }
 
-.listItem:hover {
-  background-color: #3f6940;
+.listItem:hover,
+.listItem:focus-within {
+  background: rgba(255,255,255,0.10);
+  color: #fff;
 }
 
 .link {
@@ -40,10 +53,10 @@
   color: inherit;
   display: block;
   width: 100%;
+  transition: color 0.14s;
 }
-
 .link:focus,
 .link:hover {
   outline: none;
-  color: #eaeaea;
+  color: #bad9c5;
 }

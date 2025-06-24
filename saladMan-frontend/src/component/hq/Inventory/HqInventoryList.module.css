@@ -6,7 +6,7 @@
 .content {
   position: absolute;
   top: 62px;
-  left: 200px;
+left: 200px;
   width: calc(100% - 200px);
   padding: 30px 20px;
   background-color: #f9fafb;
@@ -39,6 +39,7 @@
   font-weight: 600;
   font-size: 13px;
 }
+
 
 /* 폼 요소 스타일 */
 .row input[type="date"],

@@ -24,7 +24,7 @@ export default function StoreInventoryList() {
   });
   const [pageNums, setPageNums] = useState([]);
 
-  // 날짜를 YYYY-MM-DD 형식으로 포맷팅
+  // 날짜 포맷
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
     return dateStr.length > 10 ? dateStr.slice(0, 10) : dateStr;
@@ -44,7 +44,7 @@ export default function StoreInventoryList() {
   }, [token, filters.category, filters.name, user.id]);
 
   const fetchInventory = (page = 1) => {
-    if (!user.id) return; // 매장 아이디 없으면 실행 안 함
+    if (!user.id) return;
 
     const param = {
       storeId: user.id,
@@ -57,16 +57,18 @@ export default function StoreInventoryList() {
       .post("/store/inventory/list", param)
       .then((res) => {
         const list = res.data.storeInventory || [];
-        console.log(res.data);
+        console.log(res.data.minQuantity);
         const flatList = list.map((x) => ({
+          
           id: x.id,
           store: x.storeName || "",
           name: x.ingredientName || "",
           unit: x.unit || "",
           category: x.categoryName || "",
           unitCost: x.unitCost,
-          quantity: Number(x.quantity),
+          quantity: Number(x.minQuantity),
           minimumOrderUnit: Number(x.minimumOrderUnit),
+          minQuantity: Number(x.minQuantity), // 추가
           expiredDate: x.expiredDate,
           receivedDate: x.receivedDate || "",
         }));
@@ -196,6 +198,7 @@ export default function StoreInventoryList() {
               <th>단위가격</th>
               <th>재고량</th>
               <th>최소주문단위</th>
+              <th>**최소보유량**</th> {/* 추가 */}
               <th>유통기한</th>
               <th>입고날짜</th>
             </tr>
@@ -203,7 +206,7 @@ export default function StoreInventoryList() {
           <tbody>
             {inventory.length === 0 ? (
               <tr>
-                <td colSpan={9}>데이터가 없습니다.</td>
+                <td colSpan={10}>데이터가 없습니다.</td>
               </tr>
             ) : (
               inventory.map((r, i) => {
@@ -218,7 +221,7 @@ export default function StoreInventoryList() {
                       <input
                         type="number"
                         value={r.unitCost}
-                        disabled={true} 
+                        disabled={true}
                       />
                     </td>
                     <td>
@@ -233,21 +236,28 @@ export default function StoreInventoryList() {
                       <input
                         type="number"
                         value={r.minimumOrderUnit}
-                        disabled={true} 
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value={r.minQuantity ?? ""}
+                        disabled={true}
                       />
                     </td>
                     <td>
                       <input
                         type="date"
                         value={r.expiredDate ? r.expiredDate.substring(0, 10) : ""}
-                        disabled={true} 
+                        disabled={true}
                       />
                     </td>
                     <td>
                       <input
                         type="date"
                         value={r.receivedDate ? r.receivedDate.substring(0, 10) : ""}
-                        disabled={true} 
+                        disabled={true}
                       />
                     </td>
                   </tr>
