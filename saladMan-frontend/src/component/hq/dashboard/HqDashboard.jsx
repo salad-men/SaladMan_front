@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import styles from "./hqDashboard.module.css";
+import styles from "./HqDashboard.module.css";
 import Chart from "chart.js/auto";
 
 export default function HqDashboard() {
