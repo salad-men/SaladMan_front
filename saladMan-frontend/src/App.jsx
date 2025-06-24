@@ -31,6 +31,8 @@ import StoreLayout from '@store/StoreLayout';
 import TotalMenu from '@store/Menu/TotalMenu';
 import MenuStatus from '@store/Menu/MenuStatus';
 import Recipe from '@store/Menu/Recipe';
+import PaymentList from '@store/Sales/PaymentList';
+import StoreSales from '@store/Sales/StoreSales';
 import OtherStoreInven from '@store/StoreInquiry/OtherStoreInven';
 import FindOtherStore from '@store/StoreInquiry/FindOtherStore';
 
@@ -156,6 +158,8 @@ function App() {
           <Route path="/store/empSchedule" element={<EmpSchedule />} />
           
           {/* 매출 */}
+          <Route path="/store/paymentList" element={<PaymentList />} />
+          <Route path="/store/storeSales" element={<StoreSales />} />
 
           {/* 점포조회 */}
           <Route path='/store/findOtherStore' element={<FindOtherStore />} />

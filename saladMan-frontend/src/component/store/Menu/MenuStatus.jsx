@@ -81,7 +81,7 @@ const MenuStatus = () => {
             {menus.map(menu => (
               <tr key={menu.id}>
                 <td>
-                  <img src={menu.img || '/에그 베지 포케.png'} alt={menu.name} style={{ width: '60px', height: '60px' }} />
+                  <img src={`/${menu.name}.png`} alt={menu.name} style={{ width: '60px', height: '60px' }} />
                 </td>
                 <td>{menu.name}</td>
                 <td>{menu.salePrice.toLocaleString()}원</td>

@@ -65,7 +65,7 @@ const TotalMenu = () => {
                     {menus.map(menu => (
                         <div className={styles.menuCard} key={menu.id}>
                             <div className={styles.imageWrapper}>
-                                <img src="/img1.png" alt={menu.name} />
+                                <img src={`/${menu.name}.png`} alt={menu.name} />
                             </div>
                             <h3>{menu.name}</h3>
                             <p>{menu.salePrice.toLocaleString()}원</p>
