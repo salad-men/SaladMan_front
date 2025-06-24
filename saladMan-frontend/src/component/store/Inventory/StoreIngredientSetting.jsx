@@ -1,152 +1,300 @@
-import React, { useState } from "react";
-import { atom, useAtom } from "jotai";
+import React, { useState, useEffect } from "react";
 import StoreInventorySidebar from "./StoreInventorySidebar";
+import { myAxios } from "../../../config";
+import { accessTokenAtom, userAtom } from "/src/atoms";
+import { useAtomValue } from "jotai";
 import styles from "./StoreIngredientSetting.module.css";
 
-// 강남점 데이터만 보유
-const inventoryAtom = atom([
-  { store: "강남점", name: "로메인", category: "베이스채소", unit: "kg", min: 100, max: 500, price: 180 },
-  { store: "강남점", name: "닭가슴살", category: "단백질", unit: "kg", min: 50, max: 300, price: 450 },
-  { store: "강남점", name: "퀴노아", category: "탄수화물", unit: "g", min: 300, max: 800, price: 250 },
-]);
-
-const isEditModeAtom = atom(false);
-
 export default function StoreIngredientSetting() {
-  const [inventory, setInventory] = useAtom(inventoryAtom);
-  const [isEditMode, setIsEditMode] = useAtom(isEditModeAtom);
+  const token = useAtomValue(accessTokenAtom);
+  const user = useAtomValue(userAtom);
 
-  const [selectedCategory, setSelectedCategory] = useState("전체");
-  const [searchName, setSearchName] = useState("");
+  const STORE_ID = user?.id || null;
 
-  // 강남점 데이터 중 카테고리만 뽑아서 "전체" 포함 배열 생성
-  const categories = ["전체", ...Array.from(new Set(inventory.map((item) => item.category)))];
+  const [settings, setSettings] = useState([]);
+  const [originalSettings, setOriginalSettings] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  // 강남점 데이터만 필터링
-  const filteredInventory = inventory.filter((item) => {
-    const categoryMatch = selectedCategory === "전체" || item.category === selectedCategory;
-    const nameMatch = item.name.toLowerCase().includes(searchName.toLowerCase());
-    return categoryMatch && nameMatch;
+  const [filterCategory, setFilterCategory] = useState("");
+  const [filterName, setFilterName] = useState("");
+
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isAddMode, setIsAddMode] = useState(false);
+
+  const [newSetting, setNewSetting] = useState({
+    categoryId: "",
+    ingredientId: "",
+    minQuantity: "",
+    maxQuantity: "",
   });
 
-  const handleInventoryInput = (idx, field, value) => {
-    setInventory((cur) =>
-      cur.map((row, i) => (i === idx ? { ...row, [field]: value === "" ? "" : Number(value) } : row))
+  useEffect(() => {
+    myAxios(token).get("/store/inventory/categories").then(res => {
+      setCategories(res.data.categories || []);
+    });
+    myAxios(token).get("/store/inventory/ingredients").then(res => {
+      setIngredients(res.data.ingredients || []);
+    });
+  }, [token]);
+
+  useEffect(() => {
+    fetchSettings();
+    // eslint-disable-next-line
+  }, [token, STORE_ID, filterCategory, filterName]);
+
+  const fetchSettings = () => {
+    if (!STORE_ID) return;
+    myAxios(token)
+      .get("/store/inventory/settings", {
+        params: {
+          storeId: STORE_ID,
+          categoryId: filterCategory || undefined,
+          keyword: filterName || undefined,
+          page: 1,
+        }
+      })
+      .then(res => {
+        setSettings(res.data.settings || []);
+        if (!isEditMode) setOriginalSettings(res.data.settings || []);
+      })
+      .catch(() => {
+        setSettings([]);
+        if (!isEditMode) setOriginalSettings([]);
+      });
+  };
+
+  const handleInputChange = (idx, field, value) => {
+    setSettings(current =>
+      current.map((row, i) => (i === idx ? { ...row, [field]: value === "" ? "" : Number(value) } : row))
     );
   };
 
-  const handleEditMode = () => setIsEditMode(true);
-  const handleCancelEdit = () => setIsEditMode(false);
   const handleSaveEdit = () => {
-    setIsEditMode(false);
-    alert("강남점 재료 설정이 저장되었습니다.");
+    const changed = settings.filter((row) => {
+      if (!row.id) return false;
+      const origin = originalSettings.find((x) => x.id === row.id);
+      return (
+        !!origin &&
+        (row.minQuantity !== origin.minQuantity ||
+          row.maxQuantity !== origin.maxQuantity)
+      );
+    });
+
+    if (changed.length === 0) {
+      alert("수정된 내용이 없습니다.");
+      setIsEditMode(false);
+      return;
+    }
+
+    myAxios(token)
+      .post("/store/inventory/settings-update", changed)
+      .then(() => {
+        alert(`총 ${changed.length}건 저장 완료!`);
+        setIsEditMode(false);
+        fetchSettings();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("저장 중 오류가 발생했습니다.");
+      });
   };
 
-  const handleSearchClick = () => {
-    alert(`검색어: ${searchName}\n분류: ${selectedCategory}`);
+  const handleAddSave = () => {
+    if (!newSetting.categoryId || !newSetting.ingredientId ||
+        newSetting.minQuantity === "" || newSetting.maxQuantity === "") {
+      alert("모든 필드를 입력하세요.");
+      return;
+    }
+    myAxios(token)
+      .post("/store/inventory/settings-add", {
+        storeId: STORE_ID,
+        ingredientId: Number(newSetting.ingredientId),
+        minQuantity: Number(newSetting.minQuantity),
+        maxQuantity: Number(newSetting.maxQuantity),
+      })
+      .then(() => {
+        alert("새 설정이 추가되었습니다.");
+        setIsAddMode(false);
+        setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
+        fetchSettings();
+      })
+      .catch(() => {
+        alert("추가 중 오류가 발생했습니다.");
+      });
+  };
+
+  const handleNewInputChange = (field, value) => {
+    setNewSetting(prev => {
+      if (field === "categoryId") {
+        return { ...prev, categoryId: value, ingredientId: "" };
+      }
+      return { ...prev, [field]: value };
+    });
+  };
+
+  const filteredIngredients = newSetting.categoryId
+    ? ingredients.filter(ing => ing.categoryId === Number(newSetting.categoryId))
+    : [];
+
+  const getIngredientName = (ingredientId) => {
+    const found = ingredients.find(ing => ing.id === Number(ingredientId));
+    return found ? found.name : "-";
   };
 
   return (
     <div className={styles.container}>
       <StoreInventorySidebar />
-
       <div className={styles.content}>
-        <h2 className={styles.title}>강남점 재료 설정</h2>
+        <h2 className={styles.title}>{user?.name || ""} 재료 설정</h2>
 
-        {/* 필터 */}
-        <div className={styles.filters}>
-          <div className={styles.row}>
-            <label>분류</label>
+        {/* ⭐ 필터+버튼 한줄 정렬 */}
+        <div className={styles.topRow}>
+          <form
+            className={styles.filters}
+            onSubmit={e => {
+              e.preventDefault();
+              fetchSettings();
+            }}
+          >
             <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className={styles.select}
+              className={styles.selectNarrow}
+              value={filterCategory}
+              onChange={e => setFilterCategory(e.target.value)}
             >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
+              <option value="">분류</option>
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
                 </option>
               ))}
             </select>
-
             <input
+              className={styles.inputNarrow}
               type="text"
-              placeholder="재료명 검색"
-              value={searchName}
-              onChange={(e) => setSearchName(e.target.value)}
-              className={styles.inputText}
+              value={filterName}
+              onChange={e => setFilterName(e.target.value)}
+              placeholder="재료명"
             />
-
-            <button type="button" className={styles.search} onClick={handleSearchClick}>
-              검색
-            </button>
+            <button type="submit" className={styles.searchNarrow}>조회</button>
+          </form>
+          <div className={styles.actionBtns}>
+            {!isEditMode && !isAddMode && (
+              <>
+                <button className={styles.edit} onClick={() => {
+                  setIsEditMode(true);
+                  setOriginalSettings(JSON.parse(JSON.stringify(settings)));
+                }}>수정모드</button>
+                <button className={styles.add} onClick={() => setIsAddMode(true)}>추가</button>
+              </>
+            )}
+            {isEditMode && (
+              <>
+                <button className={styles.cancel} onClick={() => setIsEditMode(false)}>취소</button>
+                <button className={styles.save} onClick={handleSaveEdit}>저장</button>
+              </>
+            )}
+            {isAddMode && (
+              <>
+                <button className={styles.cancel} onClick={() => {
+                  setIsAddMode(false);
+                  setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
+                }}>취소</button>
+                <button className={styles.save} onClick={handleAddSave}>추가 저장</button>
+              </>
+            )}
           </div>
         </div>
 
-        {/* 버튼 */}
-        {!isEditMode ? (
-          <div className={styles.actions}>
-            <button className={styles.edit} onClick={handleEditMode}>
-              수정모드
-            </button>
-          </div>
-        ) : (
-          <div className={styles.actions}>
-            <button className={styles.cancel} onClick={handleCancelEdit}>
-              취소
-            </button>
-            <button className={styles.save} onClick={handleSaveEdit}>
-              저장
-            </button>
-          </div>
-        )}
-
-        {/* 테이블 */}
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>재료명</th>
               <th>분류</th>
-              <th>단위</th>
+              <th>재료명</th>
               <th>최소수량</th>
               <th>최대수량</th>
-              <th>단가</th>
             </tr>
           </thead>
           <tbody>
-            {filteredInventory.length === 0 ? (
+            {settings.length === 0 ? (
               <tr>
-                <td colSpan={6} className={styles.noData}>
-                  조건에 맞는 재료가 없습니다.
-                </td>
+                <td colSpan={4} className={styles.noData}>설정된 재료가 없습니다.</td>
               </tr>
             ) : (
-              filteredInventory.map((row, idx) => (
-                <tr key={idx}>
-                  <td>{row.name}</td>
-                  <td>{row.category}</td>
-                  <td>{row.unit}</td>
+              settings.map((row, idx) => (
+                <tr key={row.id || idx}>
+                  <td>{row.categoryName || "-"}</td>
+                  <td>{getIngredientName(row.ingredientId)}</td>
                   <td>
                     <input
                       type="number"
-                      value={row.min}
+                      value={row.minQuantity || ""}
                       disabled={!isEditMode}
                       className={isEditMode ? styles.editable : ""}
-                      onChange={(e) => handleInventoryInput(idx, "min", e.target.value)}
+                      onChange={e => handleInputChange(idx, "minQuantity", e.target.value)}
                     />
                   </td>
                   <td>
                     <input
                       type="number"
-                      value={row.max}
+                      value={row.maxQuantity || ""}
                       disabled={!isEditMode}
                       className={isEditMode ? styles.editable : ""}
-                      onChange={(e) => handleInventoryInput(idx, "max", e.target.value)}
+                      onChange={e => handleInputChange(idx, "maxQuantity", e.target.value)}
                     />
                   </td>
-                  <td>{row.price}</td>
                 </tr>
               ))
+            )}
+            {isAddMode && (
+              <tr>
+                <td>
+                  <select
+                    value={newSetting.categoryId}
+                    className={styles.selectNarrow}
+                    onChange={e => handleNewInputChange("categoryId", e.target.value)}
+                  >
+                    <option value="">분류 선택</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    value={newSetting.ingredientId}
+                    className={styles.selectNarrow}
+                    onChange={e => handleNewInputChange("ingredientId", e.target.value)}
+                  >
+                    <option value="">재료 선택</option>
+                    {filteredIngredients.map(ing => (
+                      <option key={ing.id} value={ing.id}>
+                        {ing.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    className={styles.inputNarrow}
+                    value={newSetting.minQuantity}
+                    onChange={e => handleNewInputChange("minQuantity", e.target.value)}
+                    min={0}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    className={styles.inputNarrow}
+                    value={newSetting.maxQuantity}
+                    onChange={e => handleNewInputChange("maxQuantity", e.target.value)}
+                    min={0}
+                  />
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

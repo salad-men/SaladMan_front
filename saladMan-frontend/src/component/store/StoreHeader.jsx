@@ -55,8 +55,8 @@ const StoreHeader = () => {
                         <a href="#">매출</a>
                         <div className="storeDropdown">
                             <ul>
-                                <li><a href="#">매출 조회</a></li>
-                                <li><a href="#">주문내역 조회</a></li>
+                                <li><a href="storeSales">매출 조회</a></li>
+                                <li><a href="paymentList">주문내역 조회</a></li>
                             </ul>
                         </div>
                     </div>

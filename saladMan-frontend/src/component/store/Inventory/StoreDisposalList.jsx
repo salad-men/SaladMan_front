@@ -1,188 +1,175 @@
 import React, { useState, useEffect } from "react";
-import { atom, useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import StoreInventorySidebar from "./StoreInventorySidebar";
+import { myAxios } from "../../../config";
 import styles from "./StoreDisposalList.module.css";
-
-const initialData = [
-  { id: 1, store: "본사", name: "렌틸콩", category: "단백질", unit: "kg", stock: 300, discardQty: 100, reason: "폐기 예정", discardDate: "2025-05-27", status: "완료", remark: "-" },
-  { id: 2, store: "강남점", name: "로메인", category: "베이스채소", unit: "kg", stock: 100, discardQty: 200, reason: "유통기한 경과로 인한 폐기", discardDate: "2025-05-27", status: "대기", remark: "-" },
-  { id: 3, store: "잠실점", name: "닭가슴살", category: "단백질", unit: "팩", stock: 50, discardQty: 200, reason: "포장 훼손으로 인한 폐기", discardDate: "2025-05-25", status: "대기", remark: "-" },
-  { id: 4, store: "신촌점", name: "토마토", category: "야채", unit: "개", stock: 80, discardQty: 30, reason: "부패로 인한 폐기", discardDate: "2025-05-26", status: "대기", remark: "-" },
-  { id: 5, store: "홍대점", name: "아보카도", category: "과일", unit: "개", stock: 40, discardQty: 5, reason: "숙성 과잉으로 인한 폐기", discardDate: "2025-05-27", status: "대기", remark: "-" },
-];
-
-const dataAtom = atom(initialData);
-
-const initialFilters = {
-  category: "all",
-  keyword: "",
-  startDate: "",
-  endDate: "",
-  status: "all",
-};
+import { userAtom, accessTokenAtom } from "/src/atoms";
 
 export default function StoreDisposalList() {
-  const [filters, setFilters] = useState(initialFilters);
-  const [tempFilters, setTempFilters] = useState(initialFilters);
-  const [data] = useAtom(dataAtom);
+  const token = useAtomValue(accessTokenAtom);
+  const user = useAtomValue(userAtom);
 
-  // 기간 버튼 클릭 시 기간 필터 업데이트 함수
-  const setPeriod = (days) => {
-    const today = new Date();
-    const end = today.toISOString().slice(0, 10);
-    const startObj = days === 0 ? null : new Date(today.getTime() - days * 86400000);
-    setTempFilters((f) => ({
-      ...f,
-      startDate: startObj ? startObj.toISOString().slice(0, 10) : "",
-      endDate: end,
-    }));
-  };
-
-  const applyFilters = () => {
-    setFilters(tempFilters);
-  };
-
-  const resetFilters = () => {
-    setTempFilters(initialFilters);
-  };
-
-  const filteredData = data.filter((item) => {
-    const matchCategory = filters.category === "all" || item.category === filters.category;
-    const matchKeyword = item.name.toLowerCase().includes(filters.keyword.toLowerCase());
-    const matchStatus = filters.status === "all" || item.status === filters.status;
-
-    const itemDate = new Date(item.discardDate);
-    const start = filters.startDate ? new Date(filters.startDate) : null;
-    const end = filters.endDate ? new Date(filters.endDate) : null;
-
-    const matchStart = !start || itemDate >= start;
-    const matchEnd = !end || itemDate <= end;
-
-    return matchCategory && matchKeyword && matchStatus && matchStart && matchEnd;
+  const [disposals, setDisposals] = useState([]);
+  const [filters, setFilters] = useState({
+    category: "all",
+    name: "",
   });
+  const [categories, setCategories] = useState([]);
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1,
+    allPage: 1,
+    startPage: 1,
+    endPage: 1,
+  });
+  const [pageNums, setPageNums] = useState([]);
+
+  // 카테고리 목록
+  useEffect(() => {
+    myAxios(token)
+      .get("/store/inventory/categories")
+      .then((res) => setCategories(res.data.categories || []))
+      .catch(() => setCategories([]));
+  }, [token]);
+
+  // 폐기목록 조회
+  useEffect(() => {
+    fetchDisposals(1);
+  }, [token, user.id, filters.category, filters.name]);
+
+  const fetchDisposals = (page = 1) => {
+    if (!user.id) return;
+    const param = {
+      storeId: user.id,
+      page,
+      category: filters.category === "all" ? "all" : Number(filters.category),
+      keyword: filters.name,
+    };
+
+    myAxios(token)
+      .post("/store/inventory/disposal-list", param)
+      .then((res) => {
+        const list = res.data.disposals || [];
+        setDisposals(list.map((x) => ({
+          id: x.id,
+          name: x.ingredientName,
+          category: x.categoryName,
+          unit: x.unit,
+          quantity: x.quantity,
+          requestedAt: x.requestedAt,
+          processedAt: x.processedAt,
+          status: x.status,
+          memo: x.memo,
+        })));
+
+        const pi = res.data.pageInfo;
+        setPageInfo(pi);
+        const nums = [];
+        for (let i = pi.startPage; i <= pi.endPage; i++) {
+          nums.push(i);
+        }
+        setPageNums(nums);
+      })
+      .catch(() => {
+        setDisposals([]);
+      });
+  };
+
+  // 필터 상태 변경
+  const onFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((f) => ({ ...f, [name]: value }));
+  };
+
+  const handleSearchClick = () => fetchDisposals(1);
 
   return (
     <div className={styles.container}>
       <StoreInventorySidebar />
-
       <div className={styles.content}>
-        <h2 className={styles.title}>내 폐기 신청 목록</h2>
-
-        {/* 필터 */}
+        <h2 className={styles.title}>{user.name} 폐기 신청 내역</h2>
         <div className={styles.filters}>
-          <div
-            className={styles.row}
-            style={{ justifyContent: "flex-start", alignItems: "center", gap: 12, marginBottom: 10 }}
-          >
-            <label>기간</label>
-            <input
-              type="date"
-              value={tempFilters.startDate}
-              onChange={(e) => setTempFilters((f) => ({ ...f, startDate: e.target.value }))}
-              className={styles.dateInput}
-            />
-            <span className={styles.dateSeparator}>~</span>
-            <input
-              type="date"
-              value={tempFilters.endDate}
-              onChange={(e) => setTempFilters((f) => ({ ...f, endDate: e.target.value }))}
-              className={styles.dateInput}
-            />
-
-            {/* 기간 버튼들 */}
-            <div className={styles.periodButtons}>
-              <button onClick={() => setPeriod(null)}>전체</button>
-              <button onClick={() => setPeriod(0)}>오늘</button>
-              <button onClick={() => setPeriod(7)}>1주</button>
-              <button onClick={() => setPeriod(14)}>2주</button>
-              <button onClick={() => setPeriod(30)}>1달</button>
-            </div>
-          </div>
-
-          <div className={styles.row}>
-            <label>분류</label>
+          <label>
+            분류
             <select
-              value={tempFilters.category}
-              onChange={(e) => setTempFilters((f) => ({ ...f, category: e.target.value }))}
-              className={styles.selectInput}
+              name="category"
+              value={filters.category}
+              onChange={onFilterChange}
             >
               <option value="all">전체</option>
-              <option value="베이스채소">베이스채소</option>
-              <option value="단백질">단백질</option>
-              <option value="야채">야채</option>
-              <option value="과일">과일</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
             </select>
-
-            <label>상태</label>
-            <select
-              value={tempFilters.status}
-              onChange={(e) => setTempFilters((f) => ({ ...f, status: e.target.value }))}
-              className={styles.selectInput}
-            >
-              <option value="all">전체</option>
-              <option value="대기">대기</option>
-              <option value="반려됨">반려</option>
-              <option value="완료">완료</option>
-            </select>
-
-            <input
-              type="text"
-              placeholder="재료명 검색"
-              value={tempFilters.keyword}
-              onChange={(e) => setTempFilters((f) => ({ ...f, keyword: e.target.value }))}
-              className={styles.textInput}
-            />
-
-            <button className={styles.searchButton} onClick={applyFilters}>
-              검색
-            </button>
-            <button className={styles.resetButton} onClick={resetFilters}>
-              초기화
-            </button>
-          </div>
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={filters.name}
+            placeholder="재료명 검색"
+            onChange={onFilterChange}
+          />
+          <button className={styles.search} onClick={handleSearchClick}>
+            검색
+          </button>
         </div>
-
-        {/* 데이터 테이블 */}
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>지점</th>
-              <th>품목명</th>
+              <th>재료명</th>
               <th>분류</th>
               <th>단위</th>
-              <th>재고량</th>
               <th>폐기량</th>
-              <th>사유</th>
-              <th>폐기날짜</th>
+              <th>신청일</th>
+              <th>처리일</th>
               <th>상태</th>
-              <th>비고</th>
+              <th>메모</th>
             </tr>
           </thead>
           <tbody>
-            {filteredData.length === 0 ? (
+            {disposals.length === 0 ? (
               <tr>
-                <td colSpan={10} className={styles.noData}>
-                  데이터가 없습니다.
-                </td>
+                <td colSpan={8}>데이터가 없습니다.</td>
               </tr>
             ) : (
-              filteredData.map((row) => (
-                <tr key={row.id}>
-                  <td>{row.store}</td>
-                  <td>{row.name}</td>
-                  <td>{row.category}</td>
-                  <td>{row.unit}</td>
-                  <td>{row.stock}</td>
-                  <td>{row.discardQty}</td>
-                  <td>{row.reason}</td>
-                  <td>{row.discardDate}</td>
-                  <td>{row.status}</td>
-                  <td>{row.remark}</td>
+              disposals.map((d) => (
+                <tr key={d.id}>
+                  <td>{d.name}</td>
+                  <td>{d.category}</td>
+                  <td>{d.unit}</td>
+                  <td>{d.quantity}</td>
+                  <td>{d.requestedAt ? d.requestedAt : "-"}</td>
+                  <td>{d.processedAt ? d.processedAt : "-"}</td>
+                  <td>{d.status}</td>
+                  <td>{d.memo || "-"}</td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
+        {/* 페이징 */}
+        <div className={styles.pagination}>
+          <button
+            onClick={() => fetchDisposals(pageInfo.curPage - 1)}
+            disabled={pageInfo.curPage === 1}
+          >
+            &lt;
+          </button>
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              onClick={() => fetchDisposals(p)}
+              className={p === pageInfo.curPage ? styles.active : ""}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            onClick={() => fetchDisposals(pageInfo.curPage + 1)}
+            disabled={pageInfo.curPage >= pageInfo.allPage}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
     </div>
   );
