@@ -6,12 +6,6 @@
     overflow: hidden;
 }
 
-
-.orderDetailContainer h2 {
-    margin-bottom: 20px;
-    font-size: 20px;
-}
-
 .orderDetailContent {
     flex: 1;
     padding: 40px 40px 60px;
@@ -22,6 +16,11 @@
     flex-direction: column;
     min-width: 0;
     position: relative;
+}
+
+.orderDetailContainer h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
 }
 
 .orderInfo {

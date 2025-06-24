@@ -1,105 +1,137 @@
-import { useState } from "react";
-import "./OrderRequestDetail.css";
+import { useState, useEffect } from "react";
+import styles from "./OrderRequestDetail.module.css"; // ← 변경
 import OrderSidebar from './OrderSidebar'
+import { myAxios } from "/src/config";
+import { useAtomValue } from 'jotai';
+import { accessTokenAtom } from "/src/atoms";
+import { useNavigate } from "react-router";
+import { useParams } from "react-router-dom";
 
 export default function OrderRequestDetail() {
-    const [items, setItems] = useState([
-        { id: 1, name: "치커리", type: "야채", quantity: "500g", price: 1500, total: 7500, status: "", reason: "" },
-        { id: 2, name: "방울토마토", type: "야채", quantity: "200개", price: 100, total: 20000, status: "", reason: "" }
-    ]);
+    const [items, setItems] = useState([]);
+    const navigate = useNavigate();
+    const token = useAtomValue(accessTokenAtom);
+    const id = new URLSearchParams(location.search).get("id");
+    const [storeName,setStoreName] = useState('');
+    useEffect(() => {
+        if (!id) return;
+
+        const fetchDetail = async () => {
+            try {
+                const res = await myAxios(token).get(`/hq/orderRequestDetail/${id}`);
+                setItems(res.data);
+                setStoreName(res.data[0]?.storeName || '');
+            } catch (err) {
+                console.error("상세 조회 실패", err);
+            }
+        };
+
+        fetchDetail();
+    }, [id, token]);
 
     const handleStatusChange = (index, value) => {
         const updated = [...items];
-        updated[index].status = value;
-        if (value !== "REJECTED") updated[index].reason = "";
+        updated[index].approvalStatus = value; 
+        if (value !== "반려") updated[index].rejectionReason = "";
         setItems(updated);
     };
 
     const handleReasonChange = (index, value) => {
         const updated = [...items];
-        updated[index].reason = value;
+        updated[index].rejectionReason = value;
         setItems(updated);
     };
 
-    const handleSubmit = () => {
-        const invalid = items.some(item => item.status === "REJECTED" && !item.reason.trim());
+    const handleSubmit = async () => {
+        const invalid = items.some(item => item.approvalStatus === "반려" && !item.rejectionReason?.trim());
         if (invalid) {
-            alert("반려 사유를 모두 입력해주세요.");
+            alert("반려 사유를 입력해주세요");
             return;
         }
-        console.log("처리 결과:", items);
+
+        try {
+            await myAxios(token).post("/hq/orderRequestDetail", items.map(item => ({
+                id: item.id,
+                approvalStatus: item.approvalStatus,
+                rejectionReason: item.rejectionReason,
+                purchaseOrderId: id
+            })));
+            alert("저장 완료");
+            navigate("/hq/orderRequest");
+        } catch (e) {
+            console.error("저장 실패", e);
+            alert("저장 중 오류 발생");
+        }
     };
 
     return (
-        <>
+        <div className={styles.orderDetailContainer}>
             <OrderSidebar />
 
-            <div className="orderDetailContainer">
-                <div className="orderDetailContent">
-                    <h2>발주 상세</h2>
+            <div className={styles.orderDetailContent}>
+                <h2>발주 상세</h2>
 
-                    <div className="orderInfo">
-                        <p><strong>점포명:</strong> 강남점</p>
-                        <p><strong>No:</strong> 1</p>
-                        <p><strong>발주일:</strong> 2025년 05월 01일</p>
-                        <p><strong>주문자:</strong> 이효봉</p>
-                    </div>
+                <div className={styles.orderInfo}>
+                    <p><strong>점포명:</strong> {storeName}</p>
+                    <p><strong>No:</strong> {id} </p>
+                    <p><strong>발주일:</strong> 2025년 05월 01일</p>
+                    <p><strong>주문자:</strong> 이효봉</p>
+                </div>
 
-                    <table className="orderDetailTable">
-                        <thead>
-                            <tr>
-                                <th>품명</th>
-                                <th>구분</th>
-                                <th>발주량</th>
-                                <th>단가(원)</th>
-                                <th>합계(원)</th>
-                                <th>승인여부</th>
-                                <th>반려사유</th>
+                <table className={styles.orderDetailTable}>
+                    <thead>
+                        <tr>
+                            <th>품명</th>
+                            <th>구분</th>
+                            <th>발주량</th>
+                            <th>단가(원)</th>
+                            <th>합계(원)</th>
+                            <th>승인여부</th>
+                            <th>반려사유</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {items.map((item, index) => (
+                            <tr key={item.id}>
+                                <td>{item.ingredientName}</td>
+                                <td>{item.categoryName}</td>
+                                <td>{item.orderedQuantity}</td>
+                                <td>{item.price}</td>
+                                <td>{item.totalPrice}</td>
+                                <td>
+                                    <select
+                                        value={item.approvalStatus}
+                                        onChange={(e) => handleStatusChange(index, e.target.value)}
+                                    >
+                                        <option value="">선택</option>
+                                        <option value="승인">승인</option>
+                                        <option value="반려">반려</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    {item.approvalStatus === "반려" && (
+                                        <input
+                                            type="text"
+                                            value={item.rejectionReason}
+                                            onChange={(e) => handleReasonChange(index, e.target.value)}
+                                            placeholder="반려 사유 입력"
+                                        />
+                                    )}
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {items.map((item, index) => (
-                                <tr key={item.id}>
-                                    <td>{item.name}</td>
-                                    <td>{item.type}</td>
-                                    <td>{item.quantity}</td>
-                                    <td>{item.price.toLocaleString()}</td>
-                                    <td>{item.total.toLocaleString()}</td>
-                                    <td>
-                                        <select
-                                            value={item.status}
-                                            onChange={(e) => handleStatusChange(index, e.target.value)}
-                                        >
-                                            <option value="">선택</option>
-                                            <option value="APPROVED">승인</option>
-                                            <option value="REJECTED">반려</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        {item.status === "REJECTED" && (
-                                            <input
-                                                type="text"
-                                                value={item.reason}
-                                                onChange={(e) => handleReasonChange(index, e.target.value)}
-                                                placeholder="반려 사유 입력"
-                                            />
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                            <tr className="summaryRow">
-                                <td colSpan="4"></td>
-                                <td><strong>{items.reduce((acc, cur) => acc + cur.total, 0).toLocaleString()}</strong></td>
-                                <td colSpan="2"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        ))}
+                        <tr className={styles.summaryRow}>
+                            <td colSpan="4"></td>
+                            <td><strong>{items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}</strong></td>
+                            <td colSpan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div className="submitArea">
-                        <button onClick={handleSubmit}>저장</button>
-                    </div>
+                <div className={styles.submitArea}>
+                    <button onClick={handleSubmit}>저장</button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

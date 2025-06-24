@@ -1,64 +1,128 @@
 // OrderRequestList.jsx
-import "./OrderRequestList.css";
-import { useState } from "react";
+import styles from "./OrderRequestList.module.css";
+import { useEffect, useState } from "react";
 import OrderSidebar from "./OrderSidebar";
+import { useAtomValue } from 'jotai';
+import { accessTokenAtom } from '/src/atoms';
+import { myAxios } from '/src/config';
+import { useNavigate } from "react-router";
 
 export default function OrderRequestList() {
-    const [orders] = useState([
-        { no: 1324, store: "강남점", item: "양상추 외 9", date: "2025-05-25", status: "대기중", count: "0/10", total: "0원", result: "" },
-        { no: 1323, store: "구로디지털점", item: "양상추 외 9", date: "2025-05-25", status: "대기중", count: "0/10", total: "0원", result: "" },
-        { no: 1322, store: "독산역점", item: "양상추 외 9", date: "2025-05-25", status: "대기중", count: "0/10", total: "0원", result: "" },
-        { no: 1321, store: "신림역점", item: "양상추", date: "2025-05-25", status: "반려", count: "0/10", total: "0원", result: "반려 (반려 사유 보기)" },
-        { no: 1320, store: "서동탄점", item: "양상추 외 9", date: "2025-05-25", status: "입고완료", count: "0/8", total: "0원", result: "승인" },
-        { no: 1219, store: "신도림점", item: "양상추 외 9", date: "2025-05-24", status: "접수완료", count: "8/8", total: "0원", result: "승인" }
-    ]);
+    const token = useAtomValue(accessTokenAtom);
+    const navigate = useNavigate();
+
+    const [filters, setFilters] = useState({
+        storeName: "",
+        status: "",
+    });
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+
+    const [orders, setOrders] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        handleSearch(1);
+    }, [token]);
+
+    const navigateToDetail=(id) => {
+        navigate(`/hq/orderRequestDetail?id=${id}`);
+    }
+
+    const handleSearch = async (page = 1) => {
+        try {
+            const res = await myAxios(token).get("/hq/orderRequestList", {
+                params: {
+                    page: page - 1,
+                    size: 10,
+                    startDate: startDate || null,
+                    endDate: endDate || null,
+                    storeName: filters.storeName,
+                    status: filters.status,
+                },
+            });
+
+            setOrders(res.data.orders); // Map 기반 응답의 키가 orders라고 가정
+            setTotalPages(res.data.totalPages);
+            setCurrentPage(page);
+            console.log(res.data);
+        } catch (err) {
+            console.error("발주 신청 목록 조회 실패", err);
+        }
+    };
+
+    const handleReset = () => {
+        setFilters({ storeName: "", status: "", approval: "" });
+        setStartDate("");
+        setEndDate("");
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFilters((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const setDateRange = (range) => {
+        const today = new Date();
+        const end = today.toISOString().slice(0, 10); // 오늘 날짜 yyyy-mm-dd
+
+        let start = new Date();
+
+        if (range === "today") {
+            start = today;
+        } else if (range === "1week") {
+            start.setDate(today.getDate() - 7);
+        } else if (range === "2weeks") {
+            start.setDate(today.getDate() - 14);
+        } else if (range === "1month") {
+            start.setMonth(today.getMonth() - 1);
+        }
+
+        setStartDate(start.toISOString().slice(0, 10));
+        setEndDate(end);
+    };
 
     return (
         <>
 
-            <div className="orderRequestContainer">
-                <OrderSidebar/>
-                <div className="orderRequestContent">
+            <div className={styles.orderRequestContainer}>
+                <OrderSidebar />
+                <div className={styles.orderRequestContent}>
                     <h2>발주 신청 목록</h2>
 
-                    <div className="orderRequestFilters">
-                        <div className="row">
+                    <div className={styles.orderRequestFilters}>
+                        <div className={styles.row}>
                             <label>기간</label>
-                            <input type="date" />
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                             <span>~</span>
-                            <input type="date" />
-                            <button>오늘</button>
-                            <button>1주</button>
-                            <button>2주</button>
-                            <button>1달</button>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                            <button onClick={() => setDateRange("today")}>오늘</button>
+                            <button onClick={() => setDateRange("1week")}>1주</button>
+                            <button onClick={() => setDateRange("2weeks")}>2주</button>
+                            <button onClick={() => setDateRange("1month")}>1달</button>
                         </div>
 
-                        <div className="row">
+                        <div className={styles.row}>
                             <label>점포</label>
-                            <input type="text" placeholder="점포 검색" />
+                            <input type="text" name="storeName" placeholder="점포 검색" value={filters.storeName} onChange={handleChange} />
                             <label>상태</label>
-                            <select>
-                                <option>전체</option>
-                                <option>대기중</option>
-                                <option>접수완료</option>
-                                <option>입고완료</option>
-                                <option>반려</option>
+                            <select name="status" value={filters.status} onChange={handleChange}>
+                                <option value="">전체</option>
+                                <option value="대기중">대기중</option>
+                                <option value="접수완료">접수완료</option>
+                                <option value="입고완료">입고완료</option>
+                                <option value="반려">반려</option>
                             </select>
-                            <label>승인</label>
-                            <select>
-                                <option>전체</option>
-                                <option>승인</option>
-                                <option>반려</option>
-                            </select>
-                            <button className="searchButton">검색</button>
-                            <button className="resetButton">초기화</button>
+
+                            <button className={styles.searchButton} onClick={() => handleSearch(1)}>검색</button>
+                            <button className={styles.resetButton} onClick={handleReset}>초기화</button>
                         </div>
                     </div>
 
-                    <table className="orderTable">
+                    <table className={styles.orderTable}>
                         <thead>
                             <tr>
-                                <th><input type="checkbox" className="checkboxColumn" /></th>
                                 <th>No</th>
                                 <th>지점명</th>
                                 <th>품명</th>
@@ -71,20 +135,33 @@ export default function OrderRequestList() {
                         </thead>
                         <tbody>
                             {orders.map((order) => (
-                                <tr key={order.no}>
-                                    <td><input type="checkbox" className="checkboxColumn" /></td>
-                                    <td>{order.no}</td>
-                                    <td>{order.store}</td>
-                                    <td>{order.item}</td>
-                                    <td>{order.date}</td>
+                                <tr key={order.id} onClick={()=>navigateToDetail(order.id)}>
+                                    <td>{order.id}</td>
+                                    <td>{order.storeName}</td>
+                                    <td>{order.productNameSummary}</td>
+                                    <td>{order.orderDateTime?.split("T")[0]}</td>
                                     <td>{order.status}</td>
-                                    <td>{order.count}</td>
-                                    <td>{order.total}</td>
-                                    <td>{order.result}</td>
+                                    <td>{order.quantitySummary}</td>
+                                    <td>{order.totalPrice?.toLocaleString()}원</td>
+                                    <td>{order.orderStatus}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+
+                    <div className={styles.pagination}>
+                        <button onClick={() => handleSearch(currentPage - 1)} disabled={currentPage === 1}>{"<"}</button>
+                        {Array.from({ length: totalPages }, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => handleSearch(i + 1)}
+                                className={currentPage === i + 1 ? styles.activePage : ""}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                        <button onClick={() => handleSearch(currentPage + 1)} disabled={currentPage === totalPages}>{">"}</button>
+                    </div>
                 </div>
             </div>
         </>

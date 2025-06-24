@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config';
+import { useNavigate } from 'react-router-dom';
+
 
 
 export default function OrderList() {
@@ -17,6 +19,7 @@ export default function OrderList() {
     const [orderData, setOrderData] = useState([]);
     const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+const navigate = useNavigate();
 
     const token = useAtomValue(accessTokenAtom);
 
@@ -58,7 +61,9 @@ export default function OrderList() {
         setEndDate('');
     };
 
-
+const navigateToInspection = (id) => {
+  navigate(`/store/stockInspection?id=${id}`);
+};
     return (
         <>
             <div className={styles.orderListContainer}>
@@ -130,6 +135,7 @@ export default function OrderList() {
                                         <button
                                             disabled={!order.receiptAvailable}
                                             className={order.receiptAvailable ? styles.activeButton : styles.disabledButton}
+                                            onClick={() =>order.receiptAvailable && navigateToInspection(order.id)}
                                         >
                                             검수서
                                         </button>
