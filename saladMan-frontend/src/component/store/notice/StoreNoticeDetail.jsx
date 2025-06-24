@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { myAxios } from "../../../config";
 import { accessTokenAtom } from "/src/atoms";
 import styles from "./StoreNoticeDetail.module.css";
-import NoticeSidebar from "./NoticeSidebar";
+import NoticeSidebar from "../notice/NoticeSidebar";
 
 export default function StoreNoticeDetail() {
   const { id } = useParams();
