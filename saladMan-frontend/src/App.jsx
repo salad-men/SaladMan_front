@@ -74,6 +74,9 @@ import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
 import StoreComplaintList from '@store/complaint/StoreComplaintList';
 import StoreComplaintDetail from '@store/complaint/StoreComplaintDetail';
 
+import HqDashboard from '@hq/dashboard/HqDashboard';
+import StoreDashboard from '@store/dashboard/StoreDashboard';
+
 import Login from './component/common/Login';
 import StoreAccountDetail from '@hq/storeManagement/StoreAccountDetail';
 import StoreAccountModify from '@hq/storeManagement/StoreAccountModify';
@@ -130,6 +133,9 @@ function App() {
           {/* 공지-알림목록 */}
           <Route path='/hq/notification' element={<HqNotification />} />
 
+          {/* 대시보드 */}
+          <Route path='/hq/HqDashboard' element={<HqDashboard />} />
+
         </Route>
 
         <Route element={<StoreLayout />}>
@@ -167,12 +173,15 @@ function App() {
 
           {/* 공지사항 */}
           <Route path='/store/StoreNoticeList' element={<StoreNoticeList />} />
-          <Route path='/store/StoreNoticeDetail' element={<StoreNoticeDetail />} />
+          <Route path='/store/StoreNoticeDetail/:id' element={<StoreNoticeDetail />} />
           <Route path='/store/notification' element={<Notification />} />
 
           {/* 공지 -고객불만사항 */}
           <Route path='/store/StoreComplaintList' element={<StoreComplaintList />} />
-          <Route path='/store/StoreComplaintDetail' element={<StoreComplaintDetail />} />
+          <Route path='/store/StoreComplaintDetail/:id' element={<StoreComplaintDetail />} />
+          
+          {/* 대시보드 */}
+          <Route path='/store/StoreDashboard' element={<StoreDashboard />} />
 
         </Route>
 

@@ -7,7 +7,7 @@ import styles from "./HqInventoryRecord.module.css";
 
 export default function HqInventoryRecord() {
   const token = useAtomValue(accessTokenAtom);
-
+  const storeId = 1;
   const [ingredients, setIngredients] = useState([]);
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
@@ -40,7 +40,6 @@ export default function HqInventoryRecord() {
   };
 
   useEffect(() => {
-    // 카테고리 API 호출 후 “전체” 옵션 직접 추가
     myAxios(token).get("/hq/inventory/categories").then(res => {
       const cats = res.data.categories || [];
       setCategories(cats);
@@ -59,6 +58,19 @@ export default function HqInventoryRecord() {
       setRecords(res.data.records || []);
     });
   }, [token]);
+
+    // --- 탭(입고/출고) 바뀔 때 기록만 새로고침 ---
+    useEffect(() => {
+      myAxios(token).get("/hq/inventory/record", {
+        params: { storeId, type: activeTab }
+      }).then(res => {
+        setRecords(res.data.records || []);
+        console.log("탭 변경, 기록 새로 불러옴", res.data.records);
+      }).catch(e => {
+        console.error("탭 변경 후 기록 불러오기 실패", e);
+      });
+    }, [activeTab, token, storeId]);
+
 
   // 필터 적용
   useEffect(() => {

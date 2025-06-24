@@ -64,6 +64,7 @@ export default function StoreInventoryExpiration() {
       .post("/store/inventory/expiration-list", params)
       .then((res) => {
         const storeList = res.data.storeInventory || [];
+        console.log(inventory.map(x => x.id));
 
         const transformed = storeList.map((item) => ({
           id: item.id,
@@ -241,7 +242,9 @@ export default function StoreInventoryExpiration() {
                 </td>
               </tr>
             ) : (
+              
               inventory.map((it) => (
+                
                 <tr
                   key={it.id}
                   className={typeof it.dday === "string" && it.dday.includes("D+") ? styles.expired : ""}

@@ -133,25 +133,18 @@
   margin-top: 16px;
   table-layout: fixed;
 }
-/* 컬럼별 너비 지정 */
-.table th:nth-child(1),
-.table td:nth-child(1) { width: 120px; } /* 지점명 */
-.table th:nth-child(2),
-.table td:nth-child(2) { width: 140px; } /* 재료명 */
-.table th:nth-child(3),
-.table td:nth-child(3) { width: 100px; } /* 분류 */
-.table th:nth-child(4),
-.table td:nth-child(4) { width: 50px;  } /* 단위 */
-.table th:nth-child(5),
-.table td:nth-child(5) { width: 80px;  } /* 단위가격 */
-.table th:nth-child(6),
-.table td:nth-child(6) { width: 80px;  } /* 재고량 */
-.table th:nth-child(7),
-.table td:nth-child(7) { width: 80px;  } /* 최소주문단위 */
-.table th:nth-child(8),
-.table td:nth-child(8) { width: 100px; } /* 유통기한 */
-.table th:nth-child(9),
-.table td:nth-child(9) { width: 100px; } /* 입고날짜 */
+
+.table th:nth-child(1), .table td:nth-child(1) { width: 140px; } /* 지점명: 길이 보통 */
+.table th:nth-child(2), .table td:nth-child(2) { width: 120px; } /* 재료명:  */
+.table th:nth-child(3), .table td:nth-child(3) { width: 80px; }  /* 분류: 짧음 */
+.table th:nth-child(4), .table td:nth-child(4) { width: 40px; }  /* 단위: 매우 짧음 */
+.table th:nth-child(5), .table td:nth-child(5) { width: 70px; }  /* 단위가격: 짧음 */
+.table th:nth-child(6), .table td:nth-child(6) { width: 70px; }  /* 재고량: 짧음 */
+.table th:nth-child(7), .table td:nth-child(7) { width: 85px; }  /* 최소주문단위: 짧음 */
+.table th:nth-child(8), .table td:nth-child(8) { width: 95px; }  /* 최소보유량: 중간 */
+.table th:nth-child(9), .table td:nth-child(9) { width: 110px; } /* 유통기한: 날짜(긴편) */
+.table th:nth-child(10), .table td:nth-child(10) { width: 110px; } /* 입고날짜: 날짜(긴편) */
+
 
 
 /* 나머지 공통 스타일 유지 */

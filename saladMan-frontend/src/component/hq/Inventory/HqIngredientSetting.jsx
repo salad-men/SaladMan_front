@@ -9,6 +9,7 @@ export default function HqIngredientSetting() {
   const token = useAtomValue(accessTokenAtom);
 
   const [settings, setSettings] = useState([]);
+  const [originalSettings, setOriginalSettings] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -27,7 +28,6 @@ export default function HqIngredientSetting() {
 
   const STORE_ID = 1; // 본사 고정
 
-  // 분류, 재료 리스트 초기 로드
   useEffect(() => {
     myAxios(token).get("/hq/inventory/categories").then(res => {
       setCategories(res.data.categories || []);
@@ -37,9 +37,9 @@ export default function HqIngredientSetting() {
     });
   }, [token]);
 
-  // 필터 변경 시, 재고 설정 목록 호출
   useEffect(() => {
     fetchSettings();
+    // eslint-disable-next-line
   }, [token, filterCategory, filterName]);
 
   const fetchSettings = () => {
@@ -49,11 +49,18 @@ export default function HqIngredientSetting() {
           storeId: STORE_ID,
           categoryId: filterCategory || undefined,
           keyword: filterName || undefined,
-          page: 1,  // 현재 페이지 고정 또는 상태로 관리 가능
+          page: 1,
         }
       })
-      .then(res => setSettings(res.data.settings || []))
-      .catch(() => setSettings([]));
+      .then(res => {
+        setSettings(res.data.settings || []);
+        // 수정모드 아닐 때만 원본도 동기화
+        if (!isEditMode) setOriginalSettings(res.data.settings || []);
+      })
+      .catch(() => {
+        setSettings([]);
+        if (!isEditMode) setOriginalSettings([]);
+      });
   };
 
   const handleInputChange = (idx, field, value) => {
@@ -62,25 +69,60 @@ export default function HqIngredientSetting() {
     );
   };
 
-  const handleSaveEdit = async () => {
-    try {
-      await Promise.all(
-        settings.map(row =>
-          myAxios(token).post("/hq/inventory/settings-save", {
-            id: row.id,
-            storeId: STORE_ID,
-            ingredientId: row.ingredientId,
-            minQuantity: row.minQuantity,
-            maxQuantity: row.maxQuantity,
-          })
-        )
+  // ⭐ 수정: id 있는 행만! (기존 데이터만)
+  const handleSaveEdit = () => {
+    const changed = settings.filter((row) => {
+      if (!row.id) return false; // 신규(추가)는 무시
+      const origin = originalSettings.find((x) => x.id === row.id);
+      return (
+        !!origin &&
+        (row.minQuantity !== origin.minQuantity ||
+          row.maxQuantity !== origin.maxQuantity)
       );
-      alert("설정이 저장되었습니다.");
+    });
+
+    if (changed.length === 0) {
+      alert("수정된 내용이 없습니다.");
       setIsEditMode(false);
-      fetchSettings();
-    } catch {
-      alert("저장 중 오류가 발생했습니다.");
+      return;
     }
+
+    myAxios(token)
+      .post("/hq/inventory/settings-update", changed)
+      .then(() => {
+        alert(`총 ${changed.length}건 저장 완료!`);
+        setIsEditMode(false);
+        fetchSettings();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("저장 중 오류가 발생했습니다.");
+      });
+  };
+
+  // 신규 추가: id 없는 값만 POST (단일)
+  const handleAddSave = () => {
+    if (!newSetting.categoryId || !newSetting.ingredientId ||
+        newSetting.minQuantity === "" || newSetting.maxQuantity === "") {
+      alert("모든 필드를 입력하세요.");
+      return;
+    }
+    myAxios(token)
+      .post("/hq/inventory/settings-add", {
+        storeId: STORE_ID,
+        ingredientId: Number(newSetting.ingredientId),
+        minQuantity: Number(newSetting.minQuantity),
+        maxQuantity: Number(newSetting.maxQuantity),
+      })
+      .then(() => {
+        alert("새 설정이 추가되었습니다.");
+        setIsAddMode(false);
+        setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
+        fetchSettings();
+      })
+      .catch(() => {
+        alert("추가 중 오류가 발생했습니다.");
+      });
   };
 
   const handleNewInputChange = (field, value) => {
@@ -96,35 +138,6 @@ export default function HqIngredientSetting() {
     ? ingredients.filter(ing => ing.categoryId === Number(newSetting.categoryId))
     : [];
 
-  const handleAddSave = async () => {
-    if (!newSetting.categoryId) {
-      alert("분류를 선택하세요.");
-      return;
-    }
-    if (!newSetting.ingredientId) {
-      alert("재료를 선택하세요.");
-      return;
-    }
-    if (newSetting.minQuantity === "" || newSetting.maxQuantity === "") {
-      alert("최소수량과 최대수량을 입력하세요.");
-      return;
-    }
-    try {
-      await myAxios(token).post("/hq/inventory/settings-save", {
-        storeId: STORE_ID,
-        ingredientId: Number(newSetting.ingredientId),
-        minQuantity: Number(newSetting.minQuantity),
-        maxQuantity: Number(newSetting.maxQuantity),
-      });
-      alert("새 설정이 추가되었습니다.");
-      setIsAddMode(false);
-      setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
-      fetchSettings();
-    } catch {
-      alert("추가 중 오류가 발생했습니다.");
-    }
-  };
-
   const getIngredientName = (ingredientId) => {
     const found = ingredients.find(ing => ing.id === Number(ingredientId));
     return found ? found.name : "-";
@@ -138,7 +151,6 @@ export default function HqIngredientSetting() {
 
         <form
           className={styles.filters}
-          style={{ display: "flex", alignItems: "center", marginBottom: 24 }}
           onSubmit={e => {
             e.preventDefault();
             fetchSettings();
@@ -147,7 +159,6 @@ export default function HqIngredientSetting() {
           <select
             value={filterCategory}
             onChange={e => setFilterCategory(e.target.value)}
-            style={{ width: 120, marginRight: 12 }}
           >
             <option value="">전체</option>
             {categories.map(cat => (
@@ -161,7 +172,6 @@ export default function HqIngredientSetting() {
             value={filterName}
             onChange={e => setFilterName(e.target.value)}
             placeholder="재료명 검색"
-            style={{ width: 160, marginRight: 12 }}
           />
           <button type="submit" className={styles.search}>조회</button>
         </form>
@@ -169,7 +179,10 @@ export default function HqIngredientSetting() {
         <div className={styles.actions}>
           {!isEditMode && !isAddMode && (
             <>
-              <button className={styles.edit} onClick={() => setIsEditMode(true)}>수정모드</button>
+              <button className={styles.edit} onClick={() => {
+                setIsEditMode(true);
+                setOriginalSettings(JSON.parse(JSON.stringify(settings))); // 깊은 복사!
+              }}>수정모드</button>
               <button className={styles.add} onClick={() => setIsAddMode(true)}>추가</button>
             </>
           )}
