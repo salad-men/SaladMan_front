@@ -1,0 +1,101 @@
+.layout {
+  width: 80%;
+  height: 70vh;
+  margin-bottom: 50px;
+  margin-left: 200px;
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboardHeader {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2F5D44;
+  margin-bottom: 24px;
+}
+.dashboardHeader .hq {
+  color: #4D774E;
+  font-weight: bold;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
+  grid-template-areas:
+    "sales sales sales popularity popularity popularity"
+    "inventory inventory notice notice order order";
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  padding: 15px;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+.cardTop {
+  height: 550px;
+}
+.cardBottom {
+  height: 300px;
+}
+
+
+/* Hover 효과 예시 (원하는 경우) */
+.card:hover {
+  box-shadow: 0 12px 32px rgba(77, 119, 78, 0.08);
+}
+
+.cardHeader {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #3D5A40;
+  border-left: 4px solid #4D774E;
+  padding-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.infoList {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+.infoList li {
+  font-size: 15px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #ccc;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.popularItemsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 32px;
+  padding-top: 10px;
+}
+.popularItemsGrid li {
+  border: none;
+  padding: 4px 0;
+  font-size: 15px;
+}
+.selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.selector label {
+  font-size: 14px;
+  color: #3D5A40;
+}
+.selector select {
+  padding: 4px 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

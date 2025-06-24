@@ -5,51 +5,17 @@ import { myAxios } from "../../../config";
 import styles from "./HqInventoryList.module.css";
 import { accessTokenAtom } from "/src/atoms";
 
-// ────── 모달 컴포넌트 (클래식 스타일) ──────
-function Modal({ open, onClose, children }) {
-  if (!open) return null;
-  return (
-    <div style={{
-      position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
-      background: "rgba(0,0,0,0.15)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000
-    }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          minWidth: 520,
-          minHeight: 340,
-          background: "#fff",
-          border: "2px solid #222",
-          borderRadius: 12,
-          boxShadow: "0 4px 32px #2223",
-          padding: "30px 32px 32px",
-          position: "relative",
-        }}
-        onClick={e => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute", right: 16, top: 14, fontWeight: 900, fontSize: 20, background: "none", border: "none", cursor: "pointer"
-          }}
-          aria-label="닫기"
-        >×</button>
-        {children}
-      </div>
-    </div>
-  );
-}
-
 export default function HqInventoryList() {
   const token = useAtomValue(accessTokenAtom);
 
-  // ----- 재고 목록 상태 -----
+  // 재고/카테고리/재료/지점 등 상태
   const [inventory, setInventory] = useState([]);
   const [filters, setFilters] = useState({
     scope: "hq", store: "all", category: "all", name: "",
   });
-  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1, allPage: 1, startPage: 1, endPage: 1,
+  });
   const [categories, setCategories] = useState([]);
   const [stores, setStores] = useState([]);
   const [ingredients, setIngredients] = useState([]);
@@ -57,7 +23,7 @@ export default function HqInventoryList() {
   const [isAddMode, setIsAddMode] = useState(false);
   const [pageNums, setPageNums] = useState([]);
 
-  // ----- 재고 신규 입력 행 -----
+  // 신규 입력 행 상태
   const [newItems, setNewItems] = useState([
     {
       store: "본사",
@@ -73,23 +39,18 @@ export default function HqInventoryList() {
     },
   ]);
 
-  // ======= 모달: 재료/카테고리 추가 관련 =======
-  const [addModalOpen, setAddModalOpen] = useState(false); // 모달 open/close
-
-  // 카테고리 추가
+  // ----- 재료추가 모달 상태 -----
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [catSelect, setCatSelect] = useState("");
+  const [ingSelect, setIngSelect] = useState("");
+  const [showCatInput, setShowCatInput] = useState(false);
+  const [showIngInput, setShowIngInput] = useState(false);
   const [catInput, setCatInput] = useState("");
-  const [catAddLoading, setCatAddLoading] = useState(false);
-  const [catAddError, setCatAddError] = useState("");
-  const [catSelect, setCatSelect] = useState(""); // 선택된 카테고리 id
-
-  // 재료 추가
   const [ingInput, setIngInput] = useState("");
   const [unitInput, setUnitInput] = useState("");
-  const [ingAddLoading, setIngAddLoading] = useState(false);
-  const [ingAddError, setIngAddError] = useState("");
-  const [ingSelect, setIngSelect] = useState(""); // 선택된 재료 id
+  const [errorMsg, setErrorMsg] = useState("");
 
-  // 데이터 fetch
+  // ----- 초기 데이터 불러오기 -----
   useEffect(() => {
     myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
     myAxios(token).get("/hq/inventory/stores").then(res => setStores(res.data.stores || []));
@@ -100,7 +61,7 @@ export default function HqInventoryList() {
     fetchInventory(1);
   }, [token, filters.scope, filters.store, filters.category, filters.name]);
 
-  // ----- 재고 목록 불러오기 -----
+  // ----- 재고목록 -----
   const fetchInventory = (page = 1) => {
     const param = {
       ...filters,
@@ -117,8 +78,8 @@ export default function HqInventoryList() {
           filters.scope === "hq"
             ? hqList
             : filters.scope === "store"
-              ? storeList
-              : [...hqList, ...storeList];
+            ? storeList
+            : [...hqList, ...storeList];
         const flatList = list.map((x) => ({
           id: x.id,
           store: x.storeName || "",
@@ -135,7 +96,9 @@ export default function HqInventoryList() {
         setInventory(flatList);
         const pi = res.data.pageInfo;
         setPageInfo(pi);
-        setPageNums(Array.from({ length: pi.endPage - pi.startPage + 1 }, (_, i) => pi.startPage + i));
+        setPageNums(
+          Array.from({ length: pi.endPage - pi.startPage + 1 }, (_, i) => pi.startPage + i)
+        );
       })
       .catch(() => setInventory([]));
   };
@@ -181,7 +144,7 @@ export default function HqInventoryList() {
     }));
   };
 
-  // ----- 신규 입력폼 값 변경 -----
+  // ----- 추가입력 폼 변경 -----
   const onNewItemChange = (idx, field, value) => {
     setNewItems((items) =>
       items.map((row, i) => {
@@ -209,15 +172,89 @@ export default function HqInventoryList() {
     );
   };
 
-  // ----- 재고 신규 등록 -----
+  // ====== [재료추가 모달 로직] ======
+  const openAddModal = () => {
+    setAddModalOpen(true);
+    setCatSelect("");
+    setIngSelect("");
+    setShowCatInput(false);
+    setShowIngInput(false);
+    setCatInput("");
+    setIngInput("");
+    setUnitInput("");
+    setErrorMsg("");
+  };
+  const closeAddModal = () => {
+    setAddModalOpen(false);
+    setCatSelect("");
+    setIngSelect("");
+    setShowCatInput(false);
+    setShowIngInput(false);
+    setCatInput("");
+    setIngInput("");
+    setUnitInput("");
+    setErrorMsg("");
+  };
+
+  // 카테고리 직접 추가
+  const handleAddCategory = async () => {
+    try {
+      if (!catInput) return setErrorMsg("카테고리명을 입력하세요");
+      const res = await myAxios(token).post("/hq/inventory/category-add", { name: catInput });
+      setCatSelect(String(res.data.id));   // 추가된 카테고리로 선택
+      setShowCatInput(false);
+      setCatInput("");
+      setErrorMsg("");
+      // 카테고리 목록 새로고침
+      myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
+    } catch (e) {
+      setErrorMsg("카테고리 등록 실패 (중복/서버오류)");
+    }
+  };
+
+  // 재료 직접 추가
+  const handleAddIngredient = async () => {
+    try {
+      if (!ingInput || !unitInput || !catSelect)
+        return setErrorMsg("재료명, 단위, 카테고리를 모두 입력하세요");
+      const res = await myAxios(token).post("/hq/inventory/ingredient-add", {
+        name: ingInput,
+        categoryId: Number(catSelect),
+        unit: unitInput
+      });
+      setIngSelect(String(res.data.id));
+      setShowIngInput(false);
+      setIngInput("");
+      setUnitInput("");
+      setErrorMsg("");
+      // 재료 목록 새로고침
+      myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
+    } catch (e) {
+      setErrorMsg("등록 실패. 이미 존재하거나 서버에러");
+    }
+  };
+
+  // ----- 신규 등록 (직접입력 포함) -----
   const saveNewItems = async () => {
     try {
       for (let idx = 0; idx < newItems.length; idx++) {
         let row = newItems[idx];
         let categoryId = categories.find(c => c.name === row.category)?.id;
+        if (row.category === "__custom__") {
+          const res = await myAxios(token).post("/hq/inventory/category-add", { name: row.category });
+          categoryId = res.data.id;
+        }
         let ingredientId = Number(row.ingredientId);
         let unit = row.unit;
-        // (여기서는 셀렉트박스에서만 추가)
+        if (row.ingredientId === "__custom__") {
+          const res = await myAxios(token).post("/hq/inventory/ingredient-add", {
+            name: row.name,
+            categoryId,
+            unit: row.unit,
+          });
+          ingredientId = res.data.id;
+          unit = row.unit;
+        }
         await myAxios(token).post("/hq/inventory/add", {
           store: "본사",
           storeId: 1,
@@ -238,13 +275,16 @@ export default function HqInventoryList() {
         store: "본사", category: "", ingredientId: "", name: "", unit: "",
         unitCost: 0, quantity: 0, minimumOrderUnit: 0, expiredDate: "", receivedDate: ""
       }]);
+      // 목록 새로고침
+      myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
+      myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
       fetchInventory(pageInfo.curPage);
     } catch (e) {
       alert("등록 실패했습니다.");
     }
   };
 
-  // ----- 재고 수정 저장 -----
+  // ----- 수정 저장 -----
   const saveEdit = async () => {
     try {
       for (const item of inventory) {
@@ -265,53 +305,13 @@ export default function HqInventoryList() {
     }
   };
 
-  // ========== [카테고리 추가] ==========
-  const handleAddCategory = async () => {
-    setCatAddError("");
-    if (!catInput.trim()) return setCatAddError("카테고리명을 입력하세요.");
-    setCatAddLoading(true);
-    try {
-      const res = await myAxios(token).post("/hq/inventory/category-add", { name: catInput.trim() });
-      setCatInput("");
-      // 목록 새로고침
-      const result = await myAxios(token).get("/hq/inventory/categories");
-      setCategories(result.data.categories || []);
-      setCatSelect(res.data.id);
-      setCatAddLoading(false);
-    } catch {
-      setCatAddError("등록 실패. 이미 존재하거나 서버에러");
-      setCatAddLoading(false);
-    }
-  };
-
-  // ========== [재료 추가] ==========
-  const handleAddIngredient = async () => {
-    setIngAddError("");
-    if (!catSelect || catSelect === "all") return setIngAddError("카테고리 선택 필요");
-    if (!ingInput.trim() || !unitInput.trim()) return setIngAddError("재료명/단위 모두 입력");
-    setIngAddLoading(true);
-    try {
-      const res = await myAxios(token).post("/hq/inventory/ingredient-add", {
-        name: ingInput.trim(), categoryId: Number(catSelect), unit: unitInput.trim()
-      });
-      setIngInput(""); setUnitInput("");
-      // 목록 새로고침
-      const result = await myAxios(token).get("/hq/inventory/ingredients");
-      setIngredients(result.data.ingredients || []);
-      setIngSelect(res.data.id);
-      setIngAddLoading(false);
-    } catch {
-      setIngAddError("등록 실패. 이미 존재하거나 서버에러");
-      setIngAddLoading(false);
-    }
-  };
-
-  // ────────────────────────────── UI ──────────────────────────────
+  // ----- UI -----
   return (
     <div className={styles.container}>
       <HqInventorySidebar />
       <div className={styles.content}>
         <h2 className={styles.title}>재고 조회</h2>
+
         {/* 필터 */}
         <div className={styles.filters}>
           <div className={styles.row}>
@@ -354,13 +354,11 @@ export default function HqInventoryList() {
 
         {/* 액션버튼 */}
         <div className={styles.actions}>
+          <button className={styles.add} onClick={openAddModal}>재료추가</button>
           {!isEditMode && !isAddMode && (
             <>
-              <button className={styles.add} onClick={() => setIsAddMode(true)}>재고추가</button>
+              <button className={styles.add} onClick={() => setIsAddMode(true)}>추가입력</button>
               <button className={styles.edit} onClick={() => setIsEditMode(true)}>수정입력</button>
-              <button className={styles.save} onClick={() => setAddModalOpen(true)}>
-                재료추가
-              </button>
             </>
           )}
           {isAddMode && (
@@ -378,7 +376,79 @@ export default function HqInventoryList() {
           )}
         </div>
 
-        {/* ----- 신규 재고 추가입력폼 ----- */}
+        {/* --- 재료추가 모달 --- */}
+        {addModalOpen && (
+          <div className={styles.modal}>
+            <div className={styles.modalBox}>
+              <h3 style={{ textAlign: "center" }}>재료</h3>
+              {/* 카테고리 영역 */}
+              <div className={styles.row}>
+                <label style={{ flex: "0 0 60px" }}>카테고리</label>
+                <select value={catSelect} onChange={e => setCatSelect(e.target.value)}>
+                  <option value="">카테고리 선택</option>
+                  {categories.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+                <button className={styles.btnSmall} onClick={() => setShowCatInput(v => !v)}>
+                  {showCatInput ? "취소" : "추가"}
+                </button>
+                {showCatInput && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="새 카테고리명"
+                      value={catInput}
+                      onChange={e => setCatInput(e.target.value)}
+                      className={styles.editable}
+                    />
+                    <button className={styles.save} onClick={handleAddCategory}>추가</button>
+                  </>
+                )}
+              </div>
+              {/* 재료 영역 */}
+              <div className={styles.row}>
+                <label style={{ flex: "0 0 60px" }}>재료명</label>
+                <select value={ingSelect} onChange={e => setIngSelect(e.target.value)}>
+                  <option value="">재료 선택</option>
+                  {ingredients.filter(i => String(i.categoryId) === String(catSelect)).map(i => (
+                    <option key={i.id} value={i.id}>{i.name} ({i.unit})</option>
+                  ))}
+                </select>
+                <button className={styles.btnSmall} onClick={() => setShowIngInput(v => !v)}>
+                  {showIngInput ? "취소" : "추가"}
+                </button>
+                {showIngInput && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="재료명"
+                      value={ingInput}
+                      onChange={e => setIngInput(e.target.value)}
+                      className={styles.editable}
+                    />
+                    <input
+                      type="text"
+                      placeholder="단위 (ex. g, ml)"
+                      value={unitInput}
+                      onChange={e => setUnitInput(e.target.value)}
+                      className={styles.editable}
+                    />
+                    <button className={styles.save} onClick={handleAddIngredient}>추가</button>
+                  </>
+                )}
+              </div>
+              {errorMsg && (
+                <div style={{ color: "crimson", fontSize: 13, margin: "12px 0 0 2px" }}>{errorMsg}</div>
+              )}
+              <div className={styles.modalActions}>
+                <button onClick={closeAddModal}>닫기</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* --- 신규 추가입력폼 --- */}
         {isAddMode && (
           <table className={styles.table}>
             <thead>
@@ -398,7 +468,6 @@ export default function HqInventoryList() {
               {newItems.map((row, idx) => (
                 <tr key={idx}>
                   <td>{row.store}</td>
-                  {/* ---- 분류 ---- */}
                   <td>
                     <select
                       value={row.category}
@@ -408,9 +477,9 @@ export default function HqInventoryList() {
                       {categories.map((c) => (
                         <option key={c.id} value={c.name}>{c.name}</option>
                       ))}
+                      {/* <option value="__custom__">직접입력</option> */}
                     </select>
                   </td>
-                  {/* ---- 재료명 ---- */}
                   <td>
                     <select
                       value={row.ingredientId}
@@ -420,19 +489,22 @@ export default function HqInventoryList() {
                       {ingredients
                         .filter(
                           (ing) =>
+                            row.category === "__custom__" ? true :
                             ing.categoryId === categories.find((c) => c.name === row.category)?.id
                         )
                         .map((ing) => (
                           <option key={ing.id} value={ing.id}>{ing.name}</option>
                         ))}
+                      {/* <option value="__custom__">직접입력</option> */}
                     </select>
                   </td>
-                  {/* ---- 단위 ---- */}
                   <td>
                     <input
                       type="text"
                       value={row.unit}
-                      readOnly
+                      disabled={row.ingredientId !== "__custom__"}
+                      className={styles.editable}
+                      onChange={e => onNewItemChange(idx, "unit", e.target.value)}
                     />
                   </td>
                   <td>
@@ -440,6 +512,7 @@ export default function HqInventoryList() {
                       type="number"
                       value={row.unitCost}
                       onChange={e => onNewItemChange(idx, "unitCost", e.target.value)}
+                      className={styles.editable}
                     />
                   </td>
                   <td>
@@ -447,6 +520,7 @@ export default function HqInventoryList() {
                       type="number"
                       value={row.quantity}
                       onChange={e => onNewItemChange(idx, "quantity", e.target.value)}
+                      className={styles.editable}
                     />
                   </td>
                   <td>
@@ -454,6 +528,7 @@ export default function HqInventoryList() {
                       type="number"
                       value={row.minimumOrderUnit}
                       onChange={e => onNewItemChange(idx, "minimumOrderUnit", e.target.value)}
+                      className={styles.editable}
                     />
                   </td>
                   <td>
@@ -461,6 +536,7 @@ export default function HqInventoryList() {
                       type="date"
                       value={row.expiredDate}
                       onChange={e => onNewItemChange(idx, "expiredDate", e.target.value)}
+                      className={styles.editable}
                     />
                   </td>
                   <td>
@@ -468,6 +544,7 @@ export default function HqInventoryList() {
                       type="date"
                       value={row.receivedDate}
                       onChange={e => onNewItemChange(idx, "receivedDate", e.target.value)}
+                      className={styles.editable}
                     />
                   </td>
                 </tr>
@@ -557,102 +634,6 @@ export default function HqInventoryList() {
           </button>
         </div>
       </div>
-
-      {/* ────────── [재료추가 모달] ────────── */}
-      <Modal open={addModalOpen} onClose={() => setAddModalOpen(false)}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <h2 style={{ fontWeight: 600, marginBottom: 20 }}>재료추가</h2>
-          {/* 카테고리/재료 2단 패널 */}
-          <div style={{
-            display: "flex", gap: 40, justifyContent: "center", width: 500, marginBottom: 16,
-          }}>
-            {/* 카테고리 추가/조회 */}
-            <div style={{ flex: 1, border: "3px solid #111", borderRadius: 8, padding: 20 }}>
-              <div style={{ fontWeight: 500, fontSize: 17, marginBottom: 8, textAlign: "center" }}>카테고리</div>
-              <select
-                style={{ width: "100%", marginBottom: 8 }}
-                value={catSelect}
-                onChange={e => setCatSelect(e.target.value)}
-              >
-                <option value="">카테고리 선택</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-              <div style={{ display: "flex", gap: 6 }}>
-                <input
-                  style={{ flex: 1, border: "1px solid #aaa", borderRadius: 4, padding: "4px 8px" }}
-                  type="text"
-                  placeholder="새 카테고리명"
-                  value={catInput}
-                  onChange={e => setCatInput(e.target.value)}
-                  disabled={catAddLoading}
-                  onKeyDown={e => e.key === "Enter" && handleAddCategory()}
-                />
-                <button
-                  style={{ background: "#232", color: "#fff", borderRadius: 4, padding: "4px 10px" }}
-                  onClick={handleAddCategory}
-                  disabled={catAddLoading}
-                  type="button"
-                >추가</button>
-              </div>
-              {catAddError && <div style={{ color: "crimson", marginTop: 4, fontSize: 12 }}>{catAddError}</div>}
-            </div>
-
-            {/* 재료 추가/조회 */}
-            <div style={{ flex: 1, border: "3px solid #111", borderRadius: 8, padding: 20 }}>
-              <div style={{ fontWeight: 500, fontSize: 17, marginBottom: 8, textAlign: "center" }}>재료</div>
-              <select
-                style={{ width: "100%", marginBottom: 8 }}
-                value={ingSelect}
-                onChange={e => setIngSelect(e.target.value)}
-                disabled={!catSelect}
-              >
-                <option value="">재료 선택</option>
-                {ingredients.filter(ing => String(ing.categoryId) === String(catSelect)).map(ing =>
-                  <option key={ing.id} value={ing.id}>{ing.name}</option>
-                )}
-              </select>
-              <div style={{ display: "flex", gap: 6 }}>
-                <input
-                  style={{ flex: 1, border: "1px solid #aaa", borderRadius: 4, padding: "4px 8px" }}
-                  type="text"
-                  placeholder="새 재료명"
-                  value={ingInput}
-                  onChange={e => setIngInput(e.target.value)}
-                  disabled={ingAddLoading}
-                />
-                <input
-                  style={{ width: 60, border: "1px solid #aaa", borderRadius: 4, padding: "4px 6px" }}
-                  type="text"
-                  placeholder="단위"
-                  value={unitInput}
-                  onChange={e => setUnitInput(e.target.value)}
-                  disabled={ingAddLoading}
-                  maxLength={8}
-                />
-                <button
-                  style={{ background: "#232", color: "#fff", borderRadius: 4, padding: "4px 10px" }}
-                  onClick={handleAddIngredient}
-                  disabled={ingAddLoading}
-                  type="button"
-                >추가</button>
-              </div>
-              {ingAddError && <div style={{ color: "crimson", marginTop: 4, fontSize: 12 }}>{ingAddError}</div>}
-            </div>
-          </div>
-          <div style={{ marginTop: 10 }}>
-            <button
-              onClick={() => setAddModalOpen(false)}
-              style={{
-                background: "#eee", color: "#111", border: "1px solid #aaa",
-                borderRadius: 5, padding: "7px 24px", fontWeight: 600,
-                fontSize: 16, cursor: "pointer",
-              }}
-            >닫기</button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }

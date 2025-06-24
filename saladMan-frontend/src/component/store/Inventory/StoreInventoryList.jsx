@@ -193,7 +193,7 @@ export default function StoreInventoryList() {
               <th>단위가격</th>
               <th>재고량</th>
               <th>최소주문단위</th>
-              <th>**최소보유량**</th> {/* 추가 */}
+              <th>최소보유량</th> 
               <th>유통기한</th>
               <th>입고날짜</th>
             </tr>
