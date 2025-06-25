@@ -80,9 +80,26 @@ import StoreDashboard from '@store/dashboard/StoreDashboard';
 import Login from './component/common/Login';
 import StoreAccountDetail from '@hq/storeManagement/StoreAccountDetail';
 import StoreAccountModify from '@hq/storeManagement/StoreAccountModify';
+import { useEffect, useState } from 'react';
+import { useAtom, useSetAtom } from 'jotai';
+import { fcmTokenAtom,alarmsAtom } from './atoms';
+import { firebaseReqPermission, registerServiceWorker } from 'firebaseconfig';
 
 
 function App() {
+  const [alarm, setAlarm] = useState({});
+  const setFcmToken = useSetAtom(fcmTokenAtom);
+  const [alarms, setAlarms] = useAtom(alarmsAtom);
+
+  useEffect(async () => {
+    registerServiceWorker();
+    await navigator.serviceWorker.ready;
+    firebaseReqPermission(setFcmToken, setAlarm);
+  },[])
+
+  useEffect(() => {
+    JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
+  },[alarm])
 
   return (
     <>

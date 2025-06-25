@@ -6,7 +6,7 @@ import Chart from 'chart.js/auto';
 import SidebarSales from './SidebarSales';
 import { useAtom } from 'jotai';
 
-const HqTotalSales = () => {
+const StoreSales = () => {
     const [salesData, setSalesData] = useState(null);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -50,6 +50,20 @@ const HqTotalSales = () => {
 
     useEffect(() => {
         if (!salesData) return;
+
+        const raw = [...salesData.popularMenus].sort((a, b) => b.quantity - a.quantity);
+        const topN = 5;
+        const topItems = raw.slice(0, topN);
+        const otherItems = raw.slice(topN);
+        const othersTotal = otherItems.reduce((sum, item) => sum + item.quantity, 0);
+
+        const finalLabels = topItems.map(m => m.menuName);
+        const finalData = topItems.map(m => m.quantity);
+
+        if (othersTotal > 0) {
+            finalLabels.push('기타');
+            finalData.push(othersTotal);
+        }
 
         const bar = new Chart(barChartRef.current, {
             type: 'line',
@@ -95,17 +109,26 @@ const HqTotalSales = () => {
         const donut = new Chart(donutChartRef.current, {
             type: 'doughnut',
             data: {
-                labels: salesData.popularMenus.map(m => m.menuName),
+                labels: finalLabels,
                 datasets: [{
-                    data: salesData.popularMenus.map(m => m.quantity),
-                    backgroundColor: ['#82ca9d', '#9ad0ec', '#f6c85f', '#e7717d', '#c2b0ea']
+                    data: finalData,
+                    backgroundColor: ['#82ca9d', '#9ad0ec', '#f6c85f', '#e7717d', '#ffb347', '#cccccc']
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                return `${label}: ${value.toLocaleString()}건`;
+                            }
+                        }
                     }
                 }
             }
@@ -144,38 +167,38 @@ const HqTotalSales = () => {
                 </div>
 
                 <div className={style.dashboard}>
-                    <div className={style.leftPanel}>
+                    <div className={style.chartBox}>
                         <div className={style.summaryBox}>
-                            <div>조회 기간<br /><strong>{salesData?.summary?.period}</strong></div>
-                            <div>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
-                            <div>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue.toLocaleString()}</strong></div>
+                            <div className={style.box}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
+                            <div className={style.box}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue.toLocaleString()}</strong></div>
                         </div>
-
-                        <div className={style.chartBox}>
-                            <canvas ref={barChartRef} height="100" />
-                        </div>
-
-                        <div className={style.salesTable}>
-                            <table>
-                                <thead>
-                                    <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>
-                                </thead>
-                                <tbody>
-                                    {salesData?.daily?.map(d => (
-                                        <tr key={d.date}>
-                                            <td>{d.date}</td>
-                                            <td>{d.quantity}</td>
-                                            <td>₩{d.revenue.toLocaleString()}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <div className={style.chart}>
+                            <div className={style.box}>
+                                <h4>🥗 판매 인기 항목</h4>
+                                <canvas ref={donutChartRef} />
+                            </div>
+                            <div className={style.box}>
+                                <h4>🥗 판매율</h4>
+                                <canvas ref={barChartRef} />
+                            </div>
+                        </div>                        
                     </div>
 
-                    <div className={style.donutBox}>
-                        <h4>🥗 판매 인기 항목</h4>
-                        <canvas ref={donutChartRef} width="300" height="300" />
+                    <div className={style.salesTable}>
+                        <table>
+                            <thead>
+                                <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>
+                            </thead>
+                            <tbody>
+                                {salesData?.daily?.map(d => (
+                                    <tr key={d.date}>
+                                        <td>{d.date}</td>
+                                        <td>{d.quantity}</td>
+                                        <td>₩{d.revenue.toLocaleString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -183,4 +206,4 @@ const HqTotalSales = () => {
     );
 };
 
-export default HqTotalSales;
+export default StoreSales;

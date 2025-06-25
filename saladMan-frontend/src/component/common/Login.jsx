@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { myAxios } from '/src/config.jsx';
-import { useSetAtom } from 'jotai';
-import { userAtom,accessTokenAtom,refreshTokenAtom } from "/src/atoms";
+import { useAtomValue, useSetAtom } from 'jotai';
+import { userAtom,accessTokenAtom,refreshTokenAtom,fcmTokenAtom } from "/src/atoms";
 import './Login.css'
 
 const Login = () => {
@@ -10,6 +10,8 @@ const Login = () => {
     const setStore = useSetAtom(userAtom);
     const setAccessToken = useSetAtom(accessTokenAtom);
     const setRefreshToken = useSetAtom(refreshTokenAtom);
+    const fcmToken = useAtomValue(fcmTokenAtom);
+    
     const navigate = useNavigate();
     const edit = (e) => {
         setLogin({...login, [e.target.name]:e.target.value});
