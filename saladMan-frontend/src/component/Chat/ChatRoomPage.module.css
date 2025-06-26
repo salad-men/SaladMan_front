@@ -1,0 +1,53 @@
+.roomWrap {
+  position: relative;
+  padding: 8px 0 0 0;
+}
+.closeBtn {
+  position: absolute;
+  right: 15px;
+  top: 4px;
+  font-size: 1.5rem;
+  border: none;
+  background: none;
+  color: #888;
+  cursor: pointer;
+}
+.chatBox {
+  min-height: 330px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: #fafbfa;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 12px 9px 14px 9px;
+  margin-bottom: 9px;
+}
+.sent {
+  text-align: right;
+  color: #29744d;
+  margin-bottom: 9px;
+}
+.received {
+  text-align: left;
+  color: #222;
+  margin-bottom: 9px;
+}
+.inputBox {
+  display: flex;
+  gap: 7px;
+}
+.input {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1px solid #bbb;
+}
+.sendBtn {
+  background: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+}

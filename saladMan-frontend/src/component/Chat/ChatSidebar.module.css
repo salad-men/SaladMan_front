@@ -1,0 +1,60 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 370px;
+  height: 100vh;
+  background: #f8faf7;
+  border-left: 2px solid #4d774e;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.08);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+  from { right: -400px; opacity: 0; }
+  to { right: 0; opacity: 1; }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  font-size: 1.6rem;
+  border: none;
+  background: none;
+  color: #888;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.tabs {
+  display: flex;
+  margin-top: 24px;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tabs button {
+  border: none;
+  background: #f2f5f0;
+  color: #2a3a1a;
+  font-weight: 600;
+  padding: 7px 24px;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.active {
+  background: #4d774e;
+  color: white;
+}
+
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 18px 24px 18px;
+}
