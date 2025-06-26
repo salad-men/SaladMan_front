@@ -1,139 +1,206 @@
-import './HqTotalSales.css'
-import { useEffect, useRef } from 'react';
-import HqSidebarSales from './HqSidebarSales';
+import { useState, useEffect, useRef } from 'react';
+import { accessTokenAtom } from '/src/atoms';
+import { myAxios } from '/src/config.jsx';
+import { useAtom } from 'jotai';
 import Chart from 'chart.js/auto';
+import HqSidebarSales from './HqSidebarSales';
+import style from './HqStoreSales.module.css'
 
 const HqTotalSales = () => {
+    const [salesData, setSalesData] = useState(null);
+    const [storeId, setStoreId] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [groupType, setGroupType] = useState('DAY');
     const barChartRef = useRef(null);
     const donutChartRef = useRef(null);
+    const [token] = useAtom(accessTokenAtom);
 
-    useEffect(() => {
-        const bar = new Chart(barChartRef.current, {
-            type: 'bar',
-            data: {
-                labels: ['5/21', '5/22', '5/23', '5/24', '5/25'],
-                datasets: [
-                    {
-                        label: '판매량',
-                        data: [35, 42, 38, 30, 46],
-                        backgroundColor: 'rgba(75,192,192,0.6)'
-                    },
-                    {
-                        label: '매출',
-                        data: [85000, 102000, 95000, 78000, 110000],
-                        backgroundColor: 'rgba(153,102,255,0.5)',
-                        yAxisID: 'y2'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true, title: { display: true, text: '판매량' } },
-                    y2: {
-                        beginAtZero: true,
-                        position: 'right',
-                        grid: { drawOnChartArea: false },
-                        title: { display: true, text: '매출(₩)' }
+    const handleSearch = () => {
+        if (!token) return;
+        const axios = myAxios(token);
+        
+        if (!startDate || !endDate || !storeId) return alert('검색할 매장과 날짜를 선택해주세요');
+
+        axios.get('/hq/storeSales', {
+            params: {storeId, startDate, endDate, groupType }
+        }).then(res => {
+            setSalesData(res.data);
+        }).catch(err => {
+            console.error('매출 데이터 불러오기 실패:', err);
+        });
+    };
+    
+        useEffect(() => {
+            if (!salesData) return;
+    
+            const raw = [...salesData.popularMenus].sort((a, b) => b.quantity - a.quantity);
+            const topN = 5;
+            const topItems = raw.slice(0, topN);
+            const otherItems = raw.slice(topN);
+            const othersTotal = otherItems.reduce((sum, item) => sum + item.quantity, 0);
+    
+            const finalLabels = topItems.map(m => m.menuName);
+            const finalData = topItems.map(m => m.quantity);
+    
+            if (othersTotal > 0) {
+                finalLabels.push('기타');
+                finalData.push(othersTotal);
+            }
+    
+            const bar = new Chart(barChartRef.current, {
+                type: 'line',
+                data: {
+                    labels: salesData.daily.map(d => d.date),
+                    datasets: [
+                        {
+                            label: '판매량',
+                            data: salesData.daily.map(d => d.quantity),
+                            borderColor: 'rgba(75,192,192,1)',
+                            backgroundColor: 'rgba(75,192,192,0.6)',
+                            yAxisID: 'y',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: '매출',
+                            data: salesData.daily.map(d => d.revenue),
+                            borderColor: 'rgba(153,102,255,1)',
+                            backgroundColor: 'rgba(153,102,255,0.2)',
+                            yAxisID: 'y2',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            title: { display: true, text: '판매량' } },
+                        y2: {
+                            beginAtZero: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: '매출(₩)' }
+                        }
                     }
                 }
-            }
-        });
-
-        const donut = new Chart(donutChartRef.current, {
-            type: 'doughnut',
-            data: {
-                labels: ['시그니처 샐러드', '닭가슴살 샐러드', '훈제연어 샐러드', '불고기 샐러드', '두부 샐러드'],
-                datasets: [{
-                    data: [170, 72, 38, 41, 27],
-                    backgroundColor: ['#82ca9d', '#9ad0ec', '#f6c85f', '#e7717d', '#c2b0ea']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
+            });
+    
+            const donut = new Chart(donutChartRef.current, {
+                type: 'doughnut',
+                data: {
+                    labels: finalLabels,
+                    datasets: [{
+                        data: finalData,
+                        backgroundColor: ['#82ca9d', '#9ad0ec', '#f6c85f', '#e7717d', '#ffb347', '#cccccc']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${value.toLocaleString()}건`;
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        });
-        // 클린업
-        return () => {
-            bar.destroy();
-            donut.destroy();
-        };
-    }, []);
+            });
+    
+            return () => {
+                bar.destroy();
+                donut.destroy();
+            };
+        }, [salesData]);
 
     return (
-        <div className='wrapper'>
+        <div className={style.wrapper}>
         <HqSidebarSales />
-        <div className="content">
-            <header className="page-header">
+        <div className={style.content}>
+            <header className={style.pageHeader}>
                 <h2>통합 매출 조회</h2>
             </header>
 
-            <div className="filter-box">
-                <div className="filter-row">
-                    <label className="filter-label">점포 선택</label>
-                    <select>
-                        <option>지역</option>
-                        <option>강남점</option>
+            <div className={style.filterBox}>
+                <div className={style.filterRow}>
+                    <label className={style.filterLabel}>점포 선택</label>
+                    <select onChange={(e) => setSelectedLocation(e.target.value)}>
+                        <option value="">지역</option>
+                        {locations.map(loc => (
+                            <option key={loc} value={loc}>{loc}</option>
+                        ))}
                     </select>
                     <select>
-                        <option>지점명</option>
-                        <option>강남점</option>
+                        <option value="">지점명</option>
+                        {filteredNames.map(name => (
+                            <option key={name} value={name}>{name}</option>
+                        ))}
                     </select>
                 </div>
-                <div className="filter-row">
-                    <label className="filter-label">기간</label>
-                    <input type="date" /> ~ <input type="date" />
-                    <button>오늘</button>
-                    <button>1주</button>
-                    <button>15일</button>
-                    <button>1개월</button>
-                    <button>3개월</button>
-                    <button>6개월</button>
-                </div>
-                <div className="filter-actions">
-                    <button>검색</button>
-                    <button className="reset">초기화</button>
+                <div className={style.filterBox}>
+                    <div className={style.filterRow}>
+                        <label className={style.filterLabel}>기간</label>
+                        <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
+                            ~ 
+                        <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
+                        <button className={groupType === 'DAY' ? style.active : ''}
+                            onClick={() => setGroupType('DAY')}>일별</button>
+                        <button className={groupType === 'WEEK' ? style.active : ''}
+                            onClick={() => setGroupType('WEEK')}>주별</button>
+                        <button className={groupType === 'MONTH' ? style.active : ''}
+                            onClick={() => setGroupType('MONTH')}>월별</button>
+                    </div>
+                    <div className={style.filterActions}>
+                        <button onClick={handleSearch}>검색</button>
+                    </div>
                 </div>
             </div>
 
-            <div className="dashboard">
-                <div className="left-panel">
-                    <div className="summary-box">
-                        <div>조회 기간<br /><strong>2024.05.21 ~ 2024.05.25</strong></div>
-                        <div>판매 수량<br /><strong>191건</strong></div>
-                        <div>총 매출<br /><strong>₩470,000</strong></div>
-                    </div>
-
-                    <div className="chart-box">
-                        <canvas ref={barChartRef} height="100" />
-                    </div>
-
-                    <div className="sales-table">
-                        <table>
-                            <thead>
-                                <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>2024-05-21</td><td>35</td><td>₩85,000</td></tr>
-                                <tr><td>2024-05-22</td><td>42</td><td>₩102,000</td></tr>
-                                <tr><td>2024-05-23</td><td>38</td><td>₩95,000</td></tr>
-                                <tr><td>2024-05-24</td><td>30</td><td>₩78,000</td></tr>
-                                <tr><td>2024-05-25</td><td>46</td><td>₩110,000</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div className="donut-box">
-                    <h4>🥗 판매 인기 항목</h4>
-                    <canvas ref={donutChartRef} width="300" height="300" />
-                </div>
-            </div>
+            <div className={style.dashboard}>
+                                <div className={style.chartBox}>
+                                    <div className={style.summaryBox}>
+                                        <div className={style.box}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
+                                        <div className={style.box}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue.toLocaleString()}</strong></div>
+                                    </div>
+                                    <div className={style.chart}>
+                                        <div className={style.box}>
+                                            <h4>🥗 판매 인기 항목</h4>
+                                            <canvas ref={donutChartRef} />
+                                        </div>
+                                        <div className={style.box}>
+                                            <h4>🥗 판매율</h4>
+                                            <canvas ref={barChartRef} />
+                                        </div>
+                                    </div>                        
+                                </div>
+            
+                                <div className={style.salesTable}>
+                                    <table>
+                                        <thead>
+                                            <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            {salesData?.daily?.map(d => (
+                                                <tr key={d.date}>
+                                                    <td>{d.date}</td>
+                                                    <td>{d.quantity}</td>
+                                                    <td>₩{d.revenue.toLocaleString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
         </div>
         </div>
     )

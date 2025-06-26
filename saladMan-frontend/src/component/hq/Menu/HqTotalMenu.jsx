@@ -8,7 +8,7 @@ import HqSidebarMenu from './HqSidebarMenu';
 const HqAllMenus = () => {
     const [menus, setMenus] = useState([]);
     const [pageInfo, setPageInfo] = useState({curPage:1, allPage:1, startPage:1, endPage:1});
-    const [sort, setSort] = useState({page: 1, type: 'release_desc'});
+    const [sort, setSort] = useState({page: 1, type: 'release_asc'});
     const [pageNums, setPageNums] = useState([]);
     const [token] = useAtom(accessTokenAtom);
 
@@ -65,7 +65,7 @@ const HqAllMenus = () => {
                     {menus.map(menu => (
                         <div className={styles.menuCard} key={menu.id}>
                             <div className={styles.imageWrapper}>
-                                <img src="/img1.png" alt={menu.name} />
+                                <img src={`/${menu.name}.png`} alt={menu.name} />
                             </div>
                             <h3>{menu.name}</h3>
                             <p>{menu.salePrice.toLocaleString()}원</p>
