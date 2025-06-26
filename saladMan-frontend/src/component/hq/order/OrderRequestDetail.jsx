@@ -21,16 +21,38 @@ export default function OrderRequestDetail() {
         const fetchDetail = async () => {
             try {
                 const res = await myAxios(token).get(`/hq/orderRequestDetail/${id}`);
-                setItems(res.data);
+                const updated = res.data.map(item => ({
+                    ...item,
+                    selectedStockIds: [] // 선택한 재고 id 배열
+                }));
+                setItems(updated);
                 setStoreName(res.data[0]?.storeName || '');
+
+                console.log(res.data);
+
             } catch (err) {
                 console.error("상세 조회 실패", err);
             }
         };
 
         fetchDetail();
-    }, [id, token]);
 
+    }, [id, token]);
+    
+    const handleStockSelect = (itemIndex, stockId, checked) => {
+        const updated = [...items];
+        const selected = new Set(updated[itemIndex].selectedStockIds);
+
+        if (checked) {
+            selected.add(stockId);
+        } else {
+            selected.delete(stockId);
+        }
+
+        updated[itemIndex].selectedStockIds = Array.from(selected);
+        setItems(updated);
+    };
+    
     const handleStatusChange = (index, value) => {
         const updated = [...items];
         updated[index].approvalStatus = value;
@@ -94,33 +116,55 @@ export default function OrderRequestDetail() {
                     </thead>
                     <tbody>
                         {items.map((item, index) => (
-                            <tr key={item.id}>
-                                <td>{item.ingredientName}</td>
-                                <td>{item.categoryName}</td>
-                                <td>{item.orderedQuantity} {item.unit}</td>
-                                <td>{item.unitCost.toLocaleString()}원</td>
-                                <td>{item.totalPrice.toLocaleString()}원</td>
-                                <td>
-                                    <select
-                                        value={item.approvalStatus}
-                                        onChange={(e) => handleStatusChange(index, e.target.value)}
-                                    >
-                                        <option value="">선택</option>
-                                        <option value="승인">승인</option>
-                                        <option value="반려">반려</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    {item.approvalStatus === "반려" && (
-                                        <input
-                                            type="text"
-                                            value={item.rejectionReason}
-                                            onChange={(e) => handleReasonChange(index, e.target.value)}
-                                            placeholder="반려 사유 입력"
-                                        />
-                                    )}
-                                </td>
-                            </tr>
+                            <>
+                                <tr key={item.id}>
+                                    <td>{item.ingredientName}</td>
+                                    <td>{item.categoryName}</td>
+                                    <td>{item.orderedQuantity} {item.unit}</td>
+                                    <td>{Math.round(item.totalPrice / item.orderedQuantity).toLocaleString()}원</td>
+                                    <td>{item.totalPrice.toLocaleString()}원</td>
+                                    <td>
+                                        <select
+                                            value={item.approvalStatus}
+                                            onChange={(e) => handleStatusChange(index, e.target.value)}
+                                        >
+                                            <option value="">선택</option>
+                                            <option value="승인">승인</option>
+                                            <option value="반려">반려</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        {item.approvalStatus === "반려" && (
+                                            <input
+                                                type="text"
+                                                value={item.rejectionReason}
+                                                onChange={(e) => handleReasonChange(index, e.target.value)}
+                                                placeholder="반려 사유 입력"
+                                            />
+                                        )}
+                                    </td>
+                                </tr>
+                                {item.approvalStatus === "승인" && item.stockList?.length > 0 && (
+                                    <tr className={styles.stockRow}>
+                                        <td colSpan="7">
+                                            <div className={styles.stockListWrapper}>
+                                                {item.stockList.map(stock => (
+                                                    <label key={stock.id} className={styles.stockItem}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={item.selectedStockIds.includes(stock.id)}
+                                                            onChange={(e) =>
+                                                                handleStockSelect(index, stock.id, e.target.checked)
+                                                            }
+                                                        />
+                                                        [유통기한: {stock.expiredDate}] {stock.ingredientName} - {stock.quantity} {item.unit} /  수량:{stock.quantity}{stock.unit}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                            </>
                         ))}
                         <tr className={styles.summaryRow}>
                             <td colSpan="4"></td>
