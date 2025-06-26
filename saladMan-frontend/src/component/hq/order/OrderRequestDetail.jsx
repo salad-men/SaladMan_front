@@ -97,9 +97,9 @@ export default function OrderRequestDetail() {
                             <tr key={item.id}>
                                 <td>{item.ingredientName}</td>
                                 <td>{item.categoryName}</td>
-                                <td>{item.orderedQuantity}</td>
-                                <td>{item.price}</td>
-                                <td>{item.totalPrice}</td>
+                                <td>{item.orderedQuantity} {item.unit}</td>
+                                <td>{item.unitCost.toLocaleString()}원</td>
+                                <td>{item.totalPrice.toLocaleString()}원</td>
                                 <td>
                                     <select
                                         value={item.approvalStatus}
@@ -124,7 +124,7 @@ export default function OrderRequestDetail() {
                         ))}
                         <tr className={styles.summaryRow}>
                             <td colSpan="4"></td>
-                            <td><strong>{items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}</strong></td>
+                            <td><strong>총 {items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}원</strong></td>
                             <td colSpan="2"></td>
                         </tr>
                     </tbody>

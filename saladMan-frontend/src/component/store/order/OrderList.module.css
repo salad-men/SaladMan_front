@@ -135,3 +135,7 @@
     background-color: #4D774E;
     color: white;
 }
+
+.clickableRow {
+  cursor: pointer;
+}

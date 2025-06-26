@@ -19,12 +19,12 @@ export default function OrderList() {
     const [orderData, setOrderData] = useState([]);
     const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
-        if(!token) return;
+        if (!token) return;
 
         handleSearch(1);
     }, [token]);
@@ -63,9 +63,12 @@ const navigate = useNavigate();
         setEndDate('');
     };
 
-const navigateToInspection = (id) => {
-  navigate(`/store/stockInspection?id=${id}`);
-};
+    const navigateToInspection = (id) => {
+        navigate(`/store/stockInspection?id=${id}`);
+    };
+    const navigateToOrderDetail = (id) => {
+        navigate(`/store/orderDetail?id=${id}`);
+    };
     return (
         <>
             <div className={styles.orderListContainer}>
@@ -125,7 +128,7 @@ const navigateToInspection = (id) => {
                         </thead>
                         <tbody>
                             {orderData.map((order, index) => (
-                                <tr key={order.id}>
+                                <tr key={order.id} onClick={() => navigateToOrderDetail(order.id)} className={styles.clickableRow}>
                                     <td>{index + 1}</td>
                                     <td>{order.purType}</td>
                                     <td>{order.productNameSummary}</td>
@@ -137,7 +140,7 @@ const navigateToInspection = (id) => {
                                         <button
                                             disabled={!order.receiptAvailable}
                                             className={order.receiptAvailable ? styles.activeButton : styles.disabledButton}
-                                            onClick={() =>order.receiptAvailable && navigateToInspection(order.id)}
+                                            onClick={(e) =>  {e.stopPropagation(); order.receiptAvailable && navigateToInspection(order.id)}}
                                         >
                                             검수서
                                         </button>

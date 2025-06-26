@@ -53,21 +53,27 @@
     position: relative;
 }
 
+.tableButtonSection{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
 .editButton {
     position: absolute;
-    top: -10px;
-    left: 0;
     font-size: 14px;
     padding: 4px 10px;
     background-color: #f1f1f1;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .detailTable {
     margin-top: 10px;
-    width: 80%;
+    width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     font-size: 14px;
@@ -79,11 +85,36 @@
     padding: 10px;
     text-align: center;
 }
-
+.detailTable th{
+        background-color: #e9f3e9;
+    font-weight: bold;
+}
 .totalRow {
     text-align: right;
     font-weight: bold;
     padding: 10px;
     background-color: #f9f9f9;
     border-top: 2px solid #ccc;
+}
+.footerSection {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.completeButton {
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+        font-size: 15px;
+
+}
+
+.completeButton:hover {
+    background-color: #3a5e3b;
 }

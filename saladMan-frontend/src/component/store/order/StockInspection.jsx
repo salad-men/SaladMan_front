@@ -11,9 +11,10 @@ export default function StockInspection() {
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
     const token = useAtomValue(accessTokenAtom);
+    const [orderDate,setOrderDate] = useState(0);
     const id = new URLSearchParams(location.search).get("id");
     useEffect(() => {
-        if(!token) return;
+        if (!token) return;
 
         console.log(id);
         if (!id) return;
@@ -22,6 +23,7 @@ export default function StockInspection() {
                 const res = await myAxios(token).get(`/store/stockInspection/${id}`);
                 console.log(res.data);
                 setItems(res.data);
+                setOrderDate(res.data[0]?.orderDateTime)
 
             } catch (err) {
                 console.error("검수 조회 실패", err);
@@ -36,7 +38,16 @@ export default function StockInspection() {
         updated[index][field] = value;
         setItems(updated);
     };
+    const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        const yyyy = date.getFullYear();
+        const mm = date.getMonth() + 1;
+        const dd = date.getDate();
+        const hh = date.getHours();
+        const min = date.getMinutes().toString().padStart(2, '0');
+        return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
 
+    };
     return (
         <>
             <div className={styles.stockInspectionContainer}>
@@ -47,7 +58,7 @@ export default function StockInspection() {
 
                     <div className={styles.infoBox}>
                         <p>발주번호: No.{id} </p>
-                        <p>발주일자:</p>
+                        <p>발주일자:{formatDate(orderDate)}</p>
                         <p>주문자: </p>
                     </div>
                     <div className={styles.inspectorBox}>
@@ -60,10 +71,11 @@ export default function StockInspection() {
                                 <th>품명</th>
                                 <th>구분</th>
                                 <th>발주량</th>
-
                                 <th>실제 입고량</th>
                                 <th>입고 처리</th>
                                 <th>비고</th>
+                                <th>단가</th>
+                                <th>합계</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,9 +83,8 @@ export default function StockInspection() {
                                 <tr key={item.id}>
                                     <td>{item.ingredientName}</td>
                                     <td>{item.categoryName}</td>
-                                    <td>{item.orderedQuantity}</td>
-                                    {/* <td>{item.price}</td>
-                                    <td>{item.total.toLocaleString()}</td> */}
+                                    <td>{item.orderedQuantity} {item.unit}</td>
+
                                     <td>
                                         <input
                                             type="text"
@@ -95,6 +106,8 @@ export default function StockInspection() {
                                             onChange={(e) => handleInputChange(index, "inspectionNote", e.target.value)}
                                         />
                                     </td>
+                                    <td>{item.unitCost.toLocaleString()} 원</td>
+                                    <td>{item.totalPrice.toLocaleString()} 원</td>
                                 </tr>
                             ))}
                         </tbody>
