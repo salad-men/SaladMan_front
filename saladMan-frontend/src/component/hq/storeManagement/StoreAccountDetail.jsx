@@ -16,6 +16,7 @@ export default function StoreAccountDetail() {
     const id = new URLSearchParams(location.search).get("id");
 
     useEffect(() => {
+        if(!token) return;
 
         const fetchStoreDetail = async () => {
             try {

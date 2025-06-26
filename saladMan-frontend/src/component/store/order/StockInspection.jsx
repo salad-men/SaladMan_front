@@ -13,6 +13,8 @@ export default function StockInspection() {
     const token = useAtomValue(accessTokenAtom);
     const id = new URLSearchParams(location.search).get("id");
     useEffect(() => {
+        if(!token) return;
+
         console.log(id);
         if (!id) return;
         const fetchDetail = async () => {

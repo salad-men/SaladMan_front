@@ -19,6 +19,8 @@ export default function StoreAccountList() {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
+        if(!token) return;
+
         fetchStores();
     }, [token]);
 

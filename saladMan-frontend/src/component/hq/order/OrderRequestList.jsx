@@ -23,6 +23,8 @@ export default function OrderRequestList() {
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
+        if(!token) return;
+
         handleSearch(1);
     }, [token]);
 

@@ -21,6 +21,7 @@ export default function OrderItemManage() {
     const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
+        if(!token) return;
         fetchItems();
     }, [currentPage, availableFilter, token]);
 

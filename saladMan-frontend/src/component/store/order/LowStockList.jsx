@@ -11,6 +11,7 @@ export default function LowStockList() {
 
     useEffect(() => {
         const fetchShortages = async () => {
+            if(!token) return;
             try {
                 const res = await myAxios(token).get('/store/orderApply/lowStock');
                 setShortages(res.data);

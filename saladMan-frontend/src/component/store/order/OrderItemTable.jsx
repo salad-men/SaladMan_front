@@ -18,6 +18,8 @@ export default function OrderItemTable() {
     const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
+        if(!token) return;
+
         if (!showModal) return;
 
         const fetchItems = async () => {

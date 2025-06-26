@@ -12,8 +12,10 @@ export default function OrderRequestDetail() {
     const navigate = useNavigate();
     const token = useAtomValue(accessTokenAtom);
     const id = new URLSearchParams(location.search).get("id");
-    const [storeName,setStoreName] = useState('');
+    const [storeName, setStoreName] = useState('');
     useEffect(() => {
+        if (!token) return;
+
         if (!id) return;
 
         const fetchDetail = async () => {
@@ -31,7 +33,7 @@ export default function OrderRequestDetail() {
 
     const handleStatusChange = (index, value) => {
         const updated = [...items];
-        updated[index].approvalStatus = value; 
+        updated[index].approvalStatus = value;
         if (value !== "반려") updated[index].rejectionReason = "";
         setItems(updated);
     };

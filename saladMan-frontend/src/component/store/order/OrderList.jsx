@@ -24,6 +24,8 @@ const navigate = useNavigate();
     const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
+        if(!token) return;
+
         handleSearch(1);
     }, [token]);
 
