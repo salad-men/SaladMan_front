@@ -19,15 +19,13 @@ const Login = () => {
 
     const loginForm = (e) => {
         const axios = myAxios();
-
         e.preventDefault();
-        axios.post("/login", login)
+        const loginData = { ...login, fcmToken };
+
+        axios.post("/login", loginData)
             .then(res=>{
                 const token = JSON.parse(res.headers.authorization);
-                console.log("✅ access:", token.access_token);
-                console.log("✅ refresh:", token.refresh_token);
 
-                // ✅ 각각 분리 저장
                 setAccessToken(token.access_token);
                 setRefreshToken(token.refresh_token);
 

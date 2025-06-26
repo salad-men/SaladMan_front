@@ -1,7 +1,7 @@
 import firebase from "firebase";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCz5heuisn9LROtRpl0dTGX8iDwaaBRC_E",
+  apiKey: import.meta.env.VITE_FIREBASE_apiKey,
   authDomain: "test-e93e5.firebaseapp.com",
   projectId: "test-e93e5",
   storageBucket: "test-e93e5.firebasestorage.app",
@@ -26,7 +26,7 @@ export function firebaseReqPermission(setFcmToken, setAlarm) {
   firebaseMessaging
   .requestPermission()
   .then(() => {
-    return firebaseMessaging.getToken({ vapidKey: 'BJBcC7PSeHvnJSg537HVdvYNL2LDb-TJZKIaLROzL_6WIx4z1WsIYd_Q6nLNVlyQvUQunYPYABXy7BRmJGIo4ek' }); //등록 토큰 받기
+    return firebaseMessaging.getToken({ vapidKey: import.meta.env.VITE_FIREBASE_vapidKey }); //등록 토큰 받기
   })
   .then(function (token) {
     console.log(token)
