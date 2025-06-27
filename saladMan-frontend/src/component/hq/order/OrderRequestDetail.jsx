@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./OrderRequestDetail.module.css"; // ← 변경
 import OrderSidebar from './OrderSidebar'
 import { myAxios } from "/src/config";
@@ -13,6 +13,9 @@ export default function OrderRequestDetail() {
     const token = useAtomValue(accessTokenAtom);
     const id = new URLSearchParams(location.search).get("id");
     const [storeName, setStoreName] = useState('');
+    const [isCompleted, setIsCompleted] = useState(false);
+
+
     useEffect(() => {
         if (!token) return;
 
@@ -28,6 +31,12 @@ export default function OrderRequestDetail() {
                 setItems(updated);
                 setStoreName(res.data[0]?.storeName || '');
 
+                if (res.data[0]?.orderStatus === "대기중") {
+                    setIsCompleted(false); // 대기중이면 아직 완료 안된 상태
+                } else {
+                    setIsCompleted(true);  // 대기중이 아니면 완료된 상태
+                }
+
                 console.log(res.data);
 
             } catch (err) {
@@ -38,7 +47,7 @@ export default function OrderRequestDetail() {
         fetchDetail();
 
     }, [id, token]);
-    
+
     const handleStockSelect = (itemIndex, stockId, checked) => {
         const updated = [...items];
         const selected = new Set(updated[itemIndex].selectedStockIds);
@@ -52,7 +61,7 @@ export default function OrderRequestDetail() {
         updated[itemIndex].selectedStockIds = Array.from(selected);
         setItems(updated);
     };
-    
+
     const handleStatusChange = (index, value) => {
         const updated = [...items];
         updated[index].approvalStatus = value;
@@ -78,7 +87,8 @@ export default function OrderRequestDetail() {
                 id: item.id,
                 approvalStatus: item.approvalStatus,
                 rejectionReason: item.rejectionReason,
-                purchaseOrderId: id
+                purchaseOrderId: id,
+                selectedStockIds: item.selectedStockIds
             })));
             alert("저장 완료");
             navigate("/hq/orderRequest");
@@ -116,7 +126,7 @@ export default function OrderRequestDetail() {
                     </thead>
                     <tbody>
                         {items.map((item, index) => (
-                            <>
+                            <React.Fragment key={item.id}>
                                 <tr key={item.id}>
                                     <td>{item.ingredientName}</td>
                                     <td>{item.categoryName}</td>
@@ -127,6 +137,7 @@ export default function OrderRequestDetail() {
                                         <select
                                             value={item.approvalStatus}
                                             onChange={(e) => handleStatusChange(index, e.target.value)}
+                                            disabled={isCompleted}
                                         >
                                             <option value="">선택</option>
                                             <option value="승인">승인</option>
@@ -140,6 +151,7 @@ export default function OrderRequestDetail() {
                                                 value={item.rejectionReason}
                                                 onChange={(e) => handleReasonChange(index, e.target.value)}
                                                 placeholder="반려 사유 입력"
+
                                             />
                                         )}
                                     </td>
@@ -156,6 +168,8 @@ export default function OrderRequestDetail() {
                                                             onChange={(e) =>
                                                                 handleStockSelect(index, stock.id, e.target.checked)
                                                             }
+                                                            disabled={isCompleted}
+
                                                         />
                                                         [유통기한: {stock.expiredDate}] {stock.ingredientName} - {stock.quantity} {item.unit} /  수량:{stock.quantity}{stock.unit}
                                                     </label>
@@ -164,7 +178,7 @@ export default function OrderRequestDetail() {
                                         </td>
                                     </tr>
                                 )}
-                            </>
+                            </React.Fragment>
                         ))}
                         <tr className={styles.summaryRow}>
                             <td colSpan="4"></td>
@@ -174,9 +188,18 @@ export default function OrderRequestDetail() {
                     </tbody>
                 </table>
 
+
                 <div className={styles.submitArea}>
-                    <button onClick={handleSubmit}>저장</button>
+                    <button onClick={() => navigate(-1)}>뒤로가기</button>
+
+                    {!isCompleted && (
+                        <button onClick={handleSubmit}>저장</button>
+                    )}
+
                 </div>
+
+
+
             </div>
         </div>
     );

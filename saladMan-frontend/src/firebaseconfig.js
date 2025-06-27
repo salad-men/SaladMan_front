@@ -26,7 +26,7 @@ export function firebaseReqPermission(setFcmToken, setAlarm) {
   firebaseMessaging
   .requestPermission()
   .then(() => {
-    return firebaseMessaging.getToken({ vapidKey: import.meta.env.VITE_FIREBASE_VAPIKEY }); //등록 토큰 받기
+    return firebaseMessaging.getToken({ vapidKey: import.meta.env.VITE_FIREBASE_VAPIKEY}); //등록 토큰 받기
   })
   .then(function (token) {
     console.log(token)

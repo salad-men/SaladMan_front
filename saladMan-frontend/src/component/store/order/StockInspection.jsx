@@ -11,7 +11,7 @@ export default function StockInspection() {
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
     const token = useAtomValue(accessTokenAtom);
-    const [orderDate,setOrderDate] = useState(0);
+    const [orderDate, setOrderDate] = useState(0);
     const id = new URLSearchParams(location.search).get("id");
     useEffect(() => {
         if (!token) return;
@@ -37,6 +37,8 @@ export default function StockInspection() {
         const updated = [...items];
         updated[index][field] = value;
         setItems(updated);
+
+
     };
     const formatDate = (isoString) => {
         const date = new Date(isoString);
@@ -47,6 +49,19 @@ export default function StockInspection() {
         const min = date.getMinutes().toString().padStart(2, '0');
         return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
 
+    };
+
+    const handleSubmit = async () => {
+        if (!window.confirm("검수를 완료하시겠습니까?")) return;
+
+        try {
+            await myAxios(token).post("/store/stockInspection", items);
+            alert("검수가 완료되었습니다.");
+            navigate("/store/orderList"); // 또는 원하는 경로
+        } catch (err) {
+            console.error("검수 저장 실패", err);
+            alert("검수 저장 중 오류가 발생했습니다.");
+        }
     };
     return (
         <>
@@ -71,7 +86,6 @@ export default function StockInspection() {
                                 <th>품명</th>
                                 <th>구분</th>
                                 <th>발주량</th>
-                                <th>실제 입고량</th>
                                 <th>입고 처리</th>
                                 <th>비고</th>
                                 <th>단가</th>
@@ -80,31 +94,41 @@ export default function StockInspection() {
                         </thead>
                         <tbody>
                             {items.map((item, index) => (
-                                <tr key={item.id}>
+                                <tr
+                                    key={item.id}
+                                    style={{
+                                        backgroundColor: item.approvalStatus === "반려" ? "#e0e0e0" : "inherit",
+                                        color: item.approvalStatus === "반려" ? "#555" : "inherit",
+                                    }}
+                                >
                                     <td>{item.ingredientName}</td>
                                     <td>{item.categoryName}</td>
                                     <td>{item.orderedQuantity} {item.unit}</td>
-
                                     <td>
-                                        <input
-                                            type="text"
-                                            value={item.receivedQuantity}
-                                            className={styles.inputBox}
-                                            onChange={(e) => handleInputChange(index, "receivedQuantity", e.target.value)}
-                                        />
+                                        {item.approvalStatus === "반려" ? (
+                                            <span>반려됨</span>
+                                        ) : (
+                                            <select
+                                                value={item.inspection}
+                                                className={styles.selectBox}
+                                                onChange={(e) => handleInputChange(index, "inspection", e.target.value)}
+                                            >
+                                                <option value="검수완료">검수완료</option>
+                                                <option value="파손">파손</option>
+                                            </select>
+                                        )}
                                     </td>
                                     <td>
-                                        <select value={item.inspection} className={styles.selectBox} onChange={(e) => handleInputChange(index, "inspection", e.target.value)}
-                                        >
-                                            <option value="검수완료">검수완료</option>
-                                            <option value="파손">파손</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text"
-                                            defaultValue={item.inspectionNote} className={styles.textArea}
-                                            onChange={(e) => handleInputChange(index, "inspectionNote", e.target.value)}
-                                        />
+                                        {item.approvalStatus === "반려" ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <input
+                                                type="text"
+                                                defaultValue={item.inspectionNote}
+                                                className={styles.textArea}
+                                                onChange={(e) => handleInputChange(index, "inspectionNote", e.target.value)}
+                                            />
+                                        )}
                                     </td>
                                     <td>{item.unitCost.toLocaleString()} 원</td>
                                     <td>{item.totalPrice.toLocaleString()} 원</td>
@@ -114,7 +138,7 @@ export default function StockInspection() {
                     </table>
 
                     <div className={styles.footerSection}>
-                        <button className={styles.completeButton}>검수 완료</button>
+                        <button className={styles.completeButton} onClick={handleSubmit}>검수 완료</button>
                     </div>
                 </div>
             </div>

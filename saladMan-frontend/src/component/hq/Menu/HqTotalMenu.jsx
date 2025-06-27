@@ -5,20 +5,28 @@ import { myAxios } from '/src/config.jsx';
 import styles from './HqTotalMenu.module.css';
 import HqSidebarMenu from './HqSidebarMenu';
 
-const HqAllMenus = () => {
+const HqTotalMenu = () => {
     const [menus, setMenus] = useState([]);
     const [pageInfo, setPageInfo] = useState({curPage:1, allPage:1, startPage:1, endPage:1});
-    const [sort, setSort] = useState({page: 1, type: 'release_asc'});
+    const [sort, setSort] = useState('release_desc');
     const [pageNums, setPageNums] = useState([]);
     const [token] = useAtom(accessTokenAtom);
 
+    useEffect(() => {
+        if (token) {
+            submit(1);
+        }
+    }, [token, sort]);
+
+    const handleSortChange = (e) => {
+        setSort(e.target.value);
+    };
+
     const submit = (page) => {
         if (!token) return;
-
         const axios = myAxios(token);
-        const param = { page: page, sort: sort.type };
 
-        axios.get(`/hq/totalMenu?page=${param.page}&sort=${param.sort}`)
+        axios.get(`/hq/totalMenu?page=${page}&sort=${sort}`)
             .then(res => {
                 console.log(res);
                 setMenus(res.data.menus);
@@ -33,16 +41,6 @@ const HqAllMenus = () => {
             .catch(err => console.error(err));
     };
 
-    useEffect(() => {
-        submit(1);
-    }, [token]);
-
-    const handleSortChange = (e) => {
-        const newType = e.target.value;
-        setSort({ ...sort, type: newType });
-        submit(1);
-    };
-
     return (
         <div className={styles.wrapper}>
             <HqSidebarMenu />
@@ -50,7 +48,7 @@ const HqAllMenus = () => {
                 <header className={styles.pageHeader}>
                     <h2>전체 메뉴 조회</h2>
                     <div className={styles.controls}>
-                        <select id="sortSelect" value={sort.type} onChange={handleSortChange}>
+                        <select id="sortSelect" value={sort} onChange={handleSortChange}>
                             <option value="release_asc">출시일 순 (최신순)</option>
                             <option value="release_desc">출시일 순 (오래된순)</option>
                             <option value="name_asc">이름순 (가나다)</option>
@@ -91,4 +89,4 @@ const HqAllMenus = () => {
     );
 };
 
-export default HqAllMenus;
+export default HqTotalMenu;

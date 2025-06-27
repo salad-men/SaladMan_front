@@ -1,25 +1,36 @@
 .wrapper {
   display: flex;
-  height: 100vh;
+  height: calc(100vh - 64px);
+  background-color: #f9fafb;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 .content {
   flex: 1;
   align-self: flex-start;
   padding: 30px 0 0 0;
-  overflow-y: auto;
   max-width: 1500px;
   margin: 0 auto;
   position: relative;
 }
 
-.updateMenu table {
-    width: 100%;
-    border-collapse: collapse;
+.pageHeader {
+  display: flex;
+  flex-direction: column;
 }
 
-.updateMenu td, 
-.updateMenu th {
+.mtable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.mtable td {
+    font-weight: bold;
+}
+.mtable th {
     padding: 8px;
     vertical-align: top;
     font-size: 14px;
@@ -51,7 +62,7 @@
     border: none;
 }
 
-/* button {
+button {
     padding: 8px 20px;
     background-color: #4D774E;
     color: white;
@@ -62,23 +73,23 @@
 
 button:hover {
     background-color: #3b5f3c;
-} */
+}
 
-.ingredient-table {
+.ingredientTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 8px;
 }
 
-.ingredient-table th,
-.ingredient-table td {
+.ingredientTable th,
+.ingredientTable td {
     text-align: center;
     border: 1px solid #ccc;
     padding: 6px;
     font-size: 13px;
 }
 
-   .ingredient-table button {
+   .ingredientTable button {
        background-color: #ddd;
        border: 1px solid #999;
        padding: 4px 10px;
@@ -106,24 +117,13 @@ button:hover {
 
    }
 
-   .modal-content {
+   .modalContent {
        background-color: white;
        border-radius: 10px;
        margin: 10% auto;
        padding: 20px;
        width: 300px;
        border: 1px solid #ccc;
-   }
-
-   .modal-list {
-       list-style: none;
-       padding: 0;
-       margin: 0 0 10px;
-   }
-
-   .modal-list li {
-       padding: 6px 0;
-       border-bottom: 1px solid #eee;
    }
 
    .ingredient-grid {

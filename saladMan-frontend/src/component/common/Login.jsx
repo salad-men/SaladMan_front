@@ -25,13 +25,14 @@ const Login = () => {
         axios.post("/login", loginData)
             .then(res=>{
                 const token = JSON.parse(res.headers.authorization);
+                console.log(token);
 
                 setAccessToken(token.access_token);
                 setRefreshToken(token.refresh_token);
 
                 const store = res.data;
                 setStore({...store})
-                navigate(store.role === "ROLE_HQ" ? "/hq/totalMenu" : "/store/totalMenu");
+                navigate(store.role === "ROLE_HQ" ? "/hq/HqDashboard" : "/store/StoreDashboard");
             })
             .catch(err=> {
                 console.log(err)
