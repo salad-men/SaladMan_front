@@ -101,37 +101,14 @@ const HqHeader = ({
                 </div>
                 <div className="user-info">
                     {store.name} | <a onClick={logout}>로그아웃</a>
-                    {/* 💬 채팅버튼, 뱃지 */}
-                        <span className="chat-icon-btn" onClick={() => setShowChat(true)} style={{marginLeft:15, cursor:"pointer", fontSize:"22px", position: "relative"}}>
-                        💬
-                        {/* 벨이 꺼져있을 때만 전체 unread 카운트 뱃지로 표시 */}
-                        {chatUnreadTotal > 0 && !chatAlarmOn &&
-                            <span className="badge" style={{
-                            position:"absolute", left:22, top:-7, background:"red",
-                            color:"white", borderRadius:"50%", fontSize:"10px",
-                            minWidth:"18px", textAlign:"center", fontWeight:"bold", zIndex:2
-                            }}>{chatUnreadTotal}</span>
-                        }
-                        </span>
-                        {/* 벨 아이콘(토글) */}
-                        <span style={{marginLeft:8, cursor:"pointer"}}
-                            onClick={()=>setChatAlarmOn(a=>!a)}>
-                        {chatAlarmOn
-                            ? <FiBell size={19} color="#4d774e" />
-                            : <FiBellOff size={19} color="#bbb" />}
-                        </span>
-                        {/* 채팅 사이드바에 알림 상태/함수 props로 전달 */}
-                        <ChatSidebar
-                        isOpen={showChat}
-                        onClose={()=>setShowChat(false)}
-                        chatAlarmOn={chatAlarmOn}
-                        setChatAlarmOn={setChatAlarmOn}
-                        chatUnreadTotal={chatUnreadTotal}
-                        showChatModal={showChatModal}
-                        setChatUnreadTotal={setChatUnreadTotal}
-                        />
-
-                </div>
+                     <span
+                    className="chat-icon-btn"
+                    onClick={() => setShowChat(true)}
+                    style={{marginLeft: 15, cursor: "pointer", fontSize: "22px"}}>
+                    💬
+                </span>
+            </div>
+            <ChatSidebar isOpen={showChat} onClose={() => setShowChat(false)} />
             </div>
 
         </>
