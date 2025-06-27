@@ -45,6 +45,8 @@ export default function OrderList() {
             });
 
             setOrderData(res.data.content);
+            console.log(res.data.content);
+
             setTotalPages(res.data.totalPages);
             setCurrentPage(validPage);
         } catch (err) {
@@ -68,6 +70,17 @@ export default function OrderList() {
     };
     const navigateToOrderDetail = (id) => {
         navigate(`/store/orderDetail?id=${id}`);
+    };
+
+        const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        const yyyy = date.getFullYear();
+        const mm = date.getMonth() + 1;
+        const dd = date.getDate();
+        const hh = date.getHours();
+        const min = date.getMinutes().toString().padStart(2, '0');
+        return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
+
     };
     return (
         <>
@@ -128,18 +141,20 @@ export default function OrderList() {
                         </thead>
                         <tbody>
                             {orderData.map((order, index) => (
+                                
                                 <tr key={order.id} onClick={() => navigateToOrderDetail(order.id)} className={styles.clickableRow}>
                                     <td>{index + 1}</td>
                                     <td>{order.purType}</td>
                                     <td>{order.productNameSummary}</td>
-                                    <td>{order.orderDateTime}</td>
+                                    <td>{formatDate(order.orderDateTime)}</td>
                                     <td>{order.status}</td>
                                     <td>{order.quantitySummary}</td>
                                     <td>{order.totalPrice} 원</td>
                                     <td>
                                         <button
-                                            disabled={!order.receiptAvailable}
-                                            className={order.receiptAvailable ? styles.activeButton : styles.disabledButton}
+                                        
+                                            disabled={!order.receiptAvailable || order.status.trim() === "검수완료"}
+                                            className={order.receiptAvailable && !order.status.trim() === "검수완료" ? styles.activeButton : styles.disabledButton}
                                             onClick={(e) =>  {e.stopPropagation(); order.receiptAvailable && navigateToInspection(order.id)}}
                                         >
                                             검수서

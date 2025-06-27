@@ -40,8 +40,27 @@
 
 .progressBar {
     width: 200px;
-    height: 6px;
+    height: 8px;
     margin-bottom: 10px;
+    background-color: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* 크롬, 사파리 */
+.progressBar::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+.progressBar::-webkit-progress-value {
+  background-color: #4caf50; /* 채워지는 색상 */
+  border-radius: 4px;
+}
+
+/* 파이어폭스 */
+.progressBar::-moz-progress-bar {
+  background-color: #4caf50; /* 채워지는 색상 */
 }
 
 .orderDate,
