@@ -3,7 +3,6 @@
   height: calc(100vh - 64px);
   background-color: #f9fafb;
   overflow: hidden;
-  overflow-y: scroll;
 }
 
 .content {
@@ -19,11 +18,6 @@
 .pageHeader {
   display: flex;
   flex-direction: column;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .filter-box {

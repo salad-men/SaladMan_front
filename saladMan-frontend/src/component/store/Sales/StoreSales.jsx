@@ -28,7 +28,7 @@ const StoreSales = () => {
         }).catch(err => {
             console.error('매출 데이터 불러오기 실패:', err);
         });
-        };
+    };
 
     useEffect(() => {
         if (!token) return;
@@ -36,8 +36,8 @@ const StoreSales = () => {
 
         axios.get('/store/storeSales', {
             params: {
-            startDate: '2025-05-21',
-            endDate: '2025-06-25'
+            startDate: '2025-06-01',
+            endDate: '2025-06-27'
             }
         })
         .then(res => {

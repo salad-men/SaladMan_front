@@ -1,18 +1,17 @@
 import styles from './HqUpdateMenu.module.css'
 import HqSidebarMenu from './HqSidebarMenu'
 
-const HqAllMenus = () => {
+const HqUpdateMenu = () => {
     return (
-        <>
-            <div className={styles.wrapper}>
-                <HqSidebarMenu />
-                <div className={styles.content}>
-                    <header className={styles.pageHeader}>
-                        <h2> 메뉴 등록</h2>
-                    </header>
-                    <form className={styles.updateMenu}>
-                        <table>
-                            <tbody>
+        <div className={styles.wrapper}>
+            <HqSidebarMenu />
+            <div className={styles.content}>
+                <header className={styles.pageHeader}>
+                    <h2> 메뉴 등록</h2>
+                </header>
+                <form>
+                    <table className={styles.mtable}>
+                        <tbody>
                             <tr>
                                 <td className={styles.labelCell}>메뉴 사진</td>
                                 <td><input type="file" id="image" accept="image/*" /></td>
@@ -69,38 +68,37 @@ const HqAllMenus = () => {
                                 <td className={styles.labelCell}>레시피</td>
                                 <td><textarea id="recipe"></textarea></td>
                             </tr>
-                            </tbody>
-                        </table>
-                        <div>
-                            <button type="submit">저장</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            {/* 재료선택 모달 */}
-            <div id="ingredientModal" className={styles.modal}>
-                <div className={styles.modalContent}>
-                    <h3>재료 선택</h3>
-                    <div className={styles.ingredientGrid}>
-                        <label><input type="radio" name="ingredient" value="로메인" /> 로메인</label>
-                        <label><input type="radio" name="ingredient" value="케일" /> 케일</label>
-                        <label><input type="radio" name="ingredient" value="양상추" /> 양상추</label>
-                        <label><input type="radio" name="ingredient" value="치커리" /> 치커리</label>
-                        <label><input type="radio" name="ingredient" value="적근대" /> 적근대</label>
-                        <label><input type="radio" name="ingredient" value="믹스채소" /> 믹스채소</label>
-                        <label><input type="radio" name="ingredient" value="닭가슴살" /> 닭가슴살</label>
-                        <label><input type="radio" name="ingredient" value="두부" /> 두부</label>
-                        <label><input type="radio" name="ingredient" value="훈제 오리" /> 훈제 오리</label>
-                        <label><input type="radio" name="ingredient" value="훈제 연어" /> 훈제 연어</label>
-                    </div>
+                        </tbody>
+                    </table>
                     <div>
-                        <button type="button">확인</button>
+                        <button type="submit">저장</button>
+                    </div>
+                </form>
+
+                {/* 재료선택 모달 */ }
+                <div id="ingredientModal" className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <h3>재료 선택</h3>
+                        <div className={styles.ingredientGrid}>
+                            <label><input type="radio" name="ingredient" value="로메인" /> 로메인</label>
+                            <label><input type="radio" name="ingredient" value="케일" /> 케일</label>
+                            <label><input type="radio" name="ingredient" value="양상추" /> 양상추</label>
+                            <label><input type="radio" name="ingredient" value="치커리" /> 치커리</label>
+                            <label><input type="radio" name="ingredient" value="적근대" /> 적근대</label>
+                            <label><input type="radio" name="ingredient" value="믹스채소" /> 믹스채소</label>
+                            <label><input type="radio" name="ingredient" value="닭가슴살" /> 닭가슴살</label>
+                            <label><input type="radio" name="ingredient" value="두부" /> 두부</label>
+                            <label><input type="radio" name="ingredient" value="훈제 오리" /> 훈제 오리</label>
+                            <label><input type="radio" name="ingredient" value="훈제 연어" /> 훈제 연어</label>
+                        </div>
+                        <div>
+                            <button type="button">확인</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </>
+    </div>
     )
 }
 
-export default HqAllMenus;
+export default HqUpdateMenu;

@@ -112,8 +112,8 @@
   cursor: not-allowed;
 }
 
-.active {
-  background-color: #2a9497;
+.pagination .active {
+  background-color: #4D774E;
   color: white;
   font-weight: bold;
 }

@@ -61,3 +61,35 @@
   font-size: 0.95rem;
   padding: 4px 0;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 4px;
+}
+
+.pagination button {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination .active {
+  background-color: #4D774E;
+  color: white;
+  font-weight: bold;
+}

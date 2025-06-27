@@ -33,8 +33,8 @@ import MenuStatus from '@store/Menu/MenuStatus';
 import Recipe from '@store/Menu/Recipe';
 import PaymentList from '@store/Sales/PaymentList';
 import StoreSales from '@store/Sales/StoreSales';
-import OtherStoreInven from '@store/StoreInquiry/OtherStoreInven';
-import FindOtherStore from '@store/StoreInquiry/FindOtherStore';
+import OtherStoreInven from '@store/FindStore/OtherStoreInven';
+import FindOtherStore from '@store/FindStore/FindOtherStore';
 
 import StoreInventoryList from '@store/Inventory/StoreInventoryList';
 import StoreInventoryExpiration from '@store/Inventory/StoreInventoryExpiration';
