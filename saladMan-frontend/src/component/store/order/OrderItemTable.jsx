@@ -91,7 +91,7 @@ export default function OrderItemTable() {
                 ingredientId: item.ingredientId,
                 quantity: item.orderQty,
                 unitCost: item.unitCost,
-                itemPrice: item.itemPrice
+                totalPrice: item.itemPrice
             }));
 
             const res = await myAxios(token).post("/store/orderApply", payload);

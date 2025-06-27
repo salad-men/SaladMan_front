@@ -36,8 +36,11 @@ export default function OrderDetail() {
                 setItems(res.data);
                 console.log(res.data);
 
-                const inspectedCount = res.data.filter(item => item.orderStatus === "검수완료").length;
+                const inspectedCount = res.data.filter(item => item.inspection === "검수완료").length;
+                                console.log(inspectedCount)
+
                 const progress = Math.round((inspectedCount / res.data.length) * 100);
+                console.log(progress)
 
                 setInfo({
                     oStatus: res.data[0]?.orderStatus || '',
@@ -99,7 +102,7 @@ export default function OrderDetail() {
                                         <td>{item.unitCost.toLocaleString()} 원</td>
                                         <td>{item.totalPrice.toLocaleString()} 원</td>
                                         <td>{item.approvalStatus}</td>
-                                        <td>{item.orderStatus}</td>
+                                        <td>{item.inspection}</td>
                                     </tr>
                                 ))}
                                 <tr>
