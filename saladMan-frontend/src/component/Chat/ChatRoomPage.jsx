@@ -28,15 +28,11 @@ export default function ChatRoomPage({ roomId, onClose }) {
   useEffect(() => {
     if (!accessToken) return;
 
-    // **항상 Bearer가 한 번만 붙어있는지 확인**
-    // 콘솔로 한 번 찍어보면 좋음
-    // console.log("WebSocket connectHeader:", accessToken);
-
     const sock = new SockJS(`${API_BASE}/connect`);
     const stomp = new StompClient({
       webSocketFactory: () => sock,
       connectHeaders: {
-        Authorization: accessToken, // Bearer ey... (한번만 붙이기!)
+        Authorization: accessToken, 
       },
       onConnect: () => {
         setConnected(true);

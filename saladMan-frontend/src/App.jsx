@@ -80,10 +80,11 @@ import StoreDashboard from '@store/dashboard/StoreDashboard';
 import Login from './component/common/Login';
 import StoreAccountDetail from '@hq/storeManagement/StoreAccountDetail';
 import StoreAccountModify from '@hq/storeManagement/StoreAccountModify';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { fcmTokenAtom,alarmsAtom } from './atoms';
 import { firebaseReqPermission, registerServiceWorker } from './firebaseconfig';
+import ChatModal from "./component/Chat/ChatModal";
 
 
 function App() {
@@ -105,11 +106,42 @@ function App() {
     JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
   },[alarm])
 
+
+  // ====== 채팅알림 ======
+  const [chatAlarmOn, setChatAlarmOn] = useState(true);
+  const [chatModalQueue, setChatModalQueue] = useState([]);
+  const [chatUnreadTotal, setChatUnreadTotal] = useState(0);
+  const chatModalTimeout = useRef(null);
+
+  // 실시간 알림 모달 (최대 1개)
+  const showChatModal = (msg) => {
+    setChatModalQueue(q => [...q, msg]);
+    if (chatModalTimeout.current) clearTimeout(chatModalTimeout.current);
+    chatModalTimeout.current = setTimeout(() => {
+      setChatModalQueue(q => q.slice(1));
+    }, 3200);
+  };
+
   return (
     <>
+      {/* 채팅알람 */}
+      {chatAlarmOn && chatModalQueue.length > 0 &&
+        <ChatModal
+          message={chatModalQueue[0]}
+          onClose={() => setChatModalQueue(q => q.slice(1))}
+        />
+       }
       <Routes>
 
-        <Route element={<HqLayout />}>
+        <Route element={
+          <HqLayout
+            chatAlarmOn={chatAlarmOn}
+            setChatAlarmOn={setChatAlarmOn}
+            chatUnreadTotal={chatUnreadTotal}
+            showChatModal={showChatModal}
+            setChatUnreadTotal={setChatUnreadTotal}
+            />
+          }>
 
           {/* 재고 */}
           <Route path='/hq/HqInventoryList' element={<HqInventoryList />} />

@@ -4,6 +4,7 @@ import { accessTokenAtom } from "/src/atoms";
 import { useAtomValue } from "jotai";
 import styles from "./ChatRoomList.module.css";
 import ChatRoomPage from "./ChatRoomPage";
+import useChatSSE from "./useChatSSE";
 
 export default function ChatRoomList() {
   const [rooms, setRooms] = useState([]);
@@ -15,6 +16,43 @@ export default function ChatRoomList() {
 
     myAxios(token).get("/chat/my/rooms").then(res=>setRooms(res.data));
   }, [token]);
+
+  // 실시간 반영 + 모달/뱃지 연동
+  useChatSSE({
+    enabled: true, // 연결은 항상 유지 (안읽은 카운트 위해)
+    onNewMessage: (msg) => {
+      setRooms(rs => {
+        const next = rs.map(room =>
+          room.roomId === msg.roomId
+            ? { ...room, unReadCount: (room.unReadCount || 0) + 1 }
+            : room
+        );
+        // 안읽은 총합 갱신
+        setUnreadTotal(next.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
+        // 모달
+        if (alertOn && showModal) {
+          // roomName 찾아서 전달
+          const targetRoom = next.find(r => r.roomId === msg.roomId);
+          showModal({
+            ...msg,
+            roomName: targetRoom?.roomName || `방번호 ${msg.roomId}`
+          });
+        }
+        return next;
+      });
+    },
+    onReadMessage: (data) => {
+      setRooms(rs => {
+        const next = rs.map(room =>
+          room.roomId === data.roomId
+            ? { ...room, unReadCount: 0 }
+            : room
+        );
+        setUnreadTotal(next.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
+        return next;
+      });
+    }
+  });
 
   if (activeRoom)
     return (

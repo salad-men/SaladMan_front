@@ -1,0 +1,27 @@
+/* ChatModal.module.css */
+.modal {
+  position: fixed;
+  bottom: 110px; right: 60px;
+  background: #fff; border-radius: 18px;
+  box-shadow: 0 6px 20px #0001;
+  padding: 19px 30px 16px 23px;
+  z-index: 2222;
+  min-width: 245px;
+  max-width: 340px;
+  animation: chatFadein 0.23s;
+}
+@keyframes chatFadein {
+  from { opacity: 0; bottom: 80px; }
+  to { opacity: 1; bottom: 110px; }
+}
+.title { font-weight: bold; font-size: 1.08rem; margin-bottom: 6px; }
+.body { font-size: 1rem; margin-bottom: 7px; }
+.close {
+  background: #eee;
+  color: #444;
+  border: none;
+  border-radius: 7px;
+  padding: 3px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}

@@ -305,16 +305,42 @@ export default function StoreIngredientSetting() {
         </table>
 
         <div className={styles.pagination}>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i + 1}
-            className={curPage === i + 1 ? styles.activePage : ""}
-            onClick={() => setCurPage(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
+        <button
+          className={`${styles.arrow}`}
+          onClick={() => setCurPage(1)}
+          disabled={curPage <= 1}
+          aria-label="맨처음"
+        >{`<<`}</button>
+        <button
+          className={`${styles.arrow}`}
+          onClick={() => setCurPage(curPage - 1)}
+          disabled={curPage <= 1}
+          aria-label="이전"
+        >{`<`}</button>
+        {/* 페이지 버튼 (예: 1~10 등) */}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .slice(Math.floor((curPage - 1) / 10) * 10, Math.floor((curPage - 1) / 10) * 10 + 10)
+          .map(page => (
+            <button
+              key={page}
+              className={curPage === page ? styles.activePage : ""}
+              onClick={() => setCurPage(page)}
+            >{page}</button>
+          ))}
+        <button
+          className={`${styles.arrow}`}
+          onClick={() => setCurPage(Math.min(curPage + 1, totalPages))}
+          disabled={curPage >= totalPages}
+          aria-label="다음"
+        >{`>`}</button>
+        <button
+          className={`${styles.arrow}`}
+          onClick={() => setCurPage(totalPages)}
+          disabled={curPage >= totalPages}
+          aria-label="맨끝"
+        >{`>>`}</button>
       </div>
+
       </div>
     </div>
 
