@@ -25,6 +25,7 @@ export default function StoreDisposalList() {
 
   // 카테고리 목록
   useEffect(() => {
+    if (!token) return;
     myAxios(token)
       .get("/store/inventory/categories")
       .then((res) => setCategories(res.data.categories || []))
@@ -33,6 +34,7 @@ export default function StoreDisposalList() {
 
   // 폐기목록 조회
   useEffect(() => {
+    if (!token) return;
     fetchDisposals(1);
   }, [token, user.id, filters.category, filters.name]);
 

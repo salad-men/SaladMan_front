@@ -40,6 +40,7 @@ export default function HqInventoryRecord() {
   };
 
   useEffect(() => {
+    if (!token) return;
     myAxios(token).get("/hq/inventory/categories").then(res => {
       const cats = res.data.categories || [];
       setCategories(cats);
@@ -61,6 +62,7 @@ export default function HqInventoryRecord() {
 
     // --- 탭(입고/출고) 바뀔 때 기록만 새로고침 ---
     useEffect(() => {
+      if (!token) return;
       myAxios(token).get("/hq/inventory/record", {
         params: { storeId, type: activeTab }
       }).then(res => {
@@ -74,6 +76,7 @@ export default function HqInventoryRecord() {
 
   // 필터 적용
   useEffect(() => {
+    if (!token) return;
     let temp = records.filter(r => r.changeType.trim() === activeTab.trim());
     if (filterCategory !== "") temp = temp.filter(r => r.categoryName === filterCategory);
     if (filterName) temp = temp.filter(r => r.ingredientName.includes(filterName));

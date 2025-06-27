@@ -32,6 +32,7 @@ export default function StoreInventoryList() {
 
   // 분류 가져오기
   useEffect(() => {
+    if (!token) return;
     myAxios(token)
       .get("/store/inventory/categories")
       .then((res) => setCategories(res.data.categories))
@@ -40,10 +41,12 @@ export default function StoreInventoryList() {
 
   // 재고 리스트 조회 (자기 매장만)
   useEffect(() => {
+    if (!token) return;
     fetchInventory(1);
   }, [token, filters.category, filters.name, user.id]);
 
   const fetchInventory = (page = 1) => {
+    if (!token) return;
     if (!user.id) return;
 
     const param = {
@@ -115,6 +118,7 @@ export default function StoreInventoryList() {
   };
 
     const saveEdit = () => {
+      if (!token) return;
     inventory.forEach(item => {
       myAxios(token).post("/store/inventory/update", {
         id: item.id,

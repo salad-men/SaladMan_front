@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
-import { myAxios } from "../../../config";
+import { myAxios } from "/src/config";
 import styles from "./HqInventoryList.module.css";
 import { accessTokenAtom } from "/src/atoms";
 
 export default function HqInventoryList() {
+  
   const token = useAtomValue(accessTokenAtom);
 
   // 재고/카테고리/재료/지점 등 상태
@@ -52,9 +53,12 @@ export default function HqInventoryList() {
 
   // ----- 초기 데이터 불러오기 -----
   useEffect(() => {
-    myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
-    myAxios(token).get("/hq/inventory/stores").then(res => setStores(res.data.stores || []));
-    myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
+    if (!token) return; 
+    const axios = myAxios(token);
+
+    axios.get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
+    axios.get("/hq/inventory/stores").then(res => setStores(res.data.stores || []));
+    axios.get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
   }, [token]);
 
   useEffect(() => {
@@ -63,14 +67,17 @@ export default function HqInventoryList() {
 
   // ----- 재고목록 -----
   const fetchInventory = (page = 1) => {
+    if (!token) return;
+
+    const axios = myAxios(token);
+
     const param = {
       ...filters,
       page,
       store: filters.store !== "all" ? Number(filters.store) : "all",
       category: filters.category === "all" ? "all" : Number(filters.category),
     };
-    myAxios(token)
-      .post("/hq/inventory/list", param)
+    axios.post("/hq/inventory/list", param)
       .then((res) => {
         const hqList = res.data.hqInventory || [];
         const storeList = res.data.storeInventory || [];
@@ -198,6 +205,8 @@ export default function HqInventoryList() {
 
   // 카테고리 직접 추가
   const handleAddCategory = async () => {
+    if (!token) return;
+
     try {
       if (!catInput) return setErrorMsg("카테고리명을 입력하세요");
       const res = await myAxios(token).post("/hq/inventory/category-add", { name: catInput });
@@ -214,13 +223,16 @@ export default function HqInventoryList() {
 
   // 재료 직접 추가
   const handleAddIngredient = async () => {
+    if (!token) return;
+
     try {
       if (!ingInput || !unitInput || !catSelect)
         return setErrorMsg("재료명, 단위, 카테고리를 모두 입력하세요");
       const res = await myAxios(token).post("/hq/inventory/ingredient-add", {
         name: ingInput,
         categoryId: Number(catSelect),
-        unit: unitInput
+        unit: unitInput,
+        available: true
       });
       setIngSelect(String(res.data.id));
       setShowIngInput(false);

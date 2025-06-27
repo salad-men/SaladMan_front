@@ -29,6 +29,8 @@ export default function HqIngredientSetting() {
   const STORE_ID = 1; // 본사 고정
 
   useEffect(() => {
+    if (!token) return;
+
     myAxios(token).get("/hq/inventory/categories").then(res => {
       setCategories(res.data.categories || []);
     });
@@ -38,11 +40,13 @@ export default function HqIngredientSetting() {
   }, [token]);
 
   useEffect(() => {
+    if (!token) return;
     fetchSettings();
     // eslint-disable-next-line
   }, [token, filterCategory, filterName]);
 
   const fetchSettings = () => {
+    if (!token) return;
     myAxios(token)
       .get("/hq/inventory/settings", {
         params: {

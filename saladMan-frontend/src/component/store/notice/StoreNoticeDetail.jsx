@@ -20,6 +20,7 @@ export default function StoreNoticeDetail() {
   });
 
   useEffect(() => {
+    if (!token) return;
     if (id) {
       myAxios(token).get("/store/notice/detail", { params: { id } })
         .then(res => {

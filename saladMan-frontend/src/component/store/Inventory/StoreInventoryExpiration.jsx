@@ -41,6 +41,7 @@ export default function StoreInventoryExpiration() {
   const storeId = user.id;
 
   useEffect(() => {
+    if (!token) return;
     myAxios(token)
       .get("/store/inventory/categories")
       .then((res) => setCategories(res.data.categories || []))
@@ -102,6 +103,7 @@ export default function StoreInventoryExpiration() {
   };
 
   useEffect(() => {
+    if (!token) return;
     fetchInventory(1);
   }, [token, storeId, category, keyword, startDate, endDate]);
 

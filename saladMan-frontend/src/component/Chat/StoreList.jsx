@@ -10,7 +10,6 @@ export default function StoreList() {
   const [activeRoom, setActiveRoom] = useState(null);
   const [token] = useAtom(accessTokenAtom);
 
-  // HqAllMenus.jsx와 동일한 패턴
   const fetchStores = () => {
     if (!token) return;
     const axios = myAxios(token);

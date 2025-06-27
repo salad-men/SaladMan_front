@@ -20,6 +20,7 @@ export default function HqNoticeDetail() {
   });
 
   useEffect(() => {
+    if (!token) return;
     if (id) {
       myAxios(token).get("/hq/notice/detail", { params: { id } })
         .then(res => setNotice(res.data.notice))

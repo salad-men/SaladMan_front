@@ -31,6 +31,7 @@ export default function HqDisposalList() {
 
   // 전체 지점 목록
   useEffect(() => {
+    if (!token) return;
     myAxios(token)
       .get("/hq/inventory/stores")
       .then(res => setStores(res.data.stores || []))
@@ -39,6 +40,7 @@ export default function HqDisposalList() {
 
   // 카테고리 목록
   useEffect(() => {
+    if (!token) return;
     myAxios(token)
       .get("/hq/inventory/categories")
       .then(res => setCategories(res.data.categories || []))
@@ -47,6 +49,7 @@ export default function HqDisposalList() {
 
   // 폐기 목록 호출 함수
   const fetchDisposalList = (page = 1) => {
+    if (!token) return;
     const params = {
       ...filters,
       page,
@@ -65,6 +68,7 @@ export default function HqDisposalList() {
   };
 
   useEffect(() => {
+    if (!token) return;
     fetchDisposalList();
   }, [token, filters.target, filters.store, filters.category, filters.keyword, filters.startDate, filters.endDate]);
 
@@ -97,6 +101,7 @@ export default function HqDisposalList() {
 
   // 승인
   const approveSelected = () => {
+    if (!token) return;
     if (!selectedIds.length) return alert("선택된 항목이 없습니다.");
     myAxios(token)
       .post("/hq/inventory/disposal/approve", selectedIds)
@@ -110,6 +115,7 @@ export default function HqDisposalList() {
     setRejectModalOpen(true);
   };
   const confirmReject = () => {
+    if (!token) return;
     const req = selectedIds.map(id => ({
       id,
       memo: rejectReasons[id] || "",

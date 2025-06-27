@@ -44,6 +44,7 @@ export default function StoreInventoryRecord() {
 
   // --- 데이터 불러오기 (최초 1회) ---
   useEffect(() => {
+    if (!token) return;
     console.log("[useEffect-최초] token:", token, "storeId:", storeId, "user:", user);
 
     if (!storeId) {
@@ -87,6 +88,7 @@ export default function StoreInventoryRecord() {
 
   // --- 탭(입고/출고) 바뀔 때 기록만 새로고침 ---
   useEffect(() => {
+    if (!token) return;
     if (!storeId) return;
     myAxios(token).get("/store/inventory/record", {
       params: { storeId, type: activeTab }

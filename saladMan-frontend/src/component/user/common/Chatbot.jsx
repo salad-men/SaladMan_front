@@ -84,7 +84,8 @@ export default function ChatbotWidget() {
   // 답변 불러오는 코드
   const fetchAnswerByValueKey = async (valueKey) => {
     try {
-      const res = await myAxios().get("/user/chatbot/answer", {
+          const res = await myAxios().get("/user/chatbot/answer-by-value", {
+
         params: { valueKey }, // ✅ valueKey로 보냄
       });
       return res.data;

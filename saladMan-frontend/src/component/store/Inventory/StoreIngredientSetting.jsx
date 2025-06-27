@@ -21,6 +21,9 @@ export default function StoreIngredientSetting() {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isAddMode, setIsAddMode] = useState(false);
+  
+  const [curPage, setCurPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [newSetting, setNewSetting] = useState({
     categoryId: "",
@@ -30,6 +33,7 @@ export default function StoreIngredientSetting() {
   });
 
   useEffect(() => {
+    if (!token) return;
     myAxios(token).get("/store/inventory/categories").then(res => {
       setCategories(res.data.categories || []);
     });
@@ -39,9 +43,9 @@ export default function StoreIngredientSetting() {
   }, [token]);
 
   useEffect(() => {
+    if (!token) return;
     fetchSettings();
-    // eslint-disable-next-line
-  }, [token, STORE_ID, filterCategory, filterName]);
+  }, [token, STORE_ID, filterCategory, filterName,curPage]);
 
   const fetchSettings = () => {
     if (!STORE_ID) return;
@@ -51,15 +55,16 @@ export default function StoreIngredientSetting() {
           storeId: STORE_ID,
           categoryId: filterCategory || undefined,
           keyword: filterName || undefined,
-          page: 1,
+          page: curPage,
         }
       })
       .then(res => {
         setSettings(res.data.settings || []);
         if (!isEditMode) setOriginalSettings(res.data.settings || []);
+        setTotalPages(res.data.pageInfo?.allPage || 1);
       })
       .catch(() => {
-        setSettings([]);
+        setSettings([]);   
         if (!isEditMode) setOriginalSettings([]);
       });
   };
@@ -298,7 +303,21 @@ export default function StoreIngredientSetting() {
             )}
           </tbody>
         </table>
+
+        <div className={styles.pagination}>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            className={curPage === i + 1 ? styles.activePage : ""}
+            onClick={() => setCurPage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
       </div>
     </div>
+
+    
   );
 }

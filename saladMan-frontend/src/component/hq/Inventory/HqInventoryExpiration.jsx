@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
-import { myAxios } from "../../../config";
+import { myAxios } from "/src/config";
 import styles from "./HqInventoryExpiration.module.css";
 import { accessTokenAtom } from "/src/atoms";
 
@@ -26,6 +26,9 @@ export default function HqInventoryExpiration() {
 
   // Escape 키로 모달 닫기
   useEffect(() => {
+    if (!token) return;
+    const axios = myAxios(token);
+    
     const onKey = (e) => {
       if (e.key === "Escape") setIsModalOpen(false);
     };
@@ -35,13 +38,14 @@ export default function HqInventoryExpiration() {
 
   // 지점, 카테고리 리스트 API 호출
   useEffect(() => {
-    myAxios(token)
-      .get("/hq/inventory/stores")
+    if (!token) return;
+    const axios = myAxios(token);
+
+    axios.get("/hq/inventory/stores")
       .then((res) => setStores(res.data.stores || []))
       .catch(console.error);
 
-    myAxios(token)
-      .get("/hq/inventory/categories")
+    axios.get("/hq/inventory/categories")
       .then((res) => setCategories(res.data.categories || []))
       .catch(console.error);
   }, [token]);
@@ -58,6 +62,9 @@ export default function HqInventoryExpiration() {
 
   // 재고 데이터 불러오기 (페이징 포함)
   const fetchInventory = (page = 1) => {
+    if (!token) return;
+    const axios = myAxios(token);
+
     const params = {
       scope,
       store: store !== "all" ? Number(store) : "all",
@@ -67,8 +74,7 @@ export default function HqInventoryExpiration() {
       endDate: endDate || "",
       page,
     };
-    myAxios(token)
-      .post("/hq/inventory/expiration-list", params)
+    axios.post("/hq/inventory/expiration-list", params)
       .then((res) => {
         const hqList = res.data.hqInventory || [];
         const storeList = res.data.storeInventory || [];
@@ -157,6 +163,9 @@ export default function HqInventoryExpiration() {
 
   // 폐기 신청 제출 (본사 품목만 보내기)
   const submit = () => {
+    if (!token) return;
+    const axios = myAxios(token);
+
     const items = selectedIds
       .map((id) => {
         const it = inventory.find((x) => x.id === id);
@@ -171,8 +180,7 @@ export default function HqInventoryExpiration() {
 
     if (items.length === 0) return alert("폐기량을 입력하세요.");
 
-    myAxios(token)
-      .post("/hq/inventory/disposal-request", items)
+    axios.post("/hq/inventory/disposal-request", items)
       .then(() => {
         alert(`총 ${items.length}건 폐기 신청 완료!`);
         setIsModalOpen(false);

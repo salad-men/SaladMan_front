@@ -16,6 +16,7 @@ export default function StoreNoticeList() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) return;
     fetchNoticeList(0);
     // eslint-disable-next-line
   }, [token]);

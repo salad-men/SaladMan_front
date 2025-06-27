@@ -32,6 +32,7 @@ export default function HqComplaintList() {
 
   // 점포 리스트 API 호출
   useEffect(() => {
+    if (!token) return;
     myAxios(token)
       .get("/hq/store/list")
       .then(res => {
@@ -42,6 +43,7 @@ export default function HqComplaintList() {
 
   // 불편사항 리스트 API 호출
   const fetchComplaintList = (pageParam = 0) => {
+    if (!token) return;
     myAxios(token)
       .post("/hq/complaint/list", {
         page: pageParam,
@@ -68,6 +70,7 @@ export default function HqComplaintList() {
   };
 
   useEffect(() => {
+    if (!token) return;
     fetchComplaintList(0);
   }, [token, storeFilter, searchKeyword, statusFilter]);
 

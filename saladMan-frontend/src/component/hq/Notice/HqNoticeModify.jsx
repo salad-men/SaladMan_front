@@ -22,6 +22,7 @@ export default function HqNoticeModify() {
 
   // 상세 데이터 로딩
   useEffect(() => {
+    if (!token) return;
     myAxios(token).get("/hq/notice/detail", { params: { id } })
       .then(res => {
         const data = res.data.notice;
@@ -77,6 +78,7 @@ export default function HqNoticeModify() {
 
   // 수정 제출
   const handleSubmit = async e => {
+    if (!token) return;
     e.preventDefault();
 
     if (!title.trim() || !content.trim()) {

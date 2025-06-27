@@ -16,10 +16,12 @@ export default function HqNoticeList() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) return;
     fetchNoticeList(0);
   }, [token]);
 
   const fetchNoticeList = (pageParam = 0) => {
+    
     myAxios(token)
       .post("/hq/notice/list", {
         page: pageParam,

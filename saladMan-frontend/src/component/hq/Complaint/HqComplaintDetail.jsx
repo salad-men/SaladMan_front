@@ -22,6 +22,7 @@ export default function HqComplaintDetail() {
   });
 
   useEffect(() => {
+    if (!token) return;
     if (id) {
       myAxios(token)
         .get("/hq/complaint/detail", { params: { id } })

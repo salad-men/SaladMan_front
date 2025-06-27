@@ -31,6 +31,7 @@ export default function HqNoticeWrite() {
 
   // 등록 함수
   const handleSubmit = async (e) => {
+    if (!token) return;
     e.preventDefault();
 
     if (!title.trim() || !content.trim()) {

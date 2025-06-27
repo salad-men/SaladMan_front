@@ -22,6 +22,8 @@ export default function StoreComplaintDetail() {
   });
 
   useEffect(() => {
+    
+    if (!token) return;
     if (id) {
       myAxios(token)
         .get("/store/complaint/detail", { params: { id } })

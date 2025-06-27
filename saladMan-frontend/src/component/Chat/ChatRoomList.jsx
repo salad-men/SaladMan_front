@@ -11,6 +11,8 @@ export default function ChatRoomList() {
   const token = useAtomValue(accessTokenAtom);
 
   useEffect(() => {
+    if (!token) return;
+
     myAxios(token).get("/chat/my/rooms").then(res=>setRooms(res.data));
   }, [token]);
 
@@ -36,14 +38,20 @@ export default function ChatRoomList() {
               <td>{room.roomName}</td>
               <td>{room.unReadCount || 0}</td>
               <td>
-                <button className={styles.enterBtn} onClick={()=>setActiveRoom(room.roomId)}>입장</button>
-                {room.isGroupChat==="Y" && (
-                  <button className={styles.leaveBtn} onClick={async()=>{
-                    await myAxios(token).delete(`/chat/room/group/${room.roomId}/leave`);
-                    setRooms(r=>r.filter(a=>a.roomId!==room.roomId));
-                  }}>나가기</button>
-                )}
-              </td>
+              <button className={styles.enterBtn} onClick={()=>setActiveRoom(room.roomId)}>입장</button>
+              {room.isGroupChat==="Y" && (
+                <button className={styles.leaveBtn} onClick={async()=>{
+                  await myAxios(token).delete(`/chat/room/group/${room.roomId}/leave`);
+                  setRooms(r=>r.filter(a=>a.roomId!==room.roomId));
+                }}>나가기</button>
+              )}
+              {room.isGroupChat==="N" && (
+                <button className={styles.leaveBtn} onClick={async()=>{
+                  await myAxios(token).delete(`/chat/room/private/${room.roomId}/leave`);
+                  setRooms(r=>r.filter(a=>a.roomId!==room.roomId));
+                }}>나가기</button>
+              )}
+            </td>
             </tr>
           ))}
         </tbody>

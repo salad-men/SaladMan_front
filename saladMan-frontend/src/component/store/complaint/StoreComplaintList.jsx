@@ -21,6 +21,7 @@ export default function StoreComplaintList() {
   const mapStatus = (isRead) => isRead ? "열람" : "미열람";
 
   const fetchComplaintList = (pageParam = 1, keywordParam = searchKeyword) => {
+    if (!token) return;
     if (!user?.id) return;
     myAxios(token)
       .post("/store/complaint/list", {
