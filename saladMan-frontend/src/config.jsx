@@ -4,17 +4,53 @@ import { getDefaultStore } from "jotai";
 
 console.log("현재 Vite 모드:", import.meta.env.MODE);
 
+const store = getDefaultStore();
+
 export const API_BASE = import.meta.env.VITE_API_URL;
 export const CF_BASE  = import.meta.env.VITE_CLOUDFRONT_URL || '';
 
-export const myAxios = (token) => {
+// export const myAxios = (token) => {
+//    var instance = axios.create({
+//       baseURL: API_BASE,
+//       timeout: 5000,
+//    })
+
+//    token && instance.interceptors.request.use((config) => {
+//       config.headers.Authorization = token;
+//       return config;
+//    });
+
+//    instance.interceptors.response.use(
+//       response => response,
+//       error => {
+//          const code = error.response?.status;
+
+//          if (code === 401 || code === 403) {
+//             alert("접근 권한이 없습니다.");
+
+//             store.set(accessTokenAtom, '');
+//             store.set(refreshTokenAtom, '');
+
+//             window.location.href = "/";
+//          }
+
+//          return Promise.reject(error);
+//       }
+//    );
+
+//     return instance;
+// }
+export const myAxios = () => {
    var instance = axios.create({
       baseURL: API_BASE,
       timeout: 5000,
-   })
+   });
 
-   token && instance.interceptors.request.use((config) => {
-      config.headers.Authorization = token;
+   instance.interceptors.request.use((config) => {
+      const token = sessionStorage.getItem("access_token"); // 여기서 무조건 sessionStorage 사용
+      if (token) {
+         config.headers.Authorization = `Bearer ${token}`;
+      }
       return config;
    });
 
@@ -22,23 +58,18 @@ export const myAxios = (token) => {
       response => response,
       error => {
          const code = error.response?.status;
-
          if (code === 401 || code === 403) {
             alert("접근 권한이 없습니다.");
-
             store.set(accessTokenAtom, '');
             store.set(refreshTokenAtom, '');
-
             window.location.href = "/";
          }
-
          return Promise.reject(error);
       }
    );
 
    return instance;
-}
-
+};
 
 export const themeObj = {
    bgColor: "", 			// 바탕 배경색
