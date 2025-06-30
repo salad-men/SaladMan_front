@@ -69,8 +69,8 @@ const StoreHeader = () => {
                         <a href="#">매장관리</a>
                         <div className="storeDropdown">
                             <ul>
-                                <li><a href="/store/empSchedule">직원일정관리</a></li>
-                                <li><a href="#">직원조회</a></li>
+                                <li><a href="/store/StoreEmployeeListStore">직원 조회</a></li>
+                                <li><a href="/store/empSchedule">직원 일정관리</a></li>
                             </ul>
                         </div>
                     </div>
