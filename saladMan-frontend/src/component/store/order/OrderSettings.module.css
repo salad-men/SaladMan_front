@@ -139,3 +139,107 @@ input:checked+.slider::before {
     padding: 20px;
     background-color: #f8f8f8;
 }
+
+.autoTable {
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.autoTable th,
+.autoTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.autoTable th {
+    background-color: #f1f1f1;
+    font-weight: 600;
+}
+.autoTable th,
+.autoTable td {
+  padding: 4px 8px; /* 셀 여백 줄이기 */
+}
+
+.autoTable th:nth-child(4),
+.autoTable td:nth-child(4) {
+  width: 250px; /* 자동주문량 열 폭 줄이기 */
+}
+.autoTable tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.autoTable input[type="number"] {
+    width: 80px;
+    padding: 4px;
+}
+
+.autoTable input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+.footerSection {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.saveButton {
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.saveButton:hover {
+    background-color: #3a5c3b;
+}
+
+.orderSettingContent {
+    flex: 1;
+    padding: 40px;
+    background-color: white;
+    box-sizing: border-box;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    overflow-y: auto; /* 스크롤 추가 */
+}
+
+.qtyControl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.qtyControl button {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.qtyControl button:hover {
+    background: #e1e1e1;
+}
+
+.qtyControl input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 28px;
+}

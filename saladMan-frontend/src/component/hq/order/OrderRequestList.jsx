@@ -50,7 +50,7 @@ export default function OrderRequestList() {
             setCurrentPage(page);
             console.log(res.data);
         } catch (err) {
-            console.error("발주 신청 목록 조회 실패", err);
+            console.error("수주 목록 조회 실패", err);
         }
     };
 
@@ -91,7 +91,7 @@ export default function OrderRequestList() {
             <div className={styles.orderRequestContainer}>
                 <OrderSidebar />
                 <div className={styles.orderRequestContent}>
-                    <h2>발주 신청 목록</h2>
+                    <h2>수주 목록</h2>
 
                     <div className={styles.orderRequestFilters}>
                         <div className={styles.row}>
