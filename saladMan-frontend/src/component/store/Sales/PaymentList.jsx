@@ -42,17 +42,6 @@ const PaymentList = () => {
                         </div>
                     </div>
                     <div className={styles.filterRow}>
-                        <div className={styles.filterLabel}>검색</div>
-                        <div className={styles.filterContent}>
-                            <select>
-                                <option>고객명</option>
-                                <option>전화번호</option>
-                                <option>상품명</option>
-                            </select>
-                            <input type="text" placeholder="검색어 입력" />
-                        </div>
-                    </div>
-                    <div className={styles.filterRow}>
                         <div className={styles.filterLabel}>기간</div>
                         <div className={styles.filterContent}>
                             <input type="date" /> ~ <input type="date" />
@@ -60,7 +49,6 @@ const PaymentList = () => {
                     </div>
                     <div className={styles.filterActions}>
                         <button>검색</button>
-                        <button className={styles.reset}>초기화</button>
                     </div>
                 </div>
 
