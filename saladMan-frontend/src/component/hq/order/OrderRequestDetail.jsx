@@ -103,12 +103,12 @@ export default function OrderRequestDetail() {
             <OrderSidebar />
 
             <div className={styles.orderDetailContent}>
-                <h2>발주 상세</h2>
+                <h2>수주 상세</h2>
 
                 <div className={styles.orderInfo}>
                     <p><strong>점포명:</strong> {storeName}</p>
                     <p><strong>No:</strong> {id} </p>
-                    <p><strong>발주일:</strong> 2025년 05월 01일</p>
+                    <p><strong>수주일:</strong> 2025년 05월 01일</p>
                     <p><strong>주문자:</strong> 이효봉</p>
                 </div>
 

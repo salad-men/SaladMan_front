@@ -79,7 +79,7 @@ export default function OrderItemManage() {
             <div className={styles.orderItemContainer}>
                 <OrderSidebar />
                 <div className={styles.orderItemContent}>
-                    <h2>발주 품목</h2>
+                    <h2>수주 품목</h2>
 
                     <div className={styles.searchControls}>
                         <select
@@ -91,8 +91,8 @@ export default function OrderItemManage() {
                             className={styles.itemFilterSelect}
                         >
                             <option value="all">전체</option>
-                            <option value="possible">발주 가능</option>
-                            <option value="impossible">발주 불가</option>
+                            <option value="possible">수주 가능</option>
+                            <option value="impossible">수주 불가</option>
                         </select>
 
                         <select
@@ -128,7 +128,7 @@ export default function OrderItemManage() {
                                 <th>본사보유량</th>
                                 <th>단위</th>
                                 <th>단위가격</th>
-                                <th>발주 가능</th>
+                                <th>수주 가능</th>
                             </tr>
                         </thead>
                         <tbody>
