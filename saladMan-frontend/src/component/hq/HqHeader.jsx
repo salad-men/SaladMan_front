@@ -40,7 +40,7 @@ const HqHeader = ({
                         </div>
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">발주</a>
+                        <a href="#">수주</a>
                         <div className="dropdown">
                             <ul>
                                 <li><a href="/hq/orderRequest">수주목록</a></li>
