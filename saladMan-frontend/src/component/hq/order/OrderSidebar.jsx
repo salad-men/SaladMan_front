@@ -5,10 +5,10 @@ export default function OrderSidebar() {
     return (
         <>
             <div className="sidebar">
-                <h3>발주</h3>
+                <h3>수주</h3>
                 <ul>
-                    <li><a href="/hq/orderRequest">발주신청목록</a></li>                
-                    <li><a href="/hq/orderItemManage">발주품목</a></li>                
+                    <li><a href="/hq/orderRequest">수주목록</a></li>                
+                    <li><a href="/hq/orderItemManage">수주품목</a></li>                
 
                 </ul>
             </div>

@@ -43,8 +43,8 @@ const HqHeader = ({
                         <a href="#">발주</a>
                         <div className="dropdown">
                             <ul>
-                                <li><a href="/hq/orderRequest">발주신청목록</a></li>
-                                <li><a href="/hq/orderItemManage">발주품목설정</a></li>
+                                <li><a href="/hq/orderRequest">수주목록</a></li>
+                                <li><a href="/hq/orderItemManage">수주품목설정</a></li>
                             </ul>
                         </div>
                     </div>
