@@ -58,7 +58,7 @@ export default function EmployeeList() {
     setEditMode(false);
     setEditForm(emp);
     setEditImgFile(null);
-    setEditImgPreview(emp.img || "/images/profile-placeholder.png");
+    setEditImgPreview(emp.imgUrl || "/images/profile-placeholder.png");
     setEditError("");
   };
   const closeModal = () => {
@@ -87,7 +87,7 @@ export default function EmployeeList() {
   const handleEditImgDelete = () => {
     setEditImgFile(null);
     setEditImgPreview("/images/profile-placeholder.png");
-    setEditForm(f => ({ ...f, img: "" }));
+    setEditForm(f => ({ ...f, imgUrl: "" }));
   };
 
   // 수정 저장
@@ -115,9 +115,7 @@ export default function EmployeeList() {
       // 이미지 파일
       if (editImgFile) formData.append("img", editImgFile);
       // 서버로 전송
-      await myAxios(token).post("/hq/emp/update", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await myAxios(token).post("/hq/emp/update", formData);
       setEditMode(false); setSelected(null); fetchEmployees(pageInfo.curPage);
     } catch {
       setEditError("수정에 실패했습니다.");
@@ -178,11 +176,12 @@ export default function EmployeeList() {
                 <td>{emp.id}</td>
                 <td>
                   <img
-                    src={emp.img ? emp.img : "/images/profile-placeholder.png"}
+                    src={emp.imgUrl}
                     alt="profile"
                     className={styles.tableProfile}
                   />
                 </td>
+
                 <td>{emp.name}</td>
                 <td>{emp.grade}</td>
                 <td>{emp.storeName}</td>
@@ -295,7 +294,7 @@ export default function EmployeeList() {
                         className={styles.tableProfile}
                       />
                       <input type="file" accept="image/*" onChange={handleEditImgChange} />
-                      {editImgFile || editForm.img ? (
+                      {editImgFile || editForm.imgUrl ? (
                         <button
                           type="button"
                           className={styles.cancelButton}
@@ -306,7 +305,7 @@ export default function EmployeeList() {
                     </div>
                   ) : (
                     <img
-                      src={selected.img ? selected.img : "/images/profile-placeholder.png"}
+                      src={selected.imgUrl ? selected.imgUrl : "/images/profile-placeholder.png"}
                       alt="profile"
                       className={styles.tableProfile}
                     />
