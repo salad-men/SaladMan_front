@@ -1,0 +1,80 @@
+.kioskHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.kioskNav {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 300px;
+    flex: 1;
+    padding: 4px 0;
+}
+
+
+.kioskUserInfo {
+    margin: auto 100px;
+    font-size: 0.9rem;
+    color: #666;
+
+    position: relative;
+    /* 기준이 되는 부모 */
+    display: inline-block;
+}
+
+.logoutBox {
+    position: absolute;
+    top: 50%;
+    /* 높이 중앙 정렬 */
+    left: 100%;
+    /* 오른쪽에 붙이기 */
+    transform: translateY(-50%);
+    /* 정확히 중앙 */
+    margin-left: 20px;
+    /* 여백 */
+    background: #eee;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .kioskHeader {
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 12px;
+    }
+
+    .kioskNav {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .kioskUserInfo {
+        margin: 8px 0;
+        font-size: 0.85rem;
+    }
+
+    .logoutBox {
+        position: static;
+        transform: none;
+        margin-left: 0;
+        margin-top: 8px;
+    }
+}
