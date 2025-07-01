@@ -11,7 +11,6 @@ const Recipe = () => {
 
   useEffect(() => {
     if (!token) return;
-
     const axios = myAxios(token);
 
     axios.get('/store/recipe')

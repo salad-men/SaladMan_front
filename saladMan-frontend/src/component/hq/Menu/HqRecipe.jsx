@@ -7,12 +7,10 @@ import style from './HqRecipe.module.css';
 
 const HqRecipe = () => {
   const [menus, setMenus] = useState([]);
-  const [selectedMenu, setSelectedMenu] = useState(null);
   const [token] = useAtom(accessTokenAtom);
 
   useEffect(() => {
     if (!token) return;
-
     const axios = myAxios(token);
 
     axios.get('/hq/recipe')
