@@ -1,20 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CartBar from './KioskCart';
 import styles from './KioskMenu.module.css';
+import { useAtomValue } from "jotai";
+import { accessTokenAtom } from "/src/atoms";
+import { myAxios } from "/src/config";
 
-// 더미 메뉴 데이터
-const menuData = [
-  { id: 1, name: '치킨 샐러볼', category: '샐러볼', price: 8900 },
-  { id: 2, name: '연어 포케볼', category: '포케볼', price: 9500 },
-  { id: 3, name: '비건 그린볼', category: '비건볼', price: 8700 },
-  { id: 4, name: '불고기 샐러볼', category: '샐러볼', price: 9200 },
-  { id: 5, name: '두부 비건볼', category: '비건볼', price: 8600 },
-  { id: 6, name: '참치 포케볼', category: '포케볼', price: 9400 },
-];
-
-const KioskMenu = () => {
+export default function KioskMenu() {
   const [selectedTab, setSelectedTab] = useState('전체');
   const [cartItems, setCartItems] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 820);
+  const [menuData, setMenuData] = useState([]);
+
+  const token = useAtomValue(accessTokenAtom);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 820);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+    // 메뉴 불러오기
+  useEffect(() => {
+    console.log("메뉴불러오기 토근:"+token);
+    console.log( token);
+    if (!token) return;
+    
+
+    const fetchMenus = async () => {
+      try {
+        const res = await myAxios(token).get("/kiosk/menus");
+        setMenuData(res.data);
+        console.log("메뉴 불러옴:", res.data);
+      } catch (err) {
+        console.error("메뉴 가져오기 실패", err);
+      }
+    };
+
+    fetchMenus();
+  }, [token]);
 
   const categories = ['전체', '샐러볼', '포케볼', '비건볼'];
 
@@ -53,42 +78,96 @@ const KioskMenu = () => {
       : menuData.filter((item) => item.category === selectedTab);
 
   return (
-    
+
     <div className={styles.page}>
-    <div className={styles.header}/>
-      <h2 className={styles.title}>메뉴를 선택하세요</h2>
+      <div className={styles.header} />
+      {isMobile ? (
+        <>
+          <div className={styles.content}>
+            <h2 className={styles.title}>메뉴를 선택하세요</h2>
+            <div className={styles.tabs}>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  className={`${styles.tab} ${selectedTab === cat ? styles.activeTab : ''}`}
+                  onClick={() => setSelectedTab(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <div className={styles.menuWrapper}>
+              <div className={styles.menuGrid}>
+                {filteredMenu.map((item) => (
+                  <div
+                    key={item.id}
+                    className={styles.card}
+                    onClick={() => handleAddToCart(item)}
+                  >
+                    <div className={styles.imgPlaceholder}>
+                      <img src={`/${item.img}`} alt={item.img} className={styles.menuImg} />
 
-      <div className={styles.tabs}>
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`${styles.tab} ${
-              selectedTab === cat ? styles.activeTab : ''
-            }`}
-            onClick={() => setSelectedTab(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      <div className={styles.menuGrid}>
-        {filteredMenu.map((item) => (
-          <div key={item.id} className={styles.card} onClick={() => handleAddToCart(item)}>
-            <div className={styles.imgPlaceholder}>🍴</div>
-            <p className={styles.itemName}>{item.name}</p>
-            <p className={styles.itemPrice}>{item.price.toLocaleString()}원</p>
+                    </div>
+                    <p className={styles.itemName}>{item.name}</p>
+                    <p className={styles.itemPrice}>{item.salePrice.toLocaleString()}원</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
+          <CartBar
+            cartItems={cartItems}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemoveItem={handleRemoveItem}
+            className={styles.fixedBar}
+          />
+        </>
+      ) : (
+        <div className={styles.content}>
+          <div className={styles.contentWrapper}>
+            <h2 className={styles.title}>메뉴를 선택하세요</h2>
+            <div className={styles.tabs}>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  className={`${styles.tab} ${selectedTab === cat ? styles.activeTab : ''}`}
+                  onClick={() => setSelectedTab(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <div className={styles.menuWrapper}>
 
-      <CartBar
-        cartItems={cartItems}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-      />
+              <div className={styles.menuGrid}>
+                {filteredMenu.map((item) => (
+                  <div
+                    key={item.id}
+                    className={styles.card}
+                    onClick={() => handleAddToCart(item)}
+                  >
+                    <div className={styles.imgPlaceholder}>
+                      <img src={`/${item.img}`} alt={item.img} className={styles.menuImg} />
+
+                    </div>
+                    <p className={styles.itemName}>{item.name}</p>
+                    <p className={styles.itemPrice}>{item.salePrice.toLocaleString()}원</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className={styles.cartContainer}>
+            <CartBar
+              cartItems={cartItems}
+              onUpdateQuantity={handleUpdateQuantity}
+              onRemoveItem={handleRemoveItem}
+              className={styles.staticCart}
+            />
+          </div>
+        </div>
+      )}
     </div>
+
   );
 };
-
-export default KioskMenu;
