@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './HqNotification.css';
+import styles from './HqNotification.module.css';
+import NoticeSidebar from './NoticeSidebar';
 
 const initialNotifications = [
   { id: 1, title: '새 공지사항', message: '6월 휴무 안내', date: '2025-06-12 14:30', read: false },
@@ -45,54 +46,61 @@ function HqNotification() {
   };
 
   return (
-    <div className="inbox-container">
-      <h2>알림 목록</h2>
-      <div className="inbox-controls">
-        <div>
-          <button onClick={markAsRead}>읽음 처리</button>
-          <button onClick={deleteSelected}>삭제</button>
+    <div className={styles.wrapper}>
+      <NoticeSidebar />
+      <div className={styles.content}>
+        <div className={styles.pageHeader}>
+          <h2>알림 목록</h2>
         </div>
-        <div>
-           읽지 않음 {notifications.filter(n => !n.read).length}개 / 총 {notifications.length}개
+        <div className={styles.inboxControls}>
+          <div className={styles.counts}>
+            읽지 않음 {notifications.filter(n => !n.read).length}개 / 총 {notifications.length}개
+          </div>
         </div>
-      </div>
 
-      <table className="inbox-table">
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                checked={selected.length === notifications.length}
-                onChange={e => toggleSelectAll(e.target.checked)}
-              />
-            </th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>수신일시</th>
-          </tr>
-        </thead>
-        <tbody>
-          {notifications.length === 0 ? (
-            <tr><td colSpan="4" className="no-data">알림이 없습니다.</td></tr>
-          ) : (
-            notifications.map(noti => (
-              <tr key={noti.id} className={noti.read ? '' : 'unread'}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(noti.id)}
-                    onChange={() => toggleSelect(noti.id)}
-                  />
-                </td>
-                <td>{noti.title}</td>
-                <td>{noti.message}</td>
-                <td>{noti.date}</td>
+        <table className={styles.inboxTable}>
+          <thead>
+            <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  checked={selected.length === notifications.length}
+                  onChange={e => toggleSelectAll(e.target.checked)}
+                />
+              </th>
+              <th>
+                <button onClick={markAsRead}>읽음 처리</button>
+                <button onClick={deleteSelected}>삭제</button>
+              </th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {notifications.length === 0 ? (
+              <tr>
+                <td colSpan="4" className={styles.noData}>알림이 없습니다.</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              notifications.map(noti => (
+                <tr key={noti.id} className={noti.read ? '' : styles.unread}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(noti.id)}
+                      onChange={() => toggleSelect(noti.id)}
+                    />
+                  </td>
+                  <td>{noti.title}</td>
+                  <td>{noti.message}</td>
+                  <td>{noti.date}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+
+      </div>
     </div>
   );
 }

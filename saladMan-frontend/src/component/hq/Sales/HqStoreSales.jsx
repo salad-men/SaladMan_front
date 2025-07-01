@@ -6,7 +6,7 @@ import Chart from 'chart.js/auto';
 import HqSidebarSales from './HqSidebarSales';
 import style from './HqStoreSales.module.css'
 
-const HqTotalSales = () => {
+const HqStoreSales = () => {
     const [salesData, setSalesData] = useState(null);
     const [storeId, setStoreId] = useState('');
     const [startDate, setStartDate] = useState('');
@@ -206,4 +206,4 @@ const HqTotalSales = () => {
     )
 }
 
-export default HqTotalSales;
+export default HqStoreSales;

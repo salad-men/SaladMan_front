@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import './Notification.css';
-
-const initialNotifications = [
-  { id: 1, title: '새 공지사항', message: '6월 휴무 안내', date: '2025-06-12 14:30', read: false },
-  { id: 2, title: '주문 완료', message: '주문이 정상 처리되었습니다.', date: '2025-06-12 11:00', read: false },
-  { id: 3, title: '보안 알림', message: '로그인이 감지되었습니다.', date: '2025-06-11 09:42', read: false },
-  { id: 4, title: '배송 시작', message: '주문하신 상품이 배송을 시작했습니다.', date: '2025-06-10 16:20', read: false },
-  { id: 5, title: '이벤트', message: '여름 맞이 할인 이벤트가 시작되었습니다.', date: '2025-06-09 08:00', read: false },
-  { id: 6, title: '시스템 점검', message: '6월 15일 새벽 2시부터 점검 예정입니다.', date: '2025-06-08 12:15', read: true },
-  { id: 7, title: '새 메시지', message: '고객센터로부터 답변이 도착했습니다.', date: '2025-06-07 14:45', read: false },
-  { id: 8, title: '주문 취소', message: '주문이 취소되었습니다.', date: '2025-06-06 17:30', read: true },
-  { id: 9, title: '할인 쿠폰', message: '다음 구매에 사용할 수 있는 쿠폰이 발급되었습니다.', date: '2025-06-05 10:10', read: false },
-  { id: 10, title: '계정 변경', message: '비밀번호가 성공적으로 변경되었습니다.', date: '2025-06-04 09:00', read: true },
-];
+import { useEffect, useState } from 'react';
+import styles from './Notification.module.css';
+import { accessTokenAtom } from '/src/atoms';
+import { myAxios } from '/src/config';
+import { useAtomValue } from 'jotai';
+import NoticeSidebar from './NoticeSidebar';
 
 function Notification() {
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const [notification, setNotification] = useState([]);
+  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
   const [selected, setSelected] = useState([]);
+  const [pageNums, setPageNums] = useState([]);
+  const token = useAtomValue(accessTokenAtom);
+
+  useEffect(() => {
+    if (token) {
+      submit(1);
+    }
+  }, [token]);
 
   const toggleSelectAll = (checked) => {
-    setSelected(checked ? notifications.map(n => n.id) : []);
+    setSelected(checked ? notification.map(n => n.id) : []);
   };
 
   const toggleSelect = (id) => {
@@ -28,42 +28,84 @@ function Notification() {
     );
   };
 
-  const markAsRead = () => {
-    setNotifications(prev =>
-      prev.map(n =>
-        selected.includes(n.id) ? { ...n, read: true } : n
-      )
-    );
+  const markAsReadSelected = () => {
+  // 선택된 알림이 없으면 함수 종료
+  if (selected.length === 0) return;
+
+  // 선택된 각각의 id에 대해 읽음 처리 요청
+  Promise.all(
+    selected.map(id =>
+      myAxios(token).get(`/store/notification/${id}`)
+        .then(res => {
+          if (res.data === true) {
+            // 프론트 상태값 업데이트
+            setNotification(prev =>
+              prev.map(n => (n.id === id ? { ...n, isRead: true } : n))
+            );
+          } else {
+            console.warn(`${id} 읽음 처리 실패`);
+          }
+        })
+        .catch(err => console.error(`${id} 읽음 처리 에러:`, err))
+    )
+  ).then(() => {
+    setSelected([]); // 선택 초기화
+  });
+};
+
+const deleteSelected = () => {
+  Promise.all(selected.map(id => 
+    myAxios(token).delete(`/store/notification/${id}`)
+  ))
+  .then(() => {
     setSelected([]);
+    submit(pageInfo.curPage);  // 삭제 후 다시 목록 요청
+  })
+  .catch(err => console.error('삭제 실패:', err));
+};
+
+
+
+  const submit = (page) => {
+    myAxios(token).get(`/store/notification?page=${page}`)
+      .then(res => {
+        setNotification(res.data.data);
+        setPageInfo(res.data.pageInfo);
+        const pages = [];
+        for (let i = res.data.pageInfo.startPage; i <= res.data.pageInfo.endPage; i++) {
+          pages.push(i);
+        }
+        setPageNums(pages);
+      })
+      .catch(err => console.error('알림 목록 가져오기 실패:', err));
   };
 
-  const deleteSelected = () => {
-    setNotifications(prev =>
-      prev.filter(n => !selected.includes(n.id))
-    );
-    setSelected([]);
-  };
+  
 
   return (
-    <div className="content">
-      <h2>알림 목록</h2>
-      <div className="inbox-controls">
+    <div className={styles.wrapper}>
+      <NoticeSidebar />
+      <div className={styles.content}>
+        <div className={styles.pageHeader}>
+          <h2>알림 목록</h2>
+        </div>
+      <div className={styles.inboxControls}>
         <div>
-          <button onClick={markAsRead}>읽음 처리</button>
+          <button onClick={markAsReadSelected}>읽음 처리</button>
           <button onClick={deleteSelected}>삭제</button>
         </div>
         <div>
-           읽지 않음 {notifications.filter(n => !n.read).length}개 / 총 {notifications.length}개
+          읽지 않음 {notification.filter(n => !n.isRead).length}개 / 총 {notification.length}개
         </div>
       </div>
 
-      <table className="inbox-table">
+      <table className={styles.inboxTable}>
         <thead>
           <tr>
             <th>
               <input
                 type="checkbox"
-                checked={selected.length === notifications.length}
+                checked={selected.length === notification.length}
                 onChange={e => toggleSelectAll(e.target.checked)}
               />
             </th>
@@ -73,11 +115,13 @@ function Notification() {
           </tr>
         </thead>
         <tbody>
-          {notifications.length === 0 ? (
-            <tr><td colSpan="4" className="no-data">알림이 없습니다.</td></tr>
+          {notification.length === 0 ? (
+            <tr>
+              <td colSpan="4" className={styles.noData}>알림이 없습니다.</td>
+            </tr>
           ) : (
-            notifications.map(noti => (
-              <tr key={noti.id} className={noti.read ? '' : 'unread'}>
+            notification.map(noti => (
+              <tr key={noti.id} className={noti.isRead ? '' : styles.unread}>
                 <td>
                   <input
                     type="checkbox"
@@ -86,13 +130,28 @@ function Notification() {
                   />
                 </td>
                 <td>{noti.title}</td>
-                <td>{noti.message}</td>
-                <td>{noti.date}</td>
+                <td>{noti.content}</td>
+                <td>{noti.sentAt}</td>
               </tr>
             ))
           )}
         </tbody>
       </table>
+
+      <div className={styles.pagination}>
+        <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
+          &lt;
+        </button>
+        {pageNums.map(p => (
+          <button key={p} onClick={() => submit(p)} className={p === pageInfo.curPage ? styles.active : ''}>
+            {p}
+          </button>
+        ))}
+        <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage >= pageInfo.allPage}>
+          &gt;
+        </button>
+      </div>
+      </div>
     </div>
   );
 }
