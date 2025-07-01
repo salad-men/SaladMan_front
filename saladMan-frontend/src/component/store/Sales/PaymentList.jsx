@@ -7,11 +7,11 @@ import SidebarSales from './SidebarSales';
 
 const PaymentList = () => {
     const [payments, setPayments] = useState([]);
-    const [pageInfo, setPageInfo] = useState({curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
-    const [pageNums, setPageNums] = useState([]);
     const [status, setStatus] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [pageInfo, setPageInfo] = useState({curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+    const [pageNums, setPageNums] = useState([]);
     const [token] = useAtom(accessTokenAtom);
 
     useEffect(() => {
@@ -26,9 +26,9 @@ const PaymentList = () => {
 
         axios.get('/store/paymentList', {
             params: {
-            status: status || '',
-            startDate: '2025-06-01',
-            endDate: '2025-06-27',
+            status: status || "",
+            startDate: startDate || "",
+            endDate: endDate || "",
             page
             }
         })
@@ -41,7 +41,6 @@ const PaymentList = () => {
             pages.push(i);
             }
             setPageNums(pages);
-            setPage(res.data.pageInfo.curPage);
         })
         .catch(err => {
             console.error('매출 데이터 불러오기 실패:', err);
@@ -74,8 +73,6 @@ const PaymentList = () => {
                             <label><input type="radio" name="status" value="환불완료" checked={status === "환불완료"}
                                     onChange={(e) => setStatus(e.target.value)}/> 환불완료</label>
                         </div>
-                    </div>
-                    <div className={styles.filterRow}>
                         <div className={styles.filterLabel}>기간</div>
                         <div className={styles.filterContent}>
                             <input type="date" value={startDate}
@@ -105,12 +102,12 @@ const PaymentList = () => {
                         {payments.length > 0 ? (
                             payments.map((order, idx) => (
                                 <tr key={idx}>
-                                    <td>{order.orderTime}-{order.id}</td>
+                                    <td>{order.orderTime.split('T')[0]}-{order.id}</td>
                                     <td>{order.name}</td>
                                     <td>{order.quantity}</td>
-                                    <td>{order.totalPrice}</td>
+                                    <td>{order.totalPrice.toLocaleString()}</td>
                                     <td><span>{order.status}</span></td>
-                                    <td>{order.orderTime}</td>
+                                    <td>{order.orderTime.replace('T', ' ')}</td>
                                 </tr>
                                 )) 
                             ) : (
