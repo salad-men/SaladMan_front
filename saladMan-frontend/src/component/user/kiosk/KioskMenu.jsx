@@ -56,7 +56,7 @@ const KioskMenu = () => {
     
     <div className={styles.page}>
     <div className={styles.header}/>
-      <h2 className={styles.title}>2단계. 메뉴를 선택하세요</h2>
+      <h2 className={styles.title}>메뉴를 선택하세요</h2>
 
       <div className={styles.tabs}>
         {categories.map((cat) => (
