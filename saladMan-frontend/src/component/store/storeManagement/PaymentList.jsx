@@ -3,7 +3,6 @@ import { useAtom } from 'jotai';
 import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config.jsx';
 import styles from './PaymentList.module.css'
-import SidebarSales from './SidebarSales';
 
 const PaymentList = () => {
     const [payments, setPayments] = useState([]);
@@ -56,7 +55,6 @@ const PaymentList = () => {
 
     return (
         <div className={styles.wrapper}>
-            <SidebarSales />
             <div className={styles.content}>
                 <header className={styles.pageHeader}>
                     <h2>주문 및 환불 내역 조회</h2>

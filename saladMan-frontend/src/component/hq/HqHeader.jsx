@@ -79,15 +79,6 @@ const HqHeader = ({
                         </div>
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">점포조회</a>
-                        <div className="dropdown">
-                            <ul>
-                                <li><a href="#">매장 위치 조회</a></li>
-                                <li><a href="/hq/storeStock">매장 재고 조회</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="dropdown-container">
                         <a href="/hq/HqNoticeList">공지사항</a>
                         <div className="dropdown">
                             <ul>
