@@ -68,7 +68,7 @@ import StoreEmployeeList from '@store/storeManagement/StoreEmployeeList';
 
 import HqComplaintList from '@hq/Complaint/HqComplaintList';
 import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
-import Notification from '@store/notice/notification';
+import Notification from '@store/notice/Notification';
 import StoreNoticeList from '@store/notice/StoreNoticeList';
 import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
 import StoreComplaintList from '@store/complaint/StoreComplaintList';
