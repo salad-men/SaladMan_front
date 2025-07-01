@@ -7,7 +7,7 @@ export default function SidebarMenus() {
                 <h1>매출</h1>
                 <ul>
                     <li><a href="/store/totalMenu">매출 조회</a></li>
-                    <li><a href="/store/menuStatus">판매 메뉴 관리</a></li>
+                    <li><a href="/store/paymentList">주문내역 조회</a></li>
                 </ul>
             </div>
         </>

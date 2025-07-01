@@ -74,3 +74,13 @@ body {
     color: #666;
     cursor: pointer;
 }
+
+.alarmCount {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: rgb(243, 0, 0);
+    top: 15px;
+    right: 165px;
+}
