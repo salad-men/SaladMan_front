@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function StoreEmployeeList() {
   const token = useAtomValue(accessTokenAtom);
-  const user = useAtomValue(userAtom); // 로그인한 지점 정보
+  const user = useAtomValue(userAtom); 
   const navigate = useNavigate();
 
   // 검색/페이징
@@ -28,12 +28,14 @@ export default function StoreEmployeeList() {
 
   // 직원 목록 불러오기 (지점 필터 X, 자기 매장만)
   const fetchEmployees = (page = 1) => {
-    if (!token || !user?.storeId) return;
+    if (!token || !user?.id) return;
     myAxios(token).post("/store/emp/list", {
+      storeId: user.id, 
       keyword: searchKeyword,
       grade: grade === "all" ? null : grade,
       page,
     }).then(res => {
+      console.log(res.data);
       setEmployees(res.data.employees || []);
       const pi = res.data.pageInfo || {curPage:1,allPage:1,startPage:1,endPage:1};
       setPageInfo(pi);
@@ -121,10 +123,6 @@ export default function StoreEmployeeList() {
       <div className={styles.employeeListContent}>
         <h2>직원 목록</h2>
         <div className={styles.topBar}>
-          <button
-            className={styles.registerButton}
-            onClick={() => navigate("/store/empRegister")}
-          >직원 등록</button>
           <form className={styles.searchGroup} onSubmit={handleSearch}>
             <select value={grade} onChange={e => setGrade(e.target.value)}>
               <option value="all">전체 직급</option>

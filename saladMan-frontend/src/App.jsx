@@ -63,7 +63,7 @@ import OrderDetail from '@store/order/OrderDetail';
 import StockInspection from '@store/order/StockInspection';
 import OrderSettings from '@store/order/OrderSettings';
 import StockLog from '@store/order/StockLog';
-import EmpSchedule from '@store/storeManagement/empSchedule';
+import EmpSchedule from '@store/storeManagement/EmpSchedule';
 import StoreEmployeeList from '@store/storeManagement/StoreEmployeeListStore';
 
 import HqComplaintList from '@hq/Complaint/HqComplaintList';
@@ -214,7 +214,7 @@ function App() {
           <Route path='/store/recipe' element={<Recipe />} />
 
           {/*매장관리*/}
-          <Route path="/store/empSchedule" element={<EmpSchedule />} />
+          <Route path="/store/EmpSchedule" element={<EmpSchedule />} />
           <Route path="/store/StoreEmployeeListStore" element={<StoreEmployeeList />} />
           
           {/* 매출 */}

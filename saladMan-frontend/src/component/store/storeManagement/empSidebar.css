@@ -1,32 +1,15 @@
+/* EmpSidebar.css */
 .sidebar {
-    /**/
-    position: fixed;        /* ← 추가 */
-    top: 0;                 /* ← 상단에 고정 */
-    left: 0;                /* ← 왼쪽에 고정 */
-    /**/
-    
     width: 200px;
+    min-width: 200px;
     background-color: #4D774E;
     color: white;
-    padding: 20px;
+    padding: 32px 16px 16px 16px;
+    min-height: 100vh;
+    height: 100%;
 }
-
-.sidebar h3 {
-    margin-top: 0;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar li {
-    margin: 10px 0;
-    list-style: none;
-
-}
-
-.sidebar a {
-    color: rgb(192, 154, 154);
-    text-decoration: none;
-}
+.sidebar h3 { margin-top: 0; font-size: 1.25rem; letter-spacing: -1px;}
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar li { margin: 16px 0; }
+.sidebar a { color: #ffeedd; text-decoration: none; font-weight: 600; }
+.sidebar a.active, .sidebar a:hover { color: #e2b47d; }
