@@ -63,12 +63,12 @@ import OrderDetail from '@store/order/OrderDetail';
 import StockInspection from '@store/order/StockInspection';
 import OrderSettings from '@store/order/OrderSettings';
 import StockLog from '@store/order/StockLog';
-import EmpSchedule from '@store/storeManagement/EmpSchedule';
+import EmpSchedule from '@store/storeManagement/empSchedule';
 import StoreEmployeeList from '@store/storeManagement/StoreEmployeeList';
 
 import HqComplaintList from '@hq/Complaint/HqComplaintList';
 import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
-import Notification from '@store/notice/Notification';
+import Notification from '@store/notice/notification';
 import StoreNoticeList from '@store/notice/StoreNoticeList';
 import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
 import StoreComplaintList from '@store/complaint/StoreComplaintList';
