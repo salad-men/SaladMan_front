@@ -1,28 +1,58 @@
+import { useEffect, useState } from "react";
+import { useAtom } from 'jotai';
+import { accessTokenAtom } from '/src/atoms';
+import { myAxios } from '/src/config.jsx';
 import styles from './PaymentList.module.css'
 import SidebarSales from './SidebarSales';
 
 const PaymentList = () => {
-    const orderList = [
-        {
-            orderNo: '20240525-002',
-            customer: '홍길동',
-            menu: '치킨 시저 샐러드',
-            quantity: '1개',
-            total: '12,000원',
-            status: '주문완료',
-            date: '2025-05-25 18:06:41',
-        },
-        {
-            orderNo: '20240522-007',
-            customer: '이철수',
-            menu: '두부 에그보울',
-            quantity: '2개',
-            total: '20,000원',
-            status: '환불완료',
-            date: '2025-05-22 19:00:14',
-        },
-        // ... 추가 데이터
-    ];
+    const [payments, setPayments] = useState([]);
+    const [status, setStatus] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [pageInfo, setPageInfo] = useState({curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+    const [pageNums, setPageNums] = useState([]);
+    const [token] = useAtom(accessTokenAtom);
+
+    useEffect(() => {
+        if (token) {
+            submit(1);
+        }
+    }, [token]);
+
+    const submit = (page) => {
+        if (!token) return;
+        const axios = myAxios(token);
+
+        axios.get('/store/paymentList', {
+            params: {
+            status: status || "",
+            startDate: startDate || "",
+            endDate: endDate || "",
+            page
+            }
+        })
+        .then(res => {
+            setPayments(res.data.content);
+            setPageInfo(res.data.pageInfo);
+
+            const pages = [];
+            for (let i = res.data.pageInfo.startPage; i <= res.data.pageInfo.endPage; i++) {
+            pages.push(i);
+            }
+            setPageNums(pages);
+        })
+        .catch(err => {
+            console.error('매출 데이터 불러오기 실패:', err);
+        });
+
+    };
+
+    const handleSearch = () => {
+        if (!token) return;
+        if (!startDate || !endDate) return alert('날짜를 선택해주세요');
+        submit(1);
+    };
 
     return (
         <div className={styles.wrapper}>
@@ -36,31 +66,24 @@ const PaymentList = () => {
                     <div className={styles.filterRow}>
                         <div className={styles.filterLabel}>주문 상태</div>
                         <div className={styles.filterContent}>
-                            <label><input type="radio" name="status" /> 전체</label>
-                            <label><input type="radio" name="status" /> 주문완료</label>
-                            <label><input type="radio" name="status" /> 환불완료</label>
+                            <label><input type="radio" name="status" value="" checked={status === ""}
+                                    onChange={(e) => setStatus(e.target.value)}/> 전체</label>
+                            <label><input type="radio" name="status" value="주문완료" checked={status === "주문완료"}
+                                    onChange={(e) => setStatus(e.target.value)}/> 주문완료</label>
+                            <label><input type="radio" name="status" value="환불완료" checked={status === "환불완료"}
+                                    onChange={(e) => setStatus(e.target.value)}/> 환불완료</label>
                         </div>
-                    </div>
-                    <div className={styles.filterRow}>
-                        <div className={styles.filterLabel}>검색</div>
-                        <div className={styles.filterContent}>
-                            <select>
-                                <option>고객명</option>
-                                <option>전화번호</option>
-                                <option>상품명</option>
-                            </select>
-                            <input type="text" placeholder="검색어 입력" />
-                        </div>
-                    </div>
-                    <div className={styles.filterRow}>
                         <div className={styles.filterLabel}>기간</div>
                         <div className={styles.filterContent}>
-                            <input type="date" /> ~ <input type="date" />
+                            <input type="date" value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}/> 
+                                ~ 
+                                <input type="date" value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}/>
                         </div>
                     </div>
                     <div className={styles.filterActions}>
-                        <button>검색</button>
-                        <button className={styles.reset}>초기화</button>
+                        <button onClick={handleSearch}>검색</button>
                     </div>
                 </div>
 
@@ -68,7 +91,6 @@ const PaymentList = () => {
                     <thead>
                         <tr className={styles.orderTableHeader}>
                             <th>주문번호</th>
-                            <th>고객명</th>
                             <th>메뉴</th>
                             <th>수량</th>
                             <th>총금액</th>
@@ -77,19 +99,40 @@ const PaymentList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {orderList.map((order, idx) => (
-                            <tr key={idx}>
-                                <td>{order.orderNo}</td>
-                                <td>{order.customer}</td>
-                                <td>{order.menu}</td>
-                                <td>{order.quantity}</td>
-                                <td>{order.total}</td>
-                                <td><span>{order.status}</span></td>
-                                <td>{order.date}</td>
-                            </tr>
-                        ))}
+                        {payments.length > 0 ? (
+                            payments.map((order, idx) => (
+                                <tr key={idx}>
+                                    <td>{order.orderTime.split('T')[0]}-{order.id}</td>
+                                    <td>{order.name}</td>
+                                    <td>{order.quantity}</td>
+                                    <td>{order.totalPrice.toLocaleString()}</td>
+                                    <td><span>{order.status}</span></td>
+                                    <td>{order.orderTime.replace('T', ' ')}</td>
+                                </tr>
+                                )) 
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" style={{ textAlign: "center" }}>
+                                        조회된 내역이 없습니다.
+                                    </td>
+                                </tr>
+                            )}
                     </tbody>
                 </table>
+
+                <div className={styles.pagination}>
+                    <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
+                        &lt;
+                    </button>
+                    {pageNums.map(p => (
+                        <button key={p} onClick={() => submit(p)} className={p === pageInfo.curPage ? styles.active : ''}>
+                            {p}
+                        </button>
+                    ))}
+                    <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage >= pageInfo.allPage}>
+                        &gt;
+                    </button>
+                </div>
             </div>
         </div>
     )

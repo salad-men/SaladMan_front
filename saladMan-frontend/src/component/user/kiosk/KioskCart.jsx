@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './KioskCart.module.css';
 
-const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem }) => {
+const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, className="staticCart" }) => {
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className={styles.cartBar}>
+    <div className={`${styles.cartBar} ${className || ''}`}>
       <div className={styles.cartItems}>
         {cartItems.length === 0 ? (
           <p className={styles.empty}>장바구니가 비어 있습니다.</p>

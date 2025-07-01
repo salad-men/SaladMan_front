@@ -68,7 +68,7 @@ import StoreEmployeeList from '@store/storeManagement/StoreEmployeeList';
 
 import HqComplaintList from '@hq/Complaint/HqComplaintList';
 import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
-import Notification from '@hq/Notice/HqNotification';
+import Notification from '@store/notice/Notification';
 import StoreNoticeList from '@store/notice/StoreNoticeList';
 import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
 import StoreComplaintList from '@store/complaint/StoreComplaintList';
@@ -85,6 +85,9 @@ import { useAtom, useSetAtom } from 'jotai';
 import { fcmTokenAtom,alarmsAtom } from './atoms';
 import { firebaseReqPermission, registerServiceWorker } from './firebaseconfig';
 import ChatModal from "./component/Chat/ChatModal";
+
+import KioskLogin from '@user/kiosk/KioskLogin';
+import KioskLayout from '@user/kiosk/KioskLayout';
 
 
 function App() {
@@ -253,9 +256,15 @@ function App() {
         <Route path="/praiseStore" element={<PraiseStorePage />} />
         <Route path="/event" element={<EventPage />} />
         <Route path="/findStore" element={<FindStorePage />} />
-        <Route path="/kiosk" element={<KioskPage />} />
-        <Route path="/kioskMenu" element={<KioskMenuPage />} />
 
+        {/* 키오스크 페이지 */}
+        
+        <Route path="/kiosk/login" element={<KioskLogin/>}/>
+        
+        <Route element={<KioskLayout />}>
+          <Route path="/kiosk/main" element={<KioskPage />} />
+          <Route path="/kiosk/menu" element={<KioskMenuPage />} />
+        </Route>
       </Routes>
     </>
   )

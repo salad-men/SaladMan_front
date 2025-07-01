@@ -1,0 +1,103 @@
+.wrapper {
+  display: flex;
+  height: calc(100vh - 64px);
+  background-color: #f9fafb;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.content {
+  flex: 1;
+  align-self: flex-start;
+  padding: 30px 0 0 0;
+  overflow-y: auto;
+  max-width: 1500px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.inboxControls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.inboxControls button:hover {
+  background-color: #3F6940;
+}
+
+.counts {
+  font-size: 13px;
+  display: flex;
+  align-items: flex-end;
+  
+}
+
+.inboxTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inboxTable td:nth-child(1),
+.inboxTable th:nth-child(1) {
+  width: 5%; /* 체크박스 열 */
+}
+
+.inboxTable td:nth-child(2),
+.inboxTable th:nth-child(2) {
+  width: 11%; /* 제목 */
+}
+
+.inboxTable td:nth-child(3),
+.inboxTable th:nth-child(3) {
+  width: 58%; /* 내용 */
+}
+
+.inboxTable td:nth-child(4),
+.inboxTable th:nth-child(4) {
+  width: 25%; /* 수신일시 */
+}
+
+.inboxTable button {
+  margin: auto 4px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #4D774E;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.inboxTable th {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-weight: normal;
+}
+
+.inboxTable td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.inboxTable td:first-child {
+   text-align: center;
+}
+
+.inboxTable td:last-child {
+   text-align: right;
+}
+
+.inboxTable .unread {
+  font-weight: bold;
+}
+
+.noData {
+  text-align: center;
+  color: #aaa;
+  padding: 30px;
+}
