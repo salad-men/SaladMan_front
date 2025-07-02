@@ -1,50 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { myAxios } from "/src/config";
 import styles from "./PraiseStore.module.css";
 
-const events = [
-  {
-    id: 1,
-    title: "25년 1분기 칭찬 매장을 소개합니다!",
-    period: "2025/04/04~2025/05/04",
-    status: "종료",
-    image: "칭찬매장.png",
-  },
-  {
-    id: 2,
-    title: "24년 4분기 칭찬 매장을 소개합니다!",
-    period: "2025/01/03~2025/02/02",
-    status: "종료",
-    image: "칭찬매장.png",
-  },
-  {
-    id: 3,
-    title: "24년 3분기 칭찬 매장을 소개합니다!",
-    period: "2024/10/04~2024/11/03",
-    status: "종료",
-    image: "칭찬매장.png",
-  },
-  {
-    id: 4,
-    title: "24년 2분기 칭찬 매장을 소개합니다!",
-    period: "2024/07/05~2024/08/04",
-    status: "종료",
-    image: "칭찬매장.png",
-  },
-];
+// html 태그 제거 유틸
+function stripHtmlTags(html) {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+}
 
 export default function PraiseStore() {
+  const [stores, setStores] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    myAxios()
+      .get(`/user/announce?type=칭찬매장&page=${page}&size=5`)
+      .then(res => {
+        setStores(res.data.content);
+        setTotalPages(res.data.totalPages);
+      })
+      .catch(err => console.error(err));
+  }, [page]);
+
   return (
     <div className={styles.container}>
-      {events.map((event) => (
-        <div key={event.id} className={styles.card}>
-          <img src={event.image} alt={event.title} className={styles.image} />
+      {stores.map((store) => (
+        <div
+          key={store.id}
+          className={styles.card}
+          onClick={() => navigate(`/praiseDetail/${store.id}`)}
+          style={{ cursor: "pointer" }}
+        >
+          <img src={store.img} alt={store.title} className={styles.image} />
           <div className={styles.info}>
-            <h3 className={styles.title}>{event.title}</h3>
-            <p className={styles.period}>이벤트 기간: {event.period}</p>
+            <h3 className={styles.title}>{store.title}</h3>
+            <p className={styles.period}>
+              {stripHtmlTags(store.content).slice(0, 15)}...
+            </p>
           </div>
-          <div className={styles.status}>{event.status}</div>
+          <div className={styles.status}>{store.type}</div>
         </div>
       ))}
+
+      <div className={styles.pagination}>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setPage(i)}
+            className={`${styles.pageButton} ${page === i ? styles.activePage : ''}`}
+          >
+            {i + 1}
+          </button>
+        ))}
+        {totalPages > 0 && page < totalPages - 1 && (
+          <button
+            onClick={() => setPage(page + 1)}
+            className={styles.pageButton}
+          >
+            &gt;&gt;
+          </button>
+        )}
+      </div>
     </div>
   );
 }

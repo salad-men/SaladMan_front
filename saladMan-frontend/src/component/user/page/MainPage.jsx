@@ -22,10 +22,12 @@ const MainPage = () => {
       <main>
         <IntroSection1 />
         <IntroSection2 />
-        <SearchStore />
-        <BestMenuSection />
       </main>
       </Layout>
+        <SearchStore />
+
+        <BestMenuSection />
+
       <Footer />
     </>
   );
