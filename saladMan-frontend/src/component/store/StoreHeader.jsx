@@ -8,7 +8,6 @@ import ChatSidebar from "@components/Chat/ChatSidebar";
 
 const StoreHeader = () => {
     const store = useAtomValue(userAtom);
-    const [showChat, setShowChat] = useState(false);
     const navigate = useNavigate();
     
     
@@ -89,9 +88,7 @@ const StoreHeader = () => {
                 </div>
                 <div className="user-info">
                     {store.name} | <a onClick={logout}>로그아웃</a>
-                    <span className="chat-icon-btn" onClick={()=>setShowChat(true)} style={{marginLeft: 15, cursor: "pointer", fontSize: "22px"}}>💬</span>
                 </div>
-                <ChatSidebar isOpen={showChat} onClose={()=>setShowChat(false)} />
             </div>
         </>
     );

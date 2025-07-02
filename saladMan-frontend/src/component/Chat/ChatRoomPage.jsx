@@ -6,13 +6,14 @@ import SockJS from "sockjs-client";
 import { Client as StompClient } from "@stomp/stompjs";
 import styles from "./ChatRoomPage.module.css";
 
+// ...import 생략
+
 export default function ChatRoomPage({ roomId, onClose }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [connected, setConnected] = useState(false);
   const stompClientRef = useRef(null);
 
-  // 👇 StoreList와 똑같이 token 사용
   const accessToken = useAtomValue(accessTokenAtom);
   const user = useAtomValue(userAtom);
 
@@ -21,32 +22,47 @@ export default function ChatRoomPage({ roomId, onClose }) {
     if (!accessToken) return;
     myAxios(accessToken)
       .get(`/chat/history/${roomId}`)
-      .then(res => setMessages(res.data || []));
+      .then(res => {
+        console.log("[ChatRoomPage] 채팅 이력 로드:", res.data);
+        setMessages(res.data || []);
+      });
   }, [roomId, accessToken]);
 
   // 웹소켓 연결 & 구독
   useEffect(() => {
     if (!accessToken) return;
+    console.log("[ChatRoomPage] WebSocket 연결 시도");
 
     const sock = new SockJS(`${API_BASE}/connect`);
     const stomp = new StompClient({
       webSocketFactory: () => sock,
       connectHeaders: {
-        Authorization: accessToken, 
+        Authorization: accessToken,
       },
       onConnect: () => {
+        console.log("[ChatRoomPage] WebSocket 연결 성공!");
         setConnected(true);
         stomp.subscribe(
           `/topic/${roomId}`,
           (msg) => {
-            setMessages(msgs => [...msgs, JSON.parse(msg.body)]);
+            const payload = JSON.parse(msg.body);
+            console.log("[ChatRoomPage] 메시지 수신:", payload);
+            setMessages(msgs => [...msgs, payload]);
           },
-          { Authorization: accessToken } // 대부분 서버에서는 CONNECT에만 검사, subscribe에는 없어도 무방
+          { Authorization: accessToken }
         );
       },
-      onDisconnect: () => setConnected(false),
-      onWebSocketClose: () => setConnected(false),
-      debug: () => {}
+      onDisconnect: () => {
+        setConnected(false);
+        console.log("[ChatRoomPage] WebSocket 연결 끊김");
+      },
+      onWebSocketClose: () => {
+        setConnected(false);
+        console.log("[ChatRoomPage] WebSocket 세션 종료");
+      },
+      debug: str => {
+        // console.log("[STOMP]", str);
+      }
     });
     stomp.activate();
     stompClientRef.current = stomp;
@@ -65,10 +81,10 @@ export default function ChatRoomPage({ roomId, onClose }) {
       return;
     }
     if (!input.trim()) return;
+    console.log("[ChatRoomPage] 메시지 전송:", input);
     stompClientRef.current.publish({
       destination: `/publish/${roomId}`,
       body: JSON.stringify({ message: input, senderUsername: user.username })
-      // 일반적으로 메시지 publish에는 헤더 안 보내도 됨 (서버가 CONNECT에서 세션 인증했기 때문)
     });
     setInput("");
   };

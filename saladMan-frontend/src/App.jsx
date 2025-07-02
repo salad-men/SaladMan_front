@@ -62,7 +62,7 @@ import StockInspection from '@store/order/StockInspection';
 import OrderSettings from '@store/order/OrderSettings';
 import StockLog from '@store/order/StockLog';
 import EmpSchedule from '@store/storeManagement/empSchedule';
-
+import StoreEmployeeList from '@store/storeManagement/StoreEmployeeList';
 
 import HqComplaintList from '@hq/Complaint/HqComplaintList';
 import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
@@ -83,15 +83,21 @@ import { useAtom, useSetAtom } from 'jotai';
 import { fcmTokenAtom,alarmsAtom } from './atoms';
 import { firebaseReqPermission, registerServiceWorker } from './firebaseconfig';
 import ChatModal from "./component/Chat/ChatModal";
+import useChatSSE from "./component/Chat/useChatSSE";
+import ChatSidebar from "./component/Chat/ChatSidebar";
 
 import KioskLogin from '@user/kiosk/KioskLogin';
 import KioskLayout from '@user/kiosk/KioskLayout';
 
+import { userAtom } from "/src/atoms";
+import { useAtomValue } from "jotai";
+import { accessTokenAtom } from "/src/atoms";
 
 function App() {
   const [alarm, setAlarm] = useState({});
   const setFcmToken = useSetAtom(fcmTokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
+
 
   useEffect(() => {
     const init = async () => {
@@ -108,30 +114,118 @@ function App() {
   },[alarm])
 
 
-  // ====== 채팅알림 ======
-  const [chatAlarmOn, setChatAlarmOn] = useState(true);
-  const [chatModalQueue, setChatModalQueue] = useState([]);
-  const [chatUnreadTotal, setChatUnreadTotal] = useState(0);
-  const chatModalTimeout = useRef(null);
+  // ====== 채팅 알림 전역 ======
+  const user = useAtomValue(userAtom); 
+  const token = useAtomValue(accessTokenAtom);
+  const jwt = token?.replace(/^Bearer\s+/i, ""); 
 
-  // 실시간 알림 모달 (최대 1개)
+const [chatAlarmOn, setChatAlarmOn] = useState(
+  () => sessionStorage.getItem("chatAlarmOn") !== "false"
+); 
+  const [chatModalQueue, setChatModalQueue] = useState([]); 
+  const [chatRooms, setChatRooms] = useState([]);           
+  const [chatUnreadTotal, setChatUnreadTotal] = useState(0);
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  // 채팅 알림 모달
   const showChatModal = (msg) => {
-    setChatModalQueue(q => [...q, msg]);
-    if (chatModalTimeout.current) clearTimeout(chatModalTimeout.current);
-    chatModalTimeout.current = setTimeout(() => {
-      setChatModalQueue(q => q.slice(1));
-    }, 3200);
+    setChatModalQueue(q => [...q, msg].slice(-5));
   };
+
+  // 자동 닫힘 (오래된 것부터)
+  useEffect(() => {
+  if (chatModalQueue.length === 0) return;
+  // 각 알림마다 3.2초 후 자동 닫힘 (최신 알림에만 타이머를 거는 방식)
+  const timer = setTimeout(() => {
+    setChatModalQueue(q => q.slice(1));
+  }, 3200);
+  return () => clearTimeout(timer);
+  }, [chatModalQueue]);
+  
+  useEffect(() => {
+  sessionStorage.setItem("chatAlarmOn", chatAlarmOn);
+  }, [chatAlarmOn]);
+
+  // ===== SSE 연결 =====
+  useChatSSE({
+    enabled: !!jwt,
+    user,
+    token: jwt,
+    rooms: chatRooms,
+    setRooms: setChatRooms,
+    onUnreadTotal: setChatUnreadTotal,
+    onModal: chatAlarmOn ? showChatModal : undefined
+  });
 
   return (
     <>
-      {/* 채팅알람 */}
+      {/* 채팅 */}
       {chatAlarmOn && chatModalQueue.length > 0 &&
-        <ChatModal
-          message={chatModalQueue[0]}
-          onClose={() => setChatModalQueue(q => q.slice(1))}
-        />
-       }
+      <div
+        style={{
+          position: "fixed",
+          top: 22,
+          right: 28,
+          zIndex: 10001,
+          display: "flex",
+          flexDirection: "column-reverse",
+          gap: 8,
+        }}
+      >
+        {chatModalQueue.map((msg, idx) => (
+          <ChatModal
+            key={idx}
+            message={msg}
+            onClose={() => setChatModalQueue(q => q.filter((_, i) => i !== idx))}
+          />
+        ))}
+      </div>
+    }
+      {/* 채팅 버튼 */}
+      <button
+      className="global-chat-badge"
+      style={{
+        position: "fixed",
+        top: -15,             // 상단!
+        right: 70,           // 오른쪽 여백 조절
+        background: "none",  // 초록 원 제거!
+        color: "#4d774e",
+        border: "none",
+        borderRadius: "50%",
+        width: 45,
+        height: 50,
+        fontSize: 28,
+        boxShadow: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 10000,
+        padding: 0,
+      }}
+      onClick={() => setShowSidebar(true)}
+      title="채팅"
+    >
+      <span role="img" aria-label="chat" style={{ fontSize: 30 }}>💬</span>
+      {chatUnreadTotal > 0 && (
+        <span style={{
+          position: "absolute", top: -2, left: 30, background: "red", color: "white",
+          borderRadius: "50%", fontSize: "12px", minWidth: "18px", textAlign: "center",
+          fontWeight: 700, padding: "1px 6px"
+        }}>
+          {chatUnreadTotal}
+        </span>
+      )}
+    </button>
+
+      <ChatSidebar
+        isOpen={showSidebar}
+        onClose={() => setShowSidebar(false)}
+        chatAlarmOn={chatAlarmOn}
+        setChatAlarmOn={setChatAlarmOn}
+        rooms={chatRooms}
+        setRooms={setChatRooms}
+      />
+
       <Routes>
 
         <Route element={
@@ -212,7 +306,8 @@ function App() {
           <Route path='/store/recipe' element={<Recipe />} />
 
           {/*매장관리*/}
-          <Route path="/store/empSchedule" element={<EmpSchedule />} />
+          <Route path="/store/EmpSchedule" element={<EmpSchedule />} />
+          <Route path="/store/StoreEmployeeList" element={<StoreEmployeeList />} />
           
           {/* 매출 */}
           <Route path="/store/paymentList" element={<PaymentList />} />
