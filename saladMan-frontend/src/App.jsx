@@ -24,17 +24,15 @@ import HqUpdateMenu from '@hq/Menu/HqUpdateMenu';
 import HqRecipe from '@hq/Menu/HqRecipe';
 import HqTotalSales from '@hq/Sales/HqTotalSales';
 import HqStoreSales from '@hq/Sales/HqStoreSales';
-import HqStoreStock from '@hq/StoreInquiry/HqStoreStock';
 import HqNotification from '@hq/Notice/HqNotification';
 
 import StoreLayout from '@store/StoreLayout';
 import TotalMenu from '@store/Menu/TotalMenu';
 import MenuStatus from '@store/Menu/MenuStatus';
 import Recipe from '@store/Menu/Recipe';
-import PaymentList from '@store/Sales/PaymentList';
-import StoreSales from '@store/Sales/StoreSales';
+import PaymentList from '@store/storeManagement/PaymentList';
+import StoreSales from '@store/storeManagement/StoreSales';
 import OtherStoreInven from '@store/FindStore/OtherStoreInven';
-import FindOtherStore from '@store/FindStore/FindOtherStore';
 
 import StoreInventoryList from '@store/Inventory/StoreInventoryList';
 import StoreInventoryExpiration from '@store/Inventory/StoreInventoryExpiration';
@@ -269,9 +267,6 @@ const [chatAlarmOn, setChatAlarmOn] = useState(
           <Route path="/hq/empRegister" element={<EmployeeRegister />} />
           <Route path="/hq/empList" element={<EmployeeList />} />
 
-          {/* 점포조회 */}
-          <Route path='/hq/storeStock' element={<HqStoreStock />} />
-
           {/* 공지- 공지 */}
           <Route path='/hq/HqNoticeList' element={<HqNoticeList />} />
           <Route path='/hq/HqNoticeDetail/:id' element={<HqNoticeDetail />} />
@@ -319,7 +314,6 @@ const [chatAlarmOn, setChatAlarmOn] = useState(
           <Route path="/store/storeSales" element={<StoreSales />} />
 
           {/* 점포조회 */}
-          <Route path='/store/findOtherStore' element={<FindOtherStore />} />
           <Route path='/store/otherStoreInven' element={<OtherStoreInven />} />
 
           {/* 공지사항 */}
