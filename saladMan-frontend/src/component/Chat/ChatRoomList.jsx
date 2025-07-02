@@ -4,55 +4,30 @@ import { accessTokenAtom } from "/src/atoms";
 import { useAtomValue } from "jotai";
 import styles from "./ChatRoomList.module.css";
 import ChatRoomPage from "./ChatRoomPage";
-import useChatSSE from "./useChatSSE";
 
-export default function ChatRoomList({ alertOn, showModal, setUnreadTotal }) {
-  const [rooms, setRooms] = useState([]);
+/**
+ * @param {Array} rooms - 방 목록 (App.js 전역에서 내려옴, 방별 unreadCount 등 포함)
+ * @param {Function} setRooms - 방 목록 setter (실시간 unread/나가기 등에서 갱신)
+ */
+export default function ChatRoomList({ rooms = [], setRooms = () => {} }) {
   const [activeRoom, setActiveRoom] = useState(null);
   const token = useAtomValue(accessTokenAtom);
 
+  // 최초 방목록 로딩 (App.js에서 이미 가져오면 이 부분은 거의 실행 안 됨)
   useEffect(() => {
-    if (!token) return;
-    myAxios(token).get("/chat/my/rooms").then(res => setRooms(res.data));
-  }, [token]);
-
-  // 실시간 반영 + 모달/뱃지 연동
-  useChatSSE({
-    enabled: true,
-    onNewMessage: (msg) => {
-      setRooms(rs => {
-        const next = rs.map(room =>
-          room.roomId === msg.roomId
-            ? { ...room, unReadCount: (room.unReadCount || 0) + 1 }
-            : room
-        );
-        setUnreadTotal(next.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
-        if (alertOn && showModal) {
-          const targetRoom = next.find(r => r.roomId === msg.roomId);
-          showModal({
-            ...msg,
-            roomName: targetRoom?.roomName || `방번호 ${msg.roomId}`
-          });
-        }
-        return next;
-      });
-    },
-    onReadMessage: (data) => {
-      setRooms(rs => {
-        const next = rs.map(room =>
-          room.roomId === data.roomId
-            ? { ...room, unReadCount: 0 }
-            : room
-        );
-        setUnreadTotal(next.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
-        return next;
-      });
-    }
-  });
+    // token 있어야 하고, rooms가 아예 없을 때만 fetch
+    if (!token || (rooms && rooms.length > 0)) return;
+    myAxios(token).get("/chat/my/rooms")
+      .then(res => setRooms(res.data || []))
+      .catch(() => setRooms([]));
+  }, [token, rooms, setRooms]);
 
   if (activeRoom)
     return (
-      <ChatRoomPage roomId={activeRoom} onClose={() => setActiveRoom(null)} />
+      <ChatRoomPage
+        roomId={activeRoom}
+        onClose={() => setActiveRoom(null)}
+      />
     );
 
   return (
@@ -67,27 +42,42 @@ export default function ChatRoomList({ alertOn, showModal, setUnreadTotal }) {
           </tr>
         </thead>
         <tbody>
-          {rooms.map(room => (
-            <tr key={room.roomId}>
-              <td>{room.roomName}</td>
-              <td>{room.unReadCount || 0}</td>
-              <td>
-                <button className={styles.enterBtn} onClick={() => setActiveRoom(room.roomId)}>입장</button>
-                {room.isGroupChat === "Y" && (
-                  <button className={styles.leaveBtn} onClick={async () => {
-                    await myAxios(token).delete(`/chat/room/group/${room.roomId}/leave`);
-                    setRooms(r => r.filter(a => a.roomId !== room.roomId));
-                  }}>나가기</button>
-                )}
-                {room.isGroupChat === "N" && (
-                  <button className={styles.leaveBtn} onClick={async () => {
-                    await myAxios(token).delete(`/chat/room/private/${room.roomId}/leave`);
-                    setRooms(r => r.filter(a => a.roomId !== room.roomId));
-                  }}>나가기</button>
-                )}
-              </td>
+          {(rooms || []).length === 0 ? (
+            <tr>
+              <td colSpan={3} style={{ color: "#888" }}>채팅방이 없습니다.</td>
             </tr>
-          ))}
+          ) : (
+            (rooms || []).map(room => (
+              <tr key={room.roomId}>
+                <td>{room.roomName}</td>
+                <td>{room.unReadCount || 0}</td>
+                <td>
+                  <button
+                    className={styles.enterBtn}
+                    onClick={() => setActiveRoom(room.roomId)}
+                  >입장</button>
+                  {room.isGroupChat === "Y" && (
+                    <button
+                      className={styles.leaveBtn}
+                      onClick={async () => {
+                        await myAxios(token).delete(`/chat/room/group/${room.roomId}/leave`);
+                        setRooms(r => (r || []).filter(a => a.roomId !== room.roomId));
+                      }}
+                    >나가기</button>
+                  )}
+                  {room.isGroupChat === "N" && (
+                    <button
+                      className={styles.leaveBtn}
+                      onClick={async () => {
+                        await myAxios(token).delete(`/chat/room/private/${room.roomId}/leave`);
+                        setRooms(r => (r || []).filter(a => a.roomId !== room.roomId));
+                      }}
+                    >나가기</button>
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config.jsx';
 import Chart from 'chart.js/auto';
-import SidebarSales from './SidebarSales';
 import { useAtom } from 'jotai';
 
 const StoreSales = () => {
@@ -142,7 +141,6 @@ const StoreSales = () => {
 
     return (
         <div className={style.wrapper}>
-            <SidebarSales />
             <div className={style.content}>
                 <header className={style.pageHeader}>
                     <h2>통합 매출 조회</h2>

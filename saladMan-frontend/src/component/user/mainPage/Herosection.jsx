@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useAtomValue } from "jotai";
+import { userAtom } from "/src/atoms";
 import { myAxios } from "../../../config";
 import "./HeroSection.css";
 
 const HeroSection = () => {
+  const store = useAtomValue(userAtom); // jotai에서 현재 로그인된 사용자 정보 가져오기
+  const [isAdmin, setIsAdmin] = useState(false);
   const [banner, setBanner] = useState({
     line1: "",
     line2: "",
     line3: "",
     image: "",
   });
-  const [isAdmin, setIsAdmin] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const [newLine1, setNewLine1] = useState("");
@@ -17,6 +20,7 @@ const HeroSection = () => {
   const [newLine3, setNewLine3] = useState("");
   const [newImage, setNewImage] = useState("");
 
+  // 배너 가져오기
   useEffect(() => {
     const fetchBanner = async () => {
       try {
@@ -27,22 +31,17 @@ const HeroSection = () => {
         console.error("배너 불러오기 실패:", err);
       }
     };
-
     fetchBanner();
-
-    try {
-      const storeStr = sessionStorage.getItem("store");
-      if (storeStr) {
-        const storeData = JSON.parse(storeStr);
-        if ((storeData.role || "").trim() === "ROLE_HQ") {
-          setIsAdmin(true);
-        }
-      }
-    } catch (err) {
-      console.error("store 파싱 실패:", err);
-    }
   }, []);
 
+  // Jotai atom에서 store(유저정보) 보고 HQ 권한이면 isAdmin true
+  useEffect(() => {
+    if (store && store.role && store.role.trim() === "ROLE_HQ") {
+      setIsAdmin(true);
+    }
+  }, [store]);
+
+  // 마우스 우클릭 -> 수정창
   const handleRightClick = (e) => {
     if (!isAdmin) return;
     e.preventDefault();
@@ -53,6 +52,7 @@ const HeroSection = () => {
     setShowModal(true);
   };
 
+  // 파일 업로드 (드래그 & 드롭 / 파일 선택)
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -81,14 +81,15 @@ const HeroSection = () => {
       const formData = new FormData();
       formData.append("file", file);
       const instance = myAxios();
-      const res = await instance.post("/user/banner/upload", formData); // 업로드용 API
-      setNewImage(res.data.url); // 절대경로 S3 URL
+      const res = await instance.post("/user/banner/upload", formData);
+      setNewImage(res.data.url);
     } catch (err) {
       console.error("업로드 실패:", err);
       alert("이미지 업로드 실패");
     }
   };
 
+  // 저장
   const handleSave = async () => {
     try {
       const instance = myAxios();
@@ -133,7 +134,7 @@ const HeroSection = () => {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
         >
-          <h3>배너 수정</h3>
+          <h3>메인 배너 수정</h3>
           <input
             value={newLine1}
             onChange={(e) => setNewLine1(e.target.value)}

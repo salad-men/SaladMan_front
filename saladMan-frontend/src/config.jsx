@@ -40,36 +40,6 @@ export const myAxios = (token) => {
 
     return instance;
 }
-// export const myAxios = () => {
-//    var instance = axios.create({
-//       baseURL: API_BASE,
-//       timeout: 5000,
-//    });
-
-//    instance.interceptors.request.use((config) => {
-//       const token = sessionStorage.getItem("access_token"); // 여기서 무조건 sessionStorage 사용
-//       if (token) {
-//          config.headers.Authorization = `Bearer ${token}`;
-//       }
-//       return config;
-//    });
-
-//    instance.interceptors.response.use(
-//       response => response,
-//       error => {
-//          const code = error.response?.status;
-//          if (code === 401 || code === 403) {
-//             alert("접근 권한이 없습니다.");
-//             store.set(accessTokenAtom, '');
-//             store.set(refreshTokenAtom, '');
-//             window.location.href = "/";
-//          }
-//          return Promise.reject(error);
-//       }
-//    );
-
-//    return instance;
-// };
 
 export const themeObj = {
    bgColor: "", 			// 바탕 배경색

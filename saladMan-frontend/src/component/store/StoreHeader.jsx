@@ -8,7 +8,6 @@ import ChatSidebar from "@components/Chat/ChatSidebar";
 
 const StoreHeader = () => {
     const store = useAtomValue(userAtom);
-    const [showChat, setShowChat] = useState(false);
     const navigate = useNavigate();
     
     
@@ -56,20 +55,13 @@ const StoreHeader = () => {
                         </div>
                     </div>
                     <div className="storeDropdownContainer">
-                        <a href="#">매출</a>
+                        <a href="#">매장관리</a>
                         <div className="storeDropdown">
                             <ul>
                                 <li><a href="storeSales">매출 조회</a></li>
                                 <li><a href="paymentList">주문내역 조회</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="storeDropdownContainer">
-                        <a href="#">매장관리</a>
-                        <div className="storeDropdown">
-                            <ul>
-                                <li><a href="/store/StoreEmployeeList">직원 조회</a></li>
-                                <li><a href="/store/empSchedule">직원 일정관리</a></li>
+                                <li><a href="/store/empSchedule">직원일정관리</a></li>
+                                <li><a href="#">직원조회</a></li>
                             </ul>
                         </div>
                     </div>
@@ -77,8 +69,7 @@ const StoreHeader = () => {
                         <a href="#">점포 조회</a>
                         <div className="storeDropdown">
                             <ul>
-                                <li><a href="/store/findOtherStore">매장 위치 조회</a></li>
-                                <li><a href="/store/otherStoreInven">매장 재고 조회</a></li>
+                                <li><a href="/store/otherStoreInven">타매장 재고조회</a></li>
                             </ul>
                         </div>
                     </div>
@@ -96,9 +87,7 @@ const StoreHeader = () => {
                 </div>
                 <div className="user-info">
                     {store.name} | <a onClick={logout}>로그아웃</a>
-                    <span className="chat-icon-btn" onClick={()=>setShowChat(true)} style={{marginLeft: 15, cursor: "pointer", fontSize: "22px"}}>💬</span>
                 </div>
-                <ChatSidebar isOpen={showChat} onClose={()=>setShowChat(false)} />
             </div>
         </>
     );
