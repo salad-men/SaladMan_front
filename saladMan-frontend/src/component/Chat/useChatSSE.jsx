@@ -4,7 +4,7 @@ import { API_BASE } from "/src/config";
 export default function useChatSSE({
   enabled = true,
   user,
-  token,          // Bearer 없는 JWT! (ex: eyJ0eXAiOiJKV1QiLCJ...)
+  token,          
   rooms,
   setRooms,
   onUnreadTotal,
@@ -26,9 +26,12 @@ export default function useChatSSE({
       try {
         const msg = JSON.parse(e.data);
         if (msg.senderUsername === user?.username) return;
+        
         setRooms(prevRooms => {
+          // 항상 배열로 보장
+          const safeRooms = Array.isArray(prevRooms) ? prevRooms : [];
           let updated = false;
-          const next = prevRooms.map(r => {
+          const next = safeRooms.map(r => {
             if (r.roomId === msg.roomId) {
               updated = true;
               return { ...r, unReadCount: (r.unReadCount || 0) + 1 };
@@ -38,18 +41,23 @@ export default function useChatSSE({
           if (!updated && msg.roomId) {
             next.push({ roomId: msg.roomId, roomName: msg.roomName, unReadCount: 1 });
           }
-          onUnreadTotal && onUnreadTotal(next.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
+          
+          const safeNext = Array.isArray(next) ? next : [];
+          const totalUnread = safeNext.reduce((sum, r) => sum + (r.unReadCount || 0), 0);
+          onUnreadTotal && onUnreadTotal(totalUnread);
           onModal && onModal({
             ...msg,
-            roomName: next.find(r => r.roomId === msg.roomId)?.roomName || `방번호 ${msg.roomId}`
+            roomName: safeNext.find(r => r.roomId === msg.roomId)?.roomName || `방번호 ${msg.roomId}`
           });
-          return next;
+          return safeNext;
         });
+
       } catch (err) {
         console.error("[SSE] newMessage 파싱 오류:", err, e.data);
       }
     });
 
+    // 읽음처리(방 들어가서 읽음 시)
     sse.addEventListener("readMessage", (e) => {
       try {
         const data = JSON.parse(e.data);
