@@ -1,18 +1,52 @@
 import React from 'react';
 import styles from './KioskCart.module.css';
 import { useNavigate } from "react-router-dom";
+import { useAtomValue } from "jotai";
+import { accessTokenAtom } from "/src/atoms";
+import { myAxios } from "/src/config";
+
 
 const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart, className = "staticCart" }) => {
+
   const totalPrice = cartItems.reduce((sum, item) => sum + item.salePrice * item.quantity, 0);
   const navigate = useNavigate();
+  const token = useAtomValue(accessTokenAtom);
+
+const handleOrder = async () => {
+  if (cartItems.length === 0) {
+    alert("장바구니에 담긴 상품이 없습니다.");
+    return;
+  }
+
+  try {
+    const res = await myAxios(token).post("/kiosk/prepare", {
+      storeId: 9,
+      items: cartItems.map((item) => ({
+        menuId: item.id,
+        quantity: item.quantity,
+        price: item.salePrice
+      }))
+    });
+
+    const { orderId, amount } = res.data;
+
+    // 결제 페이지로 이동 + 데이터 전달
+    navigate("/kiosk/paymentTest", {
+      state: {
+        orderId,
+        amount
+      }
+    });
+
+  } catch (err) {
+    console.error("결제 준비 오류", err);
+    alert("결제를 준비할 수 없습니다.");
+  }
+};
+
   return (
     <div className={`${styles.cartBar} ${styles[className] || ''}`}>
       <div className={styles.tableWrapper}>
-        <table className={styles.cartTable}>
-          <thead>
-            {/* (필요하면 헤더 넣기) */}
-          </thead>
-        </table>
         <div className={styles.bodyWrapper}>
           <table className={styles.cartTable}>
             <tbody>
@@ -85,7 +119,7 @@ const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart
           홈으로
         </button>
 
-        <button className={styles.orderButton}>주문하기</button>
+        <button className={styles.orderButton} onClick={handleOrder}>주문하기</button>
       </div>
     </div>
   );

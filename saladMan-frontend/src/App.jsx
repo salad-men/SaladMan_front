@@ -92,6 +92,9 @@ import KioskLayout from '@user/kiosk/KioskLayout';
 import { userAtom } from "/src/atoms";
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
+import PaymentSuccess from '@user/kiosk/PaymentSuccess';
+import PaymentFail from '@user/kiosk/PaymentFail';
+import PaymentTest from '@user/kiosk/paymentTest';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -352,6 +355,10 @@ const [chatAlarmOn, setChatAlarmOn] = useState(
         <Route element={<KioskLayout />}>
           <Route path="/kiosk/main" element={<KioskPage />} />
           <Route path="/kiosk/menu" element={<KioskMenuPage />} />
+          <Route path="/kiosk/paymentSuccess" element={<PaymentSuccess />} />
+          <Route path="/kiosk/paymentFail" element={<PaymentFail />} />
+          <Route path="/kiosk/paymentTest" element={<PaymentTest />} />
+
         </Route>
       </Routes>
     </>
