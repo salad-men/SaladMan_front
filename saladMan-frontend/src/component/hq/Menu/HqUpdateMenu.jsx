@@ -23,7 +23,7 @@ const HqUpdateMenu = () => {
                             <tr>
                                 <td className={styles.labelCell}>메뉴 재료</td>
                                 <td>
-                                    <button type="button">
+                                    <button className={styles.button} type='button'>
                                         재료 선택
                                     </button>
                                     <table className={styles.ingredientTable}>
@@ -71,7 +71,7 @@ const HqUpdateMenu = () => {
                         </tbody>
                     </table>
                     <div>
-                        <button type="submit">저장</button>
+                        <button  className={styles.button}  type="submit">저장</button>
                     </div>
                 </form>
 
@@ -92,7 +92,7 @@ const HqUpdateMenu = () => {
                             <label><input type="radio" name="ingredient" value="훈제 연어" /> 훈제 연어</label>
                         </div>
                         <div>
-                            <button type="button">확인</button>
+                            <button  className={styles.button}  type="button">확인</button>
                         </div>
                     </div>
                 </div>

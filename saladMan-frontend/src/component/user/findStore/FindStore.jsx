@@ -126,7 +126,7 @@ const FindStore = () => {
                   );
                 }}
               >
-                길찾기
+                길 찾기
               </button>
             </li>
           ))}

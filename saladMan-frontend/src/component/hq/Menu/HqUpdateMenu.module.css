@@ -62,7 +62,7 @@
     border: none;
 }
 
-button {
+.button {
     padding: 8px 20px;
     background-color: #4D774E;
     color: white;
@@ -71,7 +71,7 @@ button {
     margin-top: 10px;
 }
 
-button:hover {
+.button:hover {
     background-color: #3b5f3c;
 }
 
