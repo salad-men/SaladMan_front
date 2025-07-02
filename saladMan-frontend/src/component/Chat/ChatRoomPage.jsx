@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { myAxios, API_BASE } from "/src/config";
 import { accessTokenAtom, userAtom } from "/src/atoms";
-import { useAtomValue } from "jotai";
+import { useAtomValue} from "jotai";
 import SockJS from "sockjs-client";
 import { Client as StompClient } from "@stomp/stompjs";
 import styles from "./ChatRoomPage.module.css";
 
-// ...import 생략
-
-export default function ChatRoomPage({ roomId, onClose }) {
+export default function ChatRoomPage({ roomId, onClose, setRooms }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [connected, setConnected] = useState(false);
@@ -17,16 +15,21 @@ export default function ChatRoomPage({ roomId, onClose }) {
   const accessToken = useAtomValue(accessTokenAtom);
   const user = useAtomValue(userAtom);
 
-  // 메시지 로딩
+  // 1) 메시지 로딩 & 읽음처리
   useEffect(() => {
     if (!accessToken) return;
     myAxios(accessToken)
       .get(`/chat/history/${roomId}`)
       .then(res => {
-        console.log("[ChatRoomPage] 채팅 이력 로드:", res.data);
         setMessages(res.data || []);
       });
-  }, [roomId, accessToken]);
+
+    // **채팅방 입장시 읽음처리**
+    myAxios(accessToken).post(`/chat/room/${roomId}/read`).then(() => {
+      setRooms && setRooms(prevRooms => prevRooms.map(r => r.roomId === roomId ? { ...r, unReadCount: 0 } : r));
+    });
+  }, [roomId, accessToken, setRooms]);
+
 
   // 웹소켓 연결 & 구독
   useEffect(() => {
@@ -60,9 +63,6 @@ export default function ChatRoomPage({ roomId, onClose }) {
         setConnected(false);
         console.log("[ChatRoomPage] WebSocket 세션 종료");
       },
-      debug: str => {
-        // console.log("[STOMP]", str);
-      }
     });
     stomp.activate();
     stompClientRef.current = stomp;
@@ -71,6 +71,7 @@ export default function ChatRoomPage({ roomId, onClose }) {
       myAxios(accessToken).post(`/chat/room/${roomId}/read`).catch(() => {});
       stomp.deactivate();
       setConnected(false);
+      
     };
   }, [roomId, accessToken]);
 

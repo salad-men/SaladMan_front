@@ -1,54 +1,49 @@
-// BestMenuSection.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { myAxios } from "../../../config";
 import "./BestMenuSection.css";
 
-const menus = [
-  {
-    id: 1,
-    name: "메밀면+훈제오리",
-    eng: "Soba noodle + Duck Meat",
-    badge: "BEST 5",
-    img: "/assets/images/menu1.jpg",
-  },
-  {
-    id: 2,
-    name: "곡물밥+연어",
-    eng: "Grain Rice + Salmon",
-    badge: "BEST 6",
-    img: "/assets/images/menu2.jpg",
-  },
-  {
-    id: 3,
-    name: "야채만+구운버섯",
-    eng: "Vegetable only + Grilled Mushroom",
-    badge: "BEST 4",
-    img: "/assets/images/menu3.jpg",
-  },
-  {
-    id: 4,
-    name: "육회 들기름 메밀면 샐러드",
-    eng: "Beef tartare perilla oil soba salad",
-    badge: "BEST 2",
-    img: "/assets/images/menu4.jpg",
-  },
-];
+export default function BestMenuSection() {
+  const [menus, setMenus] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const BestMenuSection = () => {
+  useEffect(() => {
+    const fetchMenus = async () => {
+      try {
+        const instance = myAxios();
+        const res = await instance.get("/user/bestmenu/bestMenus");
+        setMenus(res.data);
+      } catch (err) {
+        console.error("BestMenu 불러오기 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenus();
+  }, []);
+
   return (
     <section className="best-menu-section">
       <h2>Best Menu</h2>
-      <div className="menuList">
-        {menus.map((menu) => (
-          <div key={menu.id} className="card">
-            <img src={menu.img} alt={menu.name} />
-            <span className="badge">{menu.badge}</span>
-            <h3>{menu.name}</h3>
-            <p>{menu.eng}</p>
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <p>로딩 중...</p>
+      ) : (
+        <div className="menuList">
+          {menus.slice(0, 4).map((menu, idx) => (
+            <div key={menu.id} className="card">
+              <img src={`/${menu.img}`} alt={menu.name} />
+              <span className="badge">BEST {idx + 1}</span>
+              <h3>{menu.name}</h3>
+              {/* <p>총 판매량: {menu.totalQuantity}건</p> */}
+            </div>
+          ))}
+        </div>
+      )}
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </section>
   );
-};
-
-export default BestMenuSection;
+}

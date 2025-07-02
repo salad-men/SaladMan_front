@@ -1,7 +1,8 @@
 .container {
   max-width: 700px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 36px;
+    padding-top: 111px;
   font-family: "Noto Sans KR", sans-serif;
   color: #333;
 }

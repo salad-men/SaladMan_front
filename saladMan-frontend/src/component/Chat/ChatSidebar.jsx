@@ -1,6 +1,6 @@
 import styles from "./ChatSidebar.module.css";
 import { FiBell, FiBellOff } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatRoomList from "./ChatRoomList";
 import StoreList from "./StoreList";
 import GroupChatList from "./GroupChatList";
@@ -10,9 +10,16 @@ export default function ChatSidebar({
   chatAlarmOn = true,
   setChatAlarmOn = () => {},
   rooms = [],
-  setRooms = () => {}
+  setRooms = () => {},
+  setActiveRoomId,
+  activeRoomId
 }) {
   const [activeTab, setActiveTab] = useState("mychat");
+
+  useEffect(() => {
+    if (!isOpen && setActiveRoomId) setActiveRoomId(null);
+  }, [isOpen, setActiveRoomId]);
+
   if (!isOpen) return null;
 
   return (
@@ -45,7 +52,11 @@ export default function ChatSidebar({
         </button>
       </div>
       <div className={styles.tabContent}>
-        {activeTab === "mychat" && <ChatRoomList rooms={rooms} setRooms={setRooms} />}
+        {activeTab === "mychat" && <ChatRoomList 
+            rooms={rooms} 
+            setRooms={setRooms} 
+            forceActiveRoom={activeRoomId}
+            setForceActiveRoom={setActiveRoomId} />}
         {activeTab === "group" && <GroupChatList />}
         {activeTab === "store" && <StoreList />}
       </div>
