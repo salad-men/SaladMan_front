@@ -92,7 +92,7 @@ const BrandHeroSection = () => {
   return (
     <>
       <div className={styles.heroSection} onContextMenu={handleRightClick}>
-        <h1 className={styles.title}><b>{banner.line1 || "BRAND"}</b></h1>
+        <h1 className={styles.title}><b>{banner.line1}</b></h1>
         <br />
         <p className={styles.subtitle}>
           <a href='/brandIntro' className={styles.atag}>스토리</a>
@@ -101,7 +101,7 @@ const BrandHeroSection = () => {
         </p>
         <div className={styles.imageBanner}>
           <img src={banner.image} alt="브랜드" />
-          <span className={styles.Overlay}>{banner.line2 || "SaladMan"}</span>
+          <span className={styles.Overlay}>{banner.line2}</span>
         </div>
       </div>
 
@@ -129,8 +129,8 @@ const BrandHeroSection = () => {
             <img src={newImage} alt="preview" style={{ width: "100px", marginTop: "10px" }} />
           )}
           <div className="modal-buttons">
-            <button onClick={handleSave} disabled={!newLine1 || !newLine2 || !newImage}>저장</button>
-            <button onClick={() => setShowModal(false)}>취소</button>
+            <button  className={styles.button}  onClick={handleSave} disabled={!newLine1 || !newLine2 || !newImage}>저장</button>
+            <button className={styles.button} onClick={() => setShowModal(false)}>취소</button>
           </div>
         </div>
       )}

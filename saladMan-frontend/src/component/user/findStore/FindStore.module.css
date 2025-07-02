@@ -37,7 +37,7 @@
 }
 
 .searchInput {
-  width: 95%;
+  width: 340px;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -60,7 +60,8 @@
 }
 
 .storeItem:hover {
-  background-color: #e0eae0;
+  background-color: #4D774E;
+  color: #ffffff;
 }
 
 .storeTitle {
@@ -69,19 +70,30 @@
 }
 
 .storeAddress {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 12px;
+  color: #b6b6b6;
 }
 
 .directionsButton {
-  margin-top: 0.5rem;
-  font-size: 12px;
+  margin-top: 10px;
+  height: 25px;
+  width: 60px;
+  font-size: 10px;
   background: none;
-  color: #4D774E;
+  background-color: #4D774E;
+  border-radius: 10px;
   border: none;
+  color: #ffffff;
   text-decoration: underline;
   cursor: pointer;
 }
+
+.directionsButton:hover {
+  background-color: #ffffff;
+  color: #23442e;
+  font-weight: bold;
+}
+
 .pagination {
   display: flex;
   gap: 8px;
@@ -94,6 +106,7 @@
   background: white;
   cursor: pointer;
   margin: 0;
+  color: #4D774E;
 }
 
 .pagination .activePage {
