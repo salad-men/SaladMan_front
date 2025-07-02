@@ -7,7 +7,7 @@
   background: #f8faf7;
   border-left: 2px solid #4d774e;
   box-shadow: -2px 0 10px rgba(0,0,0,0.08);
-  z-index: 2000;
+  z-index: 10001;
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s;
@@ -20,9 +20,9 @@
 
 .closeBtn {
   position: absolute;
-  top: 10px;    /* ← 더 위로 */
-  right: 12px;  /* ← 더 오른쪽 */
-  font-size: 1.35rem; /* ↓ 좀 더 작게 */
+  top: 0px;    
+  right: 12px;  
+  font-size: 1.35rem; 
   width: 32px;
   height: 32px;
   border: none;

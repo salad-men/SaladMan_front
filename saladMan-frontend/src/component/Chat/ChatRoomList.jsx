@@ -5,28 +5,52 @@ import { useAtomValue } from "jotai";
 import styles from "./ChatRoomList.module.css";
 import ChatRoomPage from "./ChatRoomPage";
 
-/**
- * @param {Array} rooms - 방 목록 (App.js 전역에서 내려옴, 방별 unreadCount 등 포함)
- * @param {Function} setRooms - 방 목록 setter (실시간 unread/나가기 등에서 갱신)
- */
-export default function ChatRoomList({ rooms = [], setRooms = () => {} }) {
+export default function ChatRoomList({ rooms = [], setRooms = () => {}, forceActiveRoom, setForceActiveRoom }) {
   const [activeRoom, setActiveRoom] = useState(null);
   const token = useAtomValue(accessTokenAtom);
 
-  // 최초 방목록 로딩 (App.js에서 이미 가져오면 이 부분은 거의 실행 안 됨)
+  const safeRooms = Array.isArray(rooms) ? rooms : [];
+
+  // 최초 방목록 로딩 
   useEffect(() => {
     // token 있어야 하고, rooms가 아예 없을 때만 fetch
-    if (!token || (rooms && rooms.length > 0)) return;
+    if (!token || (safeRooms.length > 0)) return;
     myAxios(token).get("/chat/my/rooms")
       .then(res => setRooms(res.data || []))
       .catch(() => setRooms([]));
-  }, [token, rooms, setRooms]);
+  }, [token,setRooms, safeRooms.length]);
+
+  // forceActiveRoom 값이 변경될 때 해당 방으로 자동입장
+  useEffect(() => {
+    if (forceActiveRoom && safeRooms.some(r => r.roomId === forceActiveRoom)) {
+      setActiveRoom(forceActiveRoom);
+      setForceActiveRoom && setForceActiveRoom(null); // 한 번만 반응, 값 초기화
+    }
+  }, [forceActiveRoom, safeRooms, setForceActiveRoom]);
+
+
+  // 채팅방 나가기 후 실시간 반영!
+  const handleLeaveRoom = async (roomId, isGroup) => {
+    try {
+      if (isGroup === "Y") {
+        await myAxios(token).delete(`/chat/room/group/${roomId}/leave`);
+      } else {
+        await myAxios(token).delete(`/chat/room/private/${roomId}/leave`);
+      }
+      // 반드시 서버에서 다시 받아오기
+      const res = await myAxios(token).get("/chat/my/rooms");
+      setRooms(Array.isArray(res.data) ? res.data : []);
+    } catch (e) {
+      alert("방 나가기에 실패했습니다.");
+    }
+  };
 
   if (activeRoom)
     return (
       <ChatRoomPage
         roomId={activeRoom}
         onClose={() => setActiveRoom(null)}
+        setRooms={setRooms} 
       />
     );
 
@@ -56,24 +80,12 @@ export default function ChatRoomList({ rooms = [], setRooms = () => {} }) {
                     className={styles.enterBtn}
                     onClick={() => setActiveRoom(room.roomId)}
                   >입장</button>
-                  {room.isGroupChat === "Y" && (
-                    <button
-                      className={styles.leaveBtn}
-                      onClick={async () => {
-                        await myAxios(token).delete(`/chat/room/group/${room.roomId}/leave`);
-                        setRooms(r => (r || []).filter(a => a.roomId !== room.roomId));
-                      }}
-                    >나가기</button>
-                  )}
-                  {room.isGroupChat === "N" && (
-                    <button
-                      className={styles.leaveBtn}
-                      onClick={async () => {
-                        await myAxios(token).delete(`/chat/room/private/${room.roomId}/leave`);
-                        setRooms(r => (r || []).filter(a => a.roomId !== room.roomId));
-                      }}
-                    >나가기</button>
-                  )}
+                  <button
+                    className={styles.leaveBtn}
+                    onClick={() => handleLeaveRoom(room.roomId, room.isGroupChat)}
+                  >
+                    나가기
+                  </button>
                 </td>
               </tr>
             ))

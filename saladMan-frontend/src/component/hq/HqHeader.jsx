@@ -1,18 +1,21 @@
-import { useAtomValue } from 'jotai';
-import { useState } from "react";
-import { userAtom } from "/src/atoms";
+import { useAtom } from 'jotai';
+import { userAtom, initStore, accessTokenAtom } from "/src/atoms";
 import { useNavigate } from "react-router";
 import './HqHeader.css';
-import ChatSidebar from "@components/Chat/ChatSidebar";
-import { FiBell, FiBellOff } from "react-icons/fi"; 
 
 const HqHeader = () => {
-    const store = useAtomValue(userAtom);
+    const [store, setStore] = useAtom(userAtom);
+    const [user, setUser] = useAtom(userAtom);
+    const [token, setAccessToken] = useAtom(accessTokenAtom);
+
     const navigate = useNavigate();
 
     const logout = (e) => {
         e.preventDefault();
         sessionStorage.clear();
+        setStore(initStore);
+        setUser(null);
+        setAccessToken('');
         navigate("/");
     }
 
@@ -84,8 +87,12 @@ const HqHeader = () => {
                     </div>
                 </div>
                 <div className="user-info">
+                {store && store.name ? (
+                <>
                     {store.name} | <a onClick={logout}>로그아웃</a>
-            </div>
+                </>
+                ) : null}
+                </div>
             </div>
 
         </>
