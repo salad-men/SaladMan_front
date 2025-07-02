@@ -23,25 +23,23 @@ export default function HqUpdateMenu() {
     }
   };
 
-  const openModal = () => {
-    fetchIngredients();
+
+  const openModal = async () => {
+    await fetchIngredients();
     setModalOpen(true);
   };
 
-  const addSelectedIngredient = async () => {
+  const addSelectedIngredient = () => {
     if (!selectedIngredientId) return alert('재료를 선택하세요');
-    try {
-      const res = await myAxios(token).get(`/ingredients/${selectedIngredientId}`);
-        setIngredientDetails(prev => [
-        ...prev,
-        { ...res.data, quantity: '' }
-      ]);
-      console.log('재료 상세:', res.data);
-      setModalOpen(false);
-      setSelectedIngredientId(null);
-    } catch (error) {
-      console.error('재료 상세 정보 불러오기 실패', error);
-    }
+    const selectedIngredient = ingredients.find(ing => ing.ingredientId === selectedIngredientId);
+    if (!selectedIngredient) return alert('재료 정보를 찾을 수 없습니다.');
+
+    setIngredientDetails(prev => [
+      ...prev,
+      { ...selectedIngredient, quantity: '' }
+    ]);
+    setModalOpen(false);
+    setSelectedIngredientId(null);
   };
 
   return (
@@ -94,13 +92,13 @@ export default function HqUpdateMenu() {
                                 const value = e.target.value;
                                 setIngredientDetails(prev =>
                                   prev.map(item =>
-                                    item.id === ing.id ? { ...item, quantity: value } : item
+                                    item.ingredientId === ing.ingredientId ? { ...item, quantity: value } : item
                                   )
                                 );
                               }}
                             />
                           </td>
-                          <td>{ing.price.toLocaleString()}원</td>
+                          <td>{ing.price}원</td>
                         </tr>
                       ))}
                     </tbody>
@@ -125,7 +123,7 @@ export default function HqUpdateMenu() {
 
         {/* 재료 선택 모달 */}
         {isModalOpen && (
-          <div className={styles.modal}>
+          <div className={`${styles.modal} ${isModalOpen ? styles.modalOpen : ''}`}>
             <div className={styles.modalContent}>
               <h3>재료 선택</h3>
               <div className={styles.ingredientGrid}>
@@ -134,9 +132,9 @@ export default function HqUpdateMenu() {
                     <input
                       type="radio"
                       name="ingredient"
-                      value={ing.id}
-                      checked={selectedIngredientId === ing.id}
-                      onChange={() => setSelectedIngredientId(ing.id)}
+                      value={ing.ingredientId}
+                      checked={selectedIngredientId === ing.ingredientId}
+                      onChange={() => setSelectedIngredientId(ing.ingredientId)}
                     />
                     {ing.name}
                   </label>
