@@ -1,0 +1,188 @@
+.employeeListContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+.employeeListContent {
+  flex: 1;
+  padding: 40px 40px 60px;
+  background-color: white;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+.employeeListContent h2 {
+  margin-top: 100px;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.registerButton {
+  padding: 6px 16px;
+  font-size: 14px;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.registerButton:hover {
+  background-color: #3a5e3b;
+}
+.searchGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.searchGroup input[type="text"] {
+  width: 250px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.searchButton {
+  padding: 6px 16px;
+  font-size: 14px;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.searchButton:hover {
+  background-color: #3a5e3b;
+}
+.employeeTable {
+  width: 100%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.employeeTable th,
+.employeeTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+.employeeTable th {
+  background-color: #f6f6f6;
+  font-weight: bold;
+}
+.tableProfile {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pagination {
+  margin: 32px 0 0 0;
+  text-align: center;
+}
+.pagination button {
+  margin: 0 3px;
+  padding: 5px 14px;
+  border: none;
+  border-radius: 5px;
+  background: #f0f0f0;
+  font-size: 15px;
+  cursor: pointer;
+}
+.pagination .active, .pagination button:active {
+  background: #4D774E;
+  color: #fff;
+}
+
+/* 상세/수정 모달 스타일 */
+.modalOverlay {
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modalBox {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 32px #2222;
+  padding: 38px 36px 32px;
+  max-width: 480px;
+  width: 100%;
+  min-width: 320px;
+  position: relative;
+}
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 14px;
+  margin: 20px 0;
+}
+.detailGrid label {
+  display: inline-block;
+  font-size: 13px;
+  color: #444;
+  margin-right: 8px;
+  min-width: 56px;
+}
+.detailGrid input, .detailGrid select {
+  width: 120px;
+  padding: 4px 6px;
+  font-size: 14px;
+}
+.detailGrid span {
+  font-size: 14px;
+  color: #222;
+  padding-left: 2px;
+}
+.detailModalBtnRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 28px;
+}
+.editButton, .saveButton {
+  padding: 7px 18px;
+  border-radius: 6px;
+  border: none;
+  background: #4D774E;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+.cancelButton {
+  padding: 7px 18px;
+  border-radius: 6px;
+  border: none;
+  background: #888;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+.editButton:hover, .saveButton:hover { background: #3a5e3b; }
+.cancelButton:hover { background: #333; }
+.detailGrid label { min-width: 56px; }
+.detailGrid input, .detailGrid select { width: 120px; padding: 4px 6px; font-size: 14px; }
+.detailGrid img { vertical-align: middle; }
+.detailModalBtnRow { display: flex; justify-content: flex-end; gap: 10px; margin-top: 28px; }
+.editButton, .saveButton {
+  padding: 7px 18px; border-radius: 6px; border: none;
+  background: #4D774E; color: #fff; font-size: 15px; cursor: pointer;
+}
+.cancelButton {
+  padding: 7px 18px; border-radius: 6px; border: none;
+  background: #888; color: #fff; font-size: 15px; cursor: pointer;
+}
+.editButton:hover, .saveButton:hover { background: #3a5e3b; }
+.cancelButton:hover { background: #333; }
+.errorMsg { color: crimson; font-size: 13px; margin: 8px 0 0 4px; }
