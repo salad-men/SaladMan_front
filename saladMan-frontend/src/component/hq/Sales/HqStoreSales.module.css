@@ -1,62 +1,80 @@
 .wrapper {
-  display: flex;
-  height: calc(100vh - 64px);
-  background-color: #f9fafb;
-  overflow: hidden;
-  overflow-y: scroll;
+    display: flex;
+    height: calc(100vh - 64px);
+    background-color: #f9fafb;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .content {
-  flex: 1;
-  align-self: flex-start;
-  padding: 30px 0 0 0;
-  overflow-y: auto;
-  max-width: 1500px;
-  margin: 0 auto;
-  position: relative;
+    flex: 1;
+    align-self: flex-start;
+    padding: 30px 0 0 0;
+    overflow-y: auto;
+    max-width: 1500px;
+    margin: 0 auto;
+    position: relative;
 }
 
 .pageHeader {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .filterBox {
     display: flex;
     background-color: white;
-    padding: 5px 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
 
 .filterRow {
     display: flex;
-    padding: 10px 0;
+    padding: 10px;
 }
 
 .filterLabel {
-    flex: 0 0 120px;
+    width: 70px;
     font-weight: bold;
-    padding-top: 6px;
+    margin: auto;
+    padding: 5px;
+}
+
+.filterRow select {
+    width: 150px;
+    height: 34px;
+    margin: auto 2px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .filterRow input[type="date"] {
     width: 150px;
-  margin-right: 5px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+    margin-right: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
+
 .filterRow button {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-right: 5px;
     padding: 0 10px;
+    height: 34px;
+}
+
+.searchButton{
+    margin-left: 20px;
+    background-color: #4D774E;
+    color: white;
+    width: 80px;
 }
 
 .active {
-  background-color: #4D774E;
-  color: white;
+    background-color: #4D774E;
+    color: white;
 }
 
 .filterActions {
@@ -79,9 +97,11 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .chartBox {
     display: flex;
 }
+
 .box {
     background-color: white;
     border-radius: 10px;
@@ -89,15 +109,19 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin: 20px;
 }
+
 .summaryBox {
     width: 240px;
 }
+
 .chart {
     display: flex;
 }
+
 .chart h4 {
     margin: 0;
 }
+
 .salesTable {
     max-height: 300px;
     overflow-y: auto;
@@ -110,10 +134,10 @@
 }
 
 .salesTable thead {
-  position: sticky;
-  top: 0;
-  background: #fff;
-  z-index: 1;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
 }
 
 .salesTable th,

@@ -3,7 +3,7 @@
   height: calc(100vh - 64px);
   background-color: #f9fafb;
   overflow: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .content {
@@ -16,40 +16,57 @@
   position: relative;
 }
 
-.menuTable {
-  width: 100%;
-  min-width: 1100px;
-  border-collapse: collapse;
-  font-size: 14px;
-  margin-top: 55px;
-  table-layout: fixed;
-  background-color: white;
+.pageHeader {
+  display: flex;
+  flex-direction: column;
 }
 
-.menuTable th,
-.menuTable td {
-  border: 1px solid #ccc;
-  padding: 10px 12px;
+.menuGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.menuCard {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
   text-align: center;
-  vertical-align: middle;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-.menuTable th {
-  background-color: #f6f6f6;
-  font-weight: bold;
+.menuImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
 }
 
-#state {
-  margin: auto;
-  width: 80px;
-  padding: 4px;
+.menuInfo {
+  margin: auto 0;
+  text-align: left;
+  width: 150px;
 }
 
-/* 토글 스위치 스타일 */
+.menuInfo h4 {
+  margin: 0 10px;
+  font-size: 16px;
+}
+
+.menuInfo p {
+  margin: 0 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+.switchBox {
+  margin: auto 0;
+  text-align: left;
+}
+
 .switch {
   position: relative;
   display: inline-block;

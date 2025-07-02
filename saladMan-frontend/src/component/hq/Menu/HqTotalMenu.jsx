@@ -26,7 +26,7 @@ const HqTotalMenu = () => {
         if (!token) return;
         const axios = myAxios(token);
 
-        axios.get(`/hq/totalMenu?page=${page}&sort=${sort}`)
+        axios.get(`/totalMenu?page=${page}&sort=${sort}`)
             .then(res => {
                 console.log(res);
                 setMenus(res.data.menus);

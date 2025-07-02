@@ -1,17 +1,21 @@
-import styles from "./NoticeSidebar.module.css";
+import'../HqSidebar.css'
 
 export default function NoticeSidebar() {
   return (
-    <aside className={styles.sidebar}>
-      <h1 className={styles.title}>공지사항</h1>
-      <ul className={styles.list}>
-        <li className={styles.listItem}>
-          <a href="/hq/HqNoticeList" className={styles.link}>공지사항 목록</a>
+    <div className="sidebar">
+      <h1>공지사항</h1>
+      <ul>
+        <li>
+          <a href="/hq/HqNoticeList">공지사항 목록</a>
         </li>
-        <li className={styles.listItem}>
-          <a href="/hq/HqComplaintList" className={styles.link}>불편사항 목록</a>
+        <li>
+          <a href="/hq/HqComplaintList">불편사항 목록</a>
+        </li>
+        <li>
+          <a href="/hq/alarmList">알림 목록</a>
         </li>
       </ul>
-    </aside>
+    </div>
+
   );
 }

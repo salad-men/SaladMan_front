@@ -69,7 +69,7 @@ const StoreHeader = () => {
                         <a href="#">점포 조회</a>
                         <div className="storeDropdown">
                             <ul>
-                                <li><a href="/store/otherStoreInven">타매장 재고조회</a></li>
+                                <li><a href="/store/otherStoreInven">타매장 재고 조회</a></li>
                             </ul>
                         </div>
                     </div>
@@ -79,8 +79,8 @@ const StoreHeader = () => {
                             <ul>
                                 <li><a href="/store/StoreNoticeList">공지사항 조회</a></li>
                                 <li><a href="/store/StoreComplaintList">불편사항 조회</a></li>
+                                <li><a href="/store/alarmList">알림 목록</a></li>
                                 <li><a href="#">쪽지</a></li>
-                                <li><a href="/store/notification">알림 목록</a></li>
                             </ul>
                         </div>
                     </div>

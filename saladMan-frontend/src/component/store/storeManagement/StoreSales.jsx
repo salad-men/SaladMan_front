@@ -4,12 +4,20 @@ import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config.jsx';
 import Chart from 'chart.js/auto';
 import { useAtom } from 'jotai';
+import StoreEmpSidebar from './StoreEmpSidebar';
 
 const StoreSales = () => {
     const [salesData, setSalesData] = useState(null);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [groupType, setGroupType] = useState('DAY');
+    const [groupType, setGroupType] = useState('WEEK');
+    const [startDate, setStartDate] = useState(
+        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+            .toLocaleDateString('sv-SE')
+            .substring(0, 10)
+    );
+    const [endDate, setEndDate] = useState(
+        new Date().toLocaleDateString('sv-SE').substring(0, 10)
+    );
+
     const barChartRef = useRef(null);
     const donutChartRef = useRef(null);
     const [token] = useAtom(accessTokenAtom);
@@ -34,10 +42,7 @@ const StoreSales = () => {
         const axios = myAxios(token);
 
         axios.get('/store/storeSales', {
-            params: {
-            startDate: '2025-06-01',
-            endDate: '2025-06-27'
-            }
+            params: { startDate, endDate }
         })
         .then(res => {
             setSalesData(res.data);
@@ -141,9 +146,10 @@ const StoreSales = () => {
 
     return (
         <div className={style.wrapper}>
+            <StoreEmpSidebar/>
             <div className={style.content}>
                 <header className={style.pageHeader}>
-                    <h2>통합 매출 조회</h2>
+                    <h2>매출 조회</h2>
                 </header>
 
                 <div className={style.filterBox}>

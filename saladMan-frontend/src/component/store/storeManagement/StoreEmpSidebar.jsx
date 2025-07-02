@@ -7,6 +7,8 @@ export default function StoreEmpSidebar() {
             <div className="sidebar">
                 <h3>매장관리</h3>
                 <ul>
+                    <li><a href="/store/storeSales">매출 조회</a></li>
+                    <li><a href="/store/paymentList">주문내역 조회</a></li>
                     <li><a href="/store/StoreEmployeeListStore">직원 조회</a></li>
                     <li><a href="/store/EmpSchedule">일정 관리</a></li>
                 </ul>

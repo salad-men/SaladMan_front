@@ -15,7 +15,8 @@ export default function HqUpdateMenu() {
 
   const fetchIngredients = async () => {
     try {
-      const res = await myAxios(token).get('/api/ingredients');
+      const res = await myAxios(token).get('/hq/ingredientInfo');
+      console.log("모달에 내려받은 ingredients:", res.data);
       setIngredients(res.data);
     } catch (error) {
       console.error('재료 목록 불러오기 실패', error);
@@ -30,8 +31,12 @@ export default function HqUpdateMenu() {
   const addSelectedIngredient = async () => {
     if (!selectedIngredientId) return alert('재료를 선택하세요');
     try {
-      const res = await myAxios(token).get(`/api/ingredients/${selectedIngredientId}`);
-      setIngredientDetails(prev => [...prev, res.data]);
+      const res = await myAxios(token).get(`/ingredients/${selectedIngredientId}`);
+        setIngredientDetails(prev => [
+        ...prev,
+        { ...res.data, quantity: '' }
+      ]);
+      console.log('재료 상세:', res.data);
       setModalOpen(false);
       setSelectedIngredientId(null);
     } catch (error) {
@@ -47,7 +52,7 @@ export default function HqUpdateMenu() {
           <h2>메뉴 등록</h2>
         </header>
         <form>
-          <table className={styles.mtable}>
+          <table className={styles.table}>
             <tbody>
               <tr>
                 <td className={styles.labelCell}>메뉴 사진</td>
@@ -74,13 +79,28 @@ export default function HqUpdateMenu() {
                       </tr>
                     </thead>
                     <tbody>
-                      {ingredientDetails.map((ing, index) => (
-                        <tr key={index}>
+                      {ingredientDetails.map((ing) => (
+                        <tr key={ing.ingredientId}>
                           <td>{ing.name}</td>
                           <td>{ing.category}</td>
                           <td>{ing.unit}</td>
-                          <td><input type="text" placeholder="용량 입력" /></td>
-                          <td>{ing.price}</td>
+                          <td>
+                            <input
+                              type="number"
+                              placeholder="용량 입력"
+                              value={ing.quantity}
+                              min="0"
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setIngredientDetails(prev =>
+                                  prev.map(item =>
+                                    item.id === ing.id ? { ...item, quantity: value } : item
+                                  )
+                                );
+                              }}
+                            />
+                          </td>
+                          <td>{ing.price.toLocaleString()}원</td>
                         </tr>
                       ))}
                     </tbody>
@@ -96,10 +116,6 @@ export default function HqUpdateMenu() {
                   </div>
                 </td>
               </tr>
-              <tr>
-                <td className={styles.labelCell}>레시피</td>
-                <td><textarea id="recipe" placeholder="레시피 입력"></textarea></td>
-              </tr>
             </tbody>
           </table>
           <div>
@@ -114,7 +130,7 @@ export default function HqUpdateMenu() {
               <h3>재료 선택</h3>
               <div className={styles.ingredientGrid}>
                 {ingredients.map(ing => (
-                  <label key={ing.id}>
+                  <label key={ing.ingredientId}>
                     <input
                       type="radio"
                       name="ingredient"

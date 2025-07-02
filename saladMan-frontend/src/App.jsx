@@ -24,7 +24,7 @@ import HqUpdateMenu from '@hq/Menu/HqUpdateMenu';
 import HqRecipe from '@hq/Menu/HqRecipe';
 import HqTotalSales from '@hq/Sales/HqTotalSales';
 import HqStoreSales from '@hq/Sales/HqStoreSales';
-import HqNotification from '@hq/Notice/HqNotification';
+import HqAlarmList from '@hq/Notice/HqAlarmList';
 
 import StoreLayout from '@store/StoreLayout';
 import TotalMenu from '@store/Menu/TotalMenu';
@@ -66,7 +66,7 @@ import StoreEmployeeList from '@store/storeManagement/StoreEmployeeList';
 
 import HqComplaintList from '@hq/Complaint/HqComplaintList';
 import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
-import Notification from '@store/notice/Notification';
+import AlarmList from '@store/notice/AlarmList';
 import StoreNoticeList from '@store/notice/StoreNoticeList';
 import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
 import StoreComplaintList from '@store/complaint/StoreComplaintList';
@@ -276,7 +276,7 @@ const [chatAlarmOn, setChatAlarmOn] = useState(
           <Route path='/hq/HqComplaintList' element={<HqComplaintList />} />
           <Route path='/hq/HqComplaintDetail/:id' element={<HqComplaintDetail />} />
           {/* 공지-알림목록 */}
-          <Route path='/hq/notification' element={<HqNotification />} />
+          <Route path='/hq/alarmList' element={<HqAlarmList />} />
 
           {/* 대시보드 */}
           <Route path='/hq/HqDashboard' element={<HqDashboard />} />
@@ -319,7 +319,7 @@ const [chatAlarmOn, setChatAlarmOn] = useState(
           {/* 공지사항 */}
           <Route path='/store/StoreNoticeList' element={<StoreNoticeList />} />
           <Route path='/store/StoreNoticeDetail/:id' element={<StoreNoticeDetail />} />
-          <Route path='/store/notification' element={<Notification />} />
+          <Route path='/store/alarmList' element={<AlarmList />} />
 
           {/* 공지 -고객불만사항 */}
           <Route path='/store/StoreComplaintList' element={<StoreComplaintList />} />

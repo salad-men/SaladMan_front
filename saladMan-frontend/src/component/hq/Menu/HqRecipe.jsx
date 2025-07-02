@@ -21,7 +21,7 @@ const HqRecipe = () => {
     if (!token) return;
     const axios = myAxios(token);
 
-    axios.get(`/hq/recipe?page=${page}`)
+    axios.get(`/recipe?page=${page}`)
       .then(res => {
         const data = res.data.menus.map(menu => ({
           ...menu,

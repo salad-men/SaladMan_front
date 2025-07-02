@@ -4,10 +4,9 @@ export default function SidebarMenus() {
     return(
         <>
             <div className="sidebar">
-                <h1>메뉴</h1>
+                <h1>점포 조회</h1>
                 <ul>
-                    <li><a href="/store/findOtherStore">매장 위치 조회</a></li>
-                    <li><a href="/store/OtherStoreInven">매장 재고 조회</a></li>
+                    <li><a href="/store/OtherStoreInven">타매장 재고 조회</a></li>
                 </ul>
             </div>
         </>

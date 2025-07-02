@@ -11,6 +11,9 @@ export default function NoticeSidebar() {
         <li className={styles.listItem}>
           <a href="/store/StoreComplaintList" className={styles.link}>불편사항 목록</a>
         </li>
+        <li className={styles.listItem}>
+          <a href="/store/alarmList" className={styles.link}>알림목록</a>
+        </li>
       </ul>
     </aside>
   );

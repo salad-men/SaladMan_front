@@ -67,34 +67,32 @@ const MenuStatus = () => {
           <h2>점포 메뉴 관리</h2>
         </div>
         
-        <table className={styles.menuTable}>
-          <thead>
-            <tr>
-              <th>상품 이미지</th>
-              <th>상품명</th>
-              <th>판매가</th>
-              <th>등록여부</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {menus.map(menu => (
-              <tr key={menu.id}>
-                <td>
-                  <img src={`/${menu.name}.png`} alt={menu.name} style={{ width: '60px', height: '60px' }} />
-                </td>
-                <td>{menu.name}</td>
-                <td>{menu.salePrice.toLocaleString()}원</td>
-                <td>
-                  <label className={styles.switch}>
-                    <input type="checkbox" checked={!!menu.status} onChange={() => openModal(menu)}/>
-                    <span className={`${styles.slider} ${styles.round}`}></span>
-                  </label>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className={styles.menuGrid}>
+          {menus.map(menu => (
+            <div key={menu.id} className={styles.menuCard}>
+              <img
+                src={`/${menu.name}.png`}
+                alt={menu.name}
+                className={styles.menuImage}
+              />
+              <div className={styles.menuInfo}>
+                <h4>{menu.name}</h4>
+                <p>{menu.salePrice.toLocaleString()}원</p>
+              </div>
+              <div className={styles.switchBox}>
+                <label className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={!!menu.status}
+                    onChange={() => openModal(menu)}
+                  />
+                  <span className={`${styles.slider} ${styles.round}`}></span>
+                </label>
+              </div>
+              
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* 모달 */}

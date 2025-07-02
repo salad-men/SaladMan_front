@@ -8,12 +8,18 @@ import { useAtom } from 'jotai';
 
 const HqTotalSales = () => {
     const [salesData, setSalesData] = useState(null);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [groupType, setGroupType] = useState('DAY');
+    const [groupType, setGroupType] = useState('WEEK');
     const barChartRef = useRef(null);
     const donutChartRef = useRef(null);
     const [token] = useAtom(accessTokenAtom);
+    const [startDate, setStartDate] = useState(
+        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+            .toLocaleDateString('sv-SE')
+            .substring(0, 10)
+    );
+    const [endDate, setEndDate] = useState(
+        new Date().toLocaleDateString('sv-SE').substring(0, 10)
+    );
 
     const handleSearch = () => {
             if (!token) return;
@@ -22,7 +28,7 @@ const HqTotalSales = () => {
             if (!startDate || !endDate) return alert('날짜를 선택해주세요');
     
             axios.get('/hq/totalSales', {
-                params: { startDate, endDate, groupType }
+                params: { startDate, endDate }
             }).then(res => {
                 setSalesData(res.data);
             }).catch(err => {
@@ -35,10 +41,7 @@ const HqTotalSales = () => {
             const axios = myAxios(token);
     
             axios.get('/hq/totalSales', {
-                params: {
-                startDate: '2025-06-01',
-                endDate: '2025-06-27'
-                }
+                params: { startDate, endDate }
             })
             .then(res => {
                 setSalesData(res.data);
@@ -145,7 +148,7 @@ const HqTotalSales = () => {
             <HqSidebarSales />
             <div className={styles.content}>
                 <header className={styles.pageHeader}>
-                    <h2>통합 매출 조회</h2>
+                    <h2>매출 조회(전사)</h2>
                 </header>
 
                 <div className={styles.filterBox}>

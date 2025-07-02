@@ -77,7 +77,7 @@ const HqHeader = () => {
                             <ul>
                                 <li><a href="/hq/HqNoticeList">공지사항 조회</a></li>
                                 <li><a href="/hq/HqComplaintList">불편사항 조회</a></li>
-                                <li><a href="/hq/notification">알림 목록</a></li>
+                                <li><a href="/hq/alarmList">알림 목록</a></li>
                                 <li><a href="#">쪽지</a></li>
                             </ul>
                         </div>
