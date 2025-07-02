@@ -1,59 +1,52 @@
 .best-menu-section {
-  padding: 60px 40px;
+  padding: 2rem;
   background: #ffffff;
-  text-align: center;
 }
 
-.section h2 {
-  font-size: 2rem;
-  color: #4D774E;
-  margin-bottom: 32px;
+.best-menu-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
 .menuList {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .card {
-  width: 200px;
-  background: #fefefe;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   position: relative;
-  transition: transform 0.2s ease;
+  width: 220px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.2s;
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
 }
 
 .card img {
   width: 100%;
-  border-radius: 50%;
+  height: 150px;
+  object-fit: cover;
 }
 
 .badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #3D6141;
+  top: 8px;
+  left: 8px;
+  background: #be1d1d;
   color: white;
-  font-size: 0.75rem;
   padding: 4px 8px;
   border-radius: 8px;
+  font-size: 12px;
 }
 
-.card h3 {
-  font-size: 1rem;
-  margin-top: 10px;
-  color: #333;
-}
-
-.card p {
-  font-size: 0.85rem;
-  color: #777;
+.card h3, .card p {
+  padding: 0.5rem;
+  text-align: center;
 }

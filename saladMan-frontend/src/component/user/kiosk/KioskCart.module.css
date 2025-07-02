@@ -24,6 +24,28 @@
   z-index: 1000;
 }
 
+.tableWrapper {
+  max-height: 300px; /* 원하는 높이 */
+  overflow-y: auto;
+}
+.bodyWrapper {
+  max-height: 200px; /* 원하는 높이 */
+  overflow-y: auto;
+}
+.bodyWrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.bodyWrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+.tableWrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.tableWrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
 .cartTable {
   width: 100%;
   border-collapse: collapse;
@@ -115,7 +137,6 @@
 
 .staticCart {
   position: static;
-  width: 240px;
   background-color: #4d774e;
   color: white;
   padding: 16px;
