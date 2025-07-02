@@ -18,7 +18,6 @@ import HqIngredientSetting from "@hq/Inventory/HqIngredientSetting";
 import HqInventoryRecord from "@hq/Inventory/HqInventoryRecord";
 
 // 지현
-<<<<<<< HEAD
 import HqLayout from '@hq/HqLayout';
 import HqTotalMenu from '@hq/Menu/HqTotalMenu';
 import HqUpdateMenu from '@hq/Menu/HqUpdateMenu';
@@ -26,15 +25,6 @@ import HqRecipe from '@hq/Menu/HqRecipe';
 import HqTotalSales from '@hq/Sales/HqTotalSales';
 import HqStoreSales from '@hq/Sales/HqStoreSales';
 import HqAlarmList from '@hq/Notice/HqAlarmList';
-=======
-import HqLayout from "@hq/HqLayout";
-import HqTotalMenu from "@hq/Menu/HqTotalMenu";
-import HqUpdateMenu from "@hq/Menu/HqUpdateMenu";
-import HqRecipe from "@hq/Menu/HqRecipe";
-import HqTotalSales from "@hq/Sales/HqTotalSales";
-import HqStoreSales from "@hq/Sales/HqStoreSales";
-import HqNotification from "@hq/Notice/HqNotification";
->>>>>>> 369bc3af156d1a84fbeb947a4e8ea7cee9982f1b
 
 import StoreLayout from "@store/StoreLayout";
 import TotalMenu from "@store/Menu/TotalMenu";
@@ -74,7 +64,6 @@ import StockLog from "@store/order/StockLog";
 import EmpSchedule from "@store/storeManagement/empSchedule";
 import StoreEmployeeList from "@store/storeManagement/StoreEmployeeList";
 
-<<<<<<< HEAD
 import HqComplaintList from '@hq/Complaint/HqComplaintList';
 import HqComplaintDetail from '@hq/Complaint/HqComplaintDetail';
 import AlarmList from '@store/notice/AlarmList';
@@ -82,15 +71,6 @@ import StoreNoticeList from '@store/notice/StoreNoticeList';
 import StoreNoticeDetail from '@store/notice/StoreNoticeDetail';
 import StoreComplaintList from '@store/complaint/StoreComplaintList';
 import StoreComplaintDetail from '@store/complaint/StoreComplaintDetail';
-=======
-import HqComplaintList from "@hq/Complaint/HqComplaintList";
-import HqComplaintDetail from "@hq/Complaint/HqComplaintDetail";
-import Notification from "@store/notice/Notification";
-import StoreNoticeList from "@store/notice/StoreNoticeList";
-import StoreNoticeDetail from "@store/notice/StoreNoticeDetail";
-import StoreComplaintList from "@store/complaint/StoreComplaintList";
-import StoreComplaintDetail from "@store/complaint/StoreComplaintDetail";
->>>>>>> 369bc3af156d1a84fbeb947a4e8ea7cee9982f1b
 
 import HqDashboard from "@hq/dashboard/HqDashboard";
 import StoreDashboard from "@store/dashboard/StoreDashboard";
