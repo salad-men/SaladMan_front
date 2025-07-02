@@ -1,19 +1,24 @@
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useState } from "react";
-import { userAtom } from "/src/atoms";
+import { userAtom, initStore, accessTokenAtom } from "/src/atoms";
 import { useNavigate } from "react-router";
 import './StoreHeader.css';
 import ChatSidebar from "@components/Chat/ChatSidebar";
 
 
 const StoreHeader = () => {
-    const store = useAtomValue(userAtom);
+    const [store,SetStore] = useAtom(userAtom);
+    const [token, SetAccessToken] = useAtom(accessTokenAtom);
+    const [user, SetUser] = useAtom(userAtom);
     const navigate = useNavigate();
-    
-    
+
+
     const logout = (e) => {
         e.preventDefault();
         sessionStorage.clear();
+        SetStore(initStore);      // jotai 상태까지 초기화
+        SetUser(null);
+        SetAccessToken('');
         navigate("/");
     }
     
@@ -86,8 +91,12 @@ const StoreHeader = () => {
                     </div>
                 </div>
                 <div className="user-info">
-                    {store.name} | <a onClick={logout}>로그아웃</a>
-                </div>
+                {store && store.name ? (
+                    <>
+                        {store.name} | <a onClick={logout}>로그아웃</a>
+                    </>
+                ) : null}
+            </div>
             </div>
         </>
     );
