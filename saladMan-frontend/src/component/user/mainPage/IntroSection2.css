@@ -6,23 +6,6 @@
   background-color: #ffffff;
 }
 
-.textBox {
-  flex: 1;
-  padding: 20px;
-}
-
-.textBox h2 {
-  font-size: 1.8rem;
-  color: #4D774E;
-  margin-bottom: 16px;
-}
-
-.textBox p {
-  font-size: 1rem;
-  color: #444;
-  margin-bottom: 20px;
-}
-
 .button {
   background-color: #3D6141;
   color: white;
@@ -30,12 +13,14 @@
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  text-decoration-line: none;
 }
 
 
 .textBox {
   flex: 1;
   padding: 20px;
+  
 }
 
 .textBox h2 {
@@ -57,6 +42,7 @@
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  
 }
 
 .imageBox {
@@ -87,4 +73,8 @@
   opacity: 1;
   transform: translateX(0);
   z-index: 1;
+}
+
+.button{
+    text-decoration-line: none;
 }

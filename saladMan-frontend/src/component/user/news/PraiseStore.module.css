@@ -53,3 +53,31 @@
   align-items: center;
   height: 100%;
 }
+
+/* ✅ 페이징 스타일 추가 */
+.pagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pageButton {
+  border: 1px solid #ccc;
+  background: white;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.pageButton:hover {
+  background-color: #f0f0f0;
+}
+
+.activePage {
+  background-color: #4D774E;
+  color: white;
+  font-weight: bold;
+  border-color: #4D774E;
+}

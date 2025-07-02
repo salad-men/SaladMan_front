@@ -1,10 +1,15 @@
+.wrapper {
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  font-family: 'Pretendard', sans-serif;
+}
+
 .gridContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   padding: 2rem;
-  max-width: 960px;
-  margin: 0 auto;
 }
 
 .card {
@@ -34,21 +39,53 @@
   color: #333;
 }
 
-.badge {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  border-radius: 0.25rem;
+.date {
+  padding: 0 0.75rem 0.75rem;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/* 🔥 pagination 스타일 */
+.pagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pageButton {
+  border: 1px solid #ccc;
+  background: white;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.pageButton:hover {
+  background-color: #f0f0f0;
+}
+
+.activePage {
+  background-color: #4D774E;
   color: white;
-  z-index: 1;
+  font-weight: bold;
+  border-color: #4D774E;
+}
+.writeButtonWrapper {
+  text-align: right;
+  margin-bottom: 20px;
 }
 
-.active {
-  background-color: #16a34a;
+.writeButton {
+  padding: 8px 16px;
+  background: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.closed {
-  background-color: #6b7280;
+.writeButton:hover {
+  background: #005bb5;
 }
