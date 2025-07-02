@@ -56,6 +56,9 @@ export default function KioskMenu() {
     });
   };
 
+  const handleClearCart = () => {
+    setCartItems([]);
+  };
   const handleUpdateQuantity = (id, newQty) => {
     if (newQty <= 0) {
       setCartItems((prev) => prev.filter((item) => item.id !== id));
@@ -119,6 +122,7 @@ export default function KioskMenu() {
             cartItems={cartItems}
             onUpdateQuantity={handleUpdateQuantity}
             onRemoveItem={handleRemoveItem}
+            onClearCart={handleClearCart}
             className={styles.fixedBar}
           />
         </>
@@ -162,6 +166,7 @@ export default function KioskMenu() {
               cartItems={cartItems}
               onUpdateQuantity={handleUpdateQuantity}
               onRemoveItem={handleRemoveItem}
+              onClearCart={handleClearCart}
               className={styles.staticCart}
             />
           </div>

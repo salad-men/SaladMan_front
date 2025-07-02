@@ -15,8 +15,8 @@
 }
 
 .cartContainer {
-  flex: 0 0 360px;
-  max-width: 360px;
+  flex: 0 0 420px;
+  max-width: 420px;
   height: 100vh;
   box-sizing: border-box;
 }
@@ -84,6 +84,7 @@
   flex-wrap: wrap;
   gap: 20px;
   justify-content: flex-start;
+  min-width: 690px;
 }
 
 .menuImg{
@@ -95,7 +96,7 @@
   border: 2px solid #ddd;
   border-radius: 12px;
   width: 160px;
-  padding: 16px;
+  padding: 12px;
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s;

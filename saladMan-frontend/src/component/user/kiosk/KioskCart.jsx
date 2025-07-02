@@ -1,37 +1,81 @@
 import React from 'react';
 import styles from './KioskCart.module.css';
+import { useNavigate } from "react-router-dom";
 
-const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, className="staticCart" }) => {
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
+const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart, className = "staticCart" }) => {
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.salePrice * item.quantity, 0);
+const navigate = useNavigate();
   return (
     <div className={`${styles.cartBar} ${className || ''}`}>
-      <div className={styles.cartItems}>
-        {cartItems.length === 0 ? (
-          <p className={styles.empty}>장바구니가 비어 있습니다.</p>
-        ) : (
-          cartItems.map((item, index) => (
-            <div key={index} className={styles.item}>
-              <span className={styles.name}>{item.name}</span>
-              <div className={styles.controls}>
-                <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>-</button>
-                <span>{item.quantity}개</span>
-                <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>+</button>
-              </div>
-              <span>{item.price * item.quantity}원</span>
-              <button className={styles.removeBtn} onClick={() => onRemoveItem(item.id)}>삭제</button>
-            </div>
-          ))
-        )}
+
+      <table className={styles.cartTable}>
+        <tbody>
+          {cartItems.map((item) => (
+            <tr key={item.id}>
+              <td className={styles.nameCell}>{item.name}</td>
+              <td>
+                <div className={styles.controls}>
+                  <button
+                    onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
+                  >
+                    -
+                  </button>
+                  <span>{item.quantity}개</span>
+                  <button
+                    onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+              </td>
+              <td className={styles.priceCell}>
+                {item.salePrice != null
+                  ? `${(item.salePrice * item.quantity).toLocaleString()}원`
+                  : "- 원"}
+              </td>
+              <td>
+                <button
+                  className={styles.removeBtn}
+                  onClick={() => onRemoveItem(item.id)}
+                >
+                  삭제
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={2}></td>
+            <td >
+              {cartItems.length > 0 && (
+                  <span>총 {totalPrice.toLocaleString()}원</span>
+              )}</td>
+            <td>
+              {cartItems.length > 0 && (
+                <button
+                  className={styles.removeBtn}
+                  onClick={onClearCart}
+                >
+                  전체<br />삭제
+                </button>
+              )}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+
+
+      <div className={styles.summary}>
+        <button className={styles.orderButton} onClick={() => navigate("/kiosk/main")}>홈으로</button>
+
+        <button className={styles.orderButton}>주문하기</button>
+
+
       </div>
 
-      {cartItems.length > 0 && (
-        <div className={styles.summary}>
-          <span>총 {totalPrice.toLocaleString()}원</span>
-          
-          <button className={styles.orderButton}>주문하기</button>
-        </div>
-      )}
     </div>
   );
 };

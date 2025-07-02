@@ -1,12 +1,10 @@
-
-
 /* cartBar: 공통 스타일 */
 .cartBar {
   background-color: #4d774e;
   color: white;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
 }
@@ -26,16 +24,29 @@
   z-index: 1000;
 }
 
-/* 아이템 영역 */
-.cartItems {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto;
-  padding-right: 12px;
+.cartTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cartTable th,
+.cartTable td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-size: 15px;
+}
+
+.nameCell {
+  text-align: left;
+}
+
+.priceCell {
+  text-align: right;
+}
+
+.cartTable thead {
+  display: none;
 }
 
 /* 비어있을 때 */
@@ -43,6 +54,7 @@
   opacity: 0.7;
   font-size: 1rem;
 }
+
 .item {
   display: flex;
   align-items: center;
@@ -88,6 +100,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+   font-size: 15px;
 }
 
 .orderButton {
@@ -107,5 +120,5 @@
   color: white;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }

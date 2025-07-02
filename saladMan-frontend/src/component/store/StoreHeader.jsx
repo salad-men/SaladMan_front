@@ -42,7 +42,6 @@ const StoreHeader = () => {
                                 <li><a href="/store/orderApply">발주신청</a></li>
                                 <li><a href="/store/stockInspection">발주입고검수</a></li>
                                 <li><a href="/store/orderSettings">발주설정</a></li>
-                                <li><a href="/store/stockLog">입고/재고사용리스트</a></li>
                             </ul>
                         </div>
                     </div>
