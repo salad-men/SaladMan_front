@@ -19,18 +19,20 @@ export default function HqInventoryRecord() {
   const [changeQuantity, setChangeQuantity] = useState("");
   const [memo, setMemo] = useState("");
 
-  
   const [filterCategory, setFilterCategory] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterStartDate, setFilterStartDate] = useState("");
   const [filterEndDate, setFilterEndDate] = useState("");
 
   const [categories, setCategories] = useState([]);
-  
-  //페이징
+
+  // --- 추가: 페이징 상태
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInfo, setPageInfo] = useState({
-    curPage: 1, allPage: 1, startPage: 1, endPage: 1,
+    curPage: 1,
+    allPage: 1,
+    startPage: 1,
+    endPage: 1,
   });
 
   const formatDate = (dateStr) => {
@@ -59,31 +61,36 @@ export default function HqInventoryRecord() {
       setSelectedIngredient(list[0]?.id || "");
     });
 
-    myAxios(token).get("/hq/inventory/record", {
-      params: { storeId: 1, type: activeTab }
-    }).then(res => {
-      setRecords(res.data.records || []);
-    });
+    // --- 페이지도 1로 초기화
+    fetchRecords(1);
+  // eslint-disable-next-line
   }, [token]);
 
-    // --- 탭(입고/출고) 바뀔 때 기록만 새로고침 ---
-    useEffect(() => {
-      if (!token) return;
-      myAxios(token).get("/hq/inventory/record", {
-        params: { storeId, type: activeTab }
-      }).then(res => {
-        setRecords(res.data.records || []);
-        console.log("탭 변경, 기록 새로 불러옴", res.data.records);
-      }).catch(e => {
-        console.error("탭 변경 후 기록 불러오기 실패", e);
-      });
-    }, [activeTab, token, storeId]);
+  // --- 페이징, 탭, 필터 적용해서 서버에서 가져오는 함수 (추가/수정)
+  const fetchRecords = (page = 1) => {
+    myAxios(token).get("/hq/inventory/record", {
+      params: {
+        storeId,
+        type: activeTab,
+        page, // 서버에 페이지 파라미터 전달
+      }
+    }).then(res => {
+      setRecords(res.data.records || []);
+      setPageInfo(res.data.pageInfo || {});
+      setCurrentPage(page);
+    });
+  };
 
-
-  // 필터 적용
+  // --- 탭(입고/출고) 바뀔 때 기록만 새로고침
   useEffect(() => {
     if (!token) return;
-    fetchRecords(1);
+    fetchRecords(1); // 탭 바뀌면 1페이지부터
+  // eslint-disable-next-line
+  }, [activeTab, token, storeId]);
+
+  // --- 필터 적용: 여전히 프론트에서(필요시 서버필터로 변경)
+  useEffect(() => {
+    if (!token) return;
     let temp = records.filter(r => r.changeType.trim() === activeTab.trim());
     if (filterCategory !== "") temp = temp.filter(r => r.categoryName === filterCategory);
     if (filterName) temp = temp.filter(r => r.ingredientName.includes(filterName));
@@ -121,11 +128,7 @@ export default function HqInventoryRecord() {
     }).then(() => {
       alert("저장 완료!");
       closeModal();
-      return myAxios(token).get("/hq/inventory/record", {
-        params: { storeId: 1, type: activeTab }
-      });
-    }).then(res => {
-      setRecords(res.data.records || []);
+      fetchRecords(1); // 등록 후 1페이지 새로고침
     }).catch(err => {
       console.error("등록 실패", err);
       alert("등록에 실패했습니다.");
@@ -146,18 +149,35 @@ export default function HqInventoryRecord() {
     setFilterEndDate(to.toISOString().slice(0, 10));
   };
 
-  const fetchRecords = (page = 1) => {
-  myAxios(token)
-    .get("/hq/inventory/record", {
-      params: { storeId, type: activeTab, page }
-    })
-    .then(res => {
-      setRecords(res.data.records || []);
-      setPageInfo(res.data.pageInfo || {});
-      setCurrentPage(page);
-    });
+  // --- 숫자버튼 페이지네이션 UI 함수 (추가)
+  const renderPagination = () => {
+    if (pageInfo.allPage <= 1) return null;
+    const pages = [];
+    for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          className={i === currentPage ? styles.activePage : ""}
+          onClick={() => fetchRecords(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+    return (
+      <div className={styles.pagination}>
+        <button
+          onClick={() => fetchRecords(currentPage - 1)}
+          disabled={currentPage === 1}
+        >이전</button>
+        {pages}
+        <button
+          onClick={() => fetchRecords(currentPage + 1)}
+          disabled={currentPage === pageInfo.allPage}
+        >다음</button>
+      </div>
+    );
   };
-
 
   return (
     <div className={styles.container}>
@@ -183,7 +203,6 @@ export default function HqInventoryRecord() {
           <div className={styles.row}>
             <label>분류</label>
             <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-              {/* "전체" 옵션 직접 추가 */}
               <option value="">전체</option>
               {categories.map(cat => (
                 <option key={cat.id} value={cat.name}>
@@ -197,10 +216,11 @@ export default function HqInventoryRecord() {
               value={filterName}
               onChange={e => setFilterName(e.target.value)}
             />
-            <button onClick={() => { /* 필요 시 검색 함수 추가 */ }}>검색</button>
+            <button onClick={() => fetchRecords(1)}>검색</button>
             <button onClick={() => {
               setFilterStartDate(""); setFilterEndDate("");
               setFilterCategory(""); setFilterName("");
+              fetchRecords(1); // 초기화 시도 1페이지로 새로고침
             }}>초기화</button>
           </div>
         </div>
@@ -241,6 +261,9 @@ export default function HqInventoryRecord() {
             )}
           </tbody>
         </table>
+
+        {/* --- 페이징 UI 추가 (수정/추가) */}
+        {renderPagination()}
 
         {/* 모달 */}
         {modalOpen && (
