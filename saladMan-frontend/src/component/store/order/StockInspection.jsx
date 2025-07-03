@@ -130,8 +130,8 @@ export default function StockInspection() {
                                             />
                                         )}
                                     </td>
-<td>{(item.unitCost ?? 0).toLocaleString()} 원</td>
-<td>{(item.totalPrice ?? 0).toLocaleString()} 원</td>
+                                    <td>{(item.unitCost ?? 0).toLocaleString()} 원</td>
+                                    <td>{(item.totalPrice ?? 0).toLocaleString()} 원</td>
                                 </tr>
                             ))}
                         </tbody>

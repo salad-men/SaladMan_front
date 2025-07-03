@@ -57,7 +57,7 @@ const handleOrder = async () => {
           <table className={styles.cartTable}>
             <tbody>
               {cartItems.map((item) => (
-                <tr key={item.id}>
+                <tr key={item.menuId}>
                   <td className={styles.nameCell}>{item.name}</td>
                   <td>
                     <div className={styles.controls}>

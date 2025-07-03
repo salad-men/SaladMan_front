@@ -14,6 +14,9 @@ export default function PaymentSuccess() {
     const amount = searchParams.get("amount");
 
     useEffect(() => {
+
+        if (!token) return;
+
         const confirmPayment = async () => {
             try {
                 await myAxios().post("/kiosk/confirm", {
@@ -24,9 +27,17 @@ export default function PaymentSuccess() {
                 alert("결제가 완료되었습니다.");
                 // navigate("/kiosk/main");
             } catch (err) {
-                console.error("결제 확인 오류", err);
-                alert("결제 승인에 실패했습니다.");
-                // navigate("/kiosk/main");
+                // ❗에러 상태 코드와 메시지 확인
+                const status = err.response?.status;
+                const message = err.response?.data;
+
+                if (status === 400 && message?.includes("재고")) {
+                    navigate("/kiosk/paymentFail");
+                } else {
+                    // 다른 오류는 재시도 혹은 실패 처리
+                    alert("결제 확인 중 문제가 발생했습니다");
+                    navigate("/kiosk/paymentFail");
+                }
             }
         };
 
@@ -37,7 +48,9 @@ export default function PaymentSuccess() {
 
     return (
         <div style={{ padding: 40 }}>
-            <h2>결제 처리 중...</h2>
+            <h2>결제 완료</h2>
+            <span>결제번호: {orderId}</span>
+            <button onClick={() => { navigate("/kiosk/main") }}>홈으로</button>
         </div>
     );
 
