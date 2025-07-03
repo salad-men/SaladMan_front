@@ -1,49 +1,51 @@
 .sidebar {
-  background-color: #4D774E;
-  color: white;
-  height: 100vh;
+  background: linear-gradient(160deg, #486e50 74%, #678970 100%);
+  color: #fff;
+  min-height: 100vh;
   width: 230px;
-  margin: 0;
-  padding: 20px;
-  box-sizing: border-box;
+  border-radius: 0 24px 24px 0;
+  box-shadow: 2px 0 14px 0 rgba(56,78,60,0.10);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  padding: 36px 16px 24px 24px;
 }
 
 .title {
-  margin: 10px 0 20px 20px;
-  font-size: 28px;
-  font-weight: bold;
+  margin: 6px 0 38px 2px;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -1.4px;
 }
 
 .list {
-  padding: 0 10px;
-  margin: 0;
   list-style: none;
-  flex-grow: 1;
+  padding: 0;
+  width: 100%;
 }
-
 .listItem {
-  font-size: 20px;
-  padding: 10px 20px;
+  padding: 13px 18px;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 7px;
+  border-radius: 9px;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.3s;
+  transition: background 0.17s, color 0.17s;
 }
-
-.listItem:hover {
-  background-color: #3F6940;
+.listItem:hover,
+.listItem:focus-within {
+  background: #385d3d;
+  color: #e5ffe0;
 }
-
 .link {
   text-decoration: none;
   color: inherit;
   display: block;
   width: 100%;
+  transition: color 0.2s;
 }
-
 .link:focus,
 .link:hover {
+  color: #d5ffe2;
   outline: none;
-  color: #eaeaea;
 }

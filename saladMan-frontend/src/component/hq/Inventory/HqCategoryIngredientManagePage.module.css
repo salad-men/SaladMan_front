@@ -1,0 +1,244 @@
+/* 전체 레이아웃 */
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f8fa;
+}
+
+/* 사이드바 */
+.HqInventorySidebar {
+  width: 200px;
+  min-width: 160px;
+}
+
+/* 메인 콘텐츠 */
+.content {
+  flex: 1;
+  margin: 8px 24px 40px;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* 내부 컨테이너 */
+.innerContainer {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 24px;
+  box-sizing: border-box;
+  min-height: 80vh;
+}
+
+/* 타이틀 (innerContainer 안으로 이동) */
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2f6042;
+  margin: 0 0 24px;
+  text-align: left;
+}
+
+/* 2단 그리드 */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+/* 기본 컬럼 카드 */
+.column {
+  background: #fafbfc;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.boxTitle {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #255744;
+}
+.plusBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #3b7b56;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.plusBtn:hover {
+  color: #2f6042;
+}
+
+/* ── 카테고리 전용 입력 ───────────────────────────────── */
+.catInputWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.catInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #a0c4a8;
+  border-radius: 6px;
+  background: #edf7ed;
+  font-size: 0.95rem;
+}
+.catInput:focus {
+  outline: none;
+  border-color: #3b7b56;
+  background: #f1faf1;
+}
+
+/* ── 재료 전용 입력 ───────────────────────────────── */
+.ingInputWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.ingInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #c8cfd3;
+  border-radius: 6px;
+  background: #fafbfc;
+  font-size: 0.95rem;
+}
+.ingInput:focus {
+  outline: none;
+  border-color: #3b7b56;
+}
+
+/* 삭제·수정·추가·취소 버튼 */
+.confirmBtn,
+.cancelBtn {
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+  min-height: 32px;
+  line-height: 24px;
+}
+.confirmBtn {
+  background: #d2ecf7;
+  color: #227299;
+  border: none;
+}
+.confirmBtn:hover {
+  background: #b4e1f3;
+}
+.cancelBtn {
+  background: #fde8e8;
+  color: #d33b2e;
+  border: none;
+}
+.cancelBtn:hover {
+  background: #ffcfcf;
+}
+
+/* 리스트 박스 */
+.listBox {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  border: 1px solid #eceff1;
+  border-radius: 6px;
+  padding: 8px;
+  margin-top: 8px;
+}
+.listBox::-webkit-scrollbar {
+  width: 6px;
+}
+.listBox::-webkit-scrollbar-thumb {
+  background: #c2cdd2;
+  border-radius: 3px;
+}
+
+/* 리스트 항목 */
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.item:hover,
+.active {
+  background: #e6f4ef;
+}
+
+/* 수정/삭제 버튼 */
+.btns button {
+  margin-left: 6px;
+}
+.editBtn {
+  background: #d2ecf7;
+  color: #227299;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  min-height: 32px;
+  line-height: 24px;
+}
+.editBtn:hover {
+  background: #b4e1f3;
+}
+.delBtn {
+  background: #fde8e8;
+  color: #d33b2e;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  min-height: 32px;
+  line-height: 24px;
+}
+.delBtn:hover {
+  background: #ffcfcf;
+}
+
+/* ── 재료 컬럼만 고정 높이+스크롤 ───────────────────── */
+.ingColumn {
+  height: 870px;
+}
+.ingColumn .listBox {
+  overflow-y: auto;
+}
+
+/* 상태/에러/빈 메시지 */
+.loading,
+.empty {
+  padding: 12px;
+  color: #888;
+  font-size: 0.95rem;
+}
+.error {
+  margin: 4px 0 12px;
+  color: #d33b2e;
+  font-size: 0.9rem;
+}
+
+/* 반응형 */
+@media (max-width: 1000px) {
+  .columns {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

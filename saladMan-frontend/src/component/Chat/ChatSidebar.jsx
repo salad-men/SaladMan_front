@@ -12,7 +12,7 @@ export default function ChatSidebar({
   rooms = [],
   setRooms = () => {},
   setActiveRoomId,
-  activeRoomId
+  activeRoomId,currentStoreId
 }) {
   const [activeTab, setActiveTab] = useState("mychat");
 
@@ -52,11 +52,14 @@ export default function ChatSidebar({
         </button>
       </div>
       <div className={styles.tabContent}>
-        {activeTab === "mychat" && <ChatRoomList 
+        {activeTab === "mychat" && 
+        <ChatRoomList 
             rooms={rooms} 
             setRooms={setRooms} 
             forceActiveRoom={activeRoomId}
-            setForceActiveRoom={setActiveRoomId} />}
+            setForceActiveRoom={setActiveRoomId}
+            currentStoreId={currentStoreId} 
+          />}
         {activeTab === "group" && <GroupChatList />}
         {activeTab === "store" && <StoreList />}
       </div>

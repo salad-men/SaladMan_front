@@ -33,13 +33,15 @@ const HqHeader = () => {
                                 <li><a href="/hq/HqInventoryList">재고 목록</a></li>
                                 <li><a href="/hq/HqInventoryExpiration">유통기한 목록</a></li>
                                 <li><a href="/hq/HqDisposalList">폐기 목록</a></li>
+                                <li><a href="/hq/HqDisposalRequestList">폐기 요청 목록</a></li>
                                 <li><a href="/hq/HqIngredientSetting">재료 설정</a></li>
                                 <li><a href="/hq/HqInventoryRecord">재고 기록</a></li>
+                                <li><a href="/hq/HqCategoryIngredientManagePage">카테고리/재고 설정</a></li>
                             </ul>
                         </div>
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">수주</a>
+                        <a href="/hq/orderRequest">수주</a>
                         <div className="dropdown">
                             <ul>
                                 <li><a href="/hq/orderRequest">수주 목록</a></li>
@@ -48,7 +50,7 @@ const HqHeader = () => {
                         </div>
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">메뉴</a>
+                        <a href="/hq/totalMenu">메뉴</a>
                         <div className="dropdown">
                             <ul>
                                 <li><a href="/hq/totalMenu">전체 메뉴</a></li>
@@ -58,7 +60,7 @@ const HqHeader = () => {
                         </div>
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">매출</a>
+                        <a href="/hq/totalSales">매출</a>
                         <div className="dropdown">
                             <ul>
                                 <li><a href="/hq/totalSales">매출 조회(전사)</a></li>
@@ -67,7 +69,7 @@ const HqHeader = () => {
                         </div>
                     </div>
                     <div className="dropdown-container">
-                        <a href="#">매장관리</a>
+                        <a href="/hq/storeAccount">매장관리</a>
                         <div className="dropdown">
                             <ul>
                                 <li><a href="/hq/storeAccount">매장 목록</a></li>
