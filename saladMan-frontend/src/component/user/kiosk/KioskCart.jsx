@@ -3,6 +3,8 @@ import styles from './KioskCart.module.css';
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
+import { userAtom } from "/src/atoms";
+
 import { myAxios } from "/src/config";
 
 
@@ -11,18 +13,22 @@ const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart
   const totalPrice = cartItems.reduce((sum, item) => sum + item.salePrice * item.quantity, 0);
   const navigate = useNavigate();
   const token = useAtomValue(accessTokenAtom);
+  const store = useAtomValue(userAtom);
 
 const handleOrder = async () => {
   if (cartItems.length === 0) {
     alert("장바구니에 담긴 상품이 없습니다.");
     return;
   }
-
+  if (!store || !store.id) {
+    alert("매장 정보가 없습니다.");
+    return;
+  }
   try {
     const res = await myAxios(token).post("/kiosk/prepare", {
-      storeId: 9,
+      storeId: store.id,
       items: cartItems.map((item) => ({
-        menuId: item.id,
+        menuId: item.menuId,
         quantity: item.quantity,
         price: item.salePrice
       }))
@@ -31,7 +37,7 @@ const handleOrder = async () => {
     const { orderId, amount } = res.data;
 
     // 결제 페이지로 이동 + 데이터 전달
-    navigate("/kiosk/paymentTest", {
+    navigate("/kiosk/paymentPage", {
       state: {
         orderId,
         amount
