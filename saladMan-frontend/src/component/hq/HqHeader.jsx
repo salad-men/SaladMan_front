@@ -22,6 +22,9 @@ const HqHeader = () => {
     return (
         <>
             <div className="header">
+                    <div className="logo">
+                        <a href="/hq/HqDashboard"><img src="/샐러드맨로고(그린).png" alt="로고" /></a>
+                    </div>
                 <div className="nav">
                     <div className="dropdown-container">
                         <a href="/hq/HqInventoryList">재고</a>

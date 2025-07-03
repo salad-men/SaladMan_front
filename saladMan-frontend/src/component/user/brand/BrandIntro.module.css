@@ -12,7 +12,7 @@
 .mission,
 .story,
 .palette {
-  margin: 60px auto;
+  margin: 40px auto;
   max-width: 700px;
 }
 
@@ -40,4 +40,12 @@
   height: 60px;
   background-color: #3d6141;
   border-radius: 4px;
+}
+.logoContainer {
+  text-align: center;
+}
+
+.brandLogo {
+  height:100px; /* 필요에 따라 조절 */
+  width: auto;
 }

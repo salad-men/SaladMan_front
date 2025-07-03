@@ -25,6 +25,9 @@ const StoreHeader = () => {
     return (
         <>
             <div className="storeHeader">
+                    <div className="logo">
+                        <a href="/store/StoreDashboard"><img src="/샐러드맨로고(그린).png" alt="로고" /></a>
+                    </div>
                 <div className="storeNav">
                     <div className="storeDropdownContainer">
                         <a href="#">재고</a>
