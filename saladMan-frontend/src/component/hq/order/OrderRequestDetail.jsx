@@ -108,8 +108,8 @@ export default function OrderRequestDetail() {
                 <div className={styles.orderInfo}>
                     <p><strong>점포명:</strong> {storeName}</p>
                     <p><strong>No:</strong> {id} </p>
-                    <p><strong>수주일:</strong> 2025년 05월 01일</p>
-                    <p><strong>주문자:</strong> 이효봉</p>
+                    <p><strong>수주일:</strong> </p>
+                    <p><strong>주문자:</strong> </p>
                 </div>
 
                 <table className={styles.orderDetailTable}>
