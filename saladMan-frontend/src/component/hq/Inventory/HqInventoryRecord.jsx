@@ -19,13 +19,19 @@ export default function HqInventoryRecord() {
   const [changeQuantity, setChangeQuantity] = useState("");
   const [memo, setMemo] = useState("");
 
-  // filterCategory 초기값을 빈 문자열로 변경
+  
   const [filterCategory, setFilterCategory] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterStartDate, setFilterStartDate] = useState("");
   const [filterEndDate, setFilterEndDate] = useState("");
 
   const [categories, setCategories] = useState([]);
+  
+  //페이징
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1, allPage: 1, startPage: 1, endPage: 1,
+  });
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "-";
@@ -44,7 +50,7 @@ export default function HqInventoryRecord() {
     myAxios(token).get("/hq/inventory/categories").then(res => {
       const cats = res.data.categories || [];
       setCategories(cats);
-      setFilterCategory("");  // 초기값 빈 문자열 (전체 선택 의미)
+      setFilterCategory(""); 
     });
 
     myAxios(token).get("/hq/inventory/ingredients").then(res => {
@@ -77,6 +83,7 @@ export default function HqInventoryRecord() {
   // 필터 적용
   useEffect(() => {
     if (!token) return;
+    fetchRecords(1);
     let temp = records.filter(r => r.changeType.trim() === activeTab.trim());
     if (filterCategory !== "") temp = temp.filter(r => r.categoryName === filterCategory);
     if (filterName) temp = temp.filter(r => r.ingredientName.includes(filterName));
@@ -138,6 +145,19 @@ export default function HqInventoryRecord() {
     setFilterStartDate(from.toISOString().slice(0, 10));
     setFilterEndDate(to.toISOString().slice(0, 10));
   };
+
+  const fetchRecords = (page = 1) => {
+  myAxios(token)
+    .get("/hq/inventory/record", {
+      params: { storeId, type: activeTab, page }
+    })
+    .then(res => {
+      setRecords(res.data.records || []);
+      setPageInfo(res.data.pageInfo || {});
+      setCurrentPage(page);
+    });
+  };
+
 
   return (
     <div className={styles.container}>
