@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import MainPage from "@user/page/MainPage";
 import BrandIntro from "@user/page/BrandIntro";
 import SloganIntro from "@user/page/SloganIntro";
@@ -129,6 +129,12 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeRoomId, setActiveRoomId] = useState(null);
 
+  const location = useLocation();
+  const isStoreOrHqPage =
+    location.pathname.startsWith("/store/") ||
+    location.pathname.startsWith("/hq/");
+
+
   //사이드바 열릴때마다 방목록 패치
   useEffect(() => {
     if (!token || !showSidebar) return;
@@ -178,6 +184,9 @@ function App() {
   return (
     <>
       {/* 채팅 */}
+      {isStoreOrHqPage && (
+        <>
+      
       {chatAlarmOn && chatModalQueue.length > 0 &&
       <div
         style={{
@@ -261,6 +270,8 @@ function App() {
         activeRoomId={activeRoomId}          
         setActiveRoomId={setActiveRoomId} 
       />
+      </>
+      )}
 
       <Routes>
         <Route
