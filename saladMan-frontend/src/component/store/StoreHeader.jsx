@@ -1,10 +1,7 @@
-import { useAtom, useAtomValue } from 'jotai';
-import { useState } from "react";
+import { useAtom } from 'jotai';
 import { userAtom, initStore, accessTokenAtom } from "/src/atoms";
 import { useNavigate } from "react-router";
 import './StoreHeader.css';
-import ChatSidebar from "@components/Chat/ChatSidebar";
-
 
 const StoreHeader = () => {
     const [store,SetStore] = useAtom(userAtom);

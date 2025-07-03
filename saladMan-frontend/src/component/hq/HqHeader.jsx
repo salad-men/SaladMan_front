@@ -7,7 +7,6 @@ const HqHeader = () => {
     const [store, setStore] = useAtom(userAtom);
     const [user, setUser] = useAtom(userAtom);
     const [token, setAccessToken] = useAtom(accessTokenAtom);
-
     const navigate = useNavigate();
 
     const logout = (e) => {
@@ -24,7 +23,7 @@ const HqHeader = () => {
             <div className="header">
                 <div className="nav">
                     <div className="dropdown-container">
-                        <a href="/hq/HqInventoryList">재고</a>
+                        <a href="#">재고</a>
                         <div className="dropdown">
                             <ul>
                                 <li><a href="/hq/HqInventoryList">전체 재고 조회</a></li>

@@ -76,6 +76,7 @@ import HqDashboard from "@hq/dashboard/HqDashboard";
 import StoreDashboard from "@store/dashboard/StoreDashboard";
 
 import Login from "./component/common/Login";
+import AlarmModal from "./component/common/AlarmModal";
 import StoreAccountDetail from "@hq/storeManagement/StoreAccountDetail";
 import StoreAccountModify from "@hq/storeManagement/StoreAccountModify";
 import { useEffect, useState, useRef } from "react";
@@ -92,6 +93,7 @@ import KioskLayout from "@user/kiosk/KioskLayout";
 import { userAtom } from "/src/atoms";
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
+import { myAxios } from './config';
 import PaymentSuccess from '@user/kiosk/PaymentSuccess';
 import PaymentFail from '@user/kiosk/PaymentFail';
 import PaymentTest from '@user/kiosk/paymentTest';
@@ -174,6 +176,20 @@ function App() {
     onUnreadTotal: setChatUnreadTotal,
     onModal: chatAlarmOn ? showChatModal : undefined,
   });
+
+  // fcm알람
+  const openModal = async () => {
+    if (!token) return;
+    try {
+      const res = await myAxios(token).post("/alarms");
+      setAlarms(res.data);
+      setIsAlarmOpen(true);
+    } catch (err) {
+      console.error("알림 데이터를 가져오는데 실패했습니다.", err);
+    }
+  };
+  const closeModal = () => setIsAlarmOpen(false);
+  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
 
   return (
     <>
@@ -262,6 +278,18 @@ function App() {
         setActiveRoomId={setActiveRoomId} 
       />
 
+      {/* fcm알람 */}
+      {isLoggedIn && (
+        <div onClick={openModal}
+        style={{position: "absolute", top: 8, right: 45, fontSize: 23}}>🔔</div>
+      )}
+      {isAlarmOpen && (
+        <AlarmModal
+          alarms={alarms}
+          onClose={closeModal}
+        />
+      )}
+    
       <Routes>
         <Route
           element={
