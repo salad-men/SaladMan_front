@@ -292,7 +292,7 @@ function App() {
       {/* fcm알람 */}
       {isLoggedIn && (
         <div onClick={openModal}
-        style={{position: "absolute", top: 8, right: 45, fontSize: 23}}>🔔</div>
+        style={{position: "absolute", top: 8, right: 45, fontSize: 23, cursor:"pointer"}}>🔔</div>
       )}
       {isAlarmOpen && (
         <AlarmModal

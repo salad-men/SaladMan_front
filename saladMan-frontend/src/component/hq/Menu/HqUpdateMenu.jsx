@@ -4,15 +4,17 @@ import styles from './HqUpdateMenu.module.css';
 import HqSidebarMenu from './HqSidebarMenu';
 import { myAxios } from '../../../config';
 import { accessTokenAtom } from '/src/atoms';
+import { useNavigate } from 'react-router-dom';
 
 export default function HqUpdateMenu() {
   const token = useAtomValue(accessTokenAtom);
+  const navigate = useNavigate();
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [selectedIngredientIds, setSelectedIngredientIds] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(ingredients[0]?.categoryId || null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [Menucategory, setMenuCategory] = useState([]);
   const [selectedMenuCategoryId, setSelectedMenuCategoryId] = useState('');
 
@@ -20,20 +22,24 @@ export default function HqUpdateMenu() {
   const [imgFile, setImgFile] = useState(null);
   const [imgPreview, setImgPreview] = useState("/images/profile-placeholder.png");
 
+  // 폼 상태
+  const [menuName, setMenuName] = useState('');
+  const [salePrice, setSalePrice] = useState('');
+
   useEffect(() => {
     if (!token) return;
     const axios = myAxios(token);
 
-    const MenuCategory = async () => {
+    const fetchMenuCategory = async () => {
       try {
         const res = await axios.get('/hq/menuCategory');
         setMenuCategory(res.data);
       } catch (error) {
         console.error('카테고리 목록 불러오기 실패', error);
       }
-  };
+    };
 
-    MenuCategory();
+    fetchMenuCategory();
   }, [token]);
 
   const fetchIngredients = async () => {
@@ -48,65 +54,81 @@ export default function HqUpdateMenu() {
     }
   };
 
-
   const openModal = async () => {
     await fetchIngredients();
     setModalOpen(true);
   };
 
   const addSelectedIngredient = () => {
-  if (selectedIngredientIds.length === 0) {
-    return alert('재료를 선택하세요');
-  }
+    if (selectedIngredientIds.length === 0) {
+      return alert('재료를 선택하세요');
+    }
 
-  const selectedIngredients = ingredients.filter(ing =>
-    selectedIngredientIds.includes(ing.ingredientId)
-  );
+    const selectedIngredients = ingredients.filter(ing =>
+      selectedIngredientIds.includes(ing.ingredientId)
+    );
 
-  if (selectedIngredients.length === 0) {
-    return alert('재료 정보를 찾을 수 없습니다.');
-  }
+    setIngredientDetails(prev => {
+      const existingIds = prev.map(i => i.ingredientId);
+      const newItems = selectedIngredients
+        .filter(ing => !existingIds.includes(ing.ingredientId))
+        .map(ing => ({ ...ing, quantity: '' }));
+      return [...prev, ...newItems];
+    });
 
-  // 이미 추가된 재료 중복 방지
-  setIngredientDetails(prev => {
-    const existingIds = prev.map(i => i.ingredientId);
-    const newItems = selectedIngredients
-      .filter(ing => !existingIds.includes(ing.ingredientId))
-      .map(ing => ({ ...ing, quantity: '' }));
-    return [...prev, ...newItems];
-  });
-
-  setModalOpen(false);
-  setSelectedIngredientIds([]);
-};
+    setModalOpen(false);
+    setSelectedIngredientIds([]);
+  };
 
   const toggleIngredientSelection = (id) => {
-  setSelectedIngredientIds((prev) =>
-    prev.includes(id)
-      ? prev.filter((selectedId) => selectedId !== id)
-      : [...prev, id]
-  );
-};
+    setSelectedIngredientIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
 
-const menuData = {
-  name: '', salePrice: '', categoryId: '',
-  ingredients: ingredientDetails.map(i => ({
-    ingredientId: i.ingredientId,
-    quantity: parseInt(i.quantity)
-  }))
-};
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImgFile(file);
+      const reader = new FileReader();
+      reader.onload = () => setImgPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
 
-const formData = new FormData();
-formData.append("menu", JSON.stringify(menuData));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const imageInput = document.getElementById("image");
-if (imageInput.files.length > 0) {
-  formData.append("image", imageInput.files[0]);
-}
+    if (!menuName || !salePrice || !selectedMenuCategoryId) {
+      return alert("메뉴 이름, 가격, 카테고리를 모두 입력하세요.");
+    }
 
- myAxios.post("/hq/registerMenu", formData, {
-  headers: { "Content-Type": "multipart/form-data" }
-});
+    const menu = {
+      name: menuName,
+      salePrice: parseInt(salePrice),
+      categoryId: selectedMenuCategoryId,
+      ingredients: ingredientDetails.map(i => ({
+        ingredientId: i.ingredientId,
+        quantity: parseInt(i.quantity)
+      }))
+    };
+
+    const formData = new FormData();
+    formData.append("menu", JSON.stringify(menu));
+    if (imgFile) formData.append("image", imgFile);
+
+    try {
+      await myAxios(token).post("/hq/registerMenu", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+        
+      });
+      alert("메뉴 등록 성공!");
+      navigate("/hq/totalMenu");
+    } catch (err) {
+      console.error(err);
+      alert("등록 실패");
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -115,22 +137,29 @@ if (imageInput.files.length > 0) {
         <header className={styles.pageHeader}>
           <h2>메뉴 등록</h2>
         </header>
-        <form>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <table className={styles.table}>
             <tbody>
               <tr>
                 <td className={styles.labelCell}>메뉴 사진</td>
-                <td><input type="file" id="image" accept="image/*" /></td>
+                <td><input type="file" id="image" accept="image/*" onChange={handleImageChange} /></td>
                 <td className={styles.labelCell}>판매가</td>
                 <td>
                   <div className={styles.flexRow}>
-                    <input type="number" id="price" placeholder="판매가 (₩)" min="0" />
+                    <input type="number" id="price" 
+                      value={salePrice} onChange={(e) => setSalePrice(e.target.value)} 
+                      placeholder="판매가 (₩)" min="0" 
+                    />
                   </div>
                 </td>
               </tr>
               <tr>
                 <td className={styles.labelCell}>메뉴 이름</td>
-                <td><input type="text" id="name" required /></td>
+                <td>
+                  <input type="text" id="name"
+                    value={menuName} onChange={(e) => setMenuName(e.target.value)} required 
+                  />
+                </td>
                 <td className={styles.labelCell}>카테고리</td>
                   <td>
                     <select
