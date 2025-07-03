@@ -99,8 +99,8 @@ export default function OrderDetail() {
                                         <td>{item.ingredientName}</td>
                                         <td>{item.categoryName}</td>
                                         <td>{item.orderedQuantity} {item.unit}</td>
-                                        <td>{item.unitCost.toLocaleString()} 원</td>
-                                        <td>{item.totalPrice.toLocaleString()} 원</td>
+<td>{(item.unitCost ?? 0).toLocaleString()} 원</td>
+<td>{(item.totalPrice ?? 0).toLocaleString()} 원</td>
                                         <td>{item.approvalStatus}</td>
                                         <td>{item.inspection}</td>
                                     </tr>

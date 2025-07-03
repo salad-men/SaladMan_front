@@ -16,6 +16,7 @@ export const myAxios = (token) => {
    })
 
    token && instance.interceptors.request.use((config) => {
+
       config.headers.Authorization = token;
       return config;
    });
