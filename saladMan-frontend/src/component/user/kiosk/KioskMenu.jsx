@@ -58,8 +58,16 @@ export default function KioskMenu() {
 
 
     const fetchMenus = async () => {
+      const params = {
+        page: currentPage,
+        size: pageSize
+      };
+      if (selectedTab !== "전체") {
+        params.categoryName = selectedTab;
+      }
+
       try {
-        const res = await myAxios(token).get(`/kiosk/menus?page=${currentPage}&size=${pageSize}`);
+        const res = await myAxios(token).get("/kiosk/menus", { params });
         setMenuData(res.data.content);
         setTotalPages(res.data.totalPages);
         console.log("메뉴 불러옴:", res.data);
@@ -69,7 +77,7 @@ export default function KioskMenu() {
     };
 
     fetchMenus();
-  }, [token, currentPage]);
+  }, [token, currentPage,selectedTab]);
 
 
   const handleAddToCart = (item) => {
@@ -132,7 +140,7 @@ export default function KioskMenu() {
               <button
                 key={cat.id}
                 className={`${styles.tab} ${selectedTab === cat.name ? styles.activeTab : ""}`}
-                onClick={() => setSelectedTab(cat.name)}
+                onClick={() => {setSelectedTab(cat.name); setCurrentPage(0);}}
               >
                 {cat.name}
               </button>
@@ -201,7 +209,7 @@ export default function KioskMenu() {
               className="staticCart"
             />
           </div>
-        )};
+        )}
       </div>
 
     </div>
