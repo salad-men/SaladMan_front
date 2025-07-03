@@ -233,8 +233,8 @@ function App() {
           src="/chatIcon.png"
           alt="채팅"
           style={{
-            width: 32,   // 조절 가능
-            height: 32,  // 조절 가능
+            width: 32,   
+            height: 32,  
             display: "block",
             objectFit: "contain"
           }}
