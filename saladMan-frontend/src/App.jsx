@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import MainPage from "@user/page/MainPage";
 import BrandIntro from "@user/page/BrandIntro";
 import SloganIntro from "@user/page/SloganIntro";
@@ -94,7 +94,7 @@ import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
 import PaymentSuccess from '@user/kiosk/PaymentSuccess';
 import PaymentFail from '@user/kiosk/PaymentFail';
-import PaymentTest from '@user/kiosk/paymentTest';
+import PaymentPage from '@user/kiosk/PaymentPage';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -128,6 +128,12 @@ function App() {
   const [chatUnreadTotal, setChatUnreadTotal] = useState(0);
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeRoomId, setActiveRoomId] = useState(null);
+
+  const location = useLocation();
+  const isStoreOrHqPage =
+    location.pathname.startsWith("/store/") ||
+    location.pathname.startsWith("/hq/");
+
 
   //사이드바 열릴때마다 방목록 패치
   useEffect(() => {
@@ -178,6 +184,9 @@ function App() {
   return (
     <>
       {/* 채팅 */}
+      {isStoreOrHqPage && (
+        <>
+      
       {chatAlarmOn && chatModalQueue.length > 0 &&
       <div
         style={{
@@ -233,8 +242,8 @@ function App() {
           src="/chatIcon.png"
           alt="채팅"
           style={{
-            width: 32,   // 조절 가능
-            height: 32,  // 조절 가능
+            width: 32,   
+            height: 32,  
             display: "block",
             objectFit: "contain"
           }}
@@ -261,6 +270,8 @@ function App() {
         activeRoomId={activeRoomId}          
         setActiveRoomId={setActiveRoomId} 
       />
+      </>
+      )}
 
       <Routes>
         <Route
@@ -431,7 +442,7 @@ function App() {
           <Route path="/kiosk/menu" element={<KioskMenuPage />} />
           <Route path="/kiosk/paymentSuccess" element={<PaymentSuccess />} />
           <Route path="/kiosk/paymentFail" element={<PaymentFail />} />
-          <Route path="/kiosk/paymentTest" element={<PaymentTest />} />
+          <Route path="/kiosk/paymentPage" element={<PaymentPage />} />
 
         </Route>
       </Routes>

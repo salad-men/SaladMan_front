@@ -72,6 +72,9 @@
     cursor: pointer;
 }
 
+.filters button:hover {
+    opacity: 0.9;
+}
 .searchButton {
     background-color: #4D774E;
     color: white;

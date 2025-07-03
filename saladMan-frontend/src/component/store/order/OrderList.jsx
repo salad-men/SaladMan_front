@@ -64,7 +64,25 @@ export default function OrderList() {
         setStartDate('');
         setEndDate('');
     };
+    const setDateRange = (range) => {
+        const today = new Date();
+        const end = today.toISOString().slice(0, 10); // yyyy-mm-dd
 
+        let start = new Date();
+
+        if (range === "today") {
+            start = today;
+        } else if (range === "1week") {
+            start.setDate(today.getDate() - 7);
+        } else if (range === "2weeks") {
+            start.setDate(today.getDate() - 14);
+        } else if (range === "1month") {
+            start.setMonth(today.getMonth() - 1);
+        }
+
+        setStartDate(start.toISOString().slice(0, 10));
+        setEndDate(end);
+    };
     const navigateToInspection = (id) => {
         navigate(`/store/stockInspection?id=${id}`);
     };
@@ -72,7 +90,7 @@ export default function OrderList() {
         navigate(`/store/orderDetail?id=${id}`);
     };
 
-        const formatDate = (isoString) => {
+    const formatDate = (isoString) => {
         const date = new Date(isoString);
         const yyyy = date.getFullYear();
         const mm = date.getMonth() + 1;
@@ -98,6 +116,10 @@ export default function OrderList() {
                             <span>~</span>
                             <input type="date" value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)} />
+                            <button onClick={() => setDateRange("today")}>오늘</button>
+                            <button onClick={() => setDateRange("1week")}>1주</button>
+                            <button onClick={() => setDateRange("2weeks")}>2주</button>
+                            <button onClick={() => setDateRange("1month")}>1달</button>
                         </div>
                         <div className={styles.row}>
                             <label htmlFor="orderType">발주유형</label>
@@ -108,8 +130,8 @@ export default function OrderList() {
                                 onChange={handleChange}
                             >
                                 <option value="">전체</option>
-                                <option value="auto">자동발주</option>
-                                <option value="manual">수기발주</option>
+                                <option value="자동발주">자동발주</option>
+                                <option value="수기발주">수기발주</option>
                             </select>
                             <label htmlFor="productName">품명</label>
                             <input
@@ -121,7 +143,7 @@ export default function OrderList() {
                             />
 
 
-                            <button className={styles.searchButton} onClick={handleSearch}>검색</button>
+                            <button className={styles.searchButton} onClick={() => { handleSearch(1) }}>검색</button>
                             <button className={styles.resetButton} onClick={handleReset}>초기화</button>
                         </div>
                     </div>
@@ -141,7 +163,7 @@ export default function OrderList() {
                         </thead>
                         <tbody>
                             {orderData.map((order, index) => (
-                                
+
                                 <tr key={order.id} onClick={() => navigateToOrderDetail(order.id)} className={styles.clickableRow}>
                                     <td>{index + 1}</td>
                                     <td>{order.purType}</td>
@@ -152,10 +174,21 @@ export default function OrderList() {
                                     <td>{order.totalPrice} 원</td>
                                     <td>
                                         <button
-                                        
+
                                             disabled={!order.receiptAvailable || order.status.trim() === "검수완료"}
-                                            className={order.receiptAvailable && !order.status.trim() === "검수완료" ? styles.activeButton : styles.disabledButton}
-                                            onClick={(e) =>  {e.stopPropagation(); order.receiptAvailable && navigateToInspection(order.id)}}
+                                            className={
+                                                order.receiptAvailable && order.status.trim() !== "검수완료"
+                                                    ? styles.activeButton
+                                                    : styles.disabledButton
+                                            } onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (
+                                                    order.receiptAvailable &&
+                                                    order.status.trim() !== "검수완료"
+                                                ) {
+                                                    navigateToInspection(order.id);
+                                                }
+                                            }}
                                         >
                                             검수서
                                         </button>

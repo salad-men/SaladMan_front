@@ -3,6 +3,8 @@ import CartBar from './KioskCart';
 import styles from './KioskMenu.module.css';
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
+import { userAtom } from "/src/atoms";
+
 import { myAxios } from "/src/config";
 
 export default function KioskMenu() {
@@ -18,6 +20,8 @@ export default function KioskMenu() {
   const [totalPages, setTotalPages] = useState(1);
 
   const token = useAtomValue(accessTokenAtom);
+  const store = useAtomValue(userAtom);
+
   const pageSize = 9;
   useEffect(() => {
     const handleResize = () => {

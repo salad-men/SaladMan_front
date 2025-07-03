@@ -8,18 +8,18 @@ export default function StoreInventorySidebar() {
        
         <li className={styles.listItem}>
           <a href="/store/StoreInventoryList" className={styles.link}>
-            재고 조회
+            재고 목록
           </a>
         </li>
 
         <li className={styles.listItem}>
           <a href="/store/StoreInventoryExpiration" className={styles.link}>
-            유통기한 조회
+            유통기한 목록
           </a>
         </li>
          <li className={styles.listItem}>
           <a href="/store/StoreDisposalList" className={styles.link}>
-            폐기 목록 조회
+            폐기 목록
           </a>
         </li>
 
