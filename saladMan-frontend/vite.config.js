@@ -24,9 +24,9 @@ export default defineConfig({
     cors: true,
     hmr: {
       clientPort: 5173,
-      host: '192.168.0.9',
+      host: '192.168.0.13',
     },
-    origin: 'http://192.168.0.9:5173',
+    origin: 'http://192.168.0.13:5173',
     proxy: {
       '/api': {
         target: 'http://localhost:8090', // ✅ Spring 서버 주소
