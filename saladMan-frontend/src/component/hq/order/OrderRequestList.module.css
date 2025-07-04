@@ -16,6 +16,7 @@
     flex-direction: column;
     min-width: 0;
     position: relative;
+      overflow-y: auto; /* 내용 스크롤 */
 }
 
 .orderRequestContent h2 {

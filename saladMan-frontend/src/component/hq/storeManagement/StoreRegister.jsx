@@ -296,7 +296,8 @@ export default function StoreRegister() {
                         </div>
                     </div>
 
-                    <div className={styles.submitSection}>
+                    <div className={styles.buttonGroup}>
+                        <button className={styles.backButton} onClick={()=>{navigate("/hq/storeAccount")}}>목록</button>
                         <button className={styles.submitButton} onClick={registerStore}>저장</button>
                     </div>
                 </div>

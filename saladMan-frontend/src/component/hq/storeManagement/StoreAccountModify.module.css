@@ -103,46 +103,50 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 
 }
+
 .disabledInput {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  color: #777;
-  padding: 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    color: #777;
+    padding: 8px;
 }
 
 .buttonGroup {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 40px;
 }
+
 .backButton {
-  padding: 10px 20px;
-  background-color:#b3b4b4;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+    padding: 10px 20px;
+    background-color: #b3b4b4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .backButton:hover {
-  background-color:#a8a8a8 ;
+    background-color: #a8a8a8;
 }
+
 .submitButton {
-  padding: 10px 20px;
-  background-color: #4caf50 ;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+    padding: 10px 20px;
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .submitButton:hover {
-  background-color:#388e3c ;}
+    background-color: #3a5e3b;
+}
 
 .checkButton {
     margin-top: 6px;

@@ -117,21 +117,21 @@
 }
 
 .pagination {
-    margin-top: 20px;
+    margin-top: 16px;
     display: flex;
     justify-content: center;
     gap: 8px;
 }
 
 .pagination button {
-    padding: 5px 10px;
-    border: none;
-    background-color: #eee;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background-color: white;
     cursor: pointer;
 }
 
-.pagination button.active {
-    background-color: #76c3c5;
+.pagination .activePage {
+    background-color: #4D774E;
     color: white;
     font-weight: bold;
 }
@@ -154,6 +154,6 @@
 }
 
 .clickableRow:hover {
-    background-color: #f5f7fa;
+    background-color: #f0f5f0;
     /* 밝은 회색으로 hover 효과 */
 }
