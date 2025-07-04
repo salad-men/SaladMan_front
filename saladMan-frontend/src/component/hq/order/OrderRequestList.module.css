@@ -87,7 +87,7 @@
 }
 
 .orderTable th {
-    background-color: #f6f6f6;
+    background-color: #e9f3e9;
     font-weight: bold;
 }
 
@@ -101,22 +101,34 @@
     /* 좌우 여백 줄임 */
 }
 
+.orderTable tbody tr {
+    cursor: pointer;
+    /* 마우스 커서를 손가락으로 */
+    transition: background-color 0.2s ease;
+    /* 부드러운 색 전환 */
+}
+
+.orderTable tbody tr:hover {
+    background-color: #f0f5f0;
+    /* 살짝 연녹색 호버 색상 */
+}
+
 .pagination {
-  margin-top: 16px;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
 }
 
 .pagination button {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  background-color: white;
-  cursor: pointer;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
 }
 
 .pagination .activePage {
-  background-color: #4D774E;
-  color: white;
-  font-weight: bold;
+    background-color: #4D774E;
+    color: white;
+    font-weight: bold;
 }
