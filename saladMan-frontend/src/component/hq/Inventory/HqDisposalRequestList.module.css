@@ -1,18 +1,20 @@
 /* ─── 전체 레이아웃 ─── */
 .container {
   display: flex;
-  min-height: 100vh;
+  min-height: 900px;
   background: #f7f8fa;
 }
 .content {
   flex: 1;
+  /* padding: 10px 16px 0 16px; */
   padding: 16px;
 }
 .innerContainer {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 24px;
+  /* padding: 0 24px 10px 24px; */
+  padding:24px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 .title {
@@ -289,4 +291,18 @@ select {
   background: #57a964;
   color: white;
   border-color: #57a964;
+}
+
+.modalOverlay {
+  position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4); z-index: 2000; display: flex; align-items: center; justify-content: center;
+}
+.modalBox {
+  background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 32px 24px; min-width: 320px;
+}
+.textarea {
+  width: 100%; border-radius: 6px; border: 1px solid #ccc; padding: 12px; margin-bottom: 16px;
+}
+.modalActions {
+  display: flex; justify-content: flex-end; gap: 8px;
 }

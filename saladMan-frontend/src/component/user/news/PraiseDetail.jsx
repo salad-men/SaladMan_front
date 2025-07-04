@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { myAxios } from "/src/config";
-import styles from "./NewsDetail.module.css"; // 재사용
+import styles from "./NewsDetail.module.css";
 
 const PraiseDetail = () => {
   const { id } = useParams();
@@ -31,8 +31,18 @@ const PraiseDetail = () => {
 
       <div
         className={styles.content}
-        dangerouslySetInnerHTML={{ __html: store.content }}
+        dangerouslySetInnerHTML={{ __html: store.content.replace(/\n/g, "<br/>") }}
       ></div>
+
+      {store.img && (
+        <div className={styles.imageWrapper} style={{ textAlign: "center", marginTop: "20px" }}>
+          <img
+            src={store.img}
+            alt="첨부 이미지"
+            style={{ maxWidth: "100%", borderRadius: "8px"}}
+          />
+        </div>
+      )}
 
       <div className={styles.buttons}>
         <button className={styles.buttonGreen} onClick={() => navigate(-1)}>목록</button>

@@ -9,7 +9,7 @@ export default function useChatSSE({
   setRooms,
   onUnreadTotal,
   onModal,
-  activeRoomId    // ← 현재 열려있는 채팅방 ID(옵션)
+  activeRoomId    
 }) {
   useEffect(() => {
     if (!token || !enabled) {

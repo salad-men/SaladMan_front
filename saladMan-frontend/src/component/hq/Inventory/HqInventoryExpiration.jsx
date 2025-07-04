@@ -222,7 +222,7 @@ export default function HqInventoryExpiration() {
       <HqInventorySidebar />
       <div className={styles.content}>
         <div className={styles.innerContainer}>
-          <h2 className={styles.title}>유통기한 조회</h2>
+          <h2 className={styles.title}>유통기한 목록</h2>
 
           {/* 필터 */}
           <div className={styles.filters}>
@@ -239,7 +239,6 @@ export default function HqInventoryExpiration() {
               </div>
             </div>
             <div className={styles.row}>
-              <label>대상</label>
               <select value={scope} onChange={onFilterChange(setScope)}>
                 <option value="hq">본사</option>
                 <option value="store">지점</option>
@@ -256,9 +255,8 @@ export default function HqInventoryExpiration() {
                   </select>
                 </>
               )}
-              <label>분류</label>
               <select value={category} onChange={onFilterChange(setCategory)}>
-                <option value="all">전체</option>
+                <option value="all">전체 분류</option>
                 {categories.map(c => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}

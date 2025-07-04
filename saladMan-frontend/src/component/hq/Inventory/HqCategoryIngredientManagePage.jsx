@@ -10,26 +10,25 @@ export default function HqCategoryIngredientManagePage() {
 
   const [categories, setCategories] = useState([]);
   const [allIngredients, setAllIngredients] = useState([]);
-  const [selectedCat, setSelectedCat] = useState(null);
-  const [selectedIng, setSelectedIng] = useState(null);
+  const [selectedCatId, setSelectedCatId] = useState("");
+  const [catError, setCatError] = useState("");
+  const [ingError, setIngError] = useState("");
+  const [catLoading, setCatLoading] = useState(false);
+  const [ingLoading, setIngLoading] = useState(false);
 
+  // 카테고리 추가/수정
   const [showCatInput, setShowCatInput] = useState(false);
   const [newCatName, setNewCatName] = useState("");
-  const [catError, setCatError] = useState("");
+  const [editCatId, setEditCatId] = useState(null);
+  const [editCatName, setEditCatName] = useState("");
 
+  // 재료 추가/수정
   const [showIngInput, setShowIngInput] = useState(false);
   const [newIngName, setNewIngName] = useState("");
   const [newIngUnit, setNewIngUnit] = useState("");
-  const [ingError, setIngError] = useState("");
-
-  const [editCatId, setEditCatId] = useState(null);
-  const [editCatName, setEditCatName] = useState("");
   const [editIngId, setEditIngId] = useState(null);
   const [editIngName, setEditIngName] = useState("");
   const [editIngUnit, setEditIngUnit] = useState("");
-
-  const [catLoading, setCatLoading] = useState(false);
-  const [ingLoading, setIngLoading] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -41,14 +40,12 @@ export default function HqCategoryIngredientManagePage() {
     setCatLoading(true);
     try {
       const res = await myAxios(token).get("/hq/inventory/categories");
-      const cats = res.data.categories || [];
-      setCategories(cats);
-      if (!selectedCat && cats.length) setSelectedCat(cats[0]);
+      setCategories(res.data.categories || []);
+      if (!selectedCatId && res.data.categories?.[0]?.id) setSelectedCatId(String(res.data.categories[0].id));
     } finally {
       setCatLoading(false);
     }
   };
-
   const fetchIngredients = async () => {
     setIngLoading(true);
     try {
@@ -58,16 +55,22 @@ export default function HqCategoryIngredientManagePage() {
       setIngLoading(false);
     }
   };
+  const selectedCat = categories.find(cat => String(cat.id) === selectedCatId);
 
+  // 필터된 재료
   const ingredients = selectedCat
-    ? allIngredients.filter(i => i.categoryId === selectedCat.id)
+    ? allIngredients.filter(i => String(i.categoryId) === selectedCatId)
     : [];
 
+  // 카테고리 추가/수정/삭제
   const addCategory = async () => {
+    if (!token) return;
+
     if (!newCatName.trim()) return setCatError("이름을 입력하세요.");
     setCatError("");
     try {
       const res = await myAxios(token).post("/hq/inventory/category-add", { name: newCatName.trim() });
+      console.log("token:", token);
       setCategories(prev => [...prev, { id: res.data.id, name: newCatName.trim() }]);
       setNewCatName("");
       setShowCatInput(false);
@@ -75,10 +78,11 @@ export default function HqCategoryIngredientManagePage() {
       setCatError("추가 실패");
     }
   };
-
   const saveCategory = async id => {
     if (!editCatName.trim()) return setCatError("이름을 입력하세요.");
     setCatError("");
+    if (!token) return;
+
     try {
       await myAxios(token).post("/hq/inventory/category-update", { id, name: editCatName.trim() });
       setCategories(prev => prev.map(c => c.id === id ? { ...c, name: editCatName.trim() } : c));
@@ -87,20 +91,24 @@ export default function HqCategoryIngredientManagePage() {
       setCatError("수정 실패");
     }
   };
-
   const deleteCategory = async cat => {
+    if (!token) return;
+
     try {
       await myAxios(token).post("/hq/inventory/category-delete", { id: cat.id });
       setCategories(prev => prev.filter(c => c.id !== cat.id));
-      if (selectedCat?.id === cat.id) setSelectedCat(null);
+      if (selectedCatId === String(cat.id)) setSelectedCatId("");
     } catch {
       setCatError("삭제 실패");
     }
   };
 
+  // 재료 추가/수정/삭제
   const addIngredient = async () => {
     if (!newIngName.trim() || !newIngUnit.trim()) return setIngError("이름과 단위를 모두 입력하세요.");
     setIngError("");
+    if (!token) return;
+
     try {
       const res = await myAxios(token).post("/hq/inventory/ingredient-add", {
         name: newIngName.trim(),
@@ -113,15 +121,15 @@ export default function HqCategoryIngredientManagePage() {
         unit: newIngUnit.trim(),
         categoryId: selectedCat.id
       }]);
-      setNewIngName("");
-      setNewIngUnit("");
+      setNewIngName(""); setNewIngUnit("");
       setShowIngInput(false);
     } catch {
       setIngError("추가 실패");
     }
   };
-
   const saveIngredient = async id => {
+    if (!token) return;
+
     if (!editIngName.trim() || !editIngUnit.trim()) return setIngError("이름과 단위를 모두 입력하세요.");
     setIngError("");
     try {
@@ -132,182 +140,204 @@ export default function HqCategoryIngredientManagePage() {
       setIngError("수정 실패");
     }
   };
-
   const deleteIngredient = async ing => {
+    if (!token) return;
+
     try {
       await myAxios(token).post("/hq/inventory/ingredient-delete", { id: ing.id });
       setAllIngredients(prev => prev.filter(i => i.id !== ing.id));
-      if (selectedIng?.id === ing.id) setSelectedIng(null);
     } catch {
       setIngError("삭제 실패");
     }
   };
 
-  const selectCategory = cat => {
-    setSelectedCat(cat);
-    setSelectedIng(null);
-    setEditCatId(null);
-    setShowIngInput(false);
-    setCatError("");
-    setIngError("");
-  };
-
-  const selectIngredient = ing => {
-    setSelectedIng(ing);
-    setEditIngId(null);
-  };
-
   return (
-    <div className={styles.container}>
+    <div className={styles.managerContainer}>
       <HqInventorySidebar />
-      <div className={styles.content}>
-        <div className={styles.innerContainer}>
-          {/* 제목을 innerContainer 안으로 이동 */}
-          <h2 className={styles.title}>카테고리 / 재료 관리</h2>
-
-          <div className={styles.columns}>
-            {/* 카테고리 컬럼 */}
-            <div className={styles.column}>
-              <div className={styles.header}>
-                <span className={styles.boxTitle}>카테고리</span>
-                <button
-                  className={styles.plusBtn}
-                  onClick={() => { setShowCatInput(v => !v); setCatError(""); }}
-                >
-                  ＋
-                </button>
-              </div>
-
-              {showCatInput && (
-                <div className={styles.catInputWrapper} onClick={e => e.stopPropagation()}>
-                  <input
-                    className={styles.catInput}
-                    placeholder="새 카테고리"
-                    value={newCatName}
-                    onChange={e => setNewCatName(e.target.value)}
-                  />
-                  <button className={styles.confirmBtn} onClick={addCategory}>추가</button>
+      <div className={styles.managerContent}>
+        <div className={styles.managerInner}>
+          <h2 className={styles.managerTitle}>카테고리 / 재료 관리</h2>
+          <div className={styles.managerFlex}>
+            {/* === 카테고리 컬럼 === */}
+            <div className={styles.managerCol}>
+              <div className={styles.catFilters}>
+                <div className={styles.catRow}>
+                  <span className={styles.catLabel}>카테고리</span>
+                  <button
+                    className={styles.catAddBtn}
+                    type="button"
+                    onClick={() => { setShowCatInput(v => !v); setCatError(""); }}
+                  >카테고리 추가</button>
                 </div>
-              )}
-              {catError && <div className={styles.error}>{catError}</div>}
-
-              <div className={styles.listBox}>
-                {catLoading
-                  ? <div className={styles.loading}>로딩중…</div>
-                  : categories.map(cat => (
-                    <div
-                      key={cat.id}
-                      className={`${styles.item} ${selectedCat?.id === cat.id ? styles.active : ""}`}
-                      onClick={() => selectCategory(cat)}
-                    >
-                      {editCatId === cat.id ? (
-                        <div className={styles.catInputWrapper} onClick={e => e.stopPropagation()}>
-                          <input
-                            className={styles.catInput}
-                            value={editCatName}
-                            onChange={e => setEditCatName(e.target.value)}
-                          />
-                          <button className={styles.confirmBtn} onClick={() => saveCategory(cat.id)}>저장</button>
-                          <button className={styles.cancelBtn} onClick={() => setEditCatId(null)}>취소</button>
-                        </div>
-                      ) : (
-                        <>
-                          <span>{cat.name}</span>
-                          <div className={styles.btns}>
-                            <button
-                              className={styles.editBtn}
-                              onClick={e => { e.stopPropagation(); setEditCatId(cat.id); setEditCatName(cat.name); }}
-                            >수정</button>
-                            <button
-                              className={styles.delBtn}
-                              onClick={e => { e.stopPropagation(); deleteCategory(cat); }}
-                            >삭제</button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  ))
-                }
+                {showCatInput && (
+                  <div className={styles.catRow}>
+                    <input
+                      className={styles.catInput}
+                      placeholder="새 카테고리명"
+                      value={newCatName}
+                      onChange={e => setNewCatName(e.target.value)}
+                    />
+                    <button className={styles.catAddSubmitBtn} onClick={addCategory}>추가</button>
+                    <button className={styles.catAddCancelBtn} onClick={() => { setShowCatInput(false); setNewCatName(""); }}>취소</button>
+                  </div>
+                )}
+                {catError && <div className={styles.catError}>{catError}</div>}
+              </div>
+              <div className={styles.catTableWrap}>
+                <table className={styles.catTable}>
+                  <thead>
+                    <tr>
+                      <th>카테고리명</th>
+                      <th className={styles.catManageTh}>관리</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {catLoading ? (
+                      <tr><td colSpan={2} className={styles.catNoData}>로딩중…</td></tr>
+                    ) : categories.length === 0 ? (
+                      <tr><td colSpan={2} className={styles.catNoData}>카테고리가 없습니다.</td></tr>
+                    ) : (
+                      categories.map(cat => (
+                        <tr key={cat.id} className={selectedCatId === String(cat.id) ? styles.catRowActive : ""}>
+                          {editCatId === cat.id ? (
+                            <>
+                              <td>
+                                <input
+                                  className={styles.catEditInput}
+                                  value={editCatName}
+                                  onChange={e => setEditCatName(e.target.value)}
+                                />
+                              </td>
+                              <td>
+                                <button className={styles.catEditSubmitBtn} onClick={() => saveCategory(cat.id)}>저장</button>
+                                <button className={styles.catEditCancelBtn} onClick={() => setEditCatId(null)}>취소</button>
+                              </td>
+                            </>
+                          ) : (
+                            <>
+                              <td onClick={() => setSelectedCatId(String(cat.id))} style={{ cursor: "pointer" }}>
+                                {cat.name}
+                              </td>
+                              <td>
+                                <button
+                                  className={styles.catEditBtn}
+                                  onClick={() => { setEditCatId(cat.id); setEditCatName(cat.name); }}
+                                >수정</button>
+                                <button
+                                  className={styles.catDeleteBtn}
+                                  onClick={() => deleteCategory(cat)}
+                                >삭제</button>
+                              </td>
+                            </>
+                          )}
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
-
-            {/* 재료 컬럼 */}
-            <div className={`${styles.column} ${styles.ingColumn}`}>
-              <div className={styles.header}>
-                <span className={styles.boxTitle}>
-                  {selectedCat ? `${selectedCat.name} 재료` : "재료"}
-                </span>
-                {selectedCat && (
-                  <button
-                    className={styles.plusBtn}
-                    onClick={() => { setShowIngInput(v => !v); setIngError(""); }}
+            {/* === 재료 컬럼 === */}
+            <div className={styles.managerCol}>
+              <div className={styles.ingFilters}>
+                <div className={styles.ingRow}>
+                  <span className={styles.ingLabel}>재료</span>
+                  <select
+                    value={selectedCatId}
+                    onChange={e => setSelectedCatId(e.target.value)}
+                    className={styles.ingCatSelect}
                   >
-                    ＋
-                  </button>
-                )}
-              </div>
-
-              {showIngInput && selectedCat && (
-                <div className={styles.ingInputWrapper} onClick={e => e.stopPropagation()}>
-                  <input
-                    className={styles.ingInput}
-                    placeholder="새 재료"
-                    value={newIngName}
-                    onChange={e => setNewIngName(e.target.value)}
-                  />
-                  <input
-                    className={styles.ingInput}
-                    placeholder="단위"
-                    value={newIngUnit}
-                    onChange={e => setNewIngUnit(e.target.value)}
-                  />
-                  <button className={styles.confirmBtn} onClick={addIngredient}>추가</button>
+                    <option value="">전체</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                  <button
+                    className={styles.ingAddBtn}
+                    type="button"
+                    disabled={!selectedCat}
+                    onClick={() => { setShowIngInput(v => !v); setIngError(""); }}
+                  >재료 추가</button>
                 </div>
-              )}
-              {ingError && <div className={styles.error}>{ingError}</div>}
-
-              <div className={styles.listBox}>
-                {ingLoading
-                  ? <div className={styles.loading}>로딩중…</div>
-                  : ingredients.map(ing => (
-                    <div
-                      key={ing.id}
-                      className={`${styles.item} ${selectedIng?.id === ing.id ? styles.active : ""}`}
-                      onClick={() => selectIngredient(ing)}
-                    >
-                      {editIngId === ing.id ? (
-                        <div className={styles.ingInputWrapper} onClick={e => e.stopPropagation()}>
-                          <input
-                            className={styles.ingInput}
-                            value={editIngName}
-                            onChange={e => setEditIngName(e.target.value)}
-                          />
-                          <input
-                            className={styles.ingInput}
-                            value={editIngUnit}
-                            onChange={e => setEditIngUnit(e.target.value)}
-                          />
-                          <button className={styles.confirmBtn} onClick={() => saveIngredient(ing.id)}>저장</button>
-                          <button className={styles.cancelBtn} onClick={() => setEditIngId(null)}>취소</button>
-                        </div>
-                      ) : (
-                        <>
-                          <span>{ing.name} ({ing.unit})</span>
-                          <div className={styles.btns}>
-                            <button
-                              className={styles.editBtn}
-                              onClick={e => { e.stopPropagation(); setEditIngId(ing.id); setEditIngName(ing.name); setEditIngUnit(ing.unit); }}
-                            >수정</button>
-                            <button
-                              className={styles.delBtn}
-                              onClick={e => { e.stopPropagation(); deleteIngredient(ing); }}
-                            >삭제</button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  ))
-                }
+                {showIngInput && selectedCat && (
+                  <div className={styles.ingRow}>
+                    <input
+                      className={styles.ingInput}
+                      placeholder="재료명"
+                      value={newIngName}
+                      onChange={e => setNewIngName(e.target.value)}
+                    />
+                    <input
+                      className={styles.ingInput}
+                      placeholder="단위"
+                      value={newIngUnit}
+                      onChange={e => setNewIngUnit(e.target.value)}
+                    />
+                    <button className={styles.ingAddSubmitBtn} onClick={addIngredient}>추가</button>
+                    <button className={styles.ingAddCancelBtn} onClick={() => { setShowIngInput(false); setNewIngName(""); setNewIngUnit(""); }}>취소</button>
+                  </div>
+                )}
+                {ingError && <div className={styles.ingError}>{ingError}</div>}
+              </div>
+              <div className={styles.ingTableWrap}>
+                <table className={styles.ingTable}>
+                  <thead>
+                    <tr>
+                      <th>재료명</th>
+                      <th>단위</th>
+                      <th className={styles.ingManageTh}>관리</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ingLoading ? (
+                      <tr><td colSpan={3} className={styles.ingNoData}>로딩중…</td></tr>
+                    ) : ingredients.length === 0 ? (
+                      <tr><td colSpan={3} className={styles.ingNoData}>재료가 없습니다.</td></tr>
+                    ) : (
+                      ingredients.map(ing => (
+                        <tr key={ing.id}>
+                          {editIngId === ing.id ? (
+                            <>
+                              <td>
+                                <input
+                                  className={styles.ingEditInput}
+                                  value={editIngName}
+                                  onChange={e => setEditIngName(e.target.value)}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className={styles.ingEditInput}
+                                  value={editIngUnit}
+                                  onChange={e => setEditIngUnit(e.target.value)}
+                                />
+                              </td>
+                              <td>
+                                <button className={styles.ingEditSubmitBtn} onClick={() => saveIngredient(ing.id)}>저장</button>
+                                <button className={styles.ingEditCancelBtn} onClick={() => setEditIngId(null)}>취소</button>
+                              </td>
+                            </>
+                          ) : (
+                            <>
+                              <td>{ing.name}</td>
+                              <td>{ing.unit}</td>
+                              <td>
+                                <button
+                                  className={styles.ingEditBtn}
+                                  onClick={() => { setEditIngId(ing.id); setEditIngName(ing.name); setEditIngUnit(ing.unit); }}
+                                >수정</button>
+                                <button
+                                  className={styles.ingDeleteBtn}
+                                  onClick={() => deleteIngredient(ing)}
+                                >삭제</button>
+                              </td>
+                            </>
+                          )}
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
