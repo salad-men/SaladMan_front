@@ -84,7 +84,7 @@ export default function HqDashboard() {
   return (
     <div className={styles.layout}>
       <div className={styles.dashboardHeader}>
-        🥗 샐러리맨 - <span className={styles.hq}>본사(Hq)</span> 대시보드
+        🥗 SALADMAN - <span className={styles.hq}>본사</span> 운영 현황
       </div>
       <div className={styles.dashboardGrid}>
         <div className={`${styles.card} ${styles.cardTop} ${styles.cardSales}`} style={{ gridArea: "sales" }}>

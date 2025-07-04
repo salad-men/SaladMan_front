@@ -31,11 +31,29 @@ const EventDetail = () => {
 
       <div
         className={styles.content}
-        dangerouslySetInnerHTML={{ __html: event.content }}
+        dangerouslySetInnerHTML={{ __html: event.content.replace(/\n/g, "<br/>") }}
       ></div>
 
+      {event.img && (
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          <img
+            src={event.img}
+            alt="첨부 이미지"
+            style={{
+              width: "100%",
+              maxWidth: "100%",
+              height: "auto",
+              borderRadius: "8px",
+              border: "1px solid #ccc"
+            }}
+          />
+        </div>
+      )}
+
       <div className={styles.buttons}>
-        <button className={styles.buttonGreen} onClick={() => navigate(-1)}>목록</button>
+        <button className={styles.buttonGreen} onClick={() => navigate(-1)}>
+          목록
+        </button>
       </div>
     </div>
   );

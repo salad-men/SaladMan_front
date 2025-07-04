@@ -95,6 +95,7 @@ import { accessTokenAtom } from "/src/atoms";
 import PaymentSuccess from '@user/kiosk/PaymentSuccess';
 import PaymentFail from '@user/kiosk/PaymentFail';
 import PaymentPage from '@user/kiosk/PaymentPage';
+import NewsWritePage from "@user/page/NewsWritePage";
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -432,6 +433,7 @@ function App() {
         <Route path="/eventDetail/:id" element={<EventDetailPage />} />
 
         <Route path="/praiseDetail/:id" element={<PraiseDetailPage />} />
+        <Route path="/newsWrite" element={<NewsWritePage />} />
 
         {/* 키오스크 페이지 */}
 

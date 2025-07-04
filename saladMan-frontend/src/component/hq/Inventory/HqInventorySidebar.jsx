@@ -3,7 +3,7 @@ import styles from './HqInventorySidebar.module.css';
 export default function InventorySidebar() {
   return (
     <div className={styles.sidebar}>
-      <h1 className={styles.title}>재고 관리</h1>
+      <h1 className={styles.title}> 재고 관리</h1>
       <ul className={styles.list}>
         <li className={styles.listItem}>
           <a href="/hq/HqInventoryList" className={styles.link}>전체 재고 조회</a>

@@ -1,23 +1,28 @@
 .sidebar {
+  position: fixed;
+  top: 80px;
+  left: 0;
   background-color: #4D774E;
   color: white;
-  height: 100vh;
+  height: 85vh;
   width: 230px;
-  margin: 0;
-  padding: 20px;
+  padding-top: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  border-radius: 0 29px 29px 0;
+  z-index: 999;
 }
-
 .title {
   margin: 10px 0 20px 20px;
+  padding-top: 10px;
+  padding-left: 20px;
   font-size: 28px;
   font-weight: bold;
 }
 
 .list {
-  padding: 0 10px;
+  padding: 0 0 10px;
   margin: 0;
   list-style: none;
   flex-grow: 1;
@@ -25,14 +30,14 @@
 
 .listItem {
   font-size: 20px;
-  padding: 10px 20px;
+  padding: 15px 40px;
   cursor: pointer;
-  border-radius: 6px;
   transition: background-color 0.3s;
 }
 
 .listItem:hover {
-  background-color: #3F6940;
+  background-color: #133b13;
+  color : white;
 }
 
 .link {
@@ -45,5 +50,5 @@
 .link:focus,
 .link:hover {
   outline: none;
-  color: #eaeaea;
+  color: #ffffff;
 }

@@ -3,9 +3,11 @@
   height: 70vh;
   margin-bottom: 50px;
   margin-left: 200px;
-  background: #f9fafb;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
+  padding-top: 70px;
+
 }
 
 .dashboardHeader {
@@ -31,7 +33,7 @@
 .card {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 20px rgba(45, 60, 46, 0.2);
   padding: 15px;
   box-sizing: border-box;
   transition: box-shadow 0.2s;
@@ -46,7 +48,7 @@
 
 /* Hover 효과 예시 (원하는 경우) */
 .card:hover {
-  box-shadow: 0 12px 32px rgba(77, 119, 78, 0.08);
+  box-shadow: 0 6px 20px rgba(45, 60, 46, 0.5);
 }
 
 .cardHeader {

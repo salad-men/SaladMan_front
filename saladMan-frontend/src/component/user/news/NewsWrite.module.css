@@ -1,0 +1,138 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 36px;
+  padding-top: 111px;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #333;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: 800;
+  text-align: center;
+  color: #174c34;
+  margin-bottom: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.textarea {
+      font-family: "Noto Sans KR", sans-serif;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 1rem;
+  height: 450px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 35px;
+}
+
+.buttonGreen {
+  background-color: #2d6a4f;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.buttonGreen:hover {
+  background-color: #23553d;
+}
+
+.buttonGray {
+  background-color: #ddd;
+  color: #333;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.buttonGray:hover {
+  background-color: #bbb;
+}
+
+.dropZone {
+  border: 2px dashed #737d70;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.dropZone:hover {
+  background-color: #e3ebe4;
+}
+
+.dragOver {
+  background-color: #f0f8f5;
+  border-color: #4D774E;
+}
+
+.preview {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.preview img {
+  width: 220px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+.meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+.divider {
+  border-top: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+.preview {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.preview img {
+  width: 220px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  display: block;
+  margin: 0 auto 0.5rem;
+}
+
+.cancelButton {
+  background: #b05757;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.cancelButton:hover {
+  background: #b82020;
+}

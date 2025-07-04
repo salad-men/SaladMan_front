@@ -81,3 +81,22 @@
   font-weight: bold;
   border-color: #4D774E;
 }
+.writeButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.writeButton {
+  padding: 0.5rem 1rem;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.writeButton:hover {
+  background-color: #3b5e3b;
+}

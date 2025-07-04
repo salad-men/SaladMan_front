@@ -6,16 +6,21 @@ import styles from "./HqInventoryList.module.css";
 import { accessTokenAtom } from "/src/atoms";
 
 export default function HqInventoryList() {
-  
   const token = useAtomValue(accessTokenAtom);
 
   // 재고/카테고리/재료/지점 등 상태
   const [inventory, setInventory] = useState([]);
   const [filters, setFilters] = useState({
-    scope: "hq", store: "all", category: "all", name: "",
+    scope: "hq",
+    store: "all",
+    category: "all",
+    name: "",
   });
   const [pageInfo, setPageInfo] = useState({
-    curPage: 1, allPage: 1, startPage: 1, endPage: 1,
+    curPage: 1,
+    allPage: 1,
+    startPage: 1,
+    endPage: 1,
   });
   const [categories, setCategories] = useState([]);
   const [stores, setStores] = useState([]);
@@ -53,12 +58,18 @@ export default function HqInventoryList() {
 
   // ----- 초기 데이터 불러오기 -----
   useEffect(() => {
-    if (!token) return; 
+    if (!token) return;
     const axios = myAxios(token);
 
-    axios.get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
-    axios.get("/hq/inventory/stores").then(res => setStores(res.data.stores || []));
-    axios.get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
+    axios
+      .get("/hq/inventory/categories")
+      .then((res) => setCategories(res.data.categories || []));
+    axios
+      .get("/hq/inventory/stores")
+      .then((res) => setStores(res.data.stores || []));
+    axios
+      .get("/hq/inventory/ingredients")
+      .then((res) => setIngredients(res.data.ingredients || []));
   }, [token]);
 
   useEffect(() => {
@@ -77,7 +88,8 @@ export default function HqInventoryList() {
       store: filters.store !== "all" ? Number(filters.store) : "all",
       category: filters.category === "all" ? "all" : Number(filters.category),
     };
-    axios.post("/hq/inventory/list", param)
+    axios
+      .post("/hq/inventory/list", param)
       .then((res) => {
         const hqList = res.data.hqInventory || [];
         const storeList = res.data.storeInventory || [];
@@ -104,7 +116,10 @@ export default function HqInventoryList() {
         const pi = res.data.pageInfo;
         setPageInfo(pi);
         setPageNums(
-          Array.from({ length: pi.endPage - pi.startPage + 1 }, (_, i) => pi.startPage + i)
+          Array.from(
+            { length: pi.endPage - pi.startPage + 1 },
+            (_, i) => pi.startPage + i
+          )
         );
       })
       .catch(() => setInventory([]));
@@ -137,18 +152,20 @@ export default function HqInventoryList() {
 
   // ----- 신규 행 추가 -----
   const addRow = () => {
-    setNewItems((items) => items.concat({
-      store: "본사",
-      category: "",
-      ingredientId: "",
-      name: "",
-      unit: "",
-      unitCost: 0,
-      quantity: 0,
-      minimumOrderUnit: 0,
-      expiredDate: "",
-      receivedDate: "",
-    }));
+    setNewItems((items) =>
+      items.concat({
+        store: "본사",
+        category: "",
+        ingredientId: "",
+        name: "",
+        unit: "",
+        unitCost: 0,
+        quantity: 0,
+        minimumOrderUnit: 0,
+        expiredDate: "",
+        receivedDate: "",
+      })
+    );
   };
 
   // ----- 추가입력 폼 변경 -----
@@ -157,7 +174,13 @@ export default function HqInventoryList() {
       items.map((row, i) => {
         if (i !== idx) return row;
         if (field === "category") {
-          return { ...row, category: value, ingredientId: "", name: "", unit: "" };
+          return {
+            ...row,
+            category: value,
+            ingredientId: "",
+            name: "",
+            unit: "",
+          };
         }
         if (field === "ingredientId") {
           const ing = ingredients.find((x) => x.id === Number(value));
@@ -209,13 +232,17 @@ export default function HqInventoryList() {
 
     try {
       if (!catInput) return setErrorMsg("카테고리명을 입력하세요");
-      const res = await myAxios(token).post("/hq/inventory/category-add", { name: catInput });
-      setCatSelect(String(res.data.id));   // 추가된 카테고리로 선택
+      const res = await myAxios(token).post("/hq/inventory/category-add", {
+        name: catInput,
+      });
+      setCatSelect(String(res.data.id)); // 추가된 카테고리로 선택
       setShowCatInput(false);
       setCatInput("");
       setErrorMsg("");
       // 카테고리 목록 새로고침
-      myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
+      myAxios(token)
+        .get("/hq/inventory/categories")
+        .then((res) => setCategories(res.data.categories || []));
     } catch (e) {
       setErrorMsg("카테고리 등록 실패 (중복/서버오류)");
     }
@@ -232,7 +259,7 @@ export default function HqInventoryList() {
         name: ingInput,
         categoryId: Number(catSelect),
         unit: unitInput,
-        available: true
+        available: true,
       });
       setIngSelect(String(res.data.id));
       setShowIngInput(false);
@@ -240,7 +267,9 @@ export default function HqInventoryList() {
       setUnitInput("");
       setErrorMsg("");
       // 재료 목록 새로고침
-      myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
+      myAxios(token)
+        .get("/hq/inventory/ingredients")
+        .then((res) => setIngredients(res.data.ingredients || []));
     } catch (e) {
       setErrorMsg("등록 실패. 이미 존재하거나 서버에러");
     }
@@ -251,19 +280,24 @@ export default function HqInventoryList() {
     try {
       for (let idx = 0; idx < newItems.length; idx++) {
         let row = newItems[idx];
-        let categoryId = categories.find(c => c.name === row.category)?.id;
+        let categoryId = categories.find((c) => c.name === row.category)?.id;
         if (row.category === "__custom__") {
-          const res = await myAxios(token).post("/hq/inventory/category-add", { name: row.category });
+          const res = await myAxios(token).post("/hq/inventory/category-add", {
+            name: row.category,
+          });
           categoryId = res.data.id;
         }
         let ingredientId = Number(row.ingredientId);
         let unit = row.unit;
         if (row.ingredientId === "__custom__") {
-          const res = await myAxios(token).post("/hq/inventory/ingredient-add", {
-            name: row.name,
-            categoryId,
-            unit: row.unit,
-          });
+          const res = await myAxios(token).post(
+            "/hq/inventory/ingredient-add",
+            {
+              name: row.name,
+              categoryId,
+              unit: row.unit,
+            }
+          );
           ingredientId = res.data.id;
           unit = row.unit;
         }
@@ -283,13 +317,27 @@ export default function HqInventoryList() {
       }
       alert("등록 완료!");
       setIsAddMode(false);
-      setNewItems([{
-        store: "본사", category: "", ingredientId: "", name: "", unit: "",
-        unitCost: 0, quantity: 0, minimumOrderUnit: 0, expiredDate: "", receivedDate: ""
-      }]);
+      setNewItems([
+        {
+          store: "본사",
+          category: "",
+          ingredientId: "",
+          name: "",
+          unit: "",
+          unitCost: 0,
+          quantity: 0,
+          minimumOrderUnit: 0,
+          expiredDate: "",
+          receivedDate: "",
+        },
+      ]);
       // 목록 새로고침
-      myAxios(token).get("/hq/inventory/categories").then(res => setCategories(res.data.categories || []));
-      myAxios(token).get("/hq/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
+      myAxios(token)
+        .get("/hq/inventory/categories")
+        .then((res) => setCategories(res.data.categories || []));
+      myAxios(token)
+        .get("/hq/inventory/ingredients")
+        .then((res) => setIngredients(res.data.ingredients || []));
       fetchInventory(pageInfo.curPage);
     } catch (e) {
       alert("등록 실패했습니다.");
@@ -328,7 +376,11 @@ export default function HqInventoryList() {
         <div className={styles.filters}>
           <div className={styles.row}>
             <label>대상</label>
-            <select name="scope" value={filters.scope} onChange={onFilterChange}>
+            <select
+              name="scope"
+              value={filters.scope}
+              onChange={onFilterChange}
+            >
               <option value="all">전체</option>
               <option value="hq">본사</option>
               <option value="store">지점</option>
@@ -336,19 +388,33 @@ export default function HqInventoryList() {
             {filters.scope === "store" && (
               <>
                 <label>지점</label>
-                <select name="store" value={filters.store} onChange={onFilterChange}>
+                <select
+                  name="store"
+                  value={filters.store}
+                  onChange={onFilterChange}
+                >
                   <option value="all">전체지점</option>
-                  {stores.filter((s) => s.id !== 1).map((s) => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
-                  ))}
+                  {stores
+                    .filter((s) => s.id !== 1)
+                    .map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
+                    ))}
                 </select>
               </>
             )}
             <label>분류</label>
-            <select name="category" value={filters.category} onChange={onFilterChange}>
+            <select
+              name="category"
+              value={filters.category}
+              onChange={onFilterChange}
+            >
               <option value="all">전체</option>
               {categories.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
               ))}
             </select>
             <input
@@ -362,32 +428,57 @@ export default function HqInventoryList() {
               검색
             </button>
           </div>
+          <div className={styles.actions}>
+            <button className={styles.add} onClick={openAddModal}>
+              재료추가
+            </button>
+            {!isEditMode && !isAddMode && (
+              <>
+                <button
+                  className={styles.add}
+                  onClick={() => setIsAddMode(true)}
+                >
+                  추가입력
+                </button>
+                <button
+                  className={styles.edit}
+                  onClick={() => setIsEditMode(true)}
+                >
+                  수정입력
+                </button>
+              </>
+            )}
+            {isAddMode && (
+              <>
+                <button className={styles.save} onClick={saveNewItems}>
+                  등록하기
+                </button>
+                <button
+                  className={styles.cancel}
+                  onClick={() => setIsAddMode(false)}
+                >
+                  취소
+                </button>
+                <button className={styles.addRow} onClick={addRow}>
+                  행추가
+                </button>
+              </>
+            )}
+            {isEditMode && (
+              <>
+                <button className={styles.save} onClick={saveEdit}>
+                  저장하기
+                </button>
+                <button
+                  className={styles.cancel}
+                  onClick={() => setIsEditMode(false)}
+                >
+                  취소
+                </button>
+              </>
+            )}
+          </div>
         </div>
-
-        {/* 액션버튼 */}
-        <div className={styles.actions}>
-          <button className={styles.add} onClick={openAddModal}>재료추가</button>
-          {!isEditMode && !isAddMode && (
-            <>
-              <button className={styles.add} onClick={() => setIsAddMode(true)}>추가입력</button>
-              <button className={styles.edit} onClick={() => setIsEditMode(true)}>수정입력</button>
-            </>
-          )}
-          {isAddMode && (
-            <>
-              <button className={styles.save} onClick={saveNewItems}>등록하기</button>
-              <button className={styles.cancel} onClick={() => setIsAddMode(false)}>취소</button>
-              <button className={styles.addRow} onClick={addRow}>행추가</button>
-            </>
-          )}
-          {isEditMode && (
-            <>
-              <button className={styles.save} onClick={saveEdit}>저장하기</button>
-              <button className={styles.cancel} onClick={() => setIsEditMode(false)}>취소</button>
-            </>
-          )}
-        </div>
-
         {/* --- 재료추가 모달 --- */}
         {addModalOpen && (
           <div className={styles.modal}>
@@ -396,13 +487,21 @@ export default function HqInventoryList() {
               {/* 카테고리 영역 */}
               <div className={styles.row}>
                 <label style={{ flex: "0 0 60px" }}>카테고리</label>
-                <select value={catSelect} onChange={e => setCatSelect(e.target.value)}>
+                <select
+                  value={catSelect}
+                  onChange={(e) => setCatSelect(e.target.value)}
+                >
                   <option value="">카테고리 선택</option>
-                  {categories.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
                   ))}
                 </select>
-                <button className={styles.btnSmall} onClick={() => setShowCatInput(v => !v)}>
+                <button
+                  className={styles.btnSmall}
+                  onClick={() => setShowCatInput((v) => !v)}
+                >
                   {showCatInput ? "취소" : "추가"}
                 </button>
                 {showCatInput && (
@@ -411,23 +510,35 @@ export default function HqInventoryList() {
                       type="text"
                       placeholder="새 카테고리명"
                       value={catInput}
-                      onChange={e => setCatInput(e.target.value)}
+                      onChange={(e) => setCatInput(e.target.value)}
                       className={styles.editable}
                     />
-                    <button className={styles.save} onClick={handleAddCategory}>추가</button>
+                    <button className={styles.save} onClick={handleAddCategory}>
+                      추가
+                    </button>
                   </>
                 )}
               </div>
               {/* 재료 영역 */}
               <div className={styles.row}>
                 <label style={{ flex: "0 0 60px" }}>재료명</label>
-                <select value={ingSelect} onChange={e => setIngSelect(e.target.value)}>
+                <select
+                  value={ingSelect}
+                  onChange={(e) => setIngSelect(e.target.value)}
+                >
                   <option value="">재료 선택</option>
-                  {ingredients.filter(i => String(i.categoryId) === String(catSelect)).map(i => (
-                    <option key={i.id} value={i.id}>{i.name} ({i.unit})</option>
-                  ))}
+                  {ingredients
+                    .filter((i) => String(i.categoryId) === String(catSelect))
+                    .map((i) => (
+                      <option key={i.id} value={i.id}>
+                        {i.name} ({i.unit})
+                      </option>
+                    ))}
                 </select>
-                <button className={styles.btnSmall} onClick={() => setShowIngInput(v => !v)}>
+                <button
+                  className={styles.btnSmall}
+                  onClick={() => setShowIngInput((v) => !v)}
+                >
                   {showIngInput ? "취소" : "추가"}
                 </button>
                 {showIngInput && (
@@ -436,22 +547,35 @@ export default function HqInventoryList() {
                       type="text"
                       placeholder="재료명"
                       value={ingInput}
-                      onChange={e => setIngInput(e.target.value)}
+                      onChange={(e) => setIngInput(e.target.value)}
                       className={styles.editable}
                     />
                     <input
                       type="text"
                       placeholder="단위 (ex. g, ml)"
                       value={unitInput}
-                      onChange={e => setUnitInput(e.target.value)}
+                      onChange={(e) => setUnitInput(e.target.value)}
                       className={styles.editable}
                     />
-                    <button className={styles.save} onClick={handleAddIngredient}>추가</button>
+                    <button
+                      className={styles.save}
+                      onClick={handleAddIngredient}
+                    >
+                      추가
+                    </button>
                   </>
                 )}
               </div>
               {errorMsg && (
-                <div style={{ color: "crimson", fontSize: 13, margin: "12px 0 0 2px" }}>{errorMsg}</div>
+                <div
+                  style={{
+                    color: "crimson",
+                    fontSize: 13,
+                    margin: "12px 0 0 2px",
+                  }}
+                >
+                  {errorMsg}
+                </div>
               )}
               <div className={styles.modalActions}>
                 <button onClick={closeAddModal}>닫기</button>
@@ -483,11 +607,15 @@ export default function HqInventoryList() {
                   <td>
                     <select
                       value={row.category}
-                      onChange={e => onNewItemChange(idx, "category", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "category", e.target.value)
+                      }
                     >
                       <option value="">선택</option>
                       {categories.map((c) => (
-                        <option key={c.id} value={c.name}>{c.name}</option>
+                        <option key={c.id} value={c.name}>
+                          {c.name}
+                        </option>
                       ))}
                       {/* <option value="__custom__">직접입력</option> */}
                     </select>
@@ -495,17 +623,23 @@ export default function HqInventoryList() {
                   <td>
                     <select
                       value={row.ingredientId}
-                      onChange={e => onNewItemChange(idx, "ingredientId", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "ingredientId", e.target.value)
+                      }
                     >
                       <option value="">선택</option>
                       {ingredients
-                        .filter(
-                          (ing) =>
-                            row.category === "__custom__" ? true :
-                            ing.categoryId === categories.find((c) => c.name === row.category)?.id
+                        .filter((ing) =>
+                          row.category === "__custom__"
+                            ? true
+                            : ing.categoryId ===
+                              categories.find((c) => c.name === row.category)
+                                ?.id
                         )
                         .map((ing) => (
-                          <option key={ing.id} value={ing.id}>{ing.name}</option>
+                          <option key={ing.id} value={ing.id}>
+                            {ing.name}
+                          </option>
                         ))}
                       {/* <option value="__custom__">직접입력</option> */}
                     </select>
@@ -516,14 +650,18 @@ export default function HqInventoryList() {
                       value={row.unit}
                       disabled={row.ingredientId !== "__custom__"}
                       className={styles.editable}
-                      onChange={e => onNewItemChange(idx, "unit", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "unit", e.target.value)
+                      }
                     />
                   </td>
                   <td>
                     <input
                       type="number"
                       value={row.unitCost}
-                      onChange={e => onNewItemChange(idx, "unitCost", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "unitCost", e.target.value)
+                      }
                       className={styles.editable}
                     />
                   </td>
@@ -531,7 +669,9 @@ export default function HqInventoryList() {
                     <input
                       type="number"
                       value={row.quantity}
-                      onChange={e => onNewItemChange(idx, "quantity", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "quantity", e.target.value)
+                      }
                       className={styles.editable}
                     />
                   </td>
@@ -539,7 +679,9 @@ export default function HqInventoryList() {
                     <input
                       type="number"
                       value={row.minimumOrderUnit}
-                      onChange={e => onNewItemChange(idx, "minimumOrderUnit", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "minimumOrderUnit", e.target.value)
+                      }
                       className={styles.editable}
                     />
                   </td>
@@ -547,7 +689,9 @@ export default function HqInventoryList() {
                     <input
                       type="date"
                       value={row.expiredDate}
-                      onChange={e => onNewItemChange(idx, "expiredDate", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "expiredDate", e.target.value)
+                      }
                       className={styles.editable}
                     />
                   </td>
@@ -555,7 +699,9 @@ export default function HqInventoryList() {
                     <input
                       type="date"
                       value={row.receivedDate}
-                      onChange={e => onNewItemChange(idx, "receivedDate", e.target.value)}
+                      onChange={(e) =>
+                        onNewItemChange(idx, "receivedDate", e.target.value)
+                      }
                       className={styles.editable}
                     />
                   </td>
@@ -584,13 +730,18 @@ export default function HqInventoryList() {
           <tbody>
             {inventory.length === 0 ? (
               <tr>
-                <td colSpan={10} className={styles.noData}>데이터가 없습니다.</td>
+                <td colSpan={10} className={styles.noData}>
+                  데이터가 없습니다.
+                </td>
               </tr>
             ) : (
               inventory.map((r, i) => {
                 const isLowStock = r.quantity < r.minimumOrderUnit;
                 return (
-                  <tr key={r.id} className={isLowStock ? styles.lowStockRow : ""}>
+                  <tr
+                    key={r.id}
+                    className={isLowStock ? styles.lowStockRow : ""}
+                  >
                     <td>{r.store}</td>
                     <td>{r.name}</td>
                     <td>{r.category}</td>
@@ -600,22 +751,48 @@ export default function HqInventoryList() {
                     </td>
                     <td>
                       {isEditMode ? (
-                        <input type="number" value={r.quantity} onChange={e => onInvChange(i, "quantity", e.target.value)} />
+                        <input
+                          type="number"
+                          value={r.quantity}
+                          onChange={(e) =>
+                            onInvChange(i, "quantity", e.target.value)
+                          }
+                        />
                       ) : (
                         <input type="number" value={r.quantity} disabled />
                       )}
                     </td>
                     <td>
-                      <input type="number" value={r.minimumOrderUnit} disabled={true} />
+                      <input
+                        type="number"
+                        value={r.minimumOrderUnit}
+                        disabled={true}
+                      />
                     </td>
                     <td>
-                      <input type="number" value={r.minquantity ?? 0} disabled={true} />
+                      <input
+                        type="number"
+                        value={r.minquantity ?? 0}
+                        disabled={true}
+                      />
                     </td>
                     <td>
-                      <input type="date" value={r.expiredDate ? r.expiredDate.substring(0, 10) : ""} disabled={true} />
+                      <input
+                        type="date"
+                        value={
+                          r.expiredDate ? r.expiredDate.substring(0, 10) : ""
+                        }
+                        disabled={true}
+                      />
                     </td>
                     <td>
-                      <input type="date" value={r.receivedDate ? r.receivedDate.substring(0, 10) : ""} disabled={true} />
+                      <input
+                        type="date"
+                        value={
+                          r.receivedDate ? r.receivedDate.substring(0, 10) : ""
+                        }
+                        disabled={true}
+                      />
                     </td>
                   </tr>
                 );
@@ -626,7 +803,10 @@ export default function HqInventoryList() {
 
         {/* --- 페이징 --- */}
         <div className={styles.pagination}>
-          <button onClick={() => fetchInventory(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
+          <button
+            onClick={() => fetchInventory(pageInfo.curPage - 1)}
+            disabled={pageInfo.curPage === 1}
+          >
             &lt;
           </button>
           {pageNums.map((p) => (
