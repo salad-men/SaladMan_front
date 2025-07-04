@@ -2,260 +2,148 @@ import React, { useState, useEffect } from "react";
 import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
 import { myAxios } from "/src/config";
-import styles from "./HqInventoryExpiration.module.css";
 import { accessTokenAtom } from "/src/atoms";
+import styles from "./HqDisposalList.module.css";
 
-function formatDate(d) {
-  if (!d) return "";
-  const dt = typeof d === "string" ? new Date(d) : d;
-  const yyyy = dt.getFullYear();
-  const mm = String(dt.getMonth() + 1).padStart(2, "0");
-  const dd = String(dt.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-}
-function getPeriod(type) {
-  const today = new Date();
-  if (type === "today") {
-    const d = formatDate(today);
-    return { start: d, end: d };
-  }
-  if (type === "week") {
-    const t = new Date(today);
-    t.setDate(t.getDate() - 6);
-    return { start: formatDate(t), end: formatDate(today) };
-  }
-  if (type === "month") {
-    const t = new Date(today);
-    t.setMonth(t.getMonth() - 1);
-    t.setDate(t.getDate() + 1);
-    return { start: formatDate(t), end: formatDate(today) };
-  }
-  return { start: "", end: "" };
-}
-function calcDiffDays(expiry) {
-  if (!expiry) return null;
-  const today = new Date();
-  const exp = new Date(expiry);
-  return Math.floor((exp - today) / (1000 * 60 * 60 * 24));
-}
-function formatDday(diff) {
-  if (diff == null) return "";
-  return diff < 0 ? `D+${-diff}` : `D-${diff}`;
-}
-
-export default function HqInventoryExpiration() {
+export default function HqDisposalList() {
   const token = useAtomValue(accessTokenAtom);
 
   // 필터 상태
-  const [scope, setScope] = useState("hq");       // hq | store | all
-  const [store, setStore] = useState("all");     // 지점 선택용
+  const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("all");
   const [keyword, setKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [sortOption, setSortOption] = useState("default");
 
-  // 옵션 리스트
-  const [stores, setStores] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // 쿼리(조회) 트리거용 상태
+  const [searchTrigger, setSearchTrigger] = useState(0);
 
-  // 서버 페이징 데이터
+  // 데이터 + 페이징
   const [data, setData] = useState([]);
   const [pageInfo, setPageInfo] = useState({
-    curPage: 1,
-    startPage: 1,
-    endPage: 1,
-    allPage: 1,
+    curPage: 1, startPage: 1, endPage: 1, allPage: 1
   });
 
-  // 선택 + 폐기 모달
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [disposalAmounts, setDisposalAmounts] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // 옵션 로드
+  // 분류 옵션 불러오기 (최초 1회)
   useEffect(() => {
     if (!token) return;
-    const ax = myAxios(token);
-    ax.get("/hq/inventory/stores")
-      .then(r => setStores(r.data.stores.filter(s => s.id !== 1)))
-      .catch(() => setStores([]));
-    ax.get("/hq/inventory/categories")
-      .then(r => setCategories(r.data.categories || []))
+    myAxios(token)
+      .get("/hq/inventory/categories")
+      .then(res => setCategories(res.data.categories || []))
       .catch(() => setCategories([]));
   }, [token]);
 
-  // 데이터 조회
-  const fetchInventory = page => {
+  // 목록 조회 (필터 or 페이지 or 검색)
+  const fetchDisposalList = async (page = 1) => {
     if (!token) return;
-    const param = {
-      scope,
-      store: scope === "store" && store !== "all" ? Number(store) : "all",
-      category: category === "all" ? "all" : Number(category),
-      keyword,
-      startDate,
-      endDate,
-      page,
-      sortOption,
+    const params = {
+      store: 1,
+      status: "완료",
+      category: category === "all" ? null : Number(category),
+      keyword: keyword.trim() || null,
+      startDate: startDate || null,
+      endDate: endDate || null,
+      sortOption: "dateDesc",
+      page
     };
-    myAxios(token)
-      .post("/hq/inventory/expiration-list", param)
-      .then(res => {
-        const hqInv = res.data.hqInventory || [];
-        const stInv = res.data.storeInventory || [];
-        const list =
-          scope === "hq"
-            ? hqInv
-            : scope === "store"
-            ? stInv
-            : [...hqInv, ...stInv];
-
-        const flat = list.map(x => ({
-          id: x.id,
-          store: x.storeName,
-          // 백엔드가 storeId를 넘겨주지 않으면, 이름으로 대체
-          storeId: x.storeId || (x.storeName === "본사" ? 1 : null),
-          category: x.categoryName,
-          name: x.ingredientName,
-          unit: x.unit,
-          quantity: x.quantity,
-          price: x.unitCost,
-          expiry: x.expiredDate?.slice(0, 10) || "",
-          diff: calcDiffDays(x.expiredDate?.slice(0, 10)),
-          dday: formatDday(calcDiffDays(x.expiredDate?.slice(0, 10))),
-        }));
-        setData(flat);
-        setPageInfo(res.data.pageInfo || pageInfo);
-        setSelectedIds([]);
-        setDisposalAmounts({});
-      })
-      .catch(() => setData([]));
+    try {
+      const res = await myAxios(token).post("/hq/inventory/disposal-list", params);
+      setData(res.data.disposals || []);
+      setPageInfo(res.data.pageInfo || {
+        curPage: 1, startPage: 1, endPage: 1, allPage: 1
+      });
+    } catch (e) {
+      setData([]);
+      setPageInfo({
+        curPage: 1, startPage: 1, endPage: 1, allPage: 1
+      });
+    }
   };
 
-  // 필터/정렬/페이지 변경
+  // 조회 트리거: searchTrigger 또는 pageInfo.curPage가 변경될 때 실행
   useEffect(() => {
-    fetchInventory(pageInfo.curPage);
+    fetchDisposalList(pageInfo.curPage);
     // eslint-disable-next-line
-  }, [token, scope, store, category, keyword, startDate, endDate, sortOption, pageInfo.curPage]);
+  }, [searchTrigger, pageInfo.curPage, token, category]);
 
-  const onFilterChange = setter => e => {
+  // 필터 변경시 (기간, 카테고리 등) => 페이지1, 검색트리거++
+  const handleFilterChange = setter => e => {
     setter(e.target.value);
     setPageInfo(pi => ({ ...pi, curPage: 1 }));
   };
-  const movePage = p => {
-    if (p < 1 || p > pageInfo.allPage) return;
+
+  // 날짜 직접 입력시
+  const handleStartDate = e => { setStartDate(e.target.value); setPageInfo(pi => ({ ...pi, curPage: 1 })); };
+  const handleEndDate = e => { setEndDate(e.target.value); setPageInfo(pi => ({ ...pi, curPage: 1 })); };
+
+  // 기간 단축 버튼
+  const setPeriod = (type) => {
+    const today = new Date();
+    let s = "", e = "";
+    if (type === "all") {
+      s = ""; e = "";
+    } else if (type === "today") {
+      s = e = today.toISOString().slice(0, 10);
+    } else if (type === "week") {
+      const from = new Date(today);
+      from.setDate(from.getDate() - 6);
+      s = from.toISOString().slice(0, 10);
+      e = today.toISOString().slice(0, 10);
+    } else { // month
+      const from = new Date(today);
+      from.setMonth(from.getMonth() - 1);
+      s = from.toISOString().slice(0, 10);
+      e = today.toISOString().slice(0, 10);
+    }
+    setStartDate(s);
+    setEndDate(e);
+    setPageInfo(pi => ({ ...pi, curPage: 1 }));
+    // 트리거: 실제 fetch는 아래 useEffect에서!
+    setSearchTrigger(x => x + 1);
+  };
+
+  // 검색 버튼 or 엔터키
+  const doSearch = () => {
+    setPageInfo(pi => ({ ...pi, curPage: 1 }));
+    setSearchTrigger(x => x + 1);
+  };
+
+  // 페이지 이동
+  const movePage = (p) => {
+    if (p < 1 || p > pageInfo.allPage || p === pageInfo.curPage) return;
     setPageInfo(pi => ({ ...pi, curPage: p }));
   };
 
-  // 본사 항목 판별
-  const isHqItem = it => it.storeId === 1;
-
-  // 헤더 체크박스 노출 여부
-  const showHeaderCheckbox = scope === "hq" || scope === "all";
-
-  // 개별 선택 & 전체 선택
-  const toggleSelect = id => {
-    setSelectedIds(ids =>
-      ids.includes(id) ? ids.filter(x => x !== id) : [...ids, id]
-    );
-  };
-  const toggleAll = () => {
-    const avail = data.filter(isHqItem).map(x => x.id);
-    const allSel = avail.length > 0 && avail.every(id => selectedIds.includes(id));
-    setSelectedIds(allSel ? [] : avail);
-  };
-
-  // 폐기량 입력
-  const onAmount = (id, val) => {
-    const maxQ = data.find(i => i.id === id)?.quantity || 0;
-    const num = Math.max(0, Math.min(Number(val) || 0, maxQ));
-    setDisposalAmounts(d => ({ ...d, [id]: num }));
-  };
-
-  // 모달 열기/닫기
-  const openModal = () => {
-    if (!selectedIds.length) return alert("본사 품목을 하나 이상 선택하세요.");
-    const init = {};
-    selectedIds.forEach(id => {
-      const it = data.find(r => r.id === id);
-      if (it) init[id] = it.quantity;
-    });
-    setDisposalAmounts(init);
-    setIsModalOpen(true);
-  };
-  const closeModal = () => setIsModalOpen(false);
-
-  // 폐기 신청
-  const submit = () => {
-    const items = selectedIds
-      .map(id => {
-        const it = data.find(r => r.id === id);
-        if (!isHqItem(it)) return null;
-        return { id, quantity: disposalAmounts[id] || 0, storeId: 1 };
-      })
-      .filter(i => i && i.quantity > 0);
-    if (!items.length) return alert("폐기량을 입력하세요.");
-    myAxios(token)
-      .post("/hq/inventory/disposal-request", items)
-      .then(() => {
-        alert(`총 ${items.length}건 폐기 신청 완료!`);
-        setIsModalOpen(false);
-        fetchInventory(pageInfo.curPage);
-      })
-      .catch(() => alert("폐기 신청 실패"));
-  };
-
-  // 기간 버튼
-  const setPeriodFn = type => {
-    const { start, end } = getPeriod(type);
-    setStartDate(start);
-    setEndDate(end);
-    setPageInfo(pi => ({ ...pi, curPage: 1 }));
-  };
-
-  // 페이징 버튼
-  const { curPage, startPage, endPage, allPage } = pageInfo;
-  const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  // 페이징용 배열
+  const pages = [];
+  for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) pages.push(i);
 
   return (
     <div className={styles.container}>
       <HqInventorySidebar />
       <div className={styles.content}>
         <div className={styles.innerContainer}>
-          <h2 className={styles.title}>유통기한 목록</h2>
+
+          <h2 className={styles.title}>폐기 목록</h2>
 
           {/* 필터 */}
           <div className={styles.filters}>
             <div className={styles.row}>
-              <span className={styles.label}>기간</span>
-              <input type="date" value={startDate} onChange={onFilterChange(setStartDate)} />
+              <label className={styles.label}>기간</label>
+              <input type="date" value={startDate} onChange={handleStartDate} />
               <span>~</span>
-              <input type="date" value={endDate} onChange={onFilterChange(setEndDate)} />
+              <input type="date" value={endDate} onChange={handleEndDate} />
               <div className={styles.periodButtons}>
-                <button onClick={() => setPeriodFn("all")}>전체</button>
-                <button onClick={() => setPeriodFn("today")}>오늘</button>
-                <button onClick={() => setPeriodFn("week")}>1주</button>
-                <button onClick={() => setPeriodFn("month")}>1달</button>
+                {["all", "today", "week", "month"].map(t => (
+                  <button type="button" key={t} onClick={() => setPeriod(t)}>
+                    {t === "all" ? "전체" : t === "today" ? "오늘" : t === "week" ? "1주" : "1달"}
+                  </button>
+                ))}
               </div>
             </div>
+
             <div className={styles.row}>
-              <select value={scope} onChange={onFilterChange(setScope)}>
-                <option value="hq">본사</option>
-                <option value="store">지점</option>
-                <option value="all">전체</option>
-              </select>
-              {scope === "store" && (
-                <>
-                  <label>지점</label>
-                  <select value={store} onChange={onFilterChange(setStore)} className={styles.storeSelect}>
-                    <option value="all">전체지점</option>
-                    {stores.map(s => (
-                      <option key={s.id} value={s.id}>{s.name}</option>
-                    ))}
-                  </select>
-                </>
-              )}
-              <select value={category} onChange={onFilterChange(setCategory)}>
+              <select value={category} onChange={handleFilterChange(setCategory)}>
                 <option value="all">전체 분류</option>
                 {categories.map(c => (
                   <option key={c.id} value={c.id}>{c.name}</option>
@@ -263,32 +151,13 @@ export default function HqInventoryExpiration() {
               </select>
               <input
                 type="text"
+                className={styles.inputSearch}
                 placeholder="재료명 검색"
                 value={keyword}
-                onChange={onFilterChange(setKeyword)}
-                className={styles.keywordInput}
+                onChange={handleFilterChange(setKeyword)}
+                onKeyDown={e => e.key === "Enter" && doSearch()}
               />
-              <button className={styles.searchBtn} onClick={() => movePage(1)}>검색</button>
-
-              <div className={styles.rightActions}>
-                {(scope === "hq" || scope === "all") && (
-                  <button className={styles.disposalBtn} onClick={openModal}>
-                    폐기
-                  </button>
-                )}
-                <select
-                  className={styles.sortSelect}
-                  value={sortOption}
-                  onChange={e => {
-                    setSortOption(e.target.value);
-                    setPageInfo(pi => ({ ...pi, curPage: 1 }));
-                  }}
-                >
-                  <option value="default">기본(분류-재료-유통기한)</option>
-                  <option value="expiryAsc">유통기한↑-분류-재료</option>
-                  <option value="expiryDesc">유통기한↓-분류-재료</option>
-                </select>
-              </div>
+              <button className={styles.searchBtn} onClick={doSearch}>검색</button>
             </div>
           </div>
 
@@ -297,122 +166,54 @@ export default function HqInventoryExpiration() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  {showHeaderCheckbox && (
-                    <th className={styles.checkbox}>
-                      <input
-                        type="checkbox"
-                        checked={
-                          data.filter(isHqItem).length > 0 &&
-                          data.filter(isHqItem).every(i => selectedIds.includes(i.id))
-                        }
-                        onChange={toggleAll}
-                      />
-                    </th>
-                  )}
                   <th>지점</th>
                   <th>분류</th>
                   <th>품목명</th>
                   <th>단위</th>
-                  <th>재고량</th>
-                  <th>단가</th>
-                  <th>유통기한</th>
-                  <th>남은 날짜</th>
+                  <th>폐기량</th>
+                  <th>사유</th>
+                  <th>폐기날짜</th>
+                  <th>상태</th>
                 </tr>
               </thead>
               <tbody>
-                {data.length === 0 ? (
-                  <tr><td colSpan={showHeaderCheckbox ? 9 : 8} className={styles.noData}>데이터가 없습니다.</td></tr>
-                ) : (
-                  data.map(it => (
-                    <tr key={it.id} className={it.dday.includes("D+") ? styles.expired : ""}>
-                      {/* 본사 행(isHqItem)만 체크, 나머지 빈 칸 */}
-                      {showHeaderCheckbox && (
-                        <td className={styles.checkbox}>
-                          {isHqItem(it) && (
-                            <input
-                              type="checkbox"
-                              checked={selectedIds.includes(it.id)}
-                              onChange={() => toggleSelect(it.id)}
-                            />
-                          )}
-                        </td>
-                      )}
-                      <td>{it.store}</td>
-                      <td>{it.category}</td>
-                      <td>{it.name}</td>
-                      <td>{it.unit}</td>
-                      <td>{it.quantity}</td>
-                      <td>{it.price}</td>
-                      <td>{it.expiry}</td>
-                      <td>{it.dday}</td>
+                {data.length === 0
+                  ? (
+                    <tr>
+                      <td colSpan={10} className={styles.noData}>데이터가 없습니다.</td>
+                    </tr>
+                  )
+                  : data.map(row => (
+                    <tr key={row.id}>
+                      <td>{row.storeName || '-'}</td>
+                      <td>{row.categoryName || '-'}</td>
+                      <td>{row.ingredientName || '-'}</td>
+                      <td>{row.unit || '-'}</td>
+                      <td>{row.quantity ?? '-'}</td>
+                      <td>{row.memo || '-'}</td>
+                      <td>{row.processedAt ? row.processedAt.slice(0, 10) : '-'}</td>
+                      <td>{row.status || '-'}</td>
                     </tr>
                   ))
-                )}
+                }
               </tbody>
             </table>
           </div>
 
-          {/* 페이지네이션 */}
+          {/* 페이징 */}
           <div className={styles.pagination}>
-            <button onClick={() => movePage(1)} disabled={curPage === 1}>&lt;&lt;</button>
-            <button onClick={() => movePage(curPage - 1)} disabled={curPage === 1}>&lt;</button>
+            <button onClick={() => movePage(1)} disabled={pageInfo.curPage === 1}>&lt;&lt;</button>
+            <button onClick={() => movePage(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>&lt;</button>
             {pages.map(p => (
               <button
                 key={p}
-                className={p === curPage ? styles.active : ""}
+                className={p === pageInfo.curPage ? styles.active : ""}
                 onClick={() => movePage(p)}
               >{p}</button>
             ))}
-            <button onClick={() => movePage(curPage + 1)} disabled={curPage === allPage}>&gt;</button>
-            <button onClick={() => movePage(allPage)} disabled={curPage === allPage}>&gt;&gt;</button>
+            <button onClick={() => movePage(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>&gt;</button>
+            <button onClick={() => movePage(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>&gt;&gt;</button>
           </div>
-
-          {/* 폐기 신청 모달 */}
-          {isModalOpen && (
-            <div className={styles.modal} onClick={closeModal}>
-              <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
-                <button className={styles.modalClose} onClick={closeModal}>&times;</button>
-                <h3>폐기 신청</h3>
-                <div className={styles.modalTopActions}>
-                  <button className={styles.save} onClick={submit}>신청</button>
-                </div>
-                <div className={styles.modalTableWrapper}>
-                  <table className={styles.table}>
-                    <thead>
-                      <tr>
-                        <th>품목명</th><th>분류</th><th>단위</th><th>재고량</th><th>단가</th><th>폐기량</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedIds.map(id => {
-                        const it = data.find(r => r.id === id);
-                        return (
-                          <tr key={id}>
-                            <td>{it.name}</td>
-                            <td>{it.category}</td>
-                            <td>{it.unit}</td>
-                            <td>{it.quantity}</td>
-                            <td>{it.price}</td>
-                            <td>
-                              <input
-                                type="number"
-                                min={0}
-                                max={it.quantity}
-                                value={disposalAmounts[id] || 0}
-                                onChange={e => onAmount(id, e.target.value)}
-                                className={styles.editable}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
         </div>
       </div>
     </div>

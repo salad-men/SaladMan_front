@@ -1,124 +1,154 @@
-/* 전체 레이아웃 */
-.container { display: flex; min-height: 70vh; background: #ffffff; }
-.content { flex: 1; margin: 0px; overflow: hidden; }
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f8fa;
+}
+.content {
+  flex: 1;
+  padding: 16px;
+}
 .innerContainer {
-  background: #fff; 
-  /* border: 1px solid #ddd;  */
+  background: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 24px 100px 0 100px; 
-  box-shadow: 0 4px 12px 
-  rgba(0,0,0,0.06);
-  height: 1220px;
-   overflow: auto;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
-.title { font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 16px; margin-top: 16px; }
+.title {
+  font-size: 1.8rem;
+  color: #2f6042;
+  margin-bottom: 16px;
+}
 
-/* 필터 */
-.filters { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.label { font-weight: 600; min-width: 50px; }
-.periodButtons { display: flex; gap: 6px; }
-.periodButtons button {
-  padding:4px 10px; border:1px solid #57a964; border-radius:4px;
-  background:#f7faf8; color:#2b5536; cursor:pointer; transition:background .2s;
+/* 필터 영역 */
+.filters {
+  margin-bottom: 16px;
 }
-.periodButtons button:hover { background:#57a964; color:#fff; }
-.row input[type="date"], .row select {
-  padding:6px 8px; border:1px solid #b4c7b3; border-radius:4px;
-  background:#fff; font-size:14px;
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
 }
-.storeSelect { min-width:140px; }
-.keywordInput {
-  width:180px; padding:6px 8px; border:1px solid #b4c7b3;
-  border-radius:4px; background:#fff; font-size:14px;
+.label {
+  font-weight: 600;
+  color: #3d5a40;
 }
+
+/* 공통 폼 스타일 */
+input[type="date"],
+input[type="text"],
+select {
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+}
+
+/* 검색 입력 */
+.inputSearch {
+  width: 160px;
+}
+
+/* 검색 버튼 */
 .searchBtn {
-  padding:6px 14px; background:#4d774e; color:#fff; border:none;
-  border-radius:4px; cursor:pointer; transition:opacity .2s;
+  padding: 6px 14px;
+  background: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.searchBtn:hover { opacity:.9; }
-.rightActions { margin-left:auto; display:flex; align-items:center; gap:8px; }
-.disposalBtn {
-  padding:6px 14px; background:#d9534f; color:#fff; border:none;
-  border-radius:4px; cursor:pointer; transition:background .2s;
+.searchBtn:hover {
+  background: #3b663b;
 }
-.disposalBtn:hover { background:#c9302c; }
-.sortSelect {
-  padding:6px 8px; border:1px solid #b4c7b3; border-radius:4px;
-  background:#fff; font-size:14px; cursor:pointer;
+
+/* 기간 단축 버튼 */
+.periodButtons {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+.periodButtons button {
+  background: #f7faf8;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: #4d774e;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.periodButtons button:hover {
+  background: #4d774e;
+  color: white;
 }
 
 /* 테이블 */
-.tableWrap 
-{
-   border-radius:6px; margin-bottom:20px; overflow-x:auto; 
-   border: 1px solid #e4e9e7;
+.tableWrap {
+  overflow-x: auto;
 }
 .table {
-  width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
-.table th, .table td {
- border: 1px solid #e4e9e7;padding:10px; text-align:center; border-bottom:1px solid #e4e9e7;
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #e4e9e7;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.table th { background:#eaf3eb; color:#2d4836; font-weight:600; }
-.table tr:hover { background:#f0f8f2; }
-.expired { background:#ffe6e3 !important; color:#cb4747; }
-
-/* 체크박스 열 고정 */
-.table th.checkbox, .table td.checkbox {
-  width:40px; min-width:40px; max-width:40px;
-  text-align:center; vertical-align:middle; white-space:nowrap;
-}
-
-/* 나머지 컬럼 ellipsis */
-.table th:not(.checkbox), .table td:not(.checkbox) {
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+.table thead {
+  background: #eaf3eb;
+  color: #2d4836;
 }
 
-/* “데이터 없음” */
+/* 열 너비 조정 */
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 140px; /* 품목명 */
+}
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 80px;  /* 분류 */
+}
+
+/* 데이터 없을 때 */
 .noData {
-  padding:30px 0; color:#999; font-style:italic;
+  text-align: center;
+  padding: 20px 0;
+  color: #999;
 }
 
-/* 페이지네이션 */
+/* 페이징 */
 .pagination {
-  display:flex; justify-content:center; gap:6px; margin-bottom:12px;
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
 }
 .pagination button {
-  padding:6px 12px; border:1px solid #a2b7aa; background:#fff;
-  color:#387448; border-radius:4px; cursor:pointer;
+  padding: 6px 12px;
+  border: 1px solid #a2b7aa;
+  border-radius: 4px;
+  background: white;
+  color: #387448;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.pagination button.active {
-  background:#57a964; color:#fff; border-color:#57a964;
+.pagination button:hover {
+  background: #eaf3eb;
 }
 .pagination button:disabled {
-  background:#f0f4f1; color:#c0cfc3; cursor:not-allowed;
+  background: #f0f4f1;
+  color: #c0cfc3;
+  cursor: not-allowed;
 }
-
-/* 모달 */
-.modal {
-  position:fixed; inset:0; background:rgba(0,0,0,0.3);
-  display:flex; justify-content:center; align-items:center;
+.active {
+  background: #57a964;
+  color: white;
+  border-color: #57a964;
 }
-.modalBox {
-  background:#fff; border-radius:10px; padding:20px 30px 30px;
-  width:90%; max-width:800px; box-shadow:0 4px 16px rgba(0,0,0,0.1);
-  position:relative;
-}
-.modalClose {
-  position:absolute; top:12px; right:12px; background:none; border:none;
-  font-size:20px; cursor:pointer;
-}
-.modalTopActions { display:flex; justify-content:flex-end; margin-bottom:12px; }
-.save {
-  background:#4caf50; color:#fff; border:none; padding:6px 14px;
-  border-radius:5px; cursor:pointer; transition:background .2s;
-}
-.save:hover { background:#3b8c63; }
-.modalTableWrapper { overflow:auto; }
-.editable {
-  width:70px; padding:5px 8px; font-size:14px;
-  border:1px solid #74bb7a; border-radius:4px; background:#f7faf8;
-}
-.editable:focus { outline:none; background:#e3f2fd; }
-
