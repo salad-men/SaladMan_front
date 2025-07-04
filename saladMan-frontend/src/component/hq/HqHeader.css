@@ -3,23 +3,12 @@ body {
 }
 
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 20px;
-    transition: box-shadow 0.3s ease;
+    padding: 18px 20px;
+    border-bottom: 1px solid #ccc;
 }
-
-.header.scrolled {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 스크롤 시 그림자 */
-}
-
 
 .nav {
     display: flex;
@@ -43,53 +32,35 @@ body {
     align-items: center;
 }
 
+.dropdown-container:hover .dropdown {
+    display: block;
+}
+
 .dropdown {
     display: none;
-    width: 180px;
+    width: 170px;
     position: absolute;
     top: 100%;
     background-color: white;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;
-    padding: 8px 0;
-    border-radius: 8px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    transform: translateY(5px);
+    padding: 0 10px;
+    border: 1px solid #ddd;
 }
 
-.dropdown-container:hover .dropdown {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+.dropdown a {
+    text-decoration: none;
+    color: black;
 }
 
 .dropdown ul {
     padding: 0;
-    margin: 0;
 }
 
 .dropdown li {
+    padding: 5px;
+    width: fit-content;
     list-style: none;
-    width: 100%;
-}
-
-.dropdown li a {
-    display: block;
-    padding: 10px 16px;
-    text-decoration: none;
-    color: #333;
-    font-size: 14px;
-    transition: background 0.2s, color 0.2s, border-left 0.2s;
-    border-left: 3px solid transparent;
-}
-
-.dropdown li a:hover {
-    background-color: #f9f9f9;
-    color: #4D774E;
-    border-left: 3px solid #4D774E;
 }
 
 .user-info {
@@ -113,19 +84,16 @@ body {
     top: 15px;
     right: 165px;
 }
-
 .logo {
-    flex-shrink: 0;
+  flex-shrink: 0; 
 }
-
 .logo img {
-    height: 31px;
+    height: 31px; 
     width: auto;
     margin-left: 30px;
-    flex: 1;
-    display: block;
+        flex: 1;
+          display: block;
 }
-
 .go-home-btn {
     margin-left: 30px;
 }
