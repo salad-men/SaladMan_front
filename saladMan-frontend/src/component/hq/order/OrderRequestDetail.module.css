@@ -38,6 +38,7 @@
 .orderInfo p {
     margin: 4px 0;
 }
+
 .tableWrapper {
     max-height: 550px;
     /* 원하는 높이로 조절 */
@@ -132,20 +133,40 @@
 }
 
 .submitArea {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 40px;
 }
 
-.submitArea button {
-    padding: 8px 20px;
-    background-color: #4D774E;
+.backButton {
+    padding: 10px 20px;
+    background-color: #b3b4b4;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 15px;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.submitArea button:hover {
-    background-color: #3a5e3b;
+.backButton:hover {
+    background-color: #a8a8a8;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    background-color: #226236;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+    background-color: #388e3c;
 }
 
 .stockListWrapper {

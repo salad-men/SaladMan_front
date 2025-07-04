@@ -108,7 +108,7 @@ export default function OrderSettings() {
                             <tr>
                                 <th>품명</th>
                                 <th>구분</th>
-                                <th>최소량</th>
+                                <th>매장 설정 최소량</th>
                                 <th>자동주문량</th>
                                 <th>자동발주</th>
                             </tr>

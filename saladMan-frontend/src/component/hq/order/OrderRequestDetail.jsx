@@ -192,10 +192,10 @@ export default function OrderRequestDetail() {
                 </div>
 
                 <div className={styles.submitArea}>
-                    <button onClick={() => navigate(-1)} style={{ marginRight: 10 }}>목록</button>
+                    <button className={styles.backButton} onClick={() => navigate(-1)} style={{ marginRight: 10 }}>목록</button>
 
                     {!isCompleted && (
-                        <button onClick={handleSubmit}>저장</button>
+                        <button className={styles.submitButton} onClick={handleSubmit}>저장</button>
                     )}
 
                 </div>
