@@ -25,9 +25,9 @@
   padding: 0 0 10px;
   margin: 0;
   list-style: none;
-  flex-grow: 1;
+  padding: 0;
+  width: 100%;
 }
-
 .listItem {
   font-size: 20px;
   padding: 15px 40px;
@@ -39,16 +39,16 @@
   background-color: #133b13;
   color : white;
 }
-
 .link {
   text-decoration: none;
   color: inherit;
   display: block;
   width: 100%;
+  transition: color 0.2s;
 }
-
 .link:focus,
 .link:hover {
+  color: #d5ffe2;
   outline: none;
   color: #ffffff;
 }

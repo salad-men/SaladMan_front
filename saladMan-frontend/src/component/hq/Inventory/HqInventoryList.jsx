@@ -29,13 +29,26 @@ export default function HqInventoryList() {
   const [isAddMode, setIsAddMode] = useState(false);
   const [pageNums, setPageNums] = useState([]);
 
-  // 신규 입력 행 상태
+  // 옵션 리스트
+  const [stores, setStores] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+
+  // 데이터 및 페이징
+  const [data, setData] = useState([]);
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1,
+    startPage: 1,
+    endPage: 1,
+    allPage: 1,
+  });
+
+  // 모달 입력 상태
+  const [addModalOpen, setAddModalOpen] = useState(false);
   const [newItems, setNewItems] = useState([
     {
-      store: "본사",
       category: "",
       ingredientId: "",
-      name: "",
       unit: "",
       unitCost: 0,
       quantity: 0,
@@ -45,18 +58,10 @@ export default function HqInventoryList() {
     },
   ]);
 
-  // ----- 재료추가 모달 상태 -----
-  const [addModalOpen, setAddModalOpen] = useState(false);
-  const [catSelect, setCatSelect] = useState("");
-  const [ingSelect, setIngSelect] = useState("");
-  const [showCatInput, setShowCatInput] = useState(false);
-  const [showIngInput, setShowIngInput] = useState(false);
-  const [catInput, setCatInput] = useState("");
-  const [ingInput, setIngInput] = useState("");
-  const [unitInput, setUnitInput] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  // 수정 모드
+  const [editRow, setEditRow] = useState(null);
 
-  // ----- 초기 데이터 불러오기 -----
+  // 옵션 불러오기
   useEffect(() => {
     if (!token) return;
     const axios = myAxios(token);
@@ -72,12 +77,14 @@ export default function HqInventoryList() {
       .then((res) => setIngredients(res.data.ingredients || []));
   }, [token]);
 
-  useEffect(() => {
-    fetchInventory(1);
-  }, [token, filters.scope, filters.store, filters.category, filters.name]);
-
-  // ----- 재고목록 -----
-  const fetchInventory = (page = 1) => {
+  // 재고 조회 함수
+  const fetchInventory = async (
+    page = 1,
+    sd = startDate,
+    ed = endDate,
+    sort = sortOption,
+    kw = keyword
+  ) => {
     if (!token) return;
 
     const axios = myAxios(token);
@@ -271,7 +278,8 @@ export default function HqInventoryList() {
         .get("/hq/inventory/ingredients")
         .then((res) => setIngredients(res.data.ingredients || []));
     } catch (e) {
-      setErrorMsg("등록 실패. 이미 존재하거나 서버에러");
+      console.error("재고 조회 실패", e);
+      setData([]);
     }
   };
 
@@ -344,33 +352,70 @@ export default function HqInventoryList() {
     }
   };
 
-  // ----- 수정 저장 -----
-  const saveEdit = async () => {
-    try {
-      for (const item of inventory) {
-        myAxios(token).post("/hq/inventory/update", {
-          id: item.id,
-          quantity: item.quantity,
-          minimumOrderUnit: item.minimumOrderUnit,
-          unitCost: item.unitCost,
-          expiredDate: item.expiredDate || null,
-          receivedDate: item.receivedDate || null,
-        });
-      }
-      alert("저장되었습니다.");
-      setIsEditMode(false);
-      fetchInventory(pageInfo.curPage);
-    } catch (e) {
-      alert("수정 실패했습니다.");
-    }
+  // 페이징 이동
+  const movePage = (p) => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    setPageInfo((pi) => ({ ...pi, curPage: p }));
   };
 
-  // ----- UI -----
+  // 기간 버튼
+  const setPeriod = (type) => {
+    const today = new Date().toISOString().slice(0, 10);
+    let sd = "",
+      ed = "";
+    switch (type) {
+      case "today":
+        sd = today;
+        ed = today;
+        break;
+      case "week":
+        sd = new Date(
+          new Date().setDate(new Date().getDate() - 6)
+        )
+          .toISOString()
+          .slice(0, 10);
+        ed = today;
+        break;
+      case "month":
+        sd = new Date(
+          new Date().setMonth(new Date().getMonth() - 1)
+        )
+          .toISOString()
+          .slice(0, 10);
+        ed = today;
+        break;
+      default:
+        sd = "";
+        ed = "";
+    }
+    setStartDate(sd);
+    setEndDate(ed);
+    fetchInventory(1, sd, ed, sortOption, keyword);
+  };
+
+  // 검색
+  const onSearchClick = () =>
+    fetchInventory(1, startDate, endDate, sortOption, keyword);
+
+  // 정렬 변경
+  const onSortChange = (e) => {
+    setSortOption(e.target.value);
+    setPageInfo((pi) => ({ ...pi, curPage: 1 }));
+  };
+
+  // 페이징 배열 생성
+  const { startPage, endPage, curPage, allPage } = pageInfo;
+  const pages = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i
+  );
+
   return (
     <div className={styles.container}>
       <HqInventorySidebar />
       <div className={styles.content}>
-        <h2 className={styles.title}>재고 조회</h2>
+        <div className={styles.innerContainer}>
+          <h2 className={styles.title}>재고 목록</h2>
 
         {/* 필터 */}
         <div className={styles.filters}>
@@ -577,12 +622,51 @@ export default function HqInventoryList() {
                   {errorMsg}
                 </div>
               )}
-              <div className={styles.modalActions}>
-                <button onClick={closeAddModal}>닫기</button>
-              </div>
+              <select
+                className={styles.selectCategory}
+                value={category}
+                onChange={onFilterChange(setCategory)}
+              >
+                <option value="all">전체 분류</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="text"
+                className={styles.inputSearch}
+                placeholder="재료명 검색"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && onSearchClick()}
+              />
+              <button
+                type="button"
+                className={styles.btnSearch}
+                onClick={onSearchClick}
+              >
+                검색
+              </button>
+              <button
+                type="button"
+                className={styles.btnNew}
+                onClick={() => setAddModalOpen(true)}
+              >
+                재고추가
+              </button>
+              <select
+                className={styles.selectSort}
+                value={sortOption}
+                onChange={onSortChange}
+              >
+                <option value="default">이름순</option>
+                <option value="receivedAsc">입고일 오름</option>
+                <option value="receivedDesc">입고일 내림</option>
+              </select>
             </div>
           </div>
-        )}
 
         {/* --- 신규 추가입력폼 --- */}
         {isAddMode && (
@@ -795,11 +879,90 @@ export default function HqInventoryList() {
                       />
                     </td>
                   </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+                ) : (
+                  data.map((r) => {
+                    const low = r.quantity < r.minimumOrderUnit;
+                    return (
+                      <tr key={r.id} className={low ? styles.trLow : ""}>
+                        <td className={styles.tdStore}>{r.store}</td>
+                        <td className={styles.tdCategory}>{r.category}</td>
+                        <td className={styles.tdName}>{r.name}</td>
+                        <td className={styles.tdUnit}>{r.unit}</td>
+                        <td className={styles.tdCost}>{r.unitCost}</td>
+                        <td className={styles.tdQty}>
+                          {editRow === r.id ? (
+                            <input
+                              type="number"
+                              className={styles.inputQty}
+                              value={r.quantity}
+                              onChange={(e) =>
+                                setData((d) =>
+                                  d.map((x) =>
+                                    x.id === r.id
+                                      ? { ...x, quantity: Number(e.target.value) }
+                                      : x
+                                  )
+                                )
+                              }
+                            />
+                          ) : (
+                            r.quantity
+                          )}
+                        </td>
+                        <td className={styles.tdMin}>{r.minimumOrderUnit}</td>
+                        <td className={styles.tdStoreMin}>{r.minquantity}</td>
+                        <td className={styles.tdReceived}>{r.received}</td>
+                        <td className={styles.tdEdit}>
+                          {editRow !== r.id ? (
+                            <button
+                              type="button"
+                              className={styles.btnEdit}
+                              onClick={() => setEditRow(r.id)}
+                            >
+                              수정
+                            </button>
+                          ) : (
+                            <>
+                              <button
+                                type="button"
+                                className={styles.btnSave}
+                                onClick={async () => {
+                                  try {
+                                    await myAxios(token).post("/hq/inventory/update", {
+                                      id: r.id,
+                                      quantity: r.quantity,
+                                      minimumOrderUnit: r.minimumOrderUnit,
+                                      unitCost: r.unitCost,
+                                      expiredDate: r.expired || new Date().toISOString().slice(0,10),
+                                      receivedDate: r.received || new Date().toISOString().slice(0,10),
+                                    });
+                                    setEditRow(null);
+                                    fetchInventory(curPage);
+                                  } catch (e) {
+                                    console.error(e);
+                                    alert("저장 실패");
+                                  }
+                                }}
+                              >
+                                저장
+                              </button>
+                              <button
+                                type="button"
+                                className={styles.btnCancel}
+                                onClick={() => setEditRow(null)}
+                              >
+                                취소
+                              </button>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
 
         {/* --- 페이징 --- */}
         <div className={styles.pagination}>
@@ -811,19 +974,48 @@ export default function HqInventoryList() {
           </button>
           {pageNums.map((p) => (
             <button
-              key={p}
-              onClick={() => fetchInventory(p)}
-              className={p === pageInfo.curPage ? styles.active : ""}
+              type="button"
+              className={styles.btnPageFirst}
+              onClick={() => movePage(1)}
+              disabled={curPage === 1}
             >
-              {p}
+              &lt;&lt;
             </button>
-          ))}
-          <button
-            onClick={() => fetchInventory(pageInfo.curPage + 1)}
-            disabled={pageInfo.curPage >= pageInfo.allPage}
-          >
-            &gt;
-          </button>
+            <button
+              type="button"
+              className={styles.btnPagePrev}
+              onClick={() => movePage(curPage - 1)}
+              disabled={curPage === 1}
+            >
+              &lt;
+            </button>
+            {pages.map((p) => (
+              <button
+                key={p}
+                type="button"
+                className={p === curPage ? styles.btnPageActive : styles.btnPage}
+                onClick={() => movePage(p)}
+              >
+                {p}
+              </button>
+            ))}
+            <button
+              type="button"
+              className={styles.btnPageNext}
+              onClick={() => movePage(curPage + 1)}
+              disabled={curPage === allPage}
+            >
+              &gt;
+            </button>
+            <button
+              type="button"
+              className={styles.btnPageLast}
+              onClick={() => movePage(allPage)}
+              disabled={curPage === allPage}
+            >
+              &gt;&gt;
+            </button>
+          </div>
         </div>
       </div>
     </div>

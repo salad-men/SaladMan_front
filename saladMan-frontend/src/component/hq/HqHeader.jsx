@@ -10,16 +10,32 @@ const HqHeader = () => {
     const [token, setAccessToken] = useAtom(accessTokenAtom);
     const [isScrolled, setIsScrolled] = useState(false);
 
-    const navigate = useNavigate();
+  // 채팅 알림 on/off
+  const [chatAlarmOn, setChatAlarmOn] = useState(
+    () => sessionStorage.getItem('chatAlarmOn') !== 'false'
+  );
+  // 모달 큐, 방 목록, 언읽 토탈, 사이드바 열림 여부
+  const [chatModalQueue, setChatModalQueue] = useState([]);
+  const [chatRooms, setChatRooms] = useState([]);
+  const [chatUnreadTotal, setChatUnreadTotal] = useState(0);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [activeRoomId, setActiveRoomId] = useState(null);
 
-    const logout = (e) => {
-        e.preventDefault();
-        sessionStorage.clear();
-        setStore(initStore);
-        setUser(null);
-        setAccessToken('');
-        navigate("/");
-    }
+  // 사이드바 열릴 때 방 목록 fetch
+  useEffect(() => {
+    if (!token || !showSidebar) return;
+    (async () => {
+      try {
+        const res = await myAxios(token).get('/chat/my/rooms');
+        const rooms = res.data || [];
+        setChatRooms(rooms);
+        setChatUnreadTotal(rooms.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
+      } catch {
+        setChatRooms([]);
+        setChatUnreadTotal(0);
+      }
+    })();
+  }, [token, showSidebar]);
 
     useEffect(() => {
         const handleScroll = () => {

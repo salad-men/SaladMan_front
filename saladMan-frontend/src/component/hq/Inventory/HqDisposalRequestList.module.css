@@ -1,0 +1,308 @@
+/* ─── 전체 레이아웃 ─── */
+.container {
+  display: flex;
+  min-height: 900px;
+  background: #f7f8fa;
+}
+.content {
+  flex: 1;
+  /* padding: 10px 16px 0 16px; */
+  padding: 16px;
+}
+.innerContainer {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  /* padding: 0 24px 10px 24px; */
+  padding:24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.title {
+  font-size: 1.8rem;
+  color: #2f6042;
+  margin-bottom: 16px;
+}
+
+/* ─── 필터 & Bulk ─── */
+.filters {
+  margin-bottom: 16px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+.label {
+  font-weight: 600;
+  color: #3d5a40;
+}
+
+/* ─── 입력 폼 공통 ─── */
+input[type="date"],
+input[type="text"],
+select {
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+}
+
+/* ─── 기간 단축 버튼 ─── */
+.periodButtons {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+.periodButtons button {
+  background: #f7faf8;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: #4d774e;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.periodButtons button:hover {
+  background: #4d774e;
+  color: white;
+}
+
+/* ─── Bulk 승인/반려 ─── */
+.bulkActions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.bulkActions button {
+  padding: 6px 14px;
+  background: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.bulkActions button:hover {
+  background: #3b663b;
+}
+.bulkActions button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* ─── 검색 / 정렬 ─── */
+.inputSearch {
+  width: 160px;
+}
+.searchBtn {
+  padding: 6px 14px;
+  background: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.searchBtn:hover {
+  background: #3b663b;
+}
+.rightActions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sortSelect {
+  padding: 6px 10px;
+}
+
+/* ─── 테이블 ─── */
+.tableWrap {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #e4e9e7;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.table thead {
+  background: #eaf3eb;
+  color: #2d4836;
+}
+
+/* ─── 열 너비 설정 ─── */
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: 40px;   /* 선택 */
+}
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 80px;   /* 지점 */
+}
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 70px;   /* 분류 */
+}
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 120px;  /* 품목명 */
+}
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  width: 60px;   /* 단위 */
+}
+.table th:nth-child(6),
+.table td:nth-child(6) {
+  width: 80px;   /* 요청량 */
+}
+.table th:nth-child(7),
+.table td:nth-child(7) {
+  width: 100px;  /* 요청일 */
+}
+.table th:nth-child(8),
+.table td:nth-child(8) {
+  width: 80px;   /* 상태 */
+}
+.table th:nth-child(9),
+.table td:nth-child(9) {
+  width: 240px;  /* 조치 */
+}
+
+/* ─── 데이터 없을 때 ─── */
+.noData {
+  text-align: center;
+  padding: 20px 0;
+  color: #999;
+}
+
+/* ─── 행별 버튼 ─── */
+/* 승인 버튼 */
+.btnRow {
+  margin: 0 4px;
+  padding: 4px 10px;
+  background: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btnRow:hover:enabled {
+  background: #3b663b;
+}
+.btnRow:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* 반려 버튼 */
+.btnReject {
+  margin: 0 4px;
+  padding: 4px 10px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btnReject:hover:enabled {
+  background: #d32f2f;
+}
+.btnReject:disabled {
+  background: #f1a9a0;
+  cursor: not-allowed;
+}
+
+/* ─── 인라인 반려 입력 ─── */
+/* 반려 사유 입력창을 짧게 줄이고, 넘치는 텍스트는 … 로 처리 */
+.rejectInput {
+  width: 220px;
+  margin-right: 10px;
+  padding: 4px 8px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* 인라인 반려/취소 */
+.btnConfirmReject {
+  padding: 6px 12px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-right: 4px;
+}
+.btnConfirmReject:hover {
+  background: #d32f2f;
+}
+.btnCancel {
+  padding: 6px 12px;
+  background: #ccc;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btnCancel:hover {
+  background: #bfbfbf;
+}
+
+/* ─── 페이징 ─── */
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #a2b7aa;
+  border-radius: 4px;
+  background: white;
+  color: #387448;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pagination button:hover {
+  background: #eaf3eb;
+}
+.pagination button:disabled {
+  background: #f0f4f1;
+  color: #c0cfc3;
+  cursor: not-allowed;
+}
+.active {
+  background: #57a964;
+  color: white;
+  border-color: #57a964;
+}
+
+.modalOverlay {
+  position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4); z-index: 2000; display: flex; align-items: center; justify-content: center;
+}
+.modalBox {
+  background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 32px 24px; min-width: 320px;
+}
+.textarea {
+  width: 100%; border-radius: 6px; border: 1px solid #ccc; padding: 12px; margin-bottom: 16px;
+}
+.modalActions {
+  display: flex; justify-content: flex-end; gap: 8px;
+}
