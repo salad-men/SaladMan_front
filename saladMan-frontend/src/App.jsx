@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {Routes, Route, useLocation } from "react-router-dom";
 import MainPage from "@user/page/MainPage";
 import BrandIntro from "@user/page/BrandIntro";
 import SloganIntro from "@user/page/SloganIntro";
@@ -14,8 +14,11 @@ import PraiseDetailPage from "@user/page/PraiseDetailPage";
 import HqInventoryList from "@hq/Inventory/HqInventoryList";
 import HqInventoryExpiration from "@hq/Inventory/HqInventoryExpiration";
 import HqDisposalList from "@hq/Inventory/HqDisposalList";
+import HqDisposalRequestList from "@hq/Inventory/HqDisposalRequestList";
 import HqIngredientSetting from "@hq/Inventory/HqIngredientSetting";
 import HqInventoryRecord from "@hq/Inventory/HqInventoryRecord";
+import HqCategoryIngredientManagePage from "@hq/Inventory/HqCategoryIngredientManagePage"; 
+
 
 // 지현
 import HqLayout from '@hq/HqLayout';
@@ -129,6 +132,12 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeRoomId, setActiveRoomId] = useState(null);
 
+  const location = useLocation();
+  const isStoreOrHqPage =
+    location.pathname.startsWith("/store/") ||
+    location.pathname.startsWith("/hq/");
+
+
   //사이드바 열릴때마다 방목록 패치
   useEffect(() => {
     if (!token || !showSidebar) return;
@@ -147,8 +156,21 @@ function App() {
 
   // 채팅 알림 모달
   const showChatModal = (msg) => {
+    console.log('[showChatModal]', msg); 
     setChatModalQueue((q) => [...q, msg].slice(-5));
   };
+
+  //   useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     showChatModal({
+  //       roomId: 123,
+  //       roomName: "테스트 방",
+  //       senderUsername: "테스터",
+  //       message: "이것은 테스트 알림입니다."
+  //     });
+  //   }, 3000); // 앱 켜고 3초 뒤 모달 뜸
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   useEffect(() => {
   if (chatModalQueue.length === 0) return;
@@ -159,6 +181,8 @@ function App() {
   useEffect(() => {
     sessionStorage.setItem("chatAlarmOn", chatAlarmOn);
   }, [chatAlarmOn]);
+
+  console.log('[useChatSSE 등록] chatAlarmOn:', chatAlarmOn);
 
   // ===== SSE 연결 =====
   useChatSSE({
@@ -173,11 +197,14 @@ function App() {
     },
     onUnreadTotal: setChatUnreadTotal,
     onModal: chatAlarmOn ? showChatModal : undefined,
+    activeRoomId,
   });
 
   return (
     <>
       {/* 채팅 */}
+      {isStoreOrHqPage && (
+        <>
       {chatAlarmOn && chatModalQueue.length > 0 &&
       <div
         style={{
@@ -233,8 +260,8 @@ function App() {
           src="/chatIcon.png"
           alt="채팅"
           style={{
-            width: 32,   // 조절 가능
-            height: 32,  // 조절 가능
+            width: 32,   
+            height: 32,  
             display: "block",
             objectFit: "contain"
           }}
@@ -245,7 +272,7 @@ function App() {
             borderRadius: "50%", fontSize: "12px", minWidth: "18px", textAlign: "center",
             fontWeight: 700, padding: "1px 6px"
           }}>
-            {chatUnreadTotal}
+          {chatUnreadTotal}
           </span>
         )}
       </button>
@@ -260,7 +287,11 @@ function App() {
         setRooms={setChatRooms}
         activeRoomId={activeRoomId}          
         setActiveRoomId={setActiveRoomId} 
+        currentStoreId={user.storeId}
+
       />
+      </>
+      )}
 
       <Routes>
         <Route
@@ -276,16 +307,12 @@ function App() {
         >
           {/* 재고 */}
           <Route path="/hq/HqInventoryList" element={<HqInventoryList />} />
-          <Route
-            path="/hq/HqInventoryExpiration"
-            element={<HqInventoryExpiration />}
-          />
+          <Route path="/hq/HqInventoryExpiration"element={<HqInventoryExpiration />}/>
           <Route path="/hq/HqDisposalList" element={<HqDisposalList />} />
-          <Route
-            path="/hq/HqIngredientSetting"
-            element={<HqIngredientSetting />}
-          />
+          <Route path="/hq/HqDisposalRequestList" element={<HqDisposalRequestList />} />
+          <Route path="/hq/HqIngredientSetting"element={<HqIngredientSetting />}/>
           <Route path="/hq/HqInventoryRecord" element={<HqInventoryRecord />} />
+          <Route path="/hq/HqCategoryIngredientManagePage" element={<HqCategoryIngredientManagePage />} />
 
           {/*발주*/}
           <Route path="/hq/orderRequest" element={<OrderRequestList />} />

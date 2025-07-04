@@ -42,7 +42,11 @@
   margin-left: 0px;
   text-decoration: none;
 }
-
+.logoImage {
+  height: 35px; /* 필요에 따라 조절 */
+  width: auto;
+  display: block;
+}
 .nav {
   display: flex;
   align-items: center;

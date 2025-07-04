@@ -1,18 +1,21 @@
 .container {
   min-height: 1000px;
   background-color: #ffffff;
-  padding: 0px 500px;
+  max-width: 1200px;  /* 최대 폭 */
+  margin: 0 auto;     /* 가운데 정렬 */
+  padding: 0 20px;    /* 반응형 여백 */
+  box-sizing: border-box;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개 고정 */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 35px;
   justify-items: center;
 }
 
 .card {
-  position: relative; /* 자식 absolute 위치 기준 */
+  position: relative; 
   background: #ffffff;
   border-radius: 0.75rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);

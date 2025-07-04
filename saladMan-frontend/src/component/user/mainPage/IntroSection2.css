@@ -1,7 +1,7 @@
 .section {
   display: flex;
   flex-wrap: wrap;
-  padding: 60px 40px;
+  padding: 40px 40px;
   background: #ffffff; 
   background-color: #ffffff;
 }
@@ -32,14 +32,14 @@
 .textBox p {
   font-size: 1rem;
   color: #444;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .textBox button {
   background-color: #3D6141;
   color: white;
-  padding: 10px 18px;
-  border-radius: 6px;
+  padding: 12px 20px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   
@@ -59,7 +59,7 @@
 .working-section {
   display: flex;
   flex-wrap: wrap;
-  padding: 60px 40px;
+  padding: 0px 40px;
   background: #ffffff;
   opacity: 0;
   transform: translateX(-80px);

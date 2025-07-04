@@ -25,6 +25,9 @@ const StoreHeader = () => {
     return (
         <>
             <div className="storeHeader">
+                    <div className="logo">
+                        <a href="/store/StoreDashboard"><img src="/샐러드맨로고(그린).png" alt="로고" /></a>
+                    </div>
                 <div className="storeNav">
                     <div className="storeDropdownContainer">
                         <a href="#">재고</a>
@@ -39,7 +42,7 @@ const StoreHeader = () => {
                         </div>
                     </div>
                     <div className="storeDropdownContainer">
-                        <a href="#">발주</a>
+                        <a href="/store/orderList">발주</a>
                         <div className="storeDropdown">
                             <ul>
                                 <li><a href="/store/orderList">발주 목록</a></li>
@@ -50,7 +53,7 @@ const StoreHeader = () => {
                         </div>
                     </div>
                     <div className="storeDropdownContainer">
-                        <a href="#">메뉴</a>
+                        <a href="/store/totalMenu">메뉴</a>
                         <div className="storeDropdown">
                             <ul>
                                 <li><a href="/store/totalMenu">전체 메뉴</a></li>
@@ -60,7 +63,7 @@ const StoreHeader = () => {
                         </div>
                     </div>
                     <div className="storeDropdownContainer">
-                        <a href="#">매장관리</a>
+                        <a href="storeSales">매장관리</a>
                         <div className="storeDropdown">
                             <ul>
                                 <li><a href="storeSales">매출 조회</a></li>
@@ -71,7 +74,7 @@ const StoreHeader = () => {
                         </div>
                     </div>
                     <div className="storeDropdownContainer">
-                        <a href="#">점포 조회</a>
+                        <a href="/store/otherStoreInven">점포 조회</a>
                         <div className="storeDropdown">
                             <ul>
                                 <li><a href="/store/otherStoreInven">타 매장 재고 조회</a></li>
@@ -79,7 +82,7 @@ const StoreHeader = () => {
                         </div>
                     </div>
                     <div className="storeDropdownContainer">
-                        <a href="#">공지사항</a>
+                        <a href="/store/StoreNoticeList">공지사항</a>
                         <div className="storeDropdown">
                             <ul>
                                 <li><a href="/store/StoreNoticeList">공지사항</a></li>

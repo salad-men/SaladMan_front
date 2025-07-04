@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
-import './IntroSection1.css';
-import { myAxios } from '../../../config';
+import React, { useRef, useEffect, useState } from "react";
+import "./IntroSection1.css";
+import { myAxios } from "../../../config";
 
 const IntroSection = () => {
   const sectionRef = useRef(null);
@@ -8,8 +8,9 @@ const IntroSection = () => {
 
   const [banner, setBanner] = useState({
     line1: "당신을 위한 가장 작은 배려, 한 끼 샐러드",
-    line2: "바쁜 하루 속, 나를 챙기는 가장 간단한 방법\n작은 선택이 하루의 균형을 만듭니다.",
-    image: "/introSalad.jpg"
+    line2:
+      "바쁜 하루 속, 나를 챙기는 가장 간단한 방법\n작은 선택이 하루의 균형을 만듭니다.",
+    image: "/introSalad.jpg",
   });
 
   const [isAdmin, setIsAdmin] = useState(false);
@@ -94,13 +95,13 @@ const IntroSection = () => {
         line1: newLine1,
         line2: newLine2,
         line3: "",
-        image: newImage
+        image: newImage,
       });
       setBanner({
         line1: newLine1,
         line2: newLine2,
         line3: "",
-        image: newImage
+        image: newImage,
       });
       setShowModal(false);
       alert("저장되었습니다.");
@@ -113,7 +114,7 @@ const IntroSection = () => {
   return (
     <>
       <section
-        className={`section ${isVisible ? 'slide-in' : 'slide-out'}`}
+        className={`section ${isVisible ? "slide-in" : "slide-out"}`}
         ref={sectionRef}
         onContextMenu={handleRightClick}
       >
@@ -123,14 +124,16 @@ const IntroSection = () => {
         <div className="textBox">
           <h2>{banner.line1}</h2>
           <p>
-            {banner.line2.split('\n').map((line, idx) => (
+            {banner.line2.split("\n").map((line, idx) => (
               <React.Fragment key={idx}>
                 {line}
                 <br />
               </React.Fragment>
             ))}
           </p>
-          <button>자세히 보기</button>
+            <a href="/brandIntro" className="button">
+              자세히 보기
+            </a>
         </div>
       </section>
 
@@ -156,10 +159,19 @@ const IntroSection = () => {
           />
           <input type="file" onChange={handleFileChange} />
           {newImage && (
-            <img src={newImage} alt="preview" style={{ width: "100px", marginTop: "10px" }} />
+            <img
+              src={newImage}
+              alt="preview"
+              style={{ width: "100px", marginTop: "10px" }}
+            />
           )}
           <div className="modal-buttons">
-            <button onClick={handleSave} disabled={!newLine1 || !newLine2 || !newImage}>저장</button>
+            <button
+              onClick={handleSave}
+              disabled={!newLine1 || !newLine2 || !newImage}
+            >
+              저장
+            </button>
             <button onClick={() => setShowModal(false)}>취소</button>
           </div>
         </div>

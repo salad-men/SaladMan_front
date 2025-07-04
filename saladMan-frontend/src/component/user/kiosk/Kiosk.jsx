@@ -13,8 +13,8 @@ const Kiosk = () => {
         <div className={styles.buttonGroup}>
           <div className={styles.option}>
             <a href="/kiosk/menu">
-            <img src="/eat-in.png" alt="매장 식사" />
-            <p>매장 식사</p>
+            <img src="/eat-in.png" alt="매장" />
+            <p>매장</p>
             </a>
           </div>
           <div className={styles.option}>

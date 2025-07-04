@@ -1,352 +1,476 @@
 import React, { useState, useEffect } from "react";
 import { useAtomValue } from "jotai";
 import HqInventorySidebar from "./HqInventorySidebar";
-import { myAxios } from "../../../config";
-import styles from "./HqDisposalList.module.css";
+import { myAxios } from "/src/config";
+import styles from "./HqInventoryList.module.css";
 import { accessTokenAtom } from "/src/atoms";
 
-// 필터 초기값
-const initialFilters = {
-  target: "all",      // 전체, 본사(hq), 지점(store)
-  store: "all",       // 전체지점 또는 개별 지점 id
-  category: "all",    // 카테고리 id 또는 전체
-  keyword: "",        // 키워드(재료명)
-  startDate: "",
-  endDate: "",
-};
-
-export default function HqDisposalList() {
+export default function HqInventoryList() {
   const token = useAtomValue(accessTokenAtom);
 
-  const [filters, setFilters] = useState(initialFilters);
-  const [tempFilters, setTempFilters] = useState(initialFilters);
+  // 필터 상태
+  const [scope, setScope] = useState("hq");
+  const [store, setStore] = useState("all");
+  const [category, setCategory] = useState("all");
+  const [keyword, setKeyword] = useState("");
+
+  // 기간 필터 상태
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  // 정렬 옵션 상태
+  const [sortOption, setSortOption] = useState("default");
+
+  // 옵션 리스트
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+
+  // 데이터 및 페이징
   const [data, setData] = useState([]);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [rejectModalOpen, setRejectModalOpen] = useState(false);
-  const [rejectReasons, setRejectReasons] = useState({});
-  const [pageInfo, setPageInfo] = useState({});
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1,
+    startPage: 1,
+    endPage: 1,
+    allPage: 1,
+  });
 
-  // 전체 지점 목록
+  // 모달 입력 상태
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [newItems, setNewItems] = useState([
+    {
+      category: "",
+      ingredientId: "",
+      unit: "",
+      unitCost: 0,
+      quantity: 0,
+      minimumOrderUnit: 0,
+      expiredDate: "",
+      receivedDate: "",
+    },
+  ]);
+
+  // 수정 모드
+  const [editRow, setEditRow] = useState(null);
+
+  // 1) 옵션 불러오기
   useEffect(() => {
     if (!token) return;
-    myAxios(token)
-      .get("/hq/inventory/stores")
-      .then(res => setStores(res.data.stores || []))
-      .catch(() => setStores([]));
-  }, [token]);
-
-  // 카테고리 목록
-  useEffect(() => {
-    if (!token) return;
-    myAxios(token)
-      .get("/hq/inventory/categories")
-      .then(res => setCategories(res.data.categories || []))
-      .catch(() => setCategories([]));
-  }, [token]);
-
-  // 폐기 목록 호출 함수
-  const fetchDisposalList = (page = 1) => {
-    if (!token) return;
-    const params = {
-      ...filters,
-      page,
-      store: filters.store === "all" ? null : Number(filters.store),
-      category: filters.category === "all" ? null : Number(filters.category),
-      keyword: filters.keyword || "",
-    };
-    myAxios(token)
-      .post("/hq/inventory/disposal-list", params)
-      .then(res => {
-        setData(res.data.disposals || []);
-        setPageInfo(res.data.pageInfo || {});
-        setSelectedIds([]);
+    const ax = myAxios(token);
+    Promise.all([
+      ax.get("/hq/inventory/stores"),
+      ax.get("/hq/inventory/categories"),
+      ax.get("/hq/inventory/ingredients"),
+    ])
+      .then(([r1, r2, r3]) => {
+        setStores(r1.data.stores.filter((s) => s.id !== 1));
+        setCategories(r2.data.categories || []);
+        setIngredients(r3.data.ingredients || []);
       })
-      .catch(() => setData([]));
+      .catch(console.error);
+  }, [token]);
+
+  // 2) 재고 조회 함수
+  const fetchInventory = async (
+    page = 1,
+    sd = startDate,
+    ed = endDate,
+    sort = sortOption,
+    kw = keyword
+  ) => {
+    if (!token) return;
+    try {
+      const ax = myAxios(token);
+      const res = await ax.post("/hq/inventory/list", {
+        scope,
+        store: scope === "store" && store !== "all" ? Number(store) : "all",
+        category: category === "all" ? "all" : Number(category),
+        keyword: kw,
+        startDate: sd || null,
+        endDate: ed || null,
+        sortOption: sort,
+        page,
+      });
+      const { hqInventory = [], storeInventory = [], pageInfo: pi } = res.data;
+      const list =
+        scope === "hq"
+          ? hqInventory
+          : scope === "store"
+          ? storeInventory
+          : [...hqInventory, ...storeInventory];
+      const flat = list.map((x) => ({
+        id: x.id,
+        store: x.storeName || "본사",
+        category: x.categoryName || "",
+        name: x.ingredientName || "",
+        unit: x.unit || "",
+        unitCost: x.unitCost || 0,
+        quantity: Number(x.quantity) || 0,
+        minimumOrderUnit: Number(x.minimumOrderUnit) || 0,
+        minquantity: Number(x.minquantity) || 0,
+        received: x.receivedDate?.slice(0, 10) || "",
+      }));
+      setData(flat);
+      setPageInfo(pi);
+    } catch (e) {
+      console.error("재고 조회 실패", e);
+      setData([]);
+    }
   };
 
+  // 3) 초기 및 필터 변경 및 페이지 변경 시 호출
   useEffect(() => {
     if (!token) return;
-    fetchDisposalList();
-  }, [token, filters.target, filters.store, filters.category, filters.keyword, filters.startDate, filters.endDate]);
+    fetchInventory(pageInfo.curPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    token,
+    scope,
+    store,
+    category,
+    keyword,
+    startDate,
+    endDate,
+    sortOption,
+    pageInfo.curPage,
+  ]);
 
-  // 필터 적용 버튼
-  const applyFilters = () => {
-    setFilters(tempFilters);
+  // 4) 필터 변경 헬퍼 (필터 변경시 페이지 1로 초기화)
+  const onFilterChange = (setter) => (e) => {
+    setter(e.target.value);
+    setPageInfo((pi) => ({ ...pi, curPage: 1 }));
   };
 
-  // 필터 초기화
-  const resetFilters = () => {
-    setTempFilters(initialFilters);
-    setFilters(initialFilters);
+  // 5) 페이징 이동 함수
+  const movePage = (p) => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    setPageInfo((pi) => ({ ...pi, curPage: p }));
   };
 
-  // 대상(전체/본사/지점) 변경 핸들러
-  const onChangeTarget = (e) => {
-    const val = e.target.value;
-    setTempFilters(f => ({
-      ...f,
-      target: val,
-      store: "all"
-    }));
-  };
-
-  // 전체 선택 동기화
-  useEffect(() => {
-    const allSelected = data.length > 0 && data.every(item => selectedIds.includes(item.id));
-    setSelectAll(allSelected);
-  }, [selectedIds, data]);
-
-  // 승인
-  const approveSelected = () => {
-    if (!token) return;
-    if (!selectedIds.length) return alert("선택된 항목이 없습니다.");
-    myAxios(token)
-      .post("/hq/inventory/disposal/approve", selectedIds)
-      .then(() => fetchDisposalList(pageInfo.curPage));
-  };
-
-  // 반려
-  const openRejectModal = () => {
-    if (!selectedIds.length) return alert("반려할 항목을 선택하세요.");
-    setRejectReasons({});
-    setRejectModalOpen(true);
-  };
-  const confirmReject = () => {
-    if (!token) return;
-    const req = selectedIds.map(id => ({
-      id,
-      memo: rejectReasons[id] || "",
-    }));
-    if (req.some(r => !r.memo.trim())) return alert("모든 항목에 사유 입력!");
-    myAxios(token).post("/hq/inventory/disposal/reject", req).then(() => {
-      setRejectModalOpen(false);
-      fetchDisposalList(pageInfo.curPage);
-    });
-  };
-
-  // 페이지 이동
-  const movePage = (p) => fetchDisposalList(p);
-
-  // 날짜 필터 버튼 함수
-  const setToday = () => {
+  // 6) 기간 단축 버튼
+  const setPeriod = (type) => {
     const today = new Date().toISOString().slice(0, 10);
-    setTempFilters(f => ({ ...f, startDate: today, endDate: today }));
+    let sd = "",
+      ed = "";
+    switch (type) {
+      case "today":
+        sd = today;
+        ed = today;
+        break;
+      case "week":
+        sd = new Date(new Date().setDate(new Date().getDate() - 6))
+          .toISOString()
+          .slice(0, 10);
+        ed = today;
+        break;
+      case "month":
+        sd = new Date(new Date().setMonth(new Date().getMonth() - 1))
+          .toISOString()
+          .slice(0, 10);
+        ed = today;
+        break;
+      default:
+        sd = "";
+        ed = "";
+    }
+    setStartDate(sd);
+    setEndDate(ed);
+    fetchInventory(1, sd, ed, sortOption, keyword);
   };
-  const setLastDays = (days) => {
-    const to = new Date();
-    const from = new Date();
-    from.setDate(to.getDate() - days);
-    setTempFilters(f => ({
-      ...f,
-      startDate: from.toISOString().slice(0, 10),
-      endDate: to.toISOString().slice(0, 10),
-    }));
+
+  // 7) 검색 버튼 클릭 핸들러
+  const onSearchClick = () => {
+    setPageInfo((pi) => ({ ...pi, curPage: 1 }));
+    fetchInventory(1, startDate, endDate, sortOption, keyword);
   };
-  const clearDates = () => {
-    setTempFilters(f => ({ ...f, startDate: "", endDate: "" }));
+
+  // 8) 정렬 변경
+  const onSortChange = (e) => {
+    setSortOption(e.target.value);
+    setPageInfo((pi) => ({ ...pi, curPage: 1 }));
   };
+
+  // 페이징 배열 생성
+  const { startPage, endPage, curPage, allPage } = pageInfo;
+  const pages = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i
+  );
 
   return (
-    <div className={styles.container}>
+    <div className={styles.wrap}>
       <HqInventorySidebar />
-      <div className={styles.content}>
-        <h2 className={styles.title}>폐기 목록</h2>
+      <div className={styles.main}>
+        <h2 className={styles.pageTitle}>재고 목록 조회</h2>
 
-        <div className={styles.filters}>
-          <div className={styles.row}>
-            <label>기간</label>
+        {/* 필터 영역 */}
+        <div className={styles.filterArea}>
+          <div className={styles.rowDate}>
+            <label className={styles.labelDate}>기간</label>
             <input
               type="date"
-              value={tempFilters.startDate}
-              onChange={e => setTempFilters(f => ({ ...f, startDate: e.target.value }))}
+              className={styles.inputDate}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
-            <span>~</span>
+            <span className={styles.labelSep}>~</span>
             <input
               type="date"
-              value={tempFilters.endDate}
-              onChange={e => setTempFilters(f => ({ ...f, endDate: e.target.value }))}
+              className={styles.inputDate}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
             />
-            <div className={styles.dateButtons}>
-              <button type="button" onClick={clearDates}>전체</button>
-              <button type="button" onClick={setToday}>오늘</button>
-              <button type="button" onClick={() => setLastDays(7)}>1주</button>
-              <button type="button" onClick={() => setLastDays(30)}>1달</button>
-            </div>
+
+            {["all", "today", "week", "month"].map((type) => (
+              <button
+                key={type}
+                type="button"
+                className={styles.periodBtn}
+                onClick={() => setPeriod(type)}
+              >
+                {type === "all"
+                  ? "전체"
+                  : type === "today"
+                  ? "오늘"
+                  : type === "week"
+                  ? "1주"
+                  : "1달"}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              className={styles.btnSearch}
+              onClick={onSearchClick}
+            >
+              검색
+            </button>
           </div>
-          {/* 2행: 기타 필터 */}
-          <div className={styles.row}>
-            <label>대상</label>
-            <select value={tempFilters.target} onChange={onChangeTarget}>
-              <option value="all">전체</option>
+
+          <div className={styles.rowFilter}>
+            <select
+              className={styles.selectScope}
+              value={scope}
+              onChange={onFilterChange(setScope)}
+            >
               <option value="hq">본사</option>
               <option value="store">지점</option>
-            </select>
-            {tempFilters.target === "store" && (
-              <>
-                <label>지점</label>
-                <select
-                  value={tempFilters.store}
-                  onChange={e => setTempFilters(f => ({ ...f, store: e.target.value }))}
-                >
-                  <option value="all">전체지점</option>
-                  {stores.map(s => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
-                  ))}
-                </select>
-              </>
-            )}
-            <label>분류</label>
-            <select
-              value={tempFilters.category}
-              onChange={e => setTempFilters(f => ({ ...f, category: e.target.value }))}
-            >
               <option value="all">전체</option>
-              {categories.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
+            </select>
+            {scope === "store" && (
+              <select
+                className={styles.selectStore}
+                value={store}
+                onChange={onFilterChange(setStore)}
+              >
+                <option value="all">전체지점</option>
+                {stores.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            )}
+            <select
+              className={styles.selectCategory}
+              value={category}
+              onChange={onFilterChange(setCategory)}
+            >
+              <option value="all">전체분류</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
               ))}
             </select>
             <input
               type="text"
-              placeholder="재료명"
-              value={tempFilters.keyword}
-              onChange={e => setTempFilters(f => ({ ...f, keyword: e.target.value }))}
+              className={styles.inputSearch}
+              placeholder="재료명 검색"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && onSearchClick()}
             />
-            <button type="button" onClick={applyFilters}>검색</button>
-            <button type="button" onClick={resetFilters}>초기화</button>
+            <button
+              type="button"
+              className={styles.btnSearch}
+              onClick={onSearchClick}
+            >
+              검색
+            </button>
+            <button
+              type="button"
+              className={styles.btnNew}
+              onClick={() => setAddModalOpen(true)}
+            >
+              재고추가
+            </button>
+            <select
+              className={styles.selectSort}
+              value={sortOption}
+              onChange={onSortChange}
+            >
+              <option value="default">이름순</option>
+              <option value="receivedAsc">입고일 오름</option>
+              <option value="receivedDesc">입고일 내림</option>
+            </select>
           </div>
         </div>
 
-        {/* 액션 버튼 */}
-        <div className={styles.actions}>
-          <button onClick={approveSelected} disabled={!selectedIds.length}>선택 승인</button>
-          <button onClick={openRejectModal} disabled={!selectedIds.length}>선택 반려</button>
-        </div>
+        {/* 신규 입력 모달 (생략 가능) */}
 
-        {/* 폐기 목록 테이블 */}
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={selectAll}
-                  onChange={() => setSelectedIds(selectAll ? [] : data.map(row => row.id))}
-                />
-              </th>
-              <th>지점</th>
-              <th>품목명</th>
-              <th>분류</th>
-              <th>단위</th>
-              <th>재고량</th>
-              <th>폐기량</th>
-              <th>사유</th>
-              <th>폐기날짜</th>
-              <th>상태</th>
-              <th>비고</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.length === 0 ? (
-              <tr><td colSpan={11}>데이터가 없습니다.</td></tr>
-            ) : (
-              data.map(row => (
-                <tr key={row.id}>
-                  <td>
-                    {(row.storeId === 1 || row.store === 1 || row.storeName === "본사계정")
-                      ? null
-                      : (
-                        <input
-                          type="checkbox"
-                          checked={selectedIds.includes(row.id)}
-                          onChange={() =>
-                            setSelectedIds(ids =>
-                              ids.includes(row.id)
-                                ? ids.filter(id => id !== row.id)
-                                : [...ids, row.id]
-                            )
-                          }
-                        />
-                      )}
-                  </td>
-                  <td>{row.storeName || row.store || ""}</td>
-                  <td>{row.ingredientName || row.name || ""}</td>
-                  <td>{row.categoryName || row.category || ""}</td>
-                  <td>{row.unit}</td>
-                  <td>{row.stock || row.quantity || ""}</td>
-                  <td>{row.discardQty || row.quantity || ""}</td>
-                  <td>{row.reason || row.memo || ""}</td>
-                  <td>{row.requestedAt || row.discardDate || ""}</td>
-                  <td>{row.status}</td>
-                  <td>{row.remark || ""}</td>
+        {/* 메인 테이블 */}
+        <div className={styles.tableArea}>
+          <table className={styles.mainTable}>
+            <thead>
+              <tr>
+                <th>지점</th>
+                <th>분류</th>
+                <th>재료명</th>
+                <th>단위</th>
+                <th>단가</th>
+                <th>수량</th>
+                <th>최소주문단위</th>
+                <th>매장별 최소수량</th>
+                <th>입고일</th>
+                <th>수정</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.length === 0 ? (
+                <tr>
+                  <td colSpan={10}>데이터가 없습니다.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-
-        {/* 페이지네이션 */}
-        <div>
-          {pageInfo.startPage && pageInfo.endPage &&
-            [...Array(pageInfo.endPage - pageInfo.startPage + 1).keys()]
-              .map(i => {
-                const p = pageInfo.startPage + i;
-                return (
-                  <button
-                    key={p}
-                    disabled={p === pageInfo.curPage}
-                    onClick={() => movePage(p)}
-                  >
-                    {p}
-                  </button>
-                );
-              })
-          }
+              ) : (
+                data.map((r) => {
+                  const low = r.quantity < r.minimumOrderUnit;
+                  return (
+                    <tr key={r.id} className={low ? styles.trLow : ""}>
+                      <td className={styles.tdStore}>{r.store}</td>
+                      <td className={styles.tdCategory}>{r.category}</td>
+                      <td className={styles.tdName}>{r.name}</td>
+                      <td className={styles.tdUnit}>{r.unit}</td>
+                      <td className={styles.tdCost}>{r.unitCost}</td>
+                      <td className={styles.tdQty}>
+                        {editRow === r.id ? (
+                          <input
+                            type="number"
+                            className={styles.inputQty}
+                            value={r.quantity}
+                            onChange={(e) =>
+                              setData((d) =>
+                                d.map((x) =>
+                                  x.id === r.id
+                                    ? { ...x, quantity: Number(e.target.value) }
+                                    : x
+                                )
+                              )
+                            }
+                          />
+                        ) : (
+                          r.quantity
+                        )}
+                      </td>
+                      <td className={styles.tdMin}>{r.minimumOrderUnit}</td>
+                      <td className={styles.tdStoreMin}>{r.minquantity}</td>
+                      <td className={styles.tdReceived}>{r.received}</td>
+                      <td className={styles.tdEdit}>
+                        {editRow !== r.id ? (
+                          <button
+                            type="button"
+                            className={styles.btnEdit}
+                            onClick={() => setEditRow(r.id)}
+                          >
+                            수정
+                          </button>
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              className={styles.btnSave}
+                              onClick={async () => {
+                                try {
+                                  await myAxios(token).post("/hq/inventory/update", {
+                                    id: r.id,
+                                    quantity: r.quantity,
+                                    minimumOrderUnit: r.minimumOrderUnit,
+                                    unitCost: r.unitCost,
+                                    expiredDate: r.expired || new Date().toISOString().slice(0,10),
+                                    receivedDate: r.received || new Date().toISOString().slice(0,10),
+                                  });
+                                  setEditRow(null);
+                                  fetchInventory(curPage);
+                                } catch (e) {
+                                  console.error(e);
+                                  alert("저장 실패");
+                                }
+                              }}
+                            >
+                              저장
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.btnCancel}
+                              onClick={() => setEditRow(null)}
+                            >
+                              취소
+                            </button>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
 
-        {/* 반려 모달 */}
-        {rejectModalOpen && (
-          <div className={styles.modal}>
-            <div className={styles.modalBox}>
-              <h3>반려 사유 입력</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>지점</th>
-                    <th>품목명</th>
-                    <th>분류</th>
-                    <th>폐기량</th>
-                    <th>반려사유</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedIds.map(id => {
-                    const row = data.find(d => d.id === id);
-                    return (
-                      <tr key={id}>
-                        <td>{row.storeName}</td>
-                        <td>{row.ingredientName}</td>
-                        <td>{row.categoryName}</td>
-                        <td>{row.discardQty || row.quantity || ""}</td>
-                        <td>
-                          <input
-                            value={rejectReasons[id] || ""}
-                            onChange={e => setRejectReasons(r => ({ ...r, [id]: e.target.value }))}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <button onClick={confirmReject}>확인</button>
-              <button onClick={() => setRejectModalOpen(false)}>취소</button>
-            </div>
-          </div>
-        )}
-
+        {/* 페이징 */}
+        <div className={styles.paginationArea}>
+          <button
+            type="button"
+            className={styles.btnPageFirst}
+            onClick={() => movePage(1)}
+            disabled={curPage === 1}
+          >
+            &lt;&lt;
+          </button>
+          <button
+            type="button"
+            className={styles.btnPagePrev}
+            onClick={() => movePage(curPage - 1)}
+            disabled={curPage === 1}
+          >
+            &lt;
+          </button>
+          {pages.map((p) => (
+            <button
+              key={p}
+              type="button"
+              className={p === curPage ? styles.btnPageActive : styles.btnPage}
+              onClick={() => movePage(p)}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            type="button"
+            className={styles.btnPageNext}
+            onClick={() => movePage(curPage + 1)}
+            disabled={curPage === allPage}
+          >
+            &gt;
+          </button>
+          <button
+            type="button"
+            className={styles.btnPageLast}
+            onClick={() => movePage(allPage)}
+            disabled={curPage === allPage}
+          >
+            &gt;&gt;
+          </button>
+        </div>
       </div>
     </div>
   );

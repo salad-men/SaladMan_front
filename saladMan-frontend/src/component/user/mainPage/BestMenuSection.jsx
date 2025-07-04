@@ -39,7 +39,10 @@ export default function BestMenuSection() {
           ))}
         </div>
       )}
-      <br />
+
+      <div className="infoText">
+        <p>※BEST 메뉴는 실시간 판매량을 기준입니다.</p>
+      </div>
       <br />
       <br />
       <br />
