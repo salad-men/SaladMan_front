@@ -1,244 +1,237 @@
-/* 전체 레이아웃 */
-.container {
-  display: flex;
-  min-height: 100vh;
-  background: #f7f8fa;
+.managerContainer { display: flex; min-height: 100vh; background: #f7f8fa; }
+.managerContent { flex: 1; margin: 16px; overflow: hidden; }
+.managerInner {
+  background: #fff; border: 1px solid #ddd; border-radius: 8px;
+  padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  min-height: calc(100vh - 64px); overflow: auto;
 }
-
-/* 사이드바 */
-.HqInventorySidebar {
-  width: 200px;
-  min-width: 160px;
-}
-
-/* 메인 콘텐츠 */
-.content {
-  flex: 1;
-  margin: 8px 24px 40px;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: auto;
-}
-
-/* 내부 컨테이너 */
-.innerContainer {
+.managerTitle { font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 24px; }
+.managerFlex { display: flex; gap: 28px; }
+.managerCol {
+  flex: 1 1 0;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 24px;
-  box-sizing: border-box;
-  min-height: 80vh;
-}
-
-/* 타이틀 (innerContainer 안으로 이동) */
-.title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #2f6042;
-  margin: 0 0 24px;
-  text-align: left;
-}
-
-/* 2단 그리드 */
-.columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-
-/* 기본 컬럼 카드 */
-.column {
-  background: #fafbfc;
-  border-radius: 8px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  border: 1px solid #e4e9e7;
+  border-radius: 12px;
+  padding: 18px 18px 24px 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  min-width: 0;
+  height: 1021px;           /* 높이 고정! */
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
 }
 
-/* 헤더 */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.boxTitle {
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: #255744;
-}
-.plusBtn {
-  background: none;
+/* --- 카테고리 컬럼 --- */
+.catFilters { margin-bottom: 10px; }
+.catRow { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.catLabel { font-weight: 600; min-width: 72px; color: #205c39; font-size: 1rem; }
+.catAddBtn {
+  background: #427c3c;
+  color: #fff;
   border: none;
-  font-size: 1.5rem;
-  color: #3b7b56;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.plusBtn:hover {
-  color: #2f6042;
-}
-
-/* ── 카테고리 전용 입력 ───────────────────────────────── */
-.catInputWrapper {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.catInput {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #a0c4a8;
   border-radius: 6px;
-  background: #edf7ed;
-  font-size: 0.95rem;
-}
-.catInput:focus {
-  outline: none;
-  border-color: #3b7b56;
-  background: #f1faf1;
-}
-
-/* ── 재료 전용 입력 ───────────────────────────────── */
-.ingInputWrapper {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.ingInput {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #c8cfd3;
-  border-radius: 6px;
-  background: #fafbfc;
-  font-size: 0.95rem;
-}
-.ingInput:focus {
-  outline: none;
-  border-color: #3b7b56;
-}
-
-/* 삭제·수정·추가·취소 버튼 */
-.confirmBtn,
-.cancelBtn {
-  font-size: 0.85rem;
-  font-weight: 500;
-  border-radius: 4px;
-  padding: 4px 10px;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 7px 18px;
   cursor: pointer;
-  transition: background 0.2s;
-  white-space: nowrap;
-  min-height: 32px;
-  line-height: 24px;
+  margin-left: 8px;
+  transition: background .18s;
 }
-.confirmBtn {
-  background: #d2ecf7;
-  color: #227299;
+.catAddBtn:hover { background: #285c25; }
+.catInput, .catEditInput {
+  width: 150px;
+  padding: 7px 10px;
+  border: 1.5px solid #b4c7b3;
+  border-radius: 5px;
+  background: #f7faf8;
+  font-size: 15px;
+  margin-right: 6px;
+}
+.catAddSubmitBtn {
+  background: #43ad2c;
+  color: #fff;
   border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 7px 20px;
+  margin-right: 6px;
+  cursor: pointer;
 }
-.confirmBtn:hover {
-  background: #b4e1f3;
+.catAddSubmitBtn:hover { background: #32911f; }
+.catAddCancelBtn {
+  background: #fff;
+  color: #2c2c2c;
+  border: 1.5px solid #bbb;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 18px;
+  cursor: pointer;
 }
-.cancelBtn {
-  background: #fde8e8;
-  color: #d33b2e;
-  border: none;
-}
-.cancelBtn:hover {
-  background: #ffcfcf;
-}
+.catAddCancelBtn:hover { background: #e9e9e9; }
 
-/* 리스트 박스 */
-.listBox {
+
+.catTableWrap, .ingTableWrap {
   flex: 1 1 auto;
   overflow-y: auto;
-  border: 1px solid #eceff1;
-  border-radius: 6px;
-  padding: 8px;
-  margin-top: 8px;
-}
-.listBox::-webkit-scrollbar {
-  width: 6px;
-}
-.listBox::-webkit-scrollbar-thumb {
-  background: #c2cdd2;
-  border-radius: 3px;
+  max-height: calc(1021px - 108px); /* 위쪽 filters 등 패딩값에 따라 조절 */
 }
 
-/* 리스트 항목 */
-.item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 10px;
-  margin-bottom: 6px;
+.catTable { width:100%; border-collapse:collapse; font-size:15px; table-layout:fixed; }
+.catTable th, .catTable td { border: 1px solid #e4e9e7; padding:10px; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.catTable th { background:#eaf3eb; color:#2d4836; font-weight:600; }
+.catManageTh { width: 170px; }
+.catNoData { color:#aaa; font-size:15px; text-align:center; font-style:italic; padding: 24px 0; }
+.catError { color: #c81e1e; font-size: 14px; margin: 4px 0 0 0; }
+.catRowActive { background: #fff5f5 !important; }
+.catEditBtn {
+  background: #fff;
+  color: #2c2c2c;
+  border: 1.5px solid #888;
   border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 18px;
+  font-weight: 500;
+  margin-right: 6px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background .16s, border .16s;
 }
-.item:hover,
-.active {
-  background: #e6f4ef;
-}
-
-/* 수정/삭제 버튼 */
-.btns button {
-  margin-left: 6px;
-}
-.editBtn {
-  background: #d2ecf7;
-  color: #227299;
+.catEditBtn:hover { background: #e8eee8; border: 1.5px solid #2f6042; }
+.catDeleteBtn {
+  background: #d9534f;
+  color: #fff;
   border: none;
-  padding: 4px 10px;
-  border-radius: 4px;
-  min-height: 32px;
-  line-height: 24px;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 22px;
+  font-weight: 600;
+  cursor: pointer;
 }
-.editBtn:hover {
-  background: #b4e1f3;
-}
-.delBtn {
-  background: #fde8e8;
-  color: #d33b2e;
+.catDeleteBtn:hover { background: #c9302c; }
+.catEditSubmitBtn {
+  background: #43ad2c;
+  color: #fff;
   border: none;
-  padding: 4px 10px;
-  border-radius: 4px;
-  min-height: 32px;
-  line-height: 24px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 7px 20px;
+  margin-right: 6px;
+  cursor: pointer;
 }
-.delBtn:hover {
-  background: #ffcfcf;
+.catEditSubmitBtn:hover { background: #32911f; }
+.catEditCancelBtn {
+  background: #fff;
+  color: #2c2c2c;
+  border: 1.5px solid #bbb;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 18px;
+  cursor: pointer;
 }
+.catEditCancelBtn:hover { background: #e9e9e9; }
 
-/* ── 재료 컬럼만 고정 높이+스크롤 ───────────────────── */
-.ingColumn {
-  height: 870px;
+/* --- 재료 컬럼 --- */
+.ingFilters { margin-bottom: 10px; }
+.ingRow { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.ingLabel { font-weight: 600; min-width: 72px; color: #205c39; font-size: 1rem; }
+.ingCatSelect {
+  min-width:140px; padding:7px 8px; border:1.5px solid #b4c7b3; border-radius:4px;
+  background:#fff; font-size:15px; height:38px; margin-right:8px;
 }
-.ingColumn .listBox {
-  overflow-y: auto;
+.ingAddBtn {
+  background: #2c5ba8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 7px 18px;
+  cursor: pointer;
+  margin-left: 8px;
 }
-
-/* 상태/에러/빈 메시지 */
-.loading,
-.empty {
-  padding: 12px;
-  color: #888;
-  font-size: 0.95rem;
+.ingAddBtn:disabled { background: #b6c6d8; color: #fff; cursor: default; }
+.ingAddBtn:hover:enabled { background: #204374; }
+.ingInput, .ingEditInput {
+  width: 110px;
+  padding: 7px 10px;
+  border: 1.5px solid #b4c7b3;
+  border-radius: 5px;
+  background: #f6fafd;
+  font-size: 15px;
+  margin-right: 6px;
 }
-.error {
-  margin: 4px 0 12px;
-  color: #d33b2e;
-  font-size: 0.9rem;
+.ingAddSubmitBtn {
+  background: #3687c4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 7px 20px;
+  margin-right: 6px;
+  cursor: pointer;
 }
-
-/* 반응형 */
-@media (max-width: 1000px) {
-  .columns {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
+.ingAddSubmitBtn:hover { background: #256a97; }
+.ingAddCancelBtn {
+  background: #fff;
+  color: #2c2c2c;
+  border: 1.5px solid #b7b7b7;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 18px;
+  cursor: pointer;
 }
+.ingAddCancelBtn:hover { background: #f1f1f1; }
+.ingTableWrap { border-radius:8px; margin-bottom:14px; margin-top: 8px; overflow-x:auto; border: 1px solid #e4e9e7; background: #fafcfa; }
+.ingTable { width:100%; border-collapse:collapse; font-size:15px; table-layout:fixed; }
+.ingTable th, .ingTable td { border: 1px solid #e4e9e7; padding:10px; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ingTable th { background:#eaf3eb; color:#2d4836; font-weight:600; }
+.ingManageTh { width: 170px; }
+.ingNoData { color:#aaa; font-size:15px; text-align:center; font-style:italic; padding: 24px 0; }
+.ingError { color: #1a3cbc; font-size: 14px; margin: 4px 0 0 0; }
+.ingEditBtn {
+  background: #fff;
+  color: #2c2c2c;
+  border: 1.5px solid #888;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 18px;
+  font-weight: 500;
+  margin-right: 6px;
+  cursor: pointer;
+  transition: background .16s, border .16s;
+}
+.ingEditBtn:hover { background: #e7eef7; border: 1.5px solid #2c5ba8; }
+.ingDeleteBtn {
+  background: #d9534f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 22px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ingDeleteBtn:hover { background: #b82924; }
+.ingEditSubmitBtn {
+  background: #3687c4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 7px 20px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+.ingEditSubmitBtn:hover { background: #256a97; }
+.ingEditCancelBtn {
+  background: #fff;
+  color: #2c2c2c;
+  border: 1.5px solid #b7b7b7;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 7px 18px;
+  cursor: pointer;
+}
+.ingEditCancelBtn:hover { background: #f1f1f1; }

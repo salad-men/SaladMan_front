@@ -1,367 +1,148 @@
-/* HqInventoryList.module.css */
+.container { display: flex; min-height: 70vh; background: #ffffff; }
+.content { flex: 1; margin: 0px; overflow: hidden; }
+.innerContainer {
+  background: #fff;
+  /* border: 1px solid #ddd; */
+  /* border-radius: 0px; */
+  padding: 24px 100px 0 100px;
+  box-shadow: 0 4px 12px 
+  rgba(0,0,0,0.06);
+  height: 1220px;
+  overflow: auto;
+}
+.title { font-size: 1.8rem; color: #2f6042; margin-bottom: 16px; margin-top: 16px;  }
 
-.wrap {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f7f8fa;
-}
-.main {
-  flex: 1;
-  padding: 20px;
-  box-sizing: border-box;
-}
-.pageTitle {
-  font-size: 1.8rem;
-  color: #2f6042;
-  margin-bottom: 16px;
-}
-
-.filterArea {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-.rowDate {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.labelDate {
-  font-weight: 600;
-  width: 60px;
-  color: #3d5a40;
-}
-.inputDate {
-  padding: 6px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-}
-.labelSep {
-  font-size: 1.2rem;
-  color: #3d5a40;
-}
+/* 필터 영역 */
+.filterArea { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.rowDate { display: flex; align-items: center; gap: 8px; }
+.labelDate { font-weight: 600; width: 60px; color: #3d5a40; }
+.inputDate { padding: 6px; border: 1px solid #b4c7b3; border-radius: 4px; }
+.labelSep { font-size: 1.2rem; color: #3d5a40; }
 .periodBtn {
-  margin-left: 8px;
-  padding: 4px 10px;
-  border: 1px solid #4d774e;
-  background: #f7faf8;
-  color: #4d774e;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 13px;
+  margin-left: 8px; padding: 4px 10px;
+  border: 1px solid #4d774e; background: #f7faf8;
+  color: #4d774e; border-radius: 4px;
+  cursor: pointer; font-size: 13px;
   transition: background 0.2s;
 }
-.periodBtn:hover {
-  background: #4d774e;
-  color: white;
-}
-.rowFilter {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.periodBtn:hover { background: #4d774e; color: white; }
+.rowFilter { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .selectScope,
 .selectStore,
 .selectCategory,
 .selectIngredient,
 .selectSort {
-  padding: 6px 10px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-  background: #fff;
-  font-size: 14px;
-  cursor: pointer;
+  padding: 6px 10px; border: 1px solid #b4c7b3;
+  border-radius: 4px; background: #fff; font-size: 14px; cursor: pointer;
 }
 .inputSearch {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #b4c7b3;
-  font-size: 14px;
-  width: 160px;
+  padding: 6px 10px; border-radius: 4px;
+  border: 1px solid #b4c7b3; font-size: 14px; width: 160px;
 }
 .btnSearch {
-  padding: 6px 14px;
-  background-color: #4d774e;
-  color: #ffffff;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  margin-right: 8px;
+  padding: 6px 14px; background-color: #4d774e; color: #ffffff;
+  border-radius: 4px; border: none; cursor: pointer; margin-right: 8px;
 }
-.btnSearch:hover {
-  background-color: #3b663b;
-}
+.btnSearch:hover { background-color: #3b663b; }
 .btnNew {
-  padding: 6px 14px;
-  background-color: #2196f3;
-  color: #ffffff;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  margin-left: auto;
+  padding: 6px 14px; background-color: #2196f3; color: #ffffff;
+  border-radius: 4px; border: none; cursor: pointer; margin-left: auto;
 }
-.btnNew:hover {
-  background-color: #1976d2;
-}
+.btnNew:hover { background-color: #1976d2; }
 
 .modalBg {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.3);
+  display: flex; justify-content: center; align-items: center; z-index: 2000;
 }
 .modalBox {
-  background: #ffffff;
-  border-radius: 8px;
-  width: 95%;
-  max-width: 1000px;
-  padding: 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: #ffffff; border-radius: 8px; width: 95%; max-width: 1000px;
+  padding: 20px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
-.modalHeader {
-  font-size: 1.5rem;
-  color: #2f6042;
-  text-align: center;
-  margin-bottom: 16px;
+.modalHeader { font-size: 1.5rem; color: #2f6042; text-align: center; margin-bottom: 16px; }
+.modalTable { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+.modalTable th, .modalTable td {
+  padding: 8px 12px; border: 1px solid #ddd;
+  text-align: center; font-size: 14px; vertical-align: middle;
 }
-.modalTable {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 16px;
-}
-.modalTable th,
-.modalTable td {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  text-align: center;
-  font-size: 14px;
-  vertical-align: middle;
-}
-.modalTr:nth-child(even) {
-  background-color: #fafafa;
-}
-.modalTable th:nth-child(1),
-.modalTable td:nth-child(1) {
-  width: 20%;
-}
-.modalTable th:nth-child(2),
-.modalTable td:nth-child(2) {
-  width: 25%;
-}
+.modalTr:nth-child(even) { background-color: #fafafa; }
+.modalTable th:nth-child(1), .modalTable td:nth-child(1) { width: 20%; }
+.modalTable th:nth-child(2), .modalTable td:nth-child(2) { width: 25%; }
 /* 3~6번째 열 너비 */
-.modalTable th:nth-child(3),
-.modalTable td:nth-child(3),
-.modalTable th:nth-child(4),
-.modalTable td:nth-child(4),
-.modalTable th:nth-child(5),
-.modalTable td:nth-child(5),
-.modalTable th:nth-child(6),
-.modalTable td:nth-child(6) {
-  width: 10%;
+.modalTable th:nth-child(3), .modalTable td:nth-child(3),
+.modalTable th:nth-child(4), .modalTable td:nth-child(4),
+.modalTable th:nth-child(5), .modalTable td:nth-child(5),
+.modalTable th:nth-child(6), .modalTable td:nth-child(6) { width: 10%; }
+.modalTable select, .modalTable input[type="text"], .modalTable input[type="number"], .modalTable input[type="date"] {
+  width: 100%; box-sizing: border-box; padding: 6px 8px; font-size: 14px;
+  border: 1px solid #b4c7b3; border-radius: 4px; text-align: center;
 }
-.modalTable select,
-.modalTable input[type="text"],
-.modalTable input[type="number"],
-.modalTable input[type="date"] {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 6px 8px;
-  font-size: 14px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-  text-align: center;
-}
-.modalInputDisabled {
-  background: #f0f0f0;
-  border-color: #ccc;
-  cursor: not-allowed;
-}
+.modalInputDisabled { background: #f0f0f0; border-color: #ccc; cursor: not-allowed; }
 .btnRemoveRow {
-  background: transparent;
-  color: #f44336;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  padding: 0 6px;
-  font-size: 16px;
-  line-height: 1;
+  background: transparent; color: #f44336; font-weight: bold;
+  border: none; cursor: pointer; padding: 0 6px; font-size: 16px; line-height: 1;
 }
-
-/* === Footer Buttons 정렬 및 높이 통일 === */
-.modalFooter {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-}
+.modalFooter { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
 .btnAddRow {
-  padding: 8px 18px;
-  background-color: #607d8b;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
+  padding: 8px 18px; background-color: #607d8b; color: white;
+  border: none; border-radius: 4px; font-weight: 600; cursor: pointer;
   transition: background-color 0.2s ease;
 }
-.btnAddRow:hover {
-  background-color: #455a64;
+.btnAddRow:hover { background-color: #455a64; }
+.btnModalSave, .btnModalCancel {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 36px; line-height: 1; padding: 0 18px;
+  background-color: #4caf50; color: white; border: none; border-radius: 4px;
+  font-weight: 600; cursor: pointer; transition: background-color 0.2s ease;
 }
-/* 저장 / 취소 버튼 높이·정렬 통일 */
-.btnModalSave,
-.btnModalCancel {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 36px;
-  line-height: 1;
-  padding: 0 18px;
-  background-color: #4caf50; 
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.btnModalSave {
-  background-color: #4caf50;
-}
-.btnModalSave:hover {
-  background-color: #3b8c63;
-}
-.btnModalCancel {
-  background-color: #f44336;
-}
-.btnModalCancel:hover {
-  background-color: #d32f2f;
-}
+.btnModalSave { background-color: #4caf50; }
+.btnModalSave:hover { background-color: #3b8c63; }
+.btnModalCancel { background-color: #f44336; }
+.btnModalCancel:hover { background-color: #d32f2f; }
 
-.tableArea {
-  overflow-x: auto;
-  margin-bottom: 24px;
-}
-.mainTable {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-.mainTable th,
-.mainTable td {
-  padding: 10px;
-  border: 1px solid #e4e9e7;
-  text-align: center;
-}
-.mainTable th {
-  background: #eaf3eb;
-  color: #2d4836;
-  font-weight: 600;
-}
-
+.tableArea { overflow-x: auto; margin-bottom: 24px; }
+.mainTable { width: 100%; border-collapse: collapse; font-size: 14px; }
+.mainTable th, .mainTable td { padding: 10px; border: 1px solid #e4e9e7; text-align: center; }
+.mainTable th { background: #eaf3eb; color: #2d4836; font-weight: 600; }
 /* 분류명과 재료명 너비 축소 */
-.tdCategory {
-  width: 12%;
-}
-.tdName {
-  width: 15%;
-}
+.tdCategory { width: 12%; }
+.tdName { width: 15%; }
 /* 나머지 컬럼 비율 조정 */
 .tdStore { width: 10%; }
 .tdUnit  { width: 9%; }
 .tdCost, .tdQty, .tdMin, .tdStoreMin { width: 10%; }
 .tdReceived { width: 9%; }
 .tdEdit { width: 10%; }
-
-.inputQty {
-  width: 60px;
-  padding: 4px;
-  border: 1px solid #74bb7a;
-  border-radius: 4px;
-}
-
+.inputQty { width: 60px; padding: 4px; border: 1px solid #74bb7a; border-radius: 4px; }
 .btnEdit {
-  padding: 6px 14px;
-  background: #607d8b;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  padding: 6px 14px; background: #607d8b; color: #ffffff; border: none;
+  border-radius: 4px; cursor: pointer;
 }
-.btnEdit:hover {
-  background: #455a64;
-}
-
+.btnEdit:hover { background: #455a64; }
 .btnSave {
-  padding: 6px 14px;
-  background: #4caf50;
-  color: #ffffff;
-  margin-right: 4px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  padding: 6px 14px; background: #4caf50; color: #ffffff;
+  margin-right: 4px; border: none; border-radius: 4px; cursor: pointer;
 }
-.btnSave:hover {
-  background: #3b8c63;
-}
-
+.btnSave:hover { background: #3b8c63; }
 .btnCancel {
-  padding: 6px 14px;
-  background: #f44336;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  padding: 6px 14px; background: #f44336; color: #ffffff; border: none;
+  border-radius: 4px; cursor: pointer;
 }
-.btnCancel:hover {
-  background: #d32f2f;
-}
+.btnCancel:hover { background: #d32f2f; }
 
-.paginationArea {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
+.paginationArea { display: flex; justify-content: center; gap: 6px; }
+.btnPageFirst, .btnPagePrev, .btnPage, .btnPageActive, .btnPageNext, .btnPageLast {
+  padding: 6px 12px; border: 1px solid #a2b7aa; border-radius: 4px;
+  font-size: 14px; cursor: pointer; background: #ffffff; color: #387448;
 }
-.btnPageFirst,
-.btnPagePrev,
-.btnPage,
-.btnPageActive,
-.btnPageNext,
-.btnPageLast {
-  padding: 6px 12px;
-  border: 1px solid #a2b7aa;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  background: #ffffff;
-  color: #387448;
+.btnPageFirst:hover, .btnPagePrev:hover, .btnPageNext:hover, .btnPageLast:hover { background: #eaf3eb; }
+.btnPageFirst:disabled, .btnPagePrev:disabled, .btnPageNext:disabled, .btnPageLast:disabled {
+  background: #f0f4f1; color: #c0cfc3; cursor: not-allowed;
 }
-.btnPageFirst:hover,
-.btnPagePrev:hover,
-.btnPageNext:hover,
-.btnPageLast:hover {
-  background: #eaf3eb;
-}
-.btnPageFirst:disabled,
-.btnPagePrev:disabled,
-.btnPageNext:disabled,
-.btnPageLast:disabled {
-  background: #f0f4f1;
-  color: #c0cfc3;
-  cursor: not-allowed;
-}
-.btnPage {
-  margin: 0 4px;
-}
-.btnPage:hover {
-  background: #eaf3eb;
-}
-.btnPageActive {
-  background: #57a964;
-  color: #ffffff;
-  border-color: #57a964;
+.btnPage { margin: 0 4px; }
+.btnPage:hover { background: #eaf3eb; }
+.btnPageActive { background: #57a964; color: #ffffff; border-color: #57a964; }
+
+
+.trLow {
+  background: #ffeaea !important;
 }

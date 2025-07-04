@@ -1,9 +1,9 @@
 .sidebar {
   background: linear-gradient(160deg, #486e50 74%, #678970 100%);
   color: #fff;
-  min-height: 100vh;
+  height: 1186px;
   width: 230px;
-  border-radius: 0 24px 24px 0;
+  border-radius: 0 15px 0 0;
   box-shadow: 2px 0 14px 0 rgba(56,78,60,0.10);
   display: flex;
   flex-direction: column;
@@ -12,8 +12,8 @@
 }
 
 .title {
-  margin: 6px 0 38px 2px;
-  font-size: 27px;
+  margin: 6px 0 38px 11px;
+  font-size: 35px;
   font-weight: 700;
   letter-spacing: -1.4px;
 }
@@ -25,7 +25,7 @@
 }
 .listItem {
   padding: 13px 18px;
-  font-size: 18px;
+  font-size: 23px;
   font-weight: 500;
   margin-bottom: 7px;
   border-radius: 9px;
