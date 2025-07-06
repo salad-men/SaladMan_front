@@ -137,111 +137,117 @@ export default function HqUpdateMenu() {
         <header className={styles.pageHeader}>
           <h2>메뉴 등록</h2>
         </header>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <table className={styles.table}>
-            <tbody>
-              <tr>
-                <td className={styles.labelCell}>메뉴 사진</td>
-                <td><input type="file" id="image" accept="image/*" onChange={handleImageChange} /></td>
-                <td className={styles.labelCell}>판매가</td>
-                <td>
-                  <div className={styles.flexRow}>
-                    <input type="number" id="price" 
-                      value={salePrice} onChange={(e) => setSalePrice(e.target.value)} 
-                      placeholder="판매가 (₩)" min="0" 
-                    />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.labelCell}>메뉴 이름</td>
-                <td>
-                  <input type="text" id="name"
-                    value={menuName} onChange={(e) => setMenuName(e.target.value)} required 
-                  />
-                </td>
-                <td className={styles.labelCell}>카테고리</td>
+        <div className={styles.innerbox}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <div className={styles.tableborder}>
+            <table className={styles.table}>
+              <tbody>
+                <tr>
+                  <td className={styles.labelCell}>메뉴 사진</td>
+                  <td><input type="file" id="image" accept="image/*" onChange={handleImageChange} /></td>
+                  <td className={styles.labelCell}>판매가</td>
                   <td>
-                    <select
-                      value={selectedMenuCategoryId}
-                      onChange={(e) => setSelectedMenuCategoryId(e.target.value)}
-                      required
-                    >
-                      <option value="">카테고리를 선택하세요</option>
-                      {Menucategory.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
+                    <div>
+                      <input type="number" id="price" 
+                        value={salePrice} onChange={(e) => setSalePrice(e.target.value)} 
+                        placeholder="판매가 (₩)" min="0" 
+                      />
+                    </div>
                   </td>
-              </tr>
-              <tr>
-                <td className={styles.labelCell}>메뉴 재료</td>
-                <td colSpan={3} className={styles.ingredientCell}>
-                  <div className={styles.ingredientWrapper}>
-                  <table className={styles.ingredientTable}>
-                    <thead>
-                      <tr>
-                        <th>카테고리</th>
-                        <th>재료명</th>
-                        <th>용량</th>
-                        <th>-</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {ingredientDetails.map((ing) => (
-                        <tr key={ing.ingredientId}>
-                          <td>{ing.category}</td>
-                          <td>{ing.name}</td>                          
-                          <td>
-                            <input
-                              type="number"
-                              placeholder="용량 입력"
-                              value={ing.quantity}
-                              min="0"
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                setIngredientDetails(prev =>
-                                  prev.map(item =>
-                                    item.ingredientId === ing.ingredientId ? { ...item, quantity: value } : item
-                                  )
-                                );
-                              }}
-                            />
-                            {ing.unit}
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className={styles.deleteButton}
-                              onClick={() => {
-                                setIngredientDetails(prev =>
-                                  prev.filter(item => item.ingredientId !== ing.ingredientId)
-                                );
-                              }}
-                            >
-                              삭제
-                            </button>
+                </tr>
+                <tr>
+                  <td className={styles.labelCell}>메뉴 이름</td>
+                  <td>
+                    <input type="text" id="name"
+                      value={menuName} onChange={(e) => setMenuName(e.target.value)}
+                      placeholder="메뉴명을 입력하세요" required
+                    />
+                  </td>
+                  <td className={styles.labelCell}>카테고리</td>
+                    <td>
+                      <select
+                        value={selectedMenuCategoryId}
+                        onChange={(e) => setSelectedMenuCategoryId(e.target.value)}
+                        required
+                      >
+                        <option value="">카테고리를 선택하세요</option>
+                        {Menucategory.map((cat) => (
+                          <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                </tr>
+                <tr>
+                  <td className={styles.labelCell}>메뉴 재료</td>
+                  <td colSpan={3} className={styles.ingredientCell}>
+                    <div className={styles.ingredientWrapper}>
+                    <table className={styles.ingredientTable}>
+                      <thead>
+                        <tr>
+                          <th>카테고리</th>
+                          <th>재료명</th>
+                          <th>용량</th>
+                          <th>-</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {ingredientDetails.map((ing) => (
+                          <tr key={ing.ingredientId}>
+                            <td>{ing.category}</td>
+                            <td>{ing.name}</td>                          
+                            <td>
+                              <input
+                                type="number"
+                                placeholder="용량 입력"
+                                value={ing.quantity}
+                                min="0"
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  setIngredientDetails(prev =>
+                                    prev.map(item =>
+                                      item.ingredientId === ing.ingredientId ? { ...item, quantity: value } : item
+                                    )
+                                  );
+                                }}
+                              />
+                              {ing.unit}
+                            </td>
+                            <td>
+                              <button
+                                type="button"
+                                className={styles.deleteButton}
+                                onClick={() => {
+                                  setIngredientDetails(prev =>
+                                    prev.filter(item => item.ingredientId !== ing.ingredientId)
+                                  );
+                                }}
+                              >
+                                삭제
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                        <tr>
+                          <td colSpan={4} onClick={openModal} style={{cursor:'pointer'}}>
+                            +
                           </td>
                         </tr>
-                      ))}
-                      <tr>
-                        <td colSpan={4}>
-                           <a onClick={openModal}> + </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                      </tbody>
+                    </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </form>
+
           <div>
             <button type="submit" className={styles.button}>저장</button>
           </div>
-        </form>
+        </div>
 
         {isModalOpen && (
           <div className={`${styles.modal} ${isModalOpen ? styles.modalOpen : ''}`}>
