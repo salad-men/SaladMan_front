@@ -1,108 +1,116 @@
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: #f9fafb;
+  background: #f9fafb;
+  font-family: 'Pretendard', sans-serif;
 }
-
-.mainContent {
+.content {
   flex: 1;
-  padding: 40px 40px 60px;
-  background-color: white;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
+  padding: 0;
+  background: #fff;
+  border-left: 1px solid #e4e9e7;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  align-items: center;
+}
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2f6042;
+  margin: 64px 0 30px 0;
+  letter-spacing: -1px;
+  text-align: center;
+  width: 100%;
+}
+.detail {
+  width: 1120px;
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: 0 8px 40px rgba(70, 110, 80, 0.13);
+  padding: 30px 58px 48px 18px;
+  display: flex;
+  flex-direction: column;
+}
+.detailRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 42px;
+}
+.label {
+  flex: 0 0 130px;
+  font-weight: 600;
+  font-size: 1.16rem;
+  color: #23422f;
+  text-align: right;
+  margin-right: 28px;
+  width: 130px;
+  line-height: 1.25;
+}
+.value {
+  flex: 1;
   position: relative;
 }
-
-.pageTitle {
-  font-size: 28px;
-  font-weight: 700;
-  color: #2f4f27;
-  margin-bottom: 8px;
-  user-select: none;
-}
-
-.writeDate {
-  font-size: 14px;
-  color: #555;
-  text-align: right;
-  margin-bottom: 20px;
-  user-select: none;
-}
-
-.detailTable {
+.inputLike {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 16px;
-  color: #333;
-  table-layout: fixed;
+  font-size: 1.13rem;
+  padding: 18px 20px;
+  border: 1.7px solid #b4c7b3;
+  border-radius: 10px;
+  background: #f8faf9;
+  box-sizing: border-box;
+  color: #222;
+  outline: none;
+  resize: vertical;
+  height: 58px;
 }
-
-.tableHeader,
-.tableData {
-  border: 1px solid #ddd;
-  padding: 16px 20px;
-  vertical-align: top;
+.inputLike[readonly] {
+  background: #f8faf9;
+  color: #222;
 }
-
-.tableHeader {
-  width: 120px;
-  background-color: #f4f4f4;
-  font-weight: 700;
-  text-align: left;
-  color: #2f4f27;
-  user-select: none;
+.inputLike:focus {
+  border-color: #338f55;
+  box-shadow: 0 0 7px rgba(51,143,85, 0.13);
 }
-
-.tableData {
-  white-space: pre-wrap;
-  word-break: break-word;
+input.inputLike {
+  height: 58px;
 }
-
-.writer {
-  font-weight: 700;
-  color: #2f4f27;
+textarea.inputLike {
+  min-height: 180px;
+  height: 180px;
+  max-height: 360px;
+  resize: vertical;
 }
-
-.buttonGroup {
-  margin-top: 40px;
+.btnBox {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  gap: 50px;
+  margin-top: 38px;
+  justify-content: center;
 }
-
-.listButton {
-  padding: 10px 20px;
+.btn {
+  border-radius: 11px;
+  padding: 18px 88px;
+  font-size: 1.18rem;
   font-weight: 700;
-  font-size: 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  user-select: none;
   border: none;
-  background-color: #d9d9d9;
-  color: #2f4f27;
-  transition: background-color 0.3s ease;
-}
-
-.listButton:hover {
-  background-color: #bfbfbf;
-}
-
-.sendButton {
-  padding: 10px 20px;
-  font-weight: 700;
-  font-size: 15px;
-  border-radius: 4px;
   cursor: pointer;
-  user-select: none;
-  border: none;
-  background-color: #2f4f27;
-  color: white;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 12px rgba(60, 90, 70, 0.10);
+  transition: background 0.16s, color 0.11s;
+  letter-spacing: -0.7px;
+}
+.btnSubmit {
+  background: #42794d;
+  color: #fff;
+}
+.btnSubmit:hover {
+  background: #265c30;
+}
+.btnCancel {
+  background: #e6e7ea;
+  color: #555;
+}
+.btnCancel:hover {
+  background: #c2c6c3;
+  color: #222;
 }
 
-.sendButton:hover {
-  background-color: #225121;
-}

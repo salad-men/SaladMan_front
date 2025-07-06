@@ -1,20 +1,18 @@
 /* ─── 전체 레이아웃 ─── */
 .container {
   display: flex;
-  min-height: 900px;
-  background: #f7f8fa;
+  
+  background: #fff;
 }
 .content {
   flex: 1;
-  /* padding: 10px 16px 0 16px; */
-  padding: 16px;
 }
 .innerContainer {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  /* padding: 0 24px 10px 24px; */
-  padding:24px;
+  padding: 0 24px 10px 280px; 
+  min-height: 1230px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 .title {

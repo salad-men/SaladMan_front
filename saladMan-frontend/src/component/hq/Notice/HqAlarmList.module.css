@@ -1,111 +1,142 @@
-.wrapper {
+.container {
   display: flex;
-  height: calc(100vh - 64px);
-  background-color: #f9fafb;
-  overflow: hidden;
-  overflow-y: scroll;
+  background: #f9fafb;
 }
-
 .content {
-  flex: 1;
-  align-self: flex-start;
-  padding: 30px 0 0 0;
-  overflow-y: auto;
-  max-width: 1500px;
-  margin: 0 auto;
-  position: relative;
+  position: absolute;
+  top: 80px;
+  left: 220px;
+  width: 2200px;
+  padding: 40px 40px 40px 60px;
+  background: #fff;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.title {
+  font-size: 2.2rem;
+  color: #2f6042;
+  font-weight: 700;
+  margin-top: 80px;
+  margin-bottom: 38px;
+  letter-spacing: -1px;
+  text-align: center;
+}
+.pageHeader h2 {
+  font-size: 2.1rem;
+  color: #2f6042;
+  letter-spacing: -1px;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .pageHeader {
   display: flex;
   flex-direction: column;
 }
-
-.inboxControls {
+.topActions, .inboxControls {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
-
-.inboxControls button {
-  border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 5px;
-    padding: 0 10px;
-    height: 34px;
+.actionBtn, .inboxControls button {
+  padding: 6px 16px;
+  margin-right: 8px;
+  border-radius: 4px;
+  background: #4d774e;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.18s;
 }
-
-.inboxControls button:hover {
-  background-color: #3F6940;
-}
-
+.actionBtn:last-child, .inboxControls button:last-child { margin-right: 0; }
+.actionBtn:hover, .inboxControls button:hover { background: #2f6042; }
 .counts {
-  font-size: 13px;
+  font-size: 14px;
+  color: #5a6d5a;
   display: flex;
   align-items: flex-end;
-  
+  gap: 4px;
 }
-
-.inboxTable {
+.tableWrap {
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  border: 1px solid #e4e9e7;
+  background: #fff;
+}
+.table, .inboxTable {
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;
 }
-
-.inboxTable td:nth-child(1),
-.inboxTable th:nth-child(1) {
-  width: 5%; /* 체크박스 열 */
-}
-
-.inboxTable td:nth-child(2),
-.inboxTable th:nth-child(2) {
-  width: 11%; /* 제목 */
-}
-
-.inboxTable td:nth-child(3),
-.inboxTable th:nth-child(3) {
-  width: 58%; /* 내용 */
-}
-
-.inboxTable td:nth-child(4),
-.inboxTable th:nth-child(4) {
-  width: 25%; /* 수신일시 */
-}
-
-.inboxTable button {
-  margin: auto 4px;
-  padding: 8px 12px;
-  border: none;
-  background-color: #4D774E;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.inboxTable th {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  font-weight: normal;
-}
-
-.inboxTable td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-.inboxTable td:first-child {
-   text-align: center;
-}
-
-.inboxTable td:last-child {
-   text-align: right;
-}
-
-.inboxTable .unread {
-  font-weight: bold;
-}
-
-.inboxTable tbody tr td.noData {
+.table th, .inboxTable th,
+.table td, .inboxTable td {
+  border: 1px solid #e4e9e7;
+  padding: 12px 10px;
   text-align: center;
+  background: none;
+}
+.table th, .inboxTable th {
+  background: #eaf3eb;
+  color: #2d4836;
+  font-weight: 600;
+  font-size: 15px;
+}
+.table tr:hover, .inboxTable tr:hover {
+  background: #f0f8f2;
+}
+.checkbox, .inboxTable th:first-child, .inboxTable td:first-child {
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.table th:not(.checkbox), .table td:not(.checkbox),
+.inboxTable th:not(:first-child), .inboxTable td:not(:first-child) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.unread {
+  font-weight: bold;
+  background: #f5ffe9;
+}
+.noData, .inboxTable .noData {
+  padding: 32px 0;
   color: #aaa;
-  padding: 30px;
+  text-align: center;
+  font-style: italic;
+  background: #fff;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+.pagination button {
+  padding: 7px 16px;
+  border: 1px solid #a2b7aa;
+  background: #fff;
+  color: #387448;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.15s;
+}
+.pagination button.active,
+.pagination button:focus {
+  background: #57a964;
+  color: #fff;
+  border-color: #57a964;
+}
+.pagination button:disabled {
+  background: #f0f4f1;
+  color: #c0cfc3;
+  cursor: not-allowed;
 }

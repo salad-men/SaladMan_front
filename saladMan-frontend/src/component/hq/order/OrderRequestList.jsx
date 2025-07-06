@@ -175,7 +175,14 @@ export default function OrderRequestList() {
                     </table>
 
                     <div className={styles.pagination}>
-                        <button onClick={() => handleSearch(currentPage - 1)} disabled={currentPage === 1}>{"<"}</button>
+                        <button
+                            onClick={() => handleSearch(1)}
+                            disabled={currentPage === 1}
+                        >{"<<"}</button>
+                        <button
+                            onClick={() => handleSearch(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >{"<"}</button>
                         {Array.from({ length: totalPages }, (_, i) => (
                             <button
                                 key={i}
@@ -185,8 +192,16 @@ export default function OrderRequestList() {
                                 {i + 1}
                             </button>
                         ))}
-                        <button onClick={() => handleSearch(currentPage + 1)} disabled={currentPage === totalPages}>{">"}</button>
+                        <button
+                            onClick={() => handleSearch(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >{">"}</button>
+                        <button
+                            onClick={() => handleSearch(totalPages)}
+                            disabled={currentPage === totalPages}
+                        >{">>"}</button>
                     </div>
+
                 </div>
             </div>
         </>

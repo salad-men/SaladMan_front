@@ -21,6 +21,11 @@ export default function OrderItemManage() {
 
     const token = useAtomValue(accessTokenAtom);
 
+    const PAGE_BLOCK = 10;
+    const startPage = Math.floor((currentPage - 1) / PAGE_BLOCK) * PAGE_BLOCK + 1;
+    const endPage = Math.min(startPage + PAGE_BLOCK - 1, totalPages);
+
+
     useEffect(() => {
         if (!token) return;
         fetchItems();
@@ -166,16 +171,46 @@ export default function OrderItemManage() {
                         </tbody>
                     </table>
                     <div className={styles.ordItemManagePagination}>
+                        {/* 이전 10페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(Math.max(1, startPage - PAGE_BLOCK))}
+                            disabled={startPage === 1}
+                        >
+                            &lt;&lt;
+                        </button>
+                        {/* 이전 1페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            &lt;
+                        </button>
 
-                        {[...Array(totalPages)].map((_, idx) => (
+                        {/* 현재 블록의 페이지들 */}
+                        {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
                             <button
-                                key={idx}
-                                className={currentPage === idx + 1 ? styles.active : ""}
-                                onClick={() => setCurrentPage(idx + 1)}
+                                key={page}
+                                className={currentPage === page ? styles.active : ""}
+                                onClick={() => setCurrentPage(page)}
                             >
-                                {idx + 1}
+                                {page}
                             </button>
                         ))}
+
+                        {/* 다음 1페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                        >
+                            &gt;
+                        </button>
+                        {/* 다음 10페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(Math.min(totalPages, startPage + PAGE_BLOCK))}
+                            disabled={endPage === totalPages}
+                        >
+                            &gt;&gt;
+                        </button>
                     </div>
                 </div>
             </div>

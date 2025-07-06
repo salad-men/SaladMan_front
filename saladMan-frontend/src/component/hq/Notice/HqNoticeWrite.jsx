@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { myAxios } from "../../../config";
@@ -12,37 +12,52 @@ export default function HqNoticeWrite() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imgFile, setImgFile] = useState(null);
+  const [imgFiles, setImgFiles] = useState([]); // [{file, preview}]
   const [fileFile, setFileFile] = useState(null);
-  const [imgPreview, setImgPreview] = useState(null);
 
-  // 이미지 미리보기 설정
+  const imgInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  // 이미지 업로드 (여러 개, 최대 5개)
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImgFile(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => setImgPreview(e.target.result);
-      reader.readAsDataURL(file);
+    const files = Array.from(e.target.files);
+    if (imgFiles.length + files.length > 5) {
+      alert("이미지는 최대 5개까지 첨부할 수 있습니다.");
+      return;
     }
+    // 각 파일의 미리보기
+    const fileReaders = files.map(
+      (file) =>
+        new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (ev) => resolve({ file, preview: ev.target.result });
+          reader.readAsDataURL(file);
+        })
+    );
+    Promise.all(fileReaders).then((fileObjs) => {
+      setImgFiles((prev) => [...prev, ...fileObjs].slice(0, 5));
+    });
+    e.target.value = ""; // 동일 파일 연속 첨부 대비
+  };
+
+  // 이미지 X버튼 삭제
+  const handleRemoveImg = (idx) => {
+    setImgFiles((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const handleFileChange = (e) => setFileFile(e.target.files[0]);
 
-  // 등록 함수
   const handleSubmit = async (e) => {
-    if (!token) return;
     e.preventDefault();
-
+    if (!token) return;
     if (!title.trim() || !content.trim()) {
       alert("제목과 내용을 입력하세요.");
       return;
     }
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-    if (imgFile) formData.append("img", imgFile);
+    imgFiles.forEach(({ file }) => formData.append("img", file));
     if (fileFile) formData.append("file", fileFile);
 
     try {
@@ -61,62 +76,89 @@ export default function HqNoticeWrite() {
     <div className={styles.container}>
       <NoticeSidebar />
       <main className={styles.content}>
-        <h2>공지 등록</h2>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <table className={styles.table}>
-            <tbody>
-              <tr>
-                <th>제목</th>
-                <td>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className={styles.input}
-                    required
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>내용</th>
-                <td>
-                  <textarea
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    rows={10}
-                    className={styles.input}
-                    required
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>이미지</th>
-                <td>
+        <h2 className={styles.title}>공지 등록</h2>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.formRow}>
+            <label className={styles.label}>제목</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={styles.input}
+              required
+              placeholder="제목을 입력하세요"
+            />
+          </div>
+          <div className={styles.formRow}>
+            <label className={styles.label}>내용</label>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className={styles.input}
+              required
+              placeholder="내용을 입력하세요"
+            />
+          </div>
+          <div className={styles.formRow}>
+            <label className={styles.label}>이미지</label>
+            <div className={styles.imagesContainer}>
+              {imgFiles.map((img, idx) => (
+                <div className={styles.imageBox} key={idx}>
+                  <img src={img.preview} alt={`img-${idx}`} className={styles.imagePreview} />
+                  <button
+                    type="button"
+                    className={styles.imgRemoveBtn}
+                    title="삭제"
+                    onClick={() => handleRemoveImg(idx)}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              {/* Plus 버튼은 5개 미만일 때만 */}
+              {imgFiles.length < 5 && (
+                <div
+                  className={styles.imageBox + " " + styles.addBox}
+                  onClick={() => imgInputRef.current.click()}
+                  tabIndex={0}
+                  role="button"
+                  title="이미지 추가"
+                >
+                  <img src="/plus.png" alt="이미지 추가" className={styles.plusIcon} />
                   <input
                     type="file"
                     accept="image/*"
+                    style={{ display: "none" }}
+                    ref={imgInputRef}
+                    multiple
                     onChange={handleImageChange}
                   />
-                  {imgPreview && (
-                    <div>
-                      <img
-                        src={imgPreview}
-                        alt="미리보기"
-                        style={{ maxWidth: 200, marginTop: 10 }}
-                      />
-                    </div>
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <th>첨부파일</th>
-                <td>
-                  <input type="file" onChange={handleFileChange} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className={styles.formRow}>
+            <label className={styles.label}>첨부파일</label>
+            <div className={styles.fileAttachBox}>
+              <button
+                type="button"
+                className={styles.fileBtn}
+                onClick={() => fileInputRef.current.click()}
+              >
+                파일 선택
+              </button>
+              <span className={styles.fileName}>
+                {fileFile ? fileFile.name : "선택된 파일 없음"}
+              </span>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+            </div>
+          </div>
+          <div className={styles.btnBox}>
             <button type="submit" className={styles.btnSubmit}>
               등록
             </button>

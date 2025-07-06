@@ -1,198 +1,224 @@
 .storeRegisterContainer {
   display: flex;
   min-height: 100vh;
-  background-color: #f9fafb;
+  background: #f9fafb;
 }
 
-.mainContent {
+.regMainContent {
   flex: 1;
-  align-self: flex-start;
-  padding: 40px 40px 60px;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  position: relative;
-  width: 1100px;
-
-}
-
-.mainContent h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 24px;
-}
-
-.formSection {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-}
-
-.registerTable {
-  border-collapse: collapse;
-  width: 100%;
-  max-width: 500px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: white;
-}
-
-.registerTable td {
-  padding: 12px 10px;
-  vertical-align: middle;
-}
-
-.registerTable td:first-child {
-  width: 80px;
-  font-weight: bold;
-  text-align: center;
-  white-space: nowrap;
-  color: #333;
-}
-
-.registerTable input[type="text"],
-.registerTable input[type="text"]:focus {
-  background: none !important;
-  /* ← 여기 추가 */
-  width: 200px;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  box-sizing: border-box;
-  margin-right: 5px;
-  margin-bottom: 10px;
-}
-
-.registerTable input[type="password"] {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.registerTable input[type="button"] {
-  padding: 8px 16px;
-  background-color: #4D774E;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  margin-left: 6px;
-}
-
-.registerTable input[type="button"]:hover {
-  background-color: #226236;
-}
-
-.mapBox {
-  width: 500px;
-  height: 400px;
-  background-color: #ccc;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 14px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border-left: 1px solid #e4e9e7;
+  min-width: 0;
+  padding: 0;
+  position: relative;
+}
 
+.title {
+  font-size: 2.2rem;
+  color: #2f6042;
+  font-weight: 700;
+  margin-top: 80px;
+  margin-bottom: 38px;
+  letter-spacing: -1px;
+  text-align: center;
+}
+
+.regFormSection {
+  width: 100%;
+  max-width: 1040px;
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.09);
+  border-radius: 28px;
+  padding: 60px 40px 46px 60px;
+  margin-bottom: 60px;
+  box-sizing: border-box;
+  align-items: flex-start;
+}
+
+.regFormBox {
+  width: 100%;
+  max-width: 430px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+.formRow label {
+  min-width: 98px;
+  color: #355b3b;
+  font-size: 1.09rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  text-align: left;
+  line-height: 1;
+}
+.flexRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 통일된 입력창/버튼 스타일 */
+.inputBase,
+input[type="text"],
+input[type="password"],
+input[type="button"] {
+  height: 40px;
+  padding: 0 13px;
+  font-size: 1.04rem;
+  border: 1.2px solid #b4c7b3;
+  border-radius: 5px;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.16s;
+  color: #222;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #4d774e;
+}
+
+/* 입력창 길이별 */
+.longInput {
+  width: 260px;
+  max-width: 100%;
+  min-width: 120px;
+}
+.shortInput {
+  width: 75px;
+  text-align: right;
+}
+.passwordInput {
+  width: 200px;
+}
+
+.checkButton,
+input[type="button"] {
+  height: 40px;
+  width: 70px;
+  background: #f7faf8;
+  color: #387448;
+  border: 1.2px solid #b4c7b3;
+  border-radius: 5px;
+  font-size: 1.01rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.16s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.checkButtonSmall {
+  height: 40px;
+  width: 90px;
+  background: #f7faf8;
+  color: #387448;
+  border: 1.2px solid #b4c7b3;
+  border-radius: 5px;
+  font-size: 0.96rem;
+  padding: 0 9px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-left: 5px;
+  transition: background 0.16s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.checkButton:hover,
+.checkButtonSmall:hover,
+input[type="button"]:hover {
+  background: #eaf3eb;
+}
+
+.inputFalse {
+  border: 1.5px solid crimson !important;
+  background: #fff4f4 !important;
+}
+.inputSuccess {
+  border: 1.5px solid #2f6042 !important;
+  background: #f4fff4 !important;
+}
+
+/* 일 단위 라벨 */
+.dayLabel {
+  margin-left: 4px;
+  font-size: 1.01rem;
+  color: #3b663b;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* 지도 */
+.mapBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.kakaoMap {
+  width: 420px;
+  height: 420px;
+  background: #eef3ed;
+  border: 1.4px solid #b4c7b3;
+  border-radius: 18px;
 }
 
 .buttonGroup {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 16px;
-  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-top: 16px;
 }
-
 .backButton {
-  padding: 10px 20px;
-  background-color: #b3b4b4;
-  color: white;
+  padding: 14px 48px;
+  border-radius: 9px;
   border: none;
-  border-radius: 6px;
-  font-size: 15px;
+  background: #8a908a;
+  color: #fff;
+  font-size: 1.13rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background 0.16s;
+  margin-right: 10px;
 }
-
 .backButton:hover {
-  background-color: #a8a8a8;
+  background: #6b746b;
 }
 
 .submitButton {
-  padding: 10px 20px;
-  background-color: #226236;
-  color: white;
+  padding: 14px 56px;
+  border-radius: 9px;
   border: none;
-  border-radius: 6px;
-  font-size: 15px;
+  background: #4d774e;
+  color: #fff;
+  font-size: 1.14rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(33,90,70,0.10);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background 0.16s;
+  letter-spacing: 2px;
 }
-
 .submitButton:hover {
-  background-color: #388e3c;
+  background: #3b663b;
 }
 
-.checkButton {
-  margin-top: 6px;
-  margin-left: 6px;
-  padding: 8px 14px;
-  background-color: #4D774E;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.checkButton:hover {
-  background-color: #226236;
-}
-
-input.inputFalse:focus {
-  background-color: #ffe5e5 !important;
-  border: 1px solid #ff4d4f !important;
-  outline: none;
-  box-shadow: none;
-}
-
-input.inputSuccess:focus {
-  background-color: #e5ffe6 !important;
-  border: 1px solid #51f759 !important;
-  outline: none;
-  box-shadow: none;
-}
-
-input[type="text"].inputFalse {
-  background-color: #ffe5e5 !important;
-  border: 1px solid #ff4d4f !important;
-}
-
-input[type="text"].inputSuccess {
-  background-color: #e5ffe6 !important;
-  border: 1px solid #51f759 !important;
-}
-
-input.inputFalse:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
-  box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
-  border: 1px solid #ff4d4f !important;
-}
-
-input.inputSuccess:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
-  box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
-  border: 1px solid #51f759 !important;
-}

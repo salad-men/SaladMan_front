@@ -274,6 +274,7 @@ export default function StoreAccountModify() {
                 <div className={styles.mainContent}>
                     <h2>매장 정보 수정</h2>
                     <div className={styles.formSection}>
+                        <div className={styles.registerCard}>
                         <table className={styles.registerTable}>
                             <tbody>
                                 <tr>
@@ -337,10 +338,11 @@ export default function StoreAccountModify() {
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                         <div className={styles.mapBox}>
                             <div
                                 ref={mapContainerRef}
-                                style={{ width: '500px', height: '400px' }}
+                                style={{ width: '600px', height: '600px' }}
                             ></div>
                         </div>
                     </div>

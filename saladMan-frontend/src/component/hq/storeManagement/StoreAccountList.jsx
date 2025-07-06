@@ -64,7 +64,6 @@ export default function StoreAccountList() {
                     <h2>매장/계정 목록</h2>
 
                     <div className={styles.storeAccTopBar}>
-                        <button className={styles.registerButton} onClick={() => navigate("/hq/storeRegister")}>매장등록</button>
                         <div className={styles.searchGroup}>
                             <select value={location} onChange={(e) => setLocation(e.target.value)}>
                                 <option>전체 지역</option>
@@ -91,10 +90,11 @@ export default function StoreAccountList() {
                                 <option>매장 상태</option>
                                 <option value="true">운영</option>
                                 <option value="false">폐점</option>
-                            </select> */}
+                                </select> */}
 
                             <input type="text" placeholder="검색어 입력" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
                             <button className={styles.searchButton} onClick={handleSearch}>검색</button>
+                                <button className={styles.registerButton} onClick={() => navigate("/hq/storeRegister")}>매장등록</button>
                         </div>
                     </div>
 

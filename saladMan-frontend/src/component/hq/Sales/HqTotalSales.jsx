@@ -163,9 +163,9 @@ const HqTotalSales = () => {
                             onClick={() => setGroupType('WEEK')}>주별</button>
                         <button className={groupType === 'MONTH' ? styles.active : ''}
                             onClick={() => setGroupType('MONTH')}>월별</button>
+                        <button className={styles.searchButton} onClick={handleSearch}>검색</button>
                     </div>
                     <div className={styles.filterActions}>
-                        <button onClick={handleSearch}>검색</button>
                     </div>
                 </div>
 

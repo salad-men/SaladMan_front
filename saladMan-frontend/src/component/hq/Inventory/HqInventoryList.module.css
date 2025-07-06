@@ -2,9 +2,8 @@
 .content { flex: 1; margin: 0px; overflow: hidden; }
 .innerContainer {
   background: #fff;
-  /* border: 1px solid #ddd; */
-  /* border-radius: 0px; */
-  padding: 24px 100px 0 100px;
+  /* margin-left:100px; */
+  padding: 24px 100px 0 280px;
   box-shadow: 0 4px 12px 
   rgba(0,0,0,0.06);
   height: 1220px;
