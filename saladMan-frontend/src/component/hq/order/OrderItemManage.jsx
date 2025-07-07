@@ -55,8 +55,8 @@ export default function OrderItemManage() {
 
     const fetchCategories = async () => {
         try {
-            const res = await myAxios(token).get("/hq/ingredientCategories");
-            setCategories(res.data);
+            const res = await myAxios(token).get("/hq/inventory/categories");
+            setCategories(res.data.categories || []);
         } catch (err) {
             console.error("카테고리 불러오기 실패", err);
         }
@@ -95,7 +95,7 @@ export default function OrderItemManage() {
             <div className={styles.orderItemContainer}>
                 <OrderSidebar />
                 <div className={styles.orderItemContent}>
-                    <h2>수주 품목</h2>
+                    <h2>수주 품목 설정</h2>
 
                     <div className={styles.searchControls}>
                         <select

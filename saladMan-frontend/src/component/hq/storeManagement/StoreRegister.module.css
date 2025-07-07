@@ -1,6 +1,5 @@
 .storeRegisterContainer {
   display: flex;
-  /* min-height: 100vh; */
   background: #f9fafb;
 }
 
@@ -71,11 +70,8 @@
   gap: 8px;
 }
 
-/* 통일된 입력창/버튼 스타일 */
-.inputBase,
-input[type="text"],
-input[type="password"],
-input[type="button"] {
+/* ===== input & button (클래스 기반만) ===== */
+.inputBase {
   height: 40px;
   padding: 0 13px;
   font-size: 1.04rem;
@@ -87,13 +83,9 @@ input[type="button"] {
   color: #222;
   outline: none;
 }
-
-input[type="text"]:focus,
-input[type="password"]:focus {
+.inputBase:focus {
   border-color: #4d774e;
 }
-
-/* 입력창 길이별 */
 .longInput {
   width: 260px;
   max-width: 100%;
@@ -107,8 +99,18 @@ input[type="password"]:focus {
   width: 200px;
 }
 
-.checkButton,
-input[type="button"] {
+/* 검증 결과별 스타일 */
+.inputFalse {
+  border: 1.5px solid crimson !important;
+  background: #fff4f4 !important;
+}
+.inputSuccess {
+  border: 1.5px solid #2f6042 !important;
+  background: #f4fff4 !important;
+}
+
+/* 버튼 (button 태그만 적용) */
+.checkButton {
   height: 40px;
   width: 70px;
   background: #f7faf8;
@@ -143,18 +145,8 @@ input[type="button"] {
   box-sizing: border-box;
 }
 .checkButton:hover,
-.checkButtonSmall:hover,
-input[type="button"]:hover {
+.checkButtonSmall:hover {
   background: #eaf3eb;
-}
-
-.inputFalse {
-  border: 1.5px solid crimson !important;
-  background: #fff4f4 !important;
-}
-.inputSuccess {
-  border: 1.5px solid #2f6042 !important;
-  background: #f4fff4 !important;
 }
 
 /* 일 단위 라벨 */
@@ -221,4 +213,3 @@ input[type="button"]:hover {
 .submitButton:hover {
   background: #3b663b;
 }
-

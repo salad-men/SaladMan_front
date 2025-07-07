@@ -62,7 +62,7 @@ export default function HqNoticeDetail() {
                 readOnly
                 value={notice.title}
                 placeholder="제목을 입력하세요"
-                className={styles.inputLike}
+                className={`${styles.inputLike} ${styles.inputTitle}`}
               />
             </div>
           </div>
@@ -73,7 +73,7 @@ export default function HqNoticeDetail() {
                 readOnly
                 value={notice.content}
                 placeholder="내용을 입력하세요"
-                className={styles.inputLike}
+                className={`${styles.inputLike} ${styles.inputContent}`}
               />
             </div>
           </div>

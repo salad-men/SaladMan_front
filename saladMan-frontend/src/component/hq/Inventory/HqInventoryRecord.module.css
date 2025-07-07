@@ -11,7 +11,7 @@
   background: #fff;
   /* border: 1px solid #ddd;
   border-radius: 8px; */
-  padding: 0px 100px 0 279px;
+  padding: 0px 63px 0 279px;
   /* box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   height: 1245px; */
   overflow: auto;
@@ -73,10 +73,14 @@
 }
 .table {
   width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed;
+  height: 580px;
 }
 .table th, .table td {
  border: 1px solid #e4e9e7;padding:10px; text-align:center; border-bottom:1px solid #e4e9e7;
 }
+.table td {
+    height: 31px;
+  }
 .table th { background:#eaf3eb; color:#2d4836; font-weight:600; }
 .table tr:hover { background:#f0f8f2; }
 .noData {

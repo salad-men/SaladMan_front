@@ -6,7 +6,7 @@
 }
 .orderItemContent {
     flex: 1;
-    padding: 25px 100px 60px 280px; 
+    padding: 25px 62px 60px 280px; 
     background: #fff;
     box-sizing: border-box;
     /* border-left: 1px solid #e4e9e7; */
@@ -65,7 +65,7 @@
     background: #fff;
     color: #2a3a1a;
     width: 180px;
-    height: 13px;
+    height: 22px;
     transition: border-color 0.2s;
 }
 .searchInput:focus {
@@ -95,6 +95,7 @@
     font-size: 14px;
     background: #fff;
     margin-bottom: 12px;
+    height: 585px;
 }
 .orderItemTable th, .orderItemTable td {
     border: 1px solid #e4e9e7;
@@ -160,7 +161,7 @@ input:checked + .slider:before {
 .ordItemManagePagination {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 15px;
     gap: 6px;
 }
 .ordItemManagePagination button {

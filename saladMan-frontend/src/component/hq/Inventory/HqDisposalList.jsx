@@ -127,23 +127,38 @@ export default function HqDisposalList() {
           <h2 className={styles.title}>폐기 목록</h2>
 
           {/* 필터 */}
-          <div className={styles.filters}>
+<div className={styles.filters}>
             <div className={styles.row}>
               <label className={styles.label}>기간</label>
-              <input type="date" value={startDate} onChange={handleStartDate} />
+              <input
+                type="date"
+                value={startDate}
+                onChange={handleStartDate}
+                className={styles.inputDate}
+              />
               <span>~</span>
-              <input type="date" value={endDate} onChange={handleEndDate} />
+              <input
+                type="date"
+                value={endDate}
+                onChange={handleEndDate}
+                className={styles.inputDate}
+              />
               <div className={styles.periodButtons}>
                 {["all", "today", "week", "month"].map(t => (
-                  <button type="button" key={t} onClick={() => setPeriod(t)}>
-                    {t === "all" ? "전체" : t === "today" ? "오늘" : t === "week" ? "1주" : "1달"}
+                  <button
+                    type="button"
+                    key={t}
+                    className={styles.periodBtn}
+                    onClick={() => setPeriod(t)}
+                  >
+                    {t === "all" ? "전체" : t === "today" ? "오늘" : t === "week" ? "한 주" : "한 달"}
                   </button>
                 ))}
               </div>
             </div>
 
             <div className={styles.row}>
-              <select value={category} onChange={handleFilterChange(setCategory)}>
+              <select value={category} onChange={handleFilterChange(setCategory)} className={styles.selectBox}>-
                 <option value="all">전체 분류</option>
                 {categories.map(c => (
                   <option key={c.id} value={c.id}>{c.name}</option>

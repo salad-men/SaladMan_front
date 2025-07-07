@@ -3,10 +3,10 @@
 .innerContainer {
   background: #fff;
   /* margin-left:100px; */
-  padding: 24px 100px 0 280px;
+  padding: 24px 65px 0 280px;
   box-shadow: 0 4px 12px 
   rgba(0,0,0,0.06);
-  height: 1220px;
+  /* height: 1220px; */
   overflow: auto;
 }
 .title { font-size: 1.8rem; color: #2f6042; margin-bottom: 16px; margin-top: 16px;  }
@@ -18,7 +18,7 @@
 .inputDate { padding: 6px; border: 1px solid #b4c7b3; border-radius: 4px; }
 .labelSep { font-size: 1.2rem; color: #3d5a40; }
 .periodBtn {
-  margin-left: 8px; padding: 4px 10px;
+  padding: 4px 10px;
   border: 1px solid #4d774e; background: #f7faf8;
   color: #4d774e; border-radius: 4px;
   cursor: pointer; font-size: 13px;

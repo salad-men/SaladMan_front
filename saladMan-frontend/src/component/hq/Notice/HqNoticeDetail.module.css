@@ -24,18 +24,21 @@
   width: 100%;
 }
 .detail {
+  margin-top: 15px;
   width: 1120px;
+  height: 620px;
   background: #fff;
   border-radius: 26px;
   box-shadow: 0 8px 40px rgba(70, 110, 80, 0.13);
   padding: 30px 58px 48px 18px;
   display: flex;
   flex-direction: column;
+  height: 630px;
 }
 .detailRow {
   display: flex;
   align-items: center;
-  margin-bottom: 42px;
+  margin-bottom: 50px;
 }
 .label {
   flex: 0 0 130px;
@@ -62,11 +65,25 @@
   color: #222;
   outline: none;
   resize: vertical;
-  height: 440px;
+  height: 200px;
 }
 .inputLike:focus {
   border-color: #338f55;
   box-shadow: 0 0 7px rgba(51,143,85, 0.13);
+}
+
+.inputTitle {   
+  height: 44px;
+  min-height: 36px;
+  max-height: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.inputContent {   
+  height: 110px;
+  min-height: 100px;
+  max-height: 300px;
 }
 .imagesContainer {
   display: flex;
@@ -99,7 +116,7 @@
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 12px 26px;
+  padding: 5px 26px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -118,7 +135,7 @@
 .btnBox {
   display: flex;
   gap: 50px;
-  margin-top: 38px;
+  margin-top: 70px;
   justify-content: center;
 }
 .btn {

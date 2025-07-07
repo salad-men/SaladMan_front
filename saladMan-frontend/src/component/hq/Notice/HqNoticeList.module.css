@@ -27,7 +27,7 @@
   font-size: 1.8rem;
   color: #2f6042;
   margin-bottom: 16px;
-  margin-top: 50px;
+  margin-top: 40px;
   font-weight: 700;
   letter-spacing: -1px;
   text-align: left;
@@ -46,12 +46,11 @@
   border: 1px solid #b4c7b3;
   border-radius: 4px;
   font-size: 14px;
-  height: 32px;
 }
 
 .inputSearch {
   width: 160px;
-  height: 32px;
+  height: 20px;
 }
 
 .searchBtn {

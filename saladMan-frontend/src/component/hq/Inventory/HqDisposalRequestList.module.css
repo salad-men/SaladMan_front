@@ -1,7 +1,6 @@
 /* ─── 전체 레이아웃 ─── */
 .container {
   display: flex;
-  
   background: #fff;
 }
 .content {
@@ -9,13 +8,10 @@
 }
 .innerContainer {
   background: #fff;
-  /* border: 1px solid #ddd;
-  border-radius: 8px; */
-  padding: 0 24px 10px 280px; 
-  /* min-height: 1230px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06); */
+  padding: 0 63px 10px 280px; 
 }
 .title {
+  margin-top: 37px;
   font-size: 1.8rem;
   color: #2f6042;
   margin-bottom: 16px;
@@ -36,13 +32,29 @@
   color: #3d5a40;
 }
 
-/* ─── 입력 폼 공통 ─── */
-input[type="date"],
-input[type="text"],
-select {
+/* 날짜 입력 */
+.inputDate {
   padding: 6px 10px;
   border: 1px solid #b4c7b3;
   border-radius: 4px;
+  background: #fff;
+  font-size: 1rem;
+  min-width: 120px;
+}
+.inputDate:focus {
+  border-color: #4d774e;
+}
+
+/* 셀렉트박스 */
+.selectBox {
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 1rem;
+}
+.selectBox:focus {
+  border-color: #4d774e;
 }
 
 /* ─── 기간 단축 버튼 ─── */
@@ -51,16 +63,17 @@ select {
   gap: 6px;
   margin-left: 8px;
 }
-.periodButtons button {
+.periodBtn {
   background: #f7faf8;
   border: 1px solid #4d774e;
   border-radius: 4px;
   padding: 4px 10px;
   color: #4d774e;
+  font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s;
 }
-.periodButtons button:hover {
+.periodBtn:hover {
   background: #4d774e;
   color: white;
 }
@@ -71,7 +84,7 @@ select {
   display: flex;
   gap: 8px;
 }
-.bulkActions button {
+.btnRow {
   padding: 6px 14px;
   background: #4d774e;
   color: white;
@@ -79,19 +92,47 @@ select {
   border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
+  font-size: 1rem;
   transition: background 0.2s;
+  margin-right: 4px;
 }
-.bulkActions button:hover {
+.btnRow:hover:enabled {
   background: #3b663b;
 }
-.bulkActions button:disabled {
+.btnRow:disabled {
   background: #ccc;
+  cursor: not-allowed;
+}
+.btnReject {
+  padding: 6px 14px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.btnReject:hover:enabled {
+  background: #d32f2f;
+}
+.btnReject:disabled {
+  background: #f1a9a0;
   cursor: not-allowed;
 }
 
 /* ─── 검색 / 정렬 ─── */
 .inputSearch {
   width: 160px;
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 1rem;
+}
+.inputSearch:focus {
+  border-color: #4d774e;
 }
 .searchBtn {
   padding: 6px 14px;
@@ -100,6 +141,7 @@ select {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 1rem;
   transition: background 0.2s;
 }
 .searchBtn:hover {
@@ -113,6 +155,10 @@ select {
 }
 .sortSelect {
   padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 1rem;
 }
 
 /* ─── 테이블 ─── */
@@ -121,8 +167,10 @@ select {
 }
 .table {
   width: 100%;
+  height: 580px;
   border-collapse: collapse;
   table-layout: fixed;
+  font-size:14px;
 }
 .table th,
 .table td {
@@ -133,108 +181,60 @@ select {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.table td {
+  height: 31px;
+}
 .table thead {
   background: #eaf3eb;
   color: #2d4836;
 }
 
-/* ─── 열 너비 설정 ─── */
+/* 열 너비 설정 */
 .table th:nth-child(1),
 .table td:nth-child(1) {
-  width: 40px;   /* 선택 */
+  width: 40px;
 }
 .table th:nth-child(2),
 .table td:nth-child(2) {
-  width: 80px;   /* 지점 */
+  width: 80px;
 }
 .table th:nth-child(3),
 .table td:nth-child(3) {
-  width: 70px;   /* 분류 */
+  width: 70px;
 }
 .table th:nth-child(4),
 .table td:nth-child(4) {
-  width: 120px;  /* 품목명 */
+  width: 120px;
 }
 .table th:nth-child(5),
 .table td:nth-child(5) {
-  width: 60px;   /* 단위 */
+  width: 60px;
 }
 .table th:nth-child(6),
 .table td:nth-child(6) {
-  width: 80px;   /* 요청량 */
+  width: 80px;
 }
 .table th:nth-child(7),
 .table td:nth-child(7) {
-  width: 100px;  /* 요청일 */
+  width: 100px;
 }
 .table th:nth-child(8),
 .table td:nth-child(8) {
-  width: 80px;   /* 상태 */
+  width: 80px;
 }
 .table th:nth-child(9),
 .table td:nth-child(9) {
-  width: 240px;  /* 조치 */
+  width: 240px;
 }
 
-/* ─── 데이터 없을 때 ─── */
+/* 데이터 없을 때 */
 .noData {
   text-align: center;
   padding: 20px 0;
   color: #999;
 }
 
-/* ─── 행별 버튼 ─── */
-/* 승인 버튼 */
-.btnRow {
-  margin: 0 4px;
-  padding: 4px 10px;
-  background: #4d774e;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.btnRow:hover:enabled {
-  background: #3b663b;
-}
-.btnRow:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-/* 반려 버튼 */
-.btnReject {
-  margin: 0 4px;
-  padding: 4px 10px;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.btnReject:hover:enabled {
-  background: #d32f2f;
-}
-.btnReject:disabled {
-  background: #f1a9a0;
-  cursor: not-allowed;
-}
-
-/* ─── 인라인 반려 입력 ─── */
-/* 반려 사유 입력창을 짧게 줄이고, 넘치는 텍스트는 … 로 처리 */
-.rejectInput {
-  width: 220px;
-  margin-right: 10px;
-  padding: 4px 8px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-
-/* 인라인 반려/취소 */
+/* 행별 승인/반려/취소 */
 .btnConfirmReject {
   padding: 6px 12px;
   background: #f44336;
@@ -244,6 +244,7 @@ select {
   cursor: pointer;
   transition: background 0.2s;
   margin-right: 4px;
+  font-size: 1rem;
 }
 .btnConfirmReject:hover {
   background: #d32f2f;
@@ -256,9 +257,31 @@ select {
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s;
+  font-size: 1rem;
 }
 .btnCancel:hover {
   background: #bfbfbf;
+}
+
+/* 반려사유 입력 */
+.rejectInput {
+  width: 220px;
+  margin-right: 10px;
+  padding: 4px 8px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+/* 체크박스 */
+.inputCheckbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #4d774e;
 }
 
 /* ─── 페이징 ─── */
@@ -268,19 +291,20 @@ select {
   justify-content: center;
   gap: 6px;
 }
-.pagination button {
+.pageBtn {
   padding: 6px 12px;
   border: 1px solid #a2b7aa;
   border-radius: 4px;
   background: white;
   color: #387448;
   cursor: pointer;
+  font-size: 1rem;
   transition: background 0.2s;
 }
-.pagination button:hover {
+.pageBtn:hover {
   background: #eaf3eb;
 }
-.pagination button:disabled {
+.pageBtn:disabled {
   background: #f0f4f1;
   color: #c0cfc3;
   cursor: not-allowed;
@@ -291,16 +315,34 @@ select {
   border-color: #57a964;
 }
 
+/* ─── 모달 ─── */
 .modalOverlay {
-  position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.4); z-index: 2000; display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .modalBox {
-  background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 32px 24px; min-width: 320px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 32px 24px;
+  min-width: 320px;
 }
 .textarea {
-  width: 100%; border-radius: 6px; border: 1px solid #ccc; padding: 12px; margin-bottom: 16px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  resize: vertical;
 }
 .modalActions {
-  display: flex; justify-content: flex-end; gap: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
