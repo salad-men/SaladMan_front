@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./PaymentPage.module.css";
 
 
-export default function PaymentTest() {
+export default function PaymentPage() {
     const location = useLocation();
     const navigate = useNavigate();
     const { orderId, amount } = location.state || {};
@@ -42,8 +43,8 @@ export default function PaymentTest() {
 
         const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
             "#payment-widget",
-      { value: amount, currency: "KRW" },
-      { variantKey: "DEFAULT" }
+            { value: amount, currency: "KRW" },
+            { variantKey: "DEFAULT" }
         );
 
         paymentWidget.renderAgreement(
@@ -80,14 +81,15 @@ export default function PaymentTest() {
     };
 
     return (
-        <div>
-            {/* 할인 쿠폰 */}
-            
-            {/* 결제 UI, 이용약관 UI 영역 */}
+        <div className={styles.container}>
             <div id="payment-widget" />
-            <div id="agreement" />
-            {/* 결제하기 버튼 */}
-            <button onClick={handlePaymentRequest}>결제하기</button>
+            <div id="agreement" className={styles.agreementSection} />
+            <button
+                className={styles.paymentButton}
+                onClick={handlePaymentRequest}
+            >
+                💳 결제하기
+            </button>
         </div>
     );
 }
