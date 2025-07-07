@@ -49,26 +49,39 @@ const HqTotalMenu = () => {
                     <h2>전체 메뉴 조회</h2>
                     <div className={styles.controls}>
                         <select id="sortSelect" value={sort} onChange={handleSortChange}>
-                            <option value="release_asc">출시일 순 (최신순)</option>
-                            <option value="release_desc">출시일 순 (오래된순)</option>
-                            <option value="name_asc">이름순 (가나다)</option>
-                            <option value="name_desc">이름순 (역순)</option>
-                            <option value="price_desc">가격순 (낮은 가격)</option>
-                            <option value="price_asc">가격순 (높은 가격)</option>
+                            <option value="release_desc">출시일 순 (최신순)</option>
+                            <option value="release_asc">출시일 순 (오래된순)</option>
+                            <option value="name_desc">이름순 (가나다)</option>
+                            <option value="name_asc">이름순 (역순)</option>
+                            <option value="price_asc">가격순 (낮은 가격)</option>
+                            <option value="price_desc">가격순 (높은 가격)</option>
                         </select>
                     </div>
                 </header>
 
                 <section className={styles.menuGrid}>
-                    {menus.map(menu => (
+                    {menus.map(menu => {
+                        const isNew = (() => {
+                        if (!menu.createdAt) return false;
+                        const now = new Date();
+                        const created = new Date(menu.createdAt);
+                        return (
+                            created.getFullYear() === now.getFullYear() &&
+                            created.getMonth() === now.getMonth()
+                        );
+                        })();
+
+                        return (
                         <div className={styles.menuCard} key={menu.id}>
                             <div className={styles.imageWrapper}>
-                                <img src={`/${menu.name}.png`} alt={menu.name} />
+                            <img src={`/${menu.name}.png`} alt={menu.name} />
+                            {isNew && <span className={styles.badge}>new</span>}
                             </div>
                             <h3>{menu.name}</h3>
                             <p>{menu.salePrice.toLocaleString()}원</p>
                         </div>
-                    ))}
+                        );
+                    })}
                 </section>
 
                 <div className={styles.pagination}>

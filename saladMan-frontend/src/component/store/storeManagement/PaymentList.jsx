@@ -8,11 +8,18 @@ import StoreEmpSidebar from "./StoreEmpSidebar";
 const PaymentList = () => {
     const [payments, setPayments] = useState([]);
     const [status, setStatus] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
     const [pageInfo, setPageInfo] = useState({curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
     const [pageNums, setPageNums] = useState([]);
     const [token] = useAtom(accessTokenAtom);
+    
+    const [startDate, setStartDate] = useState(
+        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+            .toLocaleDateString('sv-SE')
+            .substring(0, 10)
+    );
+    const [endDate, setEndDate] = useState(
+        new Date().toLocaleDateString('sv-SE').substring(0, 10)
+    );
 
     useEffect(() => {
         if (token) {
@@ -35,10 +42,11 @@ const PaymentList = () => {
         .then(res => {
             setPayments(res.data.content);
             setPageInfo(res.data.pageInfo);
+            console.log(res.data.pageInfo)
 
             const pages = [];
             for (let i = res.data.pageInfo.startPage; i <= res.data.pageInfo.endPage; i++) {
-            pages.push(i);
+                pages.push(i);
             }
             setPageNums(pages);
         })

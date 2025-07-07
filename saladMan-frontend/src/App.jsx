@@ -124,18 +124,31 @@ function App() {
   location.pathname.startsWith("/hq/");
 
   // fcm알람
-  const openModal = async () => {
-    if (!token) return;
+  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
+
+  const fetchAlarms = async (open = false) => {
+  if (!token) return;
     try {
       const res = await myAxios(token).post("/alarms");
       setAlarms(res.data);
-      setIsAlarmOpen(true);
+      if (open) setIsAlarmOpen(true);
     } catch (err) {
       console.error("알림 데이터를 가져오는데 실패했습니다.", err);
     }
   };
+
+  // 초기 알림 로딩
+  useEffect(() => {
+    fetchAlarms(false);
+  }, [token]);
+
+  // 모달 열기
+  const openModal = () => {
+    fetchAlarms(true);
+  };
+
+  // 모달 닫기
   const closeModal = () => setIsAlarmOpen(false);
-  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
 
   return (
     <>
@@ -231,8 +244,16 @@ function App() {
 
       {/* fcm알람 */}
       {isLoggedIn && (
-        <div onClick={openModal}
-        style={{position: "absolute", top: 8, right: 45, fontSize: 23}}>🔔</div>
+        <>
+          <div onClick={openModal}
+          style={{position: "absolute", top: 8, right: 45, fontSize: 23, cursor:"pointer"}}>🔔</div>
+          {alarms.length > 0 && (
+            <div style={{
+              width: '5px', height: '5px', backgroundColor: 'red',
+              position: 'absolute', top: 14, right: 47, borderRadius: '50%'
+            }}></div>
+          )}
+        </>
       )}
       {isAlarmOpen && (
         <AlarmModal

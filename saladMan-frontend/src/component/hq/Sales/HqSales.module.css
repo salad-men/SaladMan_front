@@ -1,0 +1,136 @@
+.wrapper {
+  display: flex;
+  height: calc(100vh - 64px);
+  background-color: #f9fafb;
+  overflow-y: scroll;
+}
+
+.content {
+  flex: 1;
+  align-self: flex-start;
+  padding: 30px 0 0 0;
+  overflow-y: auto;
+  max-width: 1500px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 필터 영역 */
+.filterBox {
+  display: flex;
+  background-color: white;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.filterRow {
+  display: flex;
+  padding: 10px 0;
+}
+
+.filterLabel {
+  width: 70px;
+  font-weight: bold;
+  margin: auto;
+  padding: 5px;
+}
+
+.filterRow select,
+.filterRow input[type="date"],
+.filterRow button {
+  height: 34px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin-right: 5px;
+}
+
+.active {
+  background-color: #4D774E;
+  color: white;
+}
+
+/* 필터 추가 액션 */
+.filterActions {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.filterActions button {
+  padding: 8px 20px;
+  margin: 0 5px;
+  border: none;
+  background-color: #4D774E;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filterContent input[type="text"] {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 차트 및 테이블 */
+.chartBox {
+  display: flex;
+  margin-left: 40px;
+}
+
+.box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+}
+
+.summaryBox {
+  width: 240px;
+}
+
+.chart {
+  display: flex;
+}
+
+.chart h4 {
+  margin: 0;
+}
+
+/* 매출 테이블 */
+.salesTable {
+  width: 930px;
+  max-height: 300px;
+  border-radius: 10px;
+  margin: auto;
+  overflow-y: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.salesTable table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.salesTable thead {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+
+.salesTable th,
+.salesTable td {
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+  font-size: 13px;
+  text-align: center;
+}
