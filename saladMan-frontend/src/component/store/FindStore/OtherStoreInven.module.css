@@ -1,14 +1,15 @@
 .wrapper {
   display: flex;
   height: calc(100vh - 64px);
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow: hidden;
   overflow-y: scroll;
+      padding: 24px 100px 0 280px;
 }
 
 .content {
    flex: 1;
-  padding: 30px 20px 0;
+  padding: 30px 20px;
   max-width: 1500px;
   margin: 0 auto;
   display: flex;
@@ -20,7 +21,12 @@
   display: flex;
   flex-direction: column;
 }
-
+  .pageHeader h2 {
+    margin: 0 0 16px;
+    font-size: 28px;
+    color: #3d5a40;
+    font-weight: bold;
+  }
 .mainArea {
   display: flex;
   gap: 20px;
