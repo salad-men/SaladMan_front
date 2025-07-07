@@ -1,8 +1,9 @@
 .wrapper {
   display: flex;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 55px);
   background-color: #f9fafb;
-  overflow: hidden;
+  overflow: auto;
+  flex-direction: row;
 }
 
 .content {
@@ -20,12 +21,16 @@
   flex-direction: column;
 }
 
+.pageHeader h2{
+  margin-bottom: 0;
+}
+
 .controls {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   right: 0;
 
 }
@@ -47,13 +52,16 @@
 }
 
 .menuGrid {
+  height: 650px;
   display: grid;
   grid-template-columns: repeat(5, 1fr); 
-  gap: 30px;
+  gap: 25px;
+  row-gap: 15px;
   padding: 5px;
 }
 
 .menuCard {
+  height: 275px;
   background-color: white;
   border-radius: 10px;
   padding: 15px;
@@ -67,7 +75,10 @@
 }
 
 .menuCard img {
-  width: 100%;
+  width: 230px;
+  height: 220px;
+  border-radius: 10px;
+  object-fit: cover;
 }
 
 .menuCard h3,
@@ -77,19 +88,20 @@
 
 .badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  background-color: rgb(230, 0, 0);
+  top: 228px;
+  left: 25px;
+  background-color: rgba(255, 9, 9, 0.904);
   color: white;
   font-size: 12px;
   padding: 3px 8px;
   border-radius: 5px;
+  
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 15px;
   gap: 4px;
 }
 

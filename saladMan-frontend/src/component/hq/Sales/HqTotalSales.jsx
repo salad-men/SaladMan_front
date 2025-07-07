@@ -1,4 +1,4 @@
-import styles from './HqTotalSales.module.css';
+import styles from './HqSales.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config.jsx';
@@ -157,6 +157,7 @@ const HqTotalSales = () => {
                         <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
                             ~ 
                         <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
+                        <label className={styles.filterLabel}>검색 단위</label>
                         <button className={groupType === 'DAY' ? styles.active : ''}
                             onClick={() => setGroupType('DAY')}>일별</button>
                         <button className={groupType === 'WEEK' ? styles.active : ''}
@@ -169,6 +170,7 @@ const HqTotalSales = () => {
                     </div>
                 </div>
 
+                {/* 차트 및 테이블 */}
                 <div className={styles.dashboard}>
                     <div className={styles.chartBox}>
                         <div className={styles.summaryBox}>

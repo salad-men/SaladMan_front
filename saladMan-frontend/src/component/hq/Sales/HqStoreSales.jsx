@@ -4,7 +4,7 @@ import { myAxios } from '/src/config.jsx';
 import { useAtom } from 'jotai';
 import Chart from 'chart.js/auto';
 import HqSidebarSales from './HqSidebarSales';
-import style from './HqStoreSales.module.css';
+import styles from './HqSales.module.css';
 
 const HqStoreSales = () => {
     const [stores, setStores] = useState([]);
@@ -28,10 +28,10 @@ const HqStoreSales = () => {
 
         axios.get('/hq/storeSales/filter')
             .then(res => {
-                setStores(res.data);
+                const filteredStores = res.data.filter(store => store.id !== 1);
+                setStores(filteredStores);
 
-                // 지역 중복 제거
-                const uniqueLocations = [...new Set(res.data.map(store => store.location))];
+                const uniqueLocations = [...new Set(filteredStores.map(store => store.location))];
                 setLocations(uniqueLocations);
             })
             .catch(err => {
@@ -162,16 +162,16 @@ const HqStoreSales = () => {
     }, [salesData]);
 
     return (
-        <div className={style.wrapper}>
+        <div className={styles.wrapper}>
             <HqSidebarSales />
-            <div className={style.content}>
-                <header className={style.pageHeader}>
+            <div className={styles.content}>
+                <header className={styles.pageHeader}>
                     <h2>매출 조회(지점)</h2>
                 </header>
 
-                <div className={style.filterBox}>
-                    <div className={style.filterRow}>
-                        <label className={style.filterLabel}>점포 선택</label>
+                <div className={styles.filterBox}>
+                    <div className={styles.filterRow}>
+                        <label className={styles.filterLabel}>점포 선택</label>
                         <select
                             value={selectedLocation}
                             onChange={(e) => setSelectedLocation(e.target.value)}
@@ -185,6 +185,7 @@ const HqStoreSales = () => {
                             value={selectedStoreId}
                             onChange={(e) => setSelectedStoreId(e.target.value)}
                             disabled={!selectedLocation}
+                            style={{width:'150px'}}
                         >
                             <option value="">지점명</option>
                             {storeOptions.map(store => (
@@ -192,38 +193,42 @@ const HqStoreSales = () => {
                             ))}
                         </select>
 
-                        <div className={style.filterRow}>
-                            <label className={style.filterLabel}>기간</label>
-                            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
-                            ~ &nbsp;
-                            <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
-                            <button className={groupType === 'DAY' ? style.active : ''} onClick={() => setGroupType('DAY')}>일별</button>
-                            <button className={groupType === 'WEEK' ? style.active : ''} onClick={() => setGroupType('WEEK')}>주별</button>
-                            <button className={groupType === 'MONTH' ? style.active : ''} onClick={() => setGroupType('MONTH')}>월별</button>
-                            <button className={style.searchButton} onClick={handleSearch}>검색</button>
-                        </div>
+                        <label className={styles.filterLabel}>기간</label>
+                        <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
+                            ~ 
+                        <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
+                        <label className={styles.filterLabel}>검색 단위</label>
+                        <button className={groupType === 'DAY' ? styles.active : ''}
+                            onClick={() => setGroupType('DAY')}>일별</button>
+                        <button className={groupType === 'WEEK' ? styles.active : ''}
+                            onClick={() => setGroupType('WEEK')}>주별</button>
+                        <button className={groupType === 'MONTH' ? styles.active : ''}
+                            onClick={() => setGroupType('MONTH')}>월별</button>
+                    </div>
+                    <div className={styles.filterActions}>
+                        <button onClick={handleSearch}>검색</button>
                     </div>
                 </div>
 
                 {/* 차트 및 테이블 */}
-                <div className={style.dashboard}>
-                    <div className={style.chartBox}>
-                        <div className={style.summaryBox}>
-                            <div className={style.box}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
-                            <div className={style.box}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue?.toLocaleString()}</strong></div>
+                <div className={styles.dashboard}>
+                    <div className={styles.chartBox}>
+                        <div className={styles.summaryBox}>
+                            <div className={styles.box}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
+                            <div className={styles.box}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue?.toLocaleString()}</strong></div>
                         </div>
-                        <div className={style.chart}>
-                            <div className={style.box}>
+                        <div className={styles.chart}>
+                            <div className={styles.box} style={{width:'280px'}}>
                                 <h4>🥗 판매 인기 항목</h4>
-                                <canvas ref={donutChartRef} />
+                                <canvas ref={donutChartRef}/>
                             </div>
-                            <div className={style.box}>
+                            <div className={styles.box} style={{width:'571px'}}>
                                 <h4>🥗 판매율</h4>
                                 <canvas ref={barChartRef} />
                             </div>
                         </div>
                     </div>
-                    <div className={style.salesTable}>
+                    <div className={styles.salesTable}>
                         <table>
                             <thead>
                                 <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>

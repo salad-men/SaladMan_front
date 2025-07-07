@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAtomValue } from 'jotai';
+import { useAtomValue,useAtom } from 'jotai';
 import { userAtom, accessTokenAtom } from '/src/atoms';
 import { useNavigate } from 'react-router-dom';
 import { myAxios } from '/src/config';
@@ -11,10 +11,11 @@ import useChatSSE from '../Chat/useChatSSE';
 import './HqHeader.css';
 
 const HqHeader = () => {
-  const user = useAtomValue(userAtom);
-  const token = useAtomValue(accessTokenAtom);
-  const jwt = token?.replace(/^Bearer\s+/i, '');
-  const navigate = useNavigate();
+    const [store, setStore] = useAtom(userAtom);
+    const user = useAtomValue(userAtom);
+    const token = useAtomValue(accessTokenAtom);
+    const jwt = token?.replace(/^Bearer\s+/i, '');
+    const navigate = useNavigate();
 
   // 채팅 알림 on/off
   const [chatAlarmOn, setChatAlarmOn] = useState(
