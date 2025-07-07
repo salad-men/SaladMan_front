@@ -11,7 +11,7 @@ export default function KioskMenu() {
 
   const [selectedTab, setSelectedTab] = useState('전체');
   const [cartItems, setCartItems] = useState([]);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 820);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 950);
 
   const [menuData, setMenuData] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -26,7 +26,7 @@ export default function KioskMenu() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 820);
+      setIsMobile(window.innerWidth <= 950);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

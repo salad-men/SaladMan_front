@@ -3,54 +3,57 @@
     height: calc(100vh - 64px);
     overflow: hidden;
     padding: 24px 100px 0 280px;
+    background-color: #f9fafb;
 }
+
 .orderSettingContent {
     flex: 1;
-  padding: 30px 20px;
+    padding: 30px 20px;
     background-color: white;
     display: flex;
     flex-direction: column;
     min-width: 0;
-    position: relative;
-    overflow-y: auto; /* 스크롤 추가 */
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-width: 1000px;
+    /* ✅ 원하는 최대 폭 (예: 900~1200px 사이 추천) */
+    margin: 0 auto;
 }
 
 .title {
-  margin: 0 0 16px;
-  font-size: 28px;
-  color: #3d5a40;
-  font-weight: bold;
+    margin: 0 0 24px;
+    font-size: 26px;
+    color: #3d5a40;
+    font-weight: bold;
+    border-bottom: 2px solid #4d774e;
+    padding-bottom: 8px;
 }
 
 .autoOrderHeader {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    margin-bottom: 20px;
-    width: 80%;
+    margin-bottom: 24px;
+    gap: 20px;
 }
 
 .toggleSection {
     display: flex;
     align-items: center;
     gap: 12px;
-    width:500px;
 }
 
 .toggleLabel {
     position: relative;
     display: inline-block;
-    width: 48px;
-    height: 24px;
+    width: 50px;
+    height: 26px;
 }
-
-
 
 .toggleLabel input {
     opacity: 0;
     width: 0;
     height: 0;
-    margin-left: 100px;
 }
 
 .slider {
@@ -62,14 +65,14 @@
     bottom: 0;
     background-color: #ccc;
     transition: 0.4s;
-    border-radius: 24px;
+    border-radius: 34px;
 }
 
 .slider::before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     left: 3px;
     bottom: 3px;
     background-color: white;
@@ -78,7 +81,7 @@
 }
 
 input:checked+.slider {
-    background-color: #4D774E;
+    background-color: #4d774e;
 }
 
 input:checked+.slider::before {
@@ -89,12 +92,8 @@ input:checked+.slider::before {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    color: #828282;
+    color: #555;
     font-size: 13px;
-}
-
-.infoIcon {
-    color: #4D774E;
 }
 
 .tooltipText {
@@ -120,88 +119,46 @@ input:checked+.slider::before {
     opacity: 1;
 }
 
-.settingLayout {
-    display: flex;
-    gap: 40px;
-    margin-top: 20px;
-    width: 80%;
-}
-
-.leftPanel {
-    flex: 1;
-    border: 1px solid #ccc;
-    padding: 20px;
-    background-color: #f8f8f8;
-}
-
-.rightPanel {
-    flex: 1;
-    border: 1px solid #ccc;
-    padding: 20px;
-    background-color: #f8f8f8;
-}
-
 .autoTable {
-    width: 90%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .autoTable th,
 .autoTable td {
-    border: 1px solid #ddd;
-    padding: 10px;
+    padding: 12px 10px;
     text-align: center;
     font-size: 14px;
 }
 
 .autoTable th {
-    background-color: #f1f1f1;
+    background-color: #f0f4f2;
     font-weight: 600;
 }
-.autoTable th,
-.autoTable td {
-  padding: 4px 8px; /* 셀 여백 줄이기 */
+
+.autoTable tbody tr {
+    background-color: white;
+    transition: background-color 0.2s;
 }
 
-.autoTable th:nth-child(4),
-.autoTable td:nth-child(4) {
-  width: 250px; /* 자동주문량 열 폭 줄이기 */
-}
 .autoTable tbody tr:hover {
-    background-color: #f9f9f9;
+    background-color: #f7f9f8;
 }
 
 .autoTable input[type="number"] {
-    width: 80px;
+    width: 70px;
     padding: 4px;
-}
-
-.autoTable input[type="checkbox"] {
-    transform: scale(1.2);
-}
-
-.footerSection {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.saveButton {
-    background-color: #4D774E;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
+    border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.saveButton:hover {
-    background-color: #3a5c3b;
+.autoTable input[type="checkbox"] {
+    transform: scale(1.3);
 }
-
-
 
 .qtyControl {
     display: flex;
@@ -211,11 +168,10 @@ input:checked+.slider::before {
 }
 
 .qtyControl button {
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #e2e8e4;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
@@ -223,7 +179,7 @@ input:checked+.slider::before {
 }
 
 .qtyControl button:hover {
-    background: #e1e1e1;
+    background: #d3ddd8;
 }
 
 .qtyControl input {
@@ -231,5 +187,65 @@ input:checked+.slider::before {
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
-    height: 28px;
+    height: 30px;
+}
+
+.footerSection {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.saveButton {
+    background-color: #4d774e;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.saveButton:hover {
+    background-color: #3a5c3b;
+}
+
+.orderSettingContent::-webkit-scrollbar {
+  width: 10px;             /* 세로 스크롤 너비 */
+  height: 10px;            /* 가로 스크롤 높이 */
+}
+
+.orderSettingContent::-webkit-scrollbar-track {
+  background: #f0f0f0;     /* 스크롤 트랙 색상 */
+  border-radius: 4px;
+}
+
+.orderSettingContent::-webkit-scrollbar-thumb {
+  background-color: #4D774E; /* 초록색 스크롤바 */
+  border-radius: 4px;
+  border: 2px solid #f0f0f0;
+}
+
+/* Firefox */
+.orderSettingContent {
+  scrollbar-color: #4D774E #f0f0f0;
+  scrollbar-width: thin;
+}
+
+/* 위아래 화살표 제거 (크롬/엣지) */
+.orderSettingContent::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* input type=number의 기본 화살표 없애기 (크롬, 사파리, 엣지) */
+.autoTable input[type="number"]::-webkit-inner-spin-button,
+.autoTable input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.autoTable input[type="number"] {
+  -moz-appearance: textfield;
 }
