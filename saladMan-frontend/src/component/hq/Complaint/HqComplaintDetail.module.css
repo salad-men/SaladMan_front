@@ -1,6 +1,5 @@
 .container {
   display: flex;
-  min-height: 100vh;
   background: #f9fafb;
   font-family: 'Pretendard', sans-serif;
 }
@@ -18,24 +17,25 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: #2f6042;
-  margin: 64px 0 30px 0;
+  margin: 24px 0 20px 0;
   letter-spacing: -1px;
   text-align: center;
   width: 100%;
 }
 .detail {
   width: 1120px;
+  height: 700px;
   background: #fff;
   border-radius: 26px;
   box-shadow: 0 8px 40px rgba(70, 110, 80, 0.13);
-  padding: 30px 58px 48px 18px;
+  padding: 30px 58px 0px 18px;
   display: flex;
   flex-direction: column;
 }
 .detailRow {
   display: flex;
   align-items: center;
-  margin-bottom: 42px;
+  margin-bottom: 25px;
 }
 .label {
   flex: 0 0 130px;
@@ -54,7 +54,7 @@
 .inputLike {
   width: 100%;
   font-size: 1.13rem;
-  padding: 18px 20px;
+  padding: 12px 20px;
   border: 1.7px solid #b4c7b3;
   border-radius: 10px;
   background: #f8faf9;
@@ -62,7 +62,7 @@
   color: #222;
   outline: none;
   resize: vertical;
-  height: 58px;
+  height: 20px;
 }
 .inputLike[readonly] {
   background: #f8faf9;
@@ -84,7 +84,6 @@ textarea.inputLike {
 .btnBox {
   display: flex;
   gap: 50px;
-  margin-top: 38px;
   justify-content: center;
 }
 .btn {

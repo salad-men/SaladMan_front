@@ -4,15 +4,16 @@
 
 .content {
   position: absolute;
-  top: 51px;
+  top: 70px;
   left: 230px;
   width: calc(100% - 300px);
-  padding: 40px 20px;
-    padding-left: 50px;
+  /* padding: 40px 20px; */
+  padding-left: 50px;
   background-color: #ffffff;
   box-sizing: border-box;
-  min-height: calc(100vh - 60px);
+  /* min-height: calc(100vh - 60px); */
   overflow: auto;
+  margin-top: 20px;
 }
 
 .title {
@@ -31,7 +32,8 @@
   gap: 8px;
   margin-left: 12px; /* 날짜 입력 옆 간격 */
 }
-.title { font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 16px; margin-top: 16px; }
+.title { 
+  font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 16px; margin-top: 16px; }
 
 /* 필터 */
 .filters { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
@@ -75,12 +77,28 @@
    border: 1px solid #e4e9e7;
 }
 .table {
-  width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed;
+  width:100%;
+  height: 570px;
+  border-collapse:collapse;
+  font-size:14px;
+  table-layout:fixed;
 }
 .table th, .table td {
- border: 1px solid #e4e9e7;padding:10px; text-align:center; border-bottom:1px solid #e4e9e7;
+ border: 1px solid #e4e9e7;
+ padding:10px;
+ text-align:center;
+ border-bottom:1px solid #e4e9e7;
+
 }
-.table th { background:#eaf3eb; color:#2d4836; font-weight:600; }
+.table th {
+   background:#eaf3eb;
+   color:#2d4836;
+   font-weight:600; 
+  }
+
+  .table td {
+    height: 31px;
+  }
 .table tr:hover { background:#f0f8f2; }
 .expired { background:#ffe6e3 !important; color:#cb4747; }
 

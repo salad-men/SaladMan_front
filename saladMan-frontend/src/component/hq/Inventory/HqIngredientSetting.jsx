@@ -216,7 +216,11 @@ console.log("categories", categories);
           <div className={styles.filters}>
             <div className={styles.row}>
               {/* <span className={styles.label}>분류</span> */}
-              <select value={filterCategory} onChange={onFilterChange(setFilterCategory)}>
+              <select
+                className={styles.selectBox}
+                value={filterCategory}
+                onChange={onFilterChange(setFilterCategory)}
+              >
                 <option value="all">전체 재료</option>
                 {categories.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>

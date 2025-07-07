@@ -158,130 +158,137 @@ export default function StoreRegister() {
             <div className={styles.regMainContent}>
                 <h2 className={styles.title}>매장 등록</h2>
                 <form className={styles.regFormSection} onSubmit={registerStore} autoComplete="off">
-                    <div className={styles.regFormBox}>
-                        {/* 매장 이름 */}
-                        <div className={styles.formRow}>
-                            <label htmlFor="storeName">매장이름</label>
-                            <div className={styles.flexRow}>
-                                <input
-                                    type="text"
-                                    name="storeName"
-                                    value={store.storeName}
-                                    onChange={edit}
-                                    className={`${styles.inputBase} ${
-                                        isStoreNameValid === false
-                                            ? styles.inputFalse
-                                            : isStoreNameValid === true
-                                            ? styles.inputSuccess
-                                            : ""
-                                    } ${styles.longInput}`}
-                                    autoComplete="off"
-                                />
-                                <button type="button" className={styles.checkButtonSmall} onClick={checkStoreName}>중복확인</button>
-                            </div>
-                        </div>
-                        {/* 주소/상세주소 */}
-                        <div className={styles.formRow}>
-                            <label htmlFor="address">매장위치</label>
-                            <div className={styles.flexRow}>
-                                <input
-                                    type="text"
-                                    name="address"
-                                    value={store.address}
-                                    placeholder="주소"
-                                    onChange={edit}
-                                    readOnly
-                                    className={`${styles.inputBase} ${styles.longInput}`}
-                                />
-                                <input
-                                    type="button"
-                                    value="검색"
-                                    className={`${styles.checkButtonSmall}`}
-                                    onClick={() => setIsOpen(true)}
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.formRow}>
-                            <label></label>
-                            <input
-                                type="text"
-                                name="detailAddress"
-                                value={store.detailAddress}
-                                placeholder="상세주소"
-                                onChange={edit}
-                                className={`${styles.inputBase} ${styles.longInput}`}
-                            />
-                        </div>
-                        {/* 전화번호 */}
-                        <div className={styles.formRow}>
-                            <label htmlFor="phoneNumber">전화번호</label>
-                            <input
-                                type="text"
-                                name="phoneNumber"
-                                value={store.phoneNumber}
-                                placeholder="예: 02-123-4567"
-                                onChange={edit}
-                                className={`${styles.inputBase} ${styles.longInput}`}
-                            />
-                        </div>
-                        {/* 배송소요일자 */}
-                        <div className={styles.formRow}>
-                            <label htmlFor="deliveryDay">배송소요일자</label>
-                            <div className={styles.flexRow}>
-                                <input
-                                    type="text"
-                                    name="deliveryDay"
-                                    value={store.deliveryDay}
-                                    onChange={edit}
-                                    className={`${styles.inputBase} ${styles.shortInput}`}
-                                />
-                                <span className={styles.dayLabel}>일</span>
-                            </div>
-                        </div>
-                        {/* 매장 계정 */}
-                        <div className={styles.formRow}>
-                            <label htmlFor="storeAccount">매장 계정</label>
-                            <div className={styles.flexRow}>
-                                <input
-                                    type="text"
-                                    name="storeAccount"
-                                    value={store.storeAccount}
-                                    placeholder="아이디"
-                                    onChange={edit}
-                                    className={`${styles.inputBase} ${
-                                        isUsernameValid === false
-                                            ? styles.inputFalse
-                                            : isUsernameValid === true
-                                            ? styles.inputSuccess
-                                            : ""
-                                    } ${styles.longInput}`}
-                                />
-                                <button type="button" className={styles.checkButtonSmall} onClick={checkUsername}>중복확인</button>
-                            </div>
-                        </div>
-                        {/* 비밀번호 */}
-                        <div className={styles.formRow}>
-                            <label htmlFor="storePassword">비밀번호</label>
-                            <div className={styles.flexRow}>
-                                <input
-                                    type="password"
-                                    name="storePassword"
-                                    value={store.storePassword}
-                                    placeholder="비밀번호"
-                                    onChange={edit}
-                                    className={`${styles.inputBase} ${styles.passwordInput}`}
-                                />
-                            </div>
-                        </div>
+                      <div className={styles.innerFlexRow}>
+
+                <div className={styles.regFormBox}>
+                    {/* 매장 이름 */}
+                    <div className={styles.formRow}>
+                    <label htmlFor="storeName">매장이름</label>
+                    <div className={styles.flexRow}>
+                        <input
+                        type="text"
+                        name="storeName"
+                        value={store.storeName}
+                        onChange={edit}
+                        className={[
+                            styles.inputBase,
+                            styles.longInput,
+                            isStoreNameValid === false
+                            ? styles.inputFalse
+                            : isStoreNameValid === true
+                            ? styles.inputSuccess
+                            : "",
+                        ].join(" ")}
+                        autoComplete="off"
+                        />
+                        <button type="button" className={styles.checkButtonSmall} onClick={checkStoreName}>중복확인</button>
                     </div>
-                    <div className={styles.mapBox}>
-                        <div ref={mapContainerRef} className={styles.kakaoMap} />
                     </div>
-                </form>
-                <div className={styles.buttonGroup}>
-                    <button type="button" className={styles.backButton} onClick={() => navigate("/hq/storeAccount")}>목록</button>
-                    <button type="submit" className={styles.submitButton} onClick={registerStore}>저장</button>
+                    {/* 주소/상세주소 */}
+                    <div className={styles.formRow}>
+                    <label htmlFor="address">매장위치</label>
+                    <div className={styles.flexRow}>
+                        <input
+                        type="text"
+                        name="address"
+                        value={store.address}
+                        placeholder="주소"
+                        onChange={edit}
+                        readOnly
+                        className={[styles.inputBase, styles.longInput].join(" ")}
+                        />
+                        <button
+                        type="button"
+                        className={styles.checkButtonSmall}
+                        onClick={() => setIsOpen(true)}
+                        >검색</button>
+                    </div>
+                    </div>
+                    <div className={styles.formRow}>
+                    <label></label>
+                    <input
+                        type="text"
+                        name="detailAddress"
+                        value={store.detailAddress}
+                        placeholder="상세주소"
+                        onChange={edit}
+                        className={[styles.inputBase, styles.longInput].join(" ")}
+                    />
+                    </div>
+                    {/* 전화번호 */}
+                    <div className={styles.formRow}>
+                    <label htmlFor="phoneNumber">전화번호</label>
+                    <input
+                        type="text"
+                        name="phoneNumber"
+                        value={store.phoneNumber}
+                        placeholder="예: 02-123-4567"
+                        onChange={edit}
+                        className={[styles.inputBase, styles.longInput].join(" ")}
+                    />
+                    </div>
+                    {/* 배송소요일자 */}
+                    <div className={styles.formRow}>
+                    <label htmlFor="deliveryDay">배송소요일자</label>
+                    <div className={styles.flexRow}>
+                        <input
+                        type="text"
+                        name="deliveryDay"
+                        value={store.deliveryDay}
+                        onChange={edit}
+                        className={[styles.inputBase, styles.shortInput].join(" ")}
+                        />
+                        <span className={styles.dayLabel}>일</span>
+                    </div>
+                    </div>
+                    {/* 매장 계정 */}
+                    <div className={styles.formRow}>
+                    <label htmlFor="storeAccount">매장 계정</label>
+                    <div className={styles.flexRow}>
+                        <input
+                        type="text"
+                        name="storeAccount"
+                        value={store.storeAccount}
+                        placeholder="아이디"
+                        onChange={edit}
+                        className={[
+                            styles.inputBase,
+                            styles.longInput,
+                            isUsernameValid === false
+                            ? styles.inputFalse
+                            : isUsernameValid === true
+                            ? styles.inputSuccess
+                            : "",
+                        ].join(" ")}
+                        />
+                        <button type="button" className={styles.checkButtonSmall} onClick={checkUsername}>중복확인</button>
+                    </div>
+                    </div>
+                    {/* 비밀번호 */}
+                    <div className={styles.formRow}>
+                    <label htmlFor="storePassword">비밀번호</label>
+                    <div className={styles.flexRow}>
+                        <input
+                        type="password"
+                        name="storePassword"
+                        value={store.storePassword}
+                        placeholder="비밀번호"
+                        onChange={edit}
+                        className={[styles.inputBase, styles.passwordInput].join(" ")}
+                        />
+                    </div>
+                    </div>
                 </div>
+                <div className={styles.mapBox}>
+                    <div ref={mapContainerRef} className={styles.kakaoMap} />
+                </div>
+                </div>
+                <div className={styles.buttonGroup}>
+                <button type="button" className={styles.backButton} onClick={() => navigate("/hq/storeAccount")}>목록</button>
+                <button type="submit" className={styles.submitButton}>저장</button>
+                </div>
+                </form>
+
             </div>
             {isOpen &&
                 <Modal title="주소입력" open={isOpen} footer={null} onCancel={closeHandler}>

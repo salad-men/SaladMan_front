@@ -234,8 +234,8 @@ export default function HqInventoryExpiration() {
               <div className={styles.periodButtons}>
                 <button onClick={() => setPeriodFn("all")}>전체</button>
                 <button onClick={() => setPeriodFn("today")}>오늘</button>
-                <button onClick={() => setPeriodFn("week")}>1주</button>
-                <button onClick={() => setPeriodFn("month")}>1달</button>
+                <button onClick={() => setPeriodFn("week")}>한 주</button>
+                <button onClick={() => setPeriodFn("month")}>한 달</button>
               </div>
             </div>
             <div className={styles.row}>

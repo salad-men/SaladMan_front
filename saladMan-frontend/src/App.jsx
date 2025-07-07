@@ -79,6 +79,7 @@ import HqDashboard from "@hq/dashboard/HqDashboard";
 import StoreDashboard from "@store/dashboard/StoreDashboard";
 
 import Login from "./component/common/Login";
+import AlarmModal from "./component/common/AlarmModal";
 import StoreAccountDetail from "@hq/storeManagement/StoreAccountDetail";
 import StoreAccountModify from "@hq/storeManagement/StoreAccountModify";
 import { useEffect, useState, useRef } from "react";
@@ -103,6 +104,8 @@ function App() {
   const [alarm, setAlarm] = useState({});
   const setFcmToken = useSetAtom(fcmTokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
+  const [token, setAccessToken] = useAtom(accessTokenAtom);
+  const [user, setUser] = useAtom(userAtom);
 
   useEffect(() => {
     const init = async () => {
@@ -121,8 +124,56 @@ function App() {
   location.pathname.startsWith("/store/") ||
   location.pathname.startsWith("/hq/");
 
+  // fcm알람
+  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
+
+  const fetchAlarms = async (open = false) => {
+  if (!token) return;
+    try {
+      const res = await myAxios(token).post("/alarms");
+      setAlarms(res.data);
+      if (open) setIsAlarmOpen(true);
+    } catch (err) {
+      console.error("알림 데이터를 가져오는데 실패했습니다.", err);
+    }
+  };
+
+  // 초기 알림 로딩
+  useEffect(() => {
+    fetchAlarms(false);
+  }, [token]);
+
+  // 모달 열기
+  const openModal = () => {
+    fetchAlarms(true);
+  };
+
+  // 모달 닫기
+  const closeModal = () => setIsAlarmOpen(false);
+
   return (
     <>
+      {/* fcm알람 */}
+      {token && (
+        <>
+          <div onClick={openModal}
+          style={{position: "absolute", top: 8, right: 45, fontSize: 23, cursor:"pointer"}}>🔔</div>
+          {alarms.length > 0 && (
+            <div style={{
+              width: '5px', height: '5px', backgroundColor: 'red',
+              position: 'absolute', top: 14, right: 47, borderRadius: '50%'
+            }}></div>
+          )}
+        </>
+      )}
+
+      {isAlarmOpen && (
+        <AlarmModal
+          alarms={alarms}
+          onClose={closeModal}
+        />
+      )}
+    
       <Routes>
       <Route element={<HqLayout />}>
           {/* 재고 */}

@@ -231,8 +231,8 @@ export default function HqInventoryList() {
                     : type === "today"
                     ? "오늘"
                     : type === "week"
-                    ? "1주"
-                    : "1달"}
+                    ? "한 주"
+                    : "한 달"}
                 </button>
               ))}
 

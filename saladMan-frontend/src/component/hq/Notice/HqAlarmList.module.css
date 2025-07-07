@@ -2,44 +2,52 @@
   display: flex;
   background: #f9fafb;
 }
+
 .content {
   position: absolute;
-  top: 80px;
-  left: 220px;
-  width: 2200px;
-  padding: 40px 40px 40px 60px;
+  margin-left: 220px;
+  padding: 15px 40px 40px 60px;
   background: #fff;
   box-sizing: border-box;
   overflow: auto;
 }
+
 .title {
   font-size: 2.2rem;
   color: #2f6042;
   font-weight: 700;
-  margin-top: 80px;
   margin-bottom: 38px;
   letter-spacing: -1px;
   text-align: center;
 }
+
 .pageHeader h2 {
-  font-size: 2.1rem;
+  font-size: 1.8rem;
   color: #2f6042;
   letter-spacing: -1px;
   text-align: left;
-  margin-bottom: 20px;
 }
 
 .pageHeader {
   display: flex;
   flex-direction: column;
 }
-.topActions, .inboxControls {
+
+.alarmList {
+  width: 1550px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+.inboxControls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 14px;
 }
-.actionBtn, .inboxControls button {
+
+.actionBtn,
+.inboxControls button {
   padding: 6px 16px;
   margin-right: 8px;
   border-radius: 4px;
@@ -50,8 +58,12 @@
   font-size: 14px;
   transition: background 0.18s;
 }
-.actionBtn:last-child, .inboxControls button:last-child { margin-right: 0; }
-.actionBtn:hover, .inboxControls button:hover { background: #2f6042; }
+
+.inboxControls button:hover {
+  background-color: #3F6940;
+  color: white;
+}
+
 .counts {
   font-size: 14px;
   color: #5a6d5a;
@@ -59,36 +71,93 @@
   align-items: flex-end;
   gap: 4px;
 }
+
 .tableWrap {
+  width: 1000px;
   border-radius: 8px;
   margin-bottom: 20px;
   overflow-x: auto;
   border: 1px solid #e4e9e7;
   background: #fff;
 }
-.table, .inboxTable {
+
+.table,
+.inboxTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
   table-layout: fixed;
 }
-.table th, .inboxTable th,
-.table td, .inboxTable td {
-  border: 1px solid #e4e9e7;
-  padding: 12px 10px;
+
+.inboxTable thead tr th {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.inboxTable tbody tr td {
+  text-align: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+  color: #4b4b4b;
+}
+
+.inboxTable td:nth-child(1),
+.inboxTable th:nth-child(1) {
+  width: 5%;
+  /* 체크박스 열 */
+}
+
+.inboxTable td:nth-child(2),
+.inboxTable th:nth-child(2) {
+  width: 15%;
+  /* 제목 */
+}
+
+.inboxTable td:nth-child(3),
+.inboxTable th:nth-child(3) {
+  width: 55%;
+  /* 내용 */
+}
+
+.inboxTable td:nth-child(4),
+.inboxTable th:nth-child(4) {
+  width: 10%;
+  /* 수신일시 */
+}
+
+.inboxTable td:nth-child(5),
+.inboxTable th:nth-child(5) {
+  width: 15%;
+  /* 수신일시 */
+}
+
+.inboxTable .unread {
+  font-weight: bold;
+  color: black;
+}
+
+.inboxTable tbody tr td.noData {
   text-align: center;
   background: none;
 }
-.table th, .inboxTable th {
+
+.table th,
+.inboxTable th {
   background: #eaf3eb;
   color: #2d4836;
   font-weight: 600;
   font-size: 15px;
 }
-.table tr:hover, .inboxTable tr:hover {
+
+.table tr:hover,
+.inboxTable tr:hover {
   background: #f0f8f2;
 }
-.checkbox, .inboxTable th:first-child, .inboxTable td:first-child {
+
+.checkbox,
+.inboxTable th:first-child,
+.inboxTable td:first-child {
   width: 40px;
   min-width: 40px;
   max-width: 40px;
@@ -96,29 +165,37 @@
   vertical-align: middle;
   white-space: nowrap;
 }
-.table th:not(.checkbox), .table td:not(.checkbox),
-.inboxTable th:not(:first-child), .inboxTable td:not(:first-child) {
+
+.table th:not(.checkbox),
+.table td:not(.checkbox),
+.inboxTable th:not(:first-child),
+.inboxTable td:not(:first-child) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .unread {
   font-weight: bold;
   background: #f5ffe9;
 }
-.noData, .inboxTable .noData {
+
+.noData,
+.inboxTable .noData {
   padding: 32px 0;
   color: #aaa;
   text-align: center;
   font-style: italic;
   background: #fff;
 }
+
 .pagination {
   display: flex;
   justify-content: center;
   gap: 7px;
   margin-bottom: 10px;
 }
+
 .pagination button {
   padding: 7px 16px;
   border: 1px solid #a2b7aa;
@@ -129,14 +206,49 @@
   font-size: 15px;
   transition: background 0.15s;
 }
+
 .pagination button.active,
 .pagination button:focus {
   background: #57a964;
   color: #fff;
   border-color: #57a964;
 }
+
 .pagination button:disabled {
   background: #f0f4f1;
   color: #c0cfc3;
   cursor: not-allowed;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  gap: 4px;
+}
+
+.pagination button {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination .active {
+  background-color: #4D774E;
+  color: white;
+  font-weight: bold;
 }

@@ -61,7 +61,7 @@ export default function StoreAccountList() {
                 <EmpSidebar />
 
                 <div className={styles.storeAccountContent}>
-                    <h2>매장/계정 목록</h2>
+                    <h2>매장 목록</h2>
 
                     <div className={styles.storeAccTopBar}>
                         <div className={styles.searchGroup}>

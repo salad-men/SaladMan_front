@@ -68,17 +68,47 @@
   padding: 4px 8px;
 }
 
+.tableWrapper {
+  max-height: 600px;
+}
+
+.inventoryTableHeader{
+  width: 97%;
+  max-height: 600px;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-bottom: none;
+}
+
+.inventoryTableHeader th {
+  padding: 10px;
+}
+
+.inventoryTableHeader th:first-child {
+  width: 170px;
+}
+
+.scrollBody {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
 .inventoryTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.inventoryTable th,
 .inventoryTable td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
+}
+
+.inventoryTable td:nth-child(2),
+.inventoryTable td:nth-child(3) {
+  width: 130px;
 }
 
 .inventoryTable thead {
