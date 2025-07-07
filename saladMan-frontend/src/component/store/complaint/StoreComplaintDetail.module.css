@@ -1,15 +1,14 @@
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: #ffffff;
+  padding: 24px 100px 0 280px;
 }
 
 .mainContent {
   flex: 1;
-  padding: 40px 40px 60px;
+  padding: 30px 0 0 20px;
   background-color: white;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -17,17 +16,16 @@
 }
 
 .pageTitle {
+  margin: 0 0 12px;
   font-size: 28px;
-  font-weight: 700;
-  color: #2f4f27;
-  margin-bottom: 8px;
-  user-select: none;
+  color: #3d5a40;
+  font-weight: bold;
 }
 
 .writeDate {
   font-size: 14px;
   color: #555;
-  text-align: right;
+  text-align: left;
   margin-bottom: 20px;
   user-select: none;
 }

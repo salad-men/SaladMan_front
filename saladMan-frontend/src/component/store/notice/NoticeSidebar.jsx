@@ -1,18 +1,18 @@
-import '../Sidebar.css';
+import styles from './NoticeSidebar.module.css';
 
 export default function NoticeSidebar() {
     return (
-        <div className="sidebar">
-            <h1 className="title">공지사항</h1>
-            <ul className="list">
-                <li className="listItem">
-                    <a href="/store/StoreNoticeList" className="link">공지사항</a>
+        <div className={styles.sidebar}>
+            <h1 className={styles.title}>공지사항</h1>
+            <ul className={styles.list}>
+                <li className={styles.listItem}>
+                    <a href="/store/StoreNoticeList" className={styles.link}>공지사항</a>
                 </li>
-                <li className="listItem">
-                    <a href="/store/StoreComplaintList" className="link">불편사항</a>
+                <li className={styles.listItem}>
+                    <a href="/store/StoreComplaintList" className={styles.link}>불편사항</a>
                 </li>
-                <li className="listItem">
-                    <a href="/store/alarmList" className="link">알림 목록</a>
+                <li className={styles.listItem}>
+                    <a href="/store/alarmList" className={styles.link}>알림 목록</a>
                 </li>
             </ul>
         </div>
