@@ -1,47 +1,49 @@
 .sidebar {
-  width: 230px;
-  background-color: #4d774e;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  background-color: #4D774E;
   color: white;
-  padding: 30px 20px;
+  height: 85vh;
+  width: 230px;
+  padding-top: 20px;
   box-sizing: border-box;
-  font-family: 'Pretendard', sans-serif;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  border-radius: 0 29px 29px 0;
+  z-index: 999;
 }
 
 .title {
+  margin: 10px 0 20px 20px;
+  padding-top: 10px;
+  padding-left: 20px;
   font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 24px;
-  user-select: none;
-  padding-left: 10px;
+  font-weight: bold;
 }
 
 .list {
-  list-style: none;
-  padding: 0;
+  padding: 0 0 10px;
   margin: 0;
+  list-style: none;
   flex-grow: 1;
 }
 
 .listItem {
-  margin-bottom: 16px;
+  padding: 15px 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.listItem:hover {
+  background-color: #133b13;
+  color: white;
 }
 
 .link {
-  display: block;
-  color: white;
   text-decoration: none;
-  font-size: 18px;
-  font-weight: 600;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-
-.link:hover,
-.link:focus {
-  background-color: #3f6940;
-  outline: none;
+  color: inherit;
+  display: block;
+  width: 100%;
 }
