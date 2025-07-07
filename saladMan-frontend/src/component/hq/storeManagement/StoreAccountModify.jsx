@@ -274,6 +274,7 @@ export default function StoreAccountModify() {
                 <div className={styles.mainContent}>
                     <h2>매장 정보 수정</h2>
                     <div className={styles.formSection}>
+                        <div className={styles.registerCard}>
                         <table className={styles.registerTable}>
                             <tbody>
                                 <tr>
@@ -337,18 +338,19 @@ export default function StoreAccountModify() {
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                         <div className={styles.mapBox}>
                             <div
                                 ref={mapContainerRef}
-                                style={{ width: '500px', height: '400px' }}
+                                style={{ width: '600px', height: '600px' }}
                             ></div>
                         </div>
                     </div>
 
                     <div className={styles.buttonGroup}>
-                        <button className={styles.backButton} onClick={() => navigate(-1)}>뒤로가기</button>
+                        <button className={styles.backButton} onClick={() => navigate(-1)}>목록</button>
 
-                        <button className={styles.submitButton} onClick={updateStore}>수정하기</button>
+                        <button className={styles.submitButton} onClick={updateStore}>수정</button>
                     </div>
                 </div>
             </div>

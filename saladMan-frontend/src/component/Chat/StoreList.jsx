@@ -72,8 +72,9 @@ export default function StoreList() {
               <td>{store.name}</td>
               <td>{store.username}</td>
               <td>
-                <button onClick={() => startChat(Number(store.id))}> 
-                  채팅하기
+                <button   className={styles.chatBtn}
+                        onClick={() => startChat(Number(store.id))}> 
+                  채팅
                 </button>
               </td>
             </tr>

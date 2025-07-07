@@ -6,18 +6,18 @@
   position: absolute;
   top: 51px;
   left: 230px;
-  width: calc(100% - 200px);
-  padding: 40px;
-  background-color: #f9fafb;
-  border-left: 1px solid #ddd;
+  width: calc(100% - 300px);
+  padding: 40px 20px;
+    padding-left: 50px;
+  background-color: #ffffff;
   box-sizing: border-box;
   min-height: calc(100vh - 60px);
   overflow: auto;
 }
 
 .title {
-  margin: 0 0 20px;
-  font-size: 20px;
+  margin: 0 0 16px;
+  font-size: 25px;
   color: #3d5a40;
   font-weight: bold;
 }
@@ -31,246 +31,114 @@
   gap: 8px;
   margin-left: 12px; /* 날짜 입력 옆 간격 */
 }
+.title { font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 16px; margin-top: 16px; }
 
+/* 필터 */
+.filters { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.label { font-weight: 600; min-width: 50px; }
+.periodButtons { display: flex; gap: 6px; }
 .periodButtons button {
-  padding: 6px 14px;
-  font-size: 13px;
-  border: 2px solid #4caf50; /* 초록색 테두리 */
-  border-radius: 5px;
-  background-color: white;
-  color: black; /* 글씨 검정 */
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding:4px 10px; border:1px solid #57a964; border-radius:4px;
+  background:#f7faf8; color:#2b5536; cursor:pointer; transition:background .2s;
 }
-
-.periodButtons button:hover {
-  background-color: #4caf50;
-  color: white;
+.periodButtons button:hover { background:#57a964; color:#fff; }
+.row input[type="date"], .row select {
+  padding:6px 8px; border:1px solid #b4c7b3; border-radius:4px;
+  background:#fff; font-size:14px;
 }
-
-.row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
+.storeSelect { min-width:140px; }
+.keywordInput {
+  width:180px; padding:6px 8px; border:1px solid #b4c7b3;
+  border-radius:4px; background:#fff; font-size:14px;
 }
-
-.row label {
-  font-weight: bold;
-  font-size: 14px;
+.searchBtn {
+  padding:6px 14px; background:#4d774e; color:#fff; border:none;
+  border-radius:4px; cursor:pointer; transition:opacity .2s;
 }
-
-.row input[type="date"],
-.row input[type="text"],
-.row select {
-  padding: 6px 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 200px;
-  box-sizing: border-box;
-}
-
-.row button {
-  padding: 6px 14px;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.row button:hover {
-  opacity: 0.9;
-}
-
-.btnSmall {
-  background-color: #eee;
-  color: #333;
-}
-
-.search {
-  background-color: #4d774e;
-  color: white;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 20px;
-  justify-content: flex-end;
-}
-
+.searchBtn:hover { opacity:.9; }
+.rightActions { margin-left:auto; display:flex; align-items:center; gap:8px; }
 .disposalBtn {
-  background-color: #4d774e; 
-  color: white;              
-  border: none;
-  font-weight: 500;
-  border-radius: 4px;
-  padding: 6px 14px;        
-  font-size: 14px;          
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding:6px 14px; background:#d9534f; color:#fff; border:none;
+  border-radius:4px; cursor:pointer; transition:background .2s;
+}
+.disposalBtn:hover { background:#c9302c; }
+.sortSelect {
+  padding:6px 8px; border:1px solid #b4c7b3; border-radius:4px;
+  background:#fff; font-size:14px; cursor:pointer;
 }
 
-.disposalBtn:hover {
-  background-color: #3b5a3b; 
+/* 테이블 */
+.tableWrap 
+{
+   border-radius:6px; margin-bottom:20px; overflow-x:auto; 
+   border: 1px solid #e4e9e7;
 }
-
-/* 목록 테이블 */
 .table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  table-layout: fixed;
+  width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed;
 }
-.table th,
-.table td {
-  border: 1px solid #ccc;
-  padding: 8px 10px;
-  text-align: center;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.table th, .table td {
+ border: 1px solid #e4e9e7;padding:10px; text-align:center; border-bottom:1px solid #e4e9e7;
 }
-.table th {
-  background: #f6f6f6;
-  font-weight: bold;
-  color: #3d5a40;
+.table th { background:#eaf3eb; color:#2d4836; font-weight:600; }
+.table tr:hover { background:#f0f8f2; }
+.expired { background:#ffe6e3 !important; color:#cb4747; }
+
+/* 체크박스 열 고정 */
+.table th.checkbox, .table td.checkbox {
+  width:40px; min-width:40px; max-width:40px;
+  text-align:center; vertical-align:middle; white-space:nowrap;
 }
-.checkbox {
-  width: 40px;
+
+/* 나머지 컬럼 ellipsis */
+.table th:not(.checkbox), .table td:not(.checkbox) {
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
+
+/* “데이터 없음” */
 .noData {
-  padding: 20px 0;
-  color: #777;
-  font-style: italic;
-}
-.expired {
-  background: #fdecea;
+  padding:30px 0; color:#999; font-style:italic;
 }
 
-.editable {
-  width: 60px;
-  padding: 4px 6px;
-  font-size: 12px;
-  border: 1px solid #4d774e;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.editable:focus {
-  outline: none;
-  background: #e3f2fd;
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-/* 모달 박스 */
-.modalBox {
-  position: relative;
-  background: white;
-  padding: 20px 30px 30px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 800px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 닫기 버튼 */
-.modalClose {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* 모달 상단 신청 버튼 */
-.modalTopActions {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
-}
-.modalTopActions .save {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.modalTopActions .save:hover {
-  background: #3b8c63;
-}
-
-/* 모달 테이블 */
-.modalTableWrapper {
-  /* 스크롤바 없이 내부에 딱 맞도록 */
-  overflow: visible;
-}
-.modalTableWrapper .table {
-  width: 100%;
-  font-size: 13px;
-  /* min-width 제거하여 가로 스크롤 방지 */
-  table-layout: auto;
-}
-
-/* 편집용 input (폐기량) */
-.editable {
-  width: 80px;
-  padding: 4px 6px;
-  font-size: 13px;
-  border: 1px solid #4d774e;
-  border-radius: 4px;
-}
-.editable:focus {
-  outline: none;
-  background: #e3f2fd;
-}
+/* 페이지네이션 */
 .pagination {
-  display: flex;
-  justify-content: center; 
-  gap: 6px;                
-  margin-top: 20px;
+  display:flex; justify-content:center; gap:6px; margin-bottom:12px;
 }
 .pagination button {
-  padding: 6px 12px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  background-color: white;
-  color: #333;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding:6px 12px; border:1px solid #a2b7aa; background:#fff;
+  color:#387448; border-radius:4px; cursor:pointer;
 }
-
 .pagination button.active {
-  background-color: #4d774e;
-  color: white;
-  border-color: #4d774e;
+  background:#57a964; color:#fff; border-color:#57a964;
 }
-
-.pagination button:hover:not(.active):not(:disabled) {
-  background-color: #f0f0f0;
-}
-
 .pagination button:disabled {
-  color: #aaa;
-  background-color: #fafafa;
-  border-color: #eee;
-  cursor: default;
+  background:#f0f4f1; color:#c0cfc3; cursor:not-allowed;
 }
+
+/* 모달 */
+.modal {
+  position:fixed; inset:0; background:rgba(0,0,0,0.3);
+  display:flex; justify-content:center; align-items:center;
+}
+.modalBox {
+  background:#fff; border-radius:10px; padding:20px 30px 30px;
+  width:90%; max-width:800px; box-shadow:0 4px 16px rgba(0,0,0,0.1);
+  position:relative;
+}
+.modalClose {
+  position:absolute; top:12px; right:12px; background:none; border:none;
+  font-size:20px; cursor:pointer;
+}
+.modalTopActions { display:flex; justify-content:flex-end; margin-bottom:12px; }
+.save {
+  background:#4caf50; color:#fff; border:none; padding:6px 14px;
+  border-radius:5px; cursor:pointer; transition:background .2s;
+}
+.save:hover { background:#3b8c63; }
+.modalTableWrapper { overflow:auto; }
+.editable {
+  width:70px; padding:5px 8px; font-size:14px;
+  border:1px solid #74bb7a; border-radius:4px; background:#f7faf8;
+}
+.editable:focus { outline:none; background:#e3f2fd; }
+

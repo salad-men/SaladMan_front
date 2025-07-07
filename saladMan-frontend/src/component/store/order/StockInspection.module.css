@@ -4,6 +4,7 @@
     background-color: #f9fafb;
     overflow: hidden;
 }
+
 .stockInspectionContent {
     flex: 1;
     padding: 40px 40px 60px;
@@ -21,7 +22,8 @@
     font-weight: bold;
     margin-bottom: 30px;
 }
-.infoBox{
+
+.infoBox {
     margin-bottom: 20px;
     border: 1px solid #ccc;
     padding: 10px;
@@ -42,7 +44,7 @@
 }
 
 .inspectorBox span {
-    
+
     display: inline-flex;
 }
 
@@ -63,10 +65,12 @@
     padding: 10px;
     text-align: center;
 }
+
 .inspectionTable th {
     background-color: #e9f3e9;
     font-weight: bold;
 }
+
 .inspectionTable .inputBox {
     width: 80px;
     padding: 6px;
@@ -107,4 +111,142 @@
 .statusText {
     font-size: 14px;
     font-weight: bold;
+}
+
+.stockInspectionContainer {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 64px);
+    background-color: #f9fafb;
+    overflow: hidden;
+}
+
+/* 모바일: flex-direction column */
+@media (max-width: 768px) {
+    .stockInspectionContainer {
+        flex-direction: column;
+        height: auto;
+    }
+}
+
+.stockInspectionContent {
+    flex: 1;
+    padding: 40px;
+    background-color: white;
+    box-sizing: border-box;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 모바일 padding 축소 */
+@media (max-width: 768px) {
+    .stockInspectionContent {
+        padding: 20px 16px;
+        border-left: none;
+    }
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+.infoBox {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.infoBox p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+/* inspectorBox 모바일에서는 왼쪽 정렬 */
+.inspectorBox {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .inspectorBox {
+        justify-content: flex-start;
+    }
+}
+
+.inspectionTableWrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.inspectionTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.inspectionTable th,
+.inspectionTable td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+
+    .inspectionTable th,
+    .inspectionTable td {
+        padding: 8px;
+        font-size: 15px;
+    }
+}
+
+.inspectionTable th {
+    background-color: #e9f3e9;
+}
+
+.selectBox {
+    padding: 6px;
+    min-width: 100px;
+}
+
+.textArea {
+    width: 100%;
+    height: 28px;
+    padding: 6px;
+}
+
+.footerSection {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.completeButton {
+    background-color: #4D774E;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.completeButton:hover {
+    background-color: #3a5e3b;
 }

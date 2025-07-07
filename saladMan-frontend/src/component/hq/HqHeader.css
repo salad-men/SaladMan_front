@@ -6,7 +6,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 18px 20px;
     border-bottom: 1px solid #ccc;
 }
 
@@ -86,12 +86,31 @@ body {
     right: 165px;
 }
 .logo {
-  flex-shrink: 0; /* 줄어들지 않게 */
+  flex-shrink: 0; 
 }
 .logo img {
-    height: 31px; /* 재고 글씨 비슷한 높이 */
+    height: 31px; 
     width: auto;
     margin-left: 30px;
         flex: 1;
           display: block;
+}
+.go-home-btn {
+    margin-left: 30px;
+}
+
+.go-home-btn a {
+    display: inline-block;
+    padding: 7px 10px;
+    background-color: #4D774E;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.go-home-btn a:hover {
+    background-color: #093a0a;
+    color: #ffffff;
 }

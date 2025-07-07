@@ -5,6 +5,7 @@ import styles from "./Header.module.css";
 const Header = ({ staticScrolled = false, onSelectCategory }) => {
   const [isScrolled, setIsScrolled] = useState(staticScrolled);
   const [activeMenu, setActiveMenu] = useState(null);
+  const [isHq, setIsHq] = useState(false);
   const menuRef = useRef();
   const navigate = useNavigate();
 
@@ -14,6 +15,20 @@ const Header = ({ staticScrolled = false, onSelectCategory }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [staticScrolled]);
+
+  useEffect(() => {
+    try {
+      const storeStr = sessionStorage.getItem("store");
+      if (storeStr) {
+        const storeData = JSON.parse(storeStr);
+        if ((storeData.role || "").trim() === "ROLE_HQ") {
+          setIsHq(true);
+        }
+      }
+    } catch (err) {
+      console.error("store 파싱 실패:", err);
+    }
+  }, []);
 
   const handleMenuClick = (categoryId) => {
     if (onSelectCategory) onSelectCategory(categoryId);
@@ -63,13 +78,21 @@ const Header = ({ staticScrolled = false, onSelectCategory }) => {
         className={`${styles.layoutContainer} ${styles.headerContent}`}
         ref={menuRef}
       >
-        <a href="/mainPage" className={styles.logo}>
-          <img
-            src="/샐러드맨로고(화이트).png"
-            alt="Saladman Logo"
-            className={styles.logoImage}
-          />
-        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <a href="/mainPage" className={styles.logo}>
+            <img
+              src="/샐러드맨로고(화이트).png"
+              alt="Saladman Logo"
+              className={styles.logoImage}
+            />
+          </a>
+          {isHq && (
+            <div className={styles.hqBtn}>
+              <a href="/hq/HqDashboard">관리 페이지로  &nbsp;▶</a>
+            </div>
+          )}
+        </div>
+
         <nav className={styles.nav}>
           {menuItems.map((item, index) => (
             <div

@@ -1,113 +1,158 @@
 .container {
   display: flex;
   min-height: 100vh;
+  background: #f9fafb;
   font-family: 'Pretendard', sans-serif;
-  background-color: #f9fafb;
 }
-
 .content {
   flex: 1;
-  padding: 40px 30px;
-  background-color: white;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
-  min-width: 900px;
-}
-
-.title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #3d5a40;
-  margin-bottom: 32px;
-  user-select: none;
-  text-align: center;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 15px;
+  padding: 0;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(60,60,60,0.06);
+  border-left: 1px solid #e4e9e7;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-.table th, .table td {
-  padding: 14px 10px;
-  color: #333;
-  border-bottom: 1px solid #eee;
-  font-size: 15px;
-  text-align: left;
-  vertical-align: top;
-}
-
-.label {
-  font-weight: bold;
-  width: 110px;
-  border-right: 1px solid #eee;
-  text-align: right;
-}
-
-.image {
-  max-width: 220px;
-  margin: 8px 0;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-
-.fileLink {
-  color: #5a8158;
-  font-weight: 600;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.buttonGroup {
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2f6042;
+  margin: 64px 0 30px 0;
+  letter-spacing: -1px;
   text-align: center;
-  margin-top: 24px;
+  width: 100%;
 }
-
-.backBtn,
-.modifyBtn {
-  padding: 7px 24px;
-  border-radius: 6px;
+.detail {
+  width: 1120px;
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: 0 8px 40px rgba(70, 110, 80, 0.13);
+  padding: 30px 58px 48px 18px;
+  display: flex;
+  flex-direction: column;
+}
+.detailRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 42px;
+}
+.label {
+  flex: 0 0 130px;
+  font-weight: 600;
+  font-size: 1.16rem;
+  color: #23422f;
+  text-align: right;
+  margin-right: 28px;
+  width: 130px;
+  line-height: 1.25;
+}
+.value {
+  flex: 1;
+  position: relative;
+}
+.inputLike {
+  width: 100%;
+  font-size: 1.13rem;
+  padding: 18px 20px;
+  border: 1.7px solid #b4c7b3;
+  border-radius: 10px;
+  background: #f8faf9;
+  box-sizing: border-box;
+  color: #222;
+  outline: none;
+  resize: vertical;
+  height: 440px;
+}
+.inputLike:focus {
+  border-color: #338f55;
+  box-shadow: 0 0 7px rgba(51,143,85, 0.13);
+}
+.imagesContainer {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.imageBox {
+  width: 140px;
+  height: 110px;
+  background: #f7f9f8;
+  border: 2.2px dashed #b8cbb6;
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.imagePreview {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 9px;
+  object-fit: cover;
+}
+.fileAttachBox {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.fileBtn {
+  background: #4d774e;
+  color: #fff;
   border: none;
-  font-weight: bold;
-  font-size: 15px;
+  border-radius: 8px;
+  padding: 12px 26px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin: 0 10px;
-  transition: background-color 0.2s ease;
 }
-
-.backBtn {
-  background-color: #dedede;
-  color: #333;
+.fileBtn:hover {
+  background: #265c30;
 }
-
-.backBtn:hover {
-  background-color: #c0c0c0;
+.fileName {
+  font-size: 1.03rem;
+  color: #466e50;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-.modifyBtn {
-  background-color: #5a8158;
-  color: white;
+.btnBox {
+  display: flex;
+  gap: 50px;
+  margin-top: 38px;
+  justify-content: center;
 }
-
-.modifyBtn:hover {
-  background-color: #4a6848;
-}
-.deleteBtn {
-  padding: 7px 24px;
-  border-radius: 6px;
+.btn {
+  border-radius: 11px;
+  padding: 18px 88px;
+  font-size: 1.18rem;
+  font-weight: 700;
   border: none;
-  font-weight: bold;
-  font-size: 15px;
   cursor: pointer;
-  background-color: #d9534f;
-  color: white;
-  margin-left: 10px;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 12px rgba(60, 90, 70, 0.10);
+  transition: background 0.16s, color 0.11s;
+  letter-spacing: -0.7px;
+}
+.btnSubmit {
+  background: #42794d;
+  color: #fff;
+}
+.btnSubmit:hover {
+  background: #265c30;
+}
+.btnCancel {
+  background: #e6e7ea;
+  color: #555;
+}
+.btnCancel:hover {
+  background: #c2c6c3;
+  color: #222;
 }
 
-.deleteBtn:hover {
-  background-color: #c9302c;
-}
+/* .imagePreview {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 9px;
+  box-shadow: 0 0 2px #ccc;
+  display: block;
+} */

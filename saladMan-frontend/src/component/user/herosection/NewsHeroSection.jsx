@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import styles from './HeroSection.module.css';
+import styles from "./HeroSection.module.css";
 import { myAxios } from "../../../config";
 
 const NewsHeroSection = () => {
   const [banner, setBanner] = useState({
     line1: "",
     line2: "",
-    image: ""
+    image: "",
   });
 
   const [isAdmin, setIsAdmin] = useState(false);
@@ -14,12 +14,13 @@ const NewsHeroSection = () => {
   const [newLine1, setNewLine1] = useState("");
   const [newLine2, setNewLine2] = useState("");
   const [newImage, setNewImage] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const fetchBanner = async () => {
       try {
         const instance = myAxios();
-        const res = await instance.get("/user/banner/4"); // 4번 ID로 새소식 배너
+        const res = await instance.get("/user/banner/4");
         setBanner(res.data);
       } catch (err) {
         console.error("새소식 배너 불러오기 실패:", err);
@@ -44,15 +45,13 @@ const NewsHeroSection = () => {
   const handleRightClick = (e) => {
     if (!isAdmin) return;
     e.preventDefault();
-    setNewLine1(banner.line1);
-    setNewLine2(banner.line2);
-    setNewImage(banner.image);
+    setNewLine1("");
+    setNewLine2("");
+    setNewImage("");
     setShowModal(true);
   };
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleFile = async (file) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -69,16 +68,16 @@ const NewsHeroSection = () => {
     try {
       const instance = myAxios();
       await instance.patch("/user/banner/4", {
-        line1: newLine1,
-        line2: newLine2,
-        line3: "",  // 필요시 line3 활용 가능
-        image: newImage
+        line1: newLine1 || banner.line1,
+        line2: newLine2 || banner.line2,
+        line3: "",
+        image: newImage || banner.image,
       });
       setBanner({
-        line1: newLine1,
-        line2: newLine2,
+        line1: newLine1 || banner.line1,
+        line2: newLine2 || banner.line2,
         line3: "",
-        image: newImage
+        image: newImage || banner.image,
       });
       setShowModal(false);
       alert("저장되었습니다.");
@@ -94,44 +93,95 @@ const NewsHeroSection = () => {
         <h1 className={styles.title}>{banner.line1}</h1>
         <br />
         <p className={styles.subtitle}>
-          <a href='/News' className={styles.atag}>공지사항</a>
+          <a href="/News" className={styles.atag}>
+            공지사항
+          </a>
           <span className={styles.divider}>ㅣ</span>
-          <a href='/Event' className={styles.atag}>이벤트</a>
+          <a href="/Event" className={styles.atag}>
+            이벤트
+          </a>
           <span className={styles.divider}>ㅣ</span>
-          <a href='/PraiseStore' className={styles.atag}>칭찬매장</a>
+          <a href="/PraiseStore" className={styles.atag}>
+            칭찬매장
+          </a>
         </p>
         <div className={styles.imageBanner}>
           <img src={banner.image} alt="새소식" />
-          <span className={styles.Overlay}>{banner.line2}</span>
+          <span className={styles.overlay}>{banner.line2}</span>
         </div>
       </div>
 
       {showModal && (
-        <div className="modal">
-          <h3>새소식 배너 수정</h3>
-          <input
-            value={newLine1}
-            onChange={(e) => setNewLine1(e.target.value)}
-            placeholder="타이틀 (line1)"
-          />
-          <input
-            value={newLine2}
-            onChange={(e) => setNewLine2(e.target.value)}
-            placeholder="서브타이틀 (line2)"
-          />
-          <input
-            type="text"
-            value={newImage}
-            onChange={(e) => setNewImage(e.target.value)}
-            placeholder="이미지 URL"
-          />
-          <input type="file" onChange={handleFileChange} />
-          {newImage && (
-            <img src={newImage} alt="preview" style={{ width: "100px", marginTop: "10px" }} />
-          )}
-          <div className="modal-buttons">
-            <button  className={styles.button} onClick={handleSave} disabled={!newLine1 || !newLine2 || !newImage}>저장</button>
-            <button className={styles.button}   onClick={() => setShowModal(false)}>취소</button>
+        <div className={styles.myModalContainer}>
+          <div className={styles.myModal}>
+            <div className={styles.modalHeader}>새소식 배너 수정</div>
+            <div className={styles.modalBody}>
+              <input
+                value={newLine1}
+                onChange={(e) => setNewLine1(e.target.value)}
+                placeholder="타이틀"
+              />
+              <input
+                value={newLine2}
+                onChange={(e) => setNewLine2(e.target.value)}
+                placeholder="서브타이틀"
+              />
+              <div
+                className={`${styles.dropContainer} ${
+                  isDragging ? styles.dragover : ""
+                }`}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragging(true);
+                }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragging(false);
+                  const file = e.dataTransfer.files[0];
+                  if (file) handleFile(file);
+                }}
+              >
+                <div className={styles.dropContent}>
+                  <p>최대 10mb 이하 jpeg, png 첨부 가능</p>
+                  <p>이미지를 드래그 앤 드롭하거나</p>
+                  <p>아래 버튼을 클릭하여 업로드하세요.</p>
+                  <label className={styles.uploadButton}>
+                    이미지 가져오기
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) handleFile(file);
+                      }}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {newImage && (
+                <div className={styles.preview}>
+                  <img src={newImage} alt="preview" />
+                </div>
+              )}
+
+              <div className={styles.modalButtons}>
+                <button
+                  className={styles.button}
+                  onClick={handleSave}
+                  disabled={!newLine1 && !newLine2 && !newImage}
+                >
+                  저장
+                </button>
+                <button
+                  className={styles.button}
+                  onClick={() => setShowModal(false)}
+                >
+                  취소
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

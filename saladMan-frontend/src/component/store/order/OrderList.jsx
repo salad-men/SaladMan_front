@@ -12,7 +12,9 @@ export default function OrderList() {
 
     const [filters, setFilters] = useState({
         productName: '',
-        orderType: ''
+        orderType: '',
+        status: ''
+
     });
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -41,6 +43,7 @@ export default function OrderList() {
                     endDate: endDate || null,
                     orderType: filters.orderType,
                     productName: filters.productName,
+                    status:filters.status
                 },
             });
 
@@ -60,7 +63,7 @@ export default function OrderList() {
     };
 
     const handleReset = () => {
-        setFilters({ productName: '', orderType: '' });
+        setFilters({ productName: '', orderType: '', status:'' });
         setStartDate('');
         setEndDate('');
     };
@@ -133,6 +136,21 @@ export default function OrderList() {
                                 <option value="자동발주">자동발주</option>
                                 <option value="수기발주">수기발주</option>
                             </select>
+
+                            <label htmlFor="status">상태</label>
+                            <select
+                                id="status"
+                                name="status"
+                                value={filters.status}
+                                onChange={handleChange}
+                            >
+                                <option value="">전체</option>
+                                <option value="대기중">대기중</option>
+                                <option value="입고완료">입고완료</option>
+                                <option value="검수완료">검수완료</option>
+                                <option value="반려">반려</option>
+                            </select>
+
                             <label htmlFor="productName">품명</label>
                             <input
                                 type="text"

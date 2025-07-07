@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  padding: 2rem;
+  padding: 0px;
 }
 
 .card {
@@ -88,4 +88,23 @@
 
 .writeButton:hover {
   background: #005bb5;
+}
+.writeButtonContainer {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.writeButton {
+  padding: 8px 16px;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.writeButton:hover {
+  background-color: #3b5e3b;
 }

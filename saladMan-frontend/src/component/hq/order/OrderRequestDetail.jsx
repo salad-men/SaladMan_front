@@ -97,7 +97,8 @@ export default function OrderRequestDetail() {
             alert("저장 중 오류 발생");
         }
     };
-
+    const approvedCount = items.filter(
+        item => item.approvalStatus === "승인" || item.approvalStatus === "반려").length;
     return (
         <div className={styles.orderDetailContainer}>
             <OrderSidebar />
@@ -106,94 +107,95 @@ export default function OrderRequestDetail() {
                 <h2>수주 상세</h2>
 
                 <div className={styles.orderInfo}>
-                    <p><strong>점포명:</strong> {storeName}</p>
-                    <p><strong>No:</strong> {id} </p>
-                    <p><strong>수주일:</strong> </p>
-                    <p><strong>주문자:</strong> </p>
+                    <p><strong>점포명:&nbsp;</strong> {storeName}</p>
+                    <p><strong>No:&nbsp;</strong> {id} </p>
+                    <p><strong>수주일:&nbsp;</strong> </p>
+                    <p><strong>주문 품목 수: &nbsp;</strong> {items.length} 개</p>
                 </div>
+                <div className={styles.tableWrapper}>
+                    <table className={styles.orderDetailTable}>
+                        <thead>
+                            <tr>
+                                <th>품명</th>
+                                <th>구분</th>
+                                <th>발주량</th>
+                                <th>단가(원)</th>
+                                <th>합계(원)</th>
+                                <th>승인여부</th>
+                                <th>반려사유</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {items.map((item, index) => (
+                                <React.Fragment key={item.id}>
+                                    <tr key={item.id}>
+                                        <td>{item.ingredientName}</td>
+                                        <td>{item.categoryName}</td>
+                                        <td>{item.orderedQuantity} {item.unit}</td>
+                                        <td>{Math.round(item.totalPrice / item.orderedQuantity).toLocaleString()}원</td>
+                                        <td>{item.totalPrice.toLocaleString()}원</td>
+                                        <td>
+                                            <select
+                                                value={item.approvalStatus}
+                                                onChange={(e) => handleStatusChange(index, e.target.value)}
+                                                disabled={isCompleted}
+                                            >
+                                                <option value="">선택</option>
+                                                <option value="승인">승인</option>
+                                                <option value="반려">반려</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            {item.approvalStatus === "반려" && (
+                                                <input
+                                                    type="text"
+                                                    value={item.rejectionReason}
+                                                    onChange={(e) => handleReasonChange(index, e.target.value)}
+                                                    placeholder="반려 사유 입력"
 
-                <table className={styles.orderDetailTable}>
-                    <thead>
-                        <tr>
-                            <th>품명</th>
-                            <th>구분</th>
-                            <th>발주량</th>
-                            <th>단가(원)</th>
-                            <th>합계(원)</th>
-                            <th>승인여부</th>
-                            <th>반려사유</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map((item, index) => (
-                            <React.Fragment key={item.id}>
-                                <tr key={item.id}>
-                                    <td>{item.ingredientName}</td>
-                                    <td>{item.categoryName}</td>
-                                    <td>{item.orderedQuantity} {item.unit}</td>
-                                    <td>{Math.round(item.totalPrice / item.orderedQuantity).toLocaleString()}원</td>
-                                    <td>{item.totalPrice.toLocaleString()}원</td>
-                                    <td>
-                                        <select
-                                            value={item.approvalStatus}
-                                            onChange={(e) => handleStatusChange(index, e.target.value)}
-                                            disabled={isCompleted}
-                                        >
-                                            <option value="">선택</option>
-                                            <option value="승인">승인</option>
-                                            <option value="반려">반려</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        {item.approvalStatus === "반려" && (
-                                            <input
-                                                type="text"
-                                                value={item.rejectionReason}
-                                                onChange={(e) => handleReasonChange(index, e.target.value)}
-                                                placeholder="반려 사유 입력"
-
-                                            />
-                                        )}
-                                    </td>
-                                </tr>
-                                {item.approvalStatus === "승인" && item.stockList?.length > 0 && (
-                                    <tr className={styles.stockRow}>
-                                        <td colSpan="7">
-                                            <div className={styles.stockListWrapper}>
-                                                {item.stockList.map(stock => (
-                                                    <label key={stock.id} className={styles.stockItem}>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={item.selectedStockIds.includes(stock.id)}
-                                                            onChange={(e) =>
-                                                                handleStockSelect(index, stock.id, e.target.checked)
-                                                            }
-                                                            disabled={isCompleted}
-
-                                                        />
-                                                        [유통기한: {stock.expiredDate}] {stock.ingredientName} - {stock.quantity} {item.unit} /  수량:{stock.quantity}{stock.unit}
-                                                    </label>
-                                                ))}
-                                            </div>
+                                                />
+                                            )}
                                         </td>
                                     </tr>
-                                )}
-                            </React.Fragment>
-                        ))}
-                        <tr className={styles.summaryRow}>
-                            <td colSpan="4"></td>
-                            <td><strong>총 {items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}원</strong></td>
-                            <td colSpan="2"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    {item.approvalStatus === "승인" && item.stockList?.length > 0 && (
+                                        <tr className={styles.stockRow}>
+                                            <td colSpan="7">
+                                                <div className={styles.stockListWrapper}>
+                                                    {item.stockList.map(stock => (
+                                                        <label key={stock.id} className={styles.stockItem}>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={item.selectedStockIds.includes(stock.id)}
+                                                                onChange={(e) =>
+                                                                    handleStockSelect(index, stock.id, e.target.checked)
+                                                                }
+                                                                disabled={isCompleted}
 
+                                                            />
+                                                            [유통기한: {stock.expiredDate}] {stock.ingredientName} - {stock.quantity} {item.unit} /  수량:{stock.quantity}{stock.unit}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                            <tr className={styles.summaryRow}>
+                                <td colSpan="4"></td>
+                                <td><strong>총 {items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}원</strong></td>
+                                <td><strong>{approvedCount}/{items.length}</strong></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div className={styles.submitArea}>
-                    <button onClick={() => navigate(-1)}>뒤로가기</button>
+                    <button className={styles.backButton} onClick={() => navigate(-1)} style={{ marginRight: 10 }}>목록</button>
 
                     {!isCompleted && (
-                        <button onClick={handleSubmit}>저장</button>
+                        <button className={styles.submitButton} onClick={handleSubmit}>저장</button>
                     )}
 
                 </div>

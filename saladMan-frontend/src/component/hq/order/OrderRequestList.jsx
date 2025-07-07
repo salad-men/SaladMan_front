@@ -11,6 +11,7 @@ export default function OrderRequestList() {
     const token = useAtomValue(accessTokenAtom);
     const navigate = useNavigate();
 
+    const [storeList, setStoreList] = useState([]);
     const [filters, setFilters] = useState({
         storeName: "",
         status: "",
@@ -22,15 +23,26 @@ export default function OrderRequestList() {
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => {
-        if(!token) return;
 
+    useEffect(() => {
+        if (!token) return;
+        const fetchStores = async () => {
+            try {
+                const res = await myAxios(token).get("/hq/storeNames");
+                setStoreList(res.data);
+            } catch (err) {
+                console.error("점포 목록 조회 실패", err);
+
+            }
+        }
+        fetchStores();
         handleSearch(1);
     }, [token]);
 
-    const navigateToDetail=(id) => {
+    const navigateToDetail = (id) => {
         navigate(`/hq/orderRequestDetail?id=${id}`);
     }
+
 
     const handleSearch = async (page = 1) => {
         try {
@@ -107,13 +119,24 @@ export default function OrderRequestList() {
 
                         <div className={styles.row}>
                             <label>점포</label>
-                            <input type="text" name="storeName" placeholder="점포 검색" value={filters.storeName} onChange={handleChange} />
+                            <select
+                                name="storeName"
+                                value={filters.storeName}
+                                onChange={handleChange}
+                            >
+                                <option value="">전체</option>
+                                {storeList.map((store) => (
+                                    <option key={store.id} value={store.name}>
+                                        {store.name}
+                                    </option>
+                                ))}
+                            </select>
                             <label>상태</label>
                             <select name="status" value={filters.status} onChange={handleChange}>
                                 <option value="">전체</option>
                                 <option value="대기중">대기중</option>
-                                <option value="접수완료">접수완료</option>
                                 <option value="입고완료">입고완료</option>
+                                <option value="검수완료">검수완료</option>
                                 <option value="반려">반려</option>
                             </select>
 
@@ -137,7 +160,7 @@ export default function OrderRequestList() {
                         </thead>
                         <tbody>
                             {orders.map((order) => (
-                                <tr key={order.id} onClick={()=>navigateToDetail(order.id)}>
+                                <tr key={order.id} onClick={() => navigateToDetail(order.id)}>
                                     <td>{order.id}</td>
                                     <td>{order.storeName}</td>
                                     <td>{order.productNameSummary}</td>
@@ -152,7 +175,14 @@ export default function OrderRequestList() {
                     </table>
 
                     <div className={styles.pagination}>
-                        <button onClick={() => handleSearch(currentPage - 1)} disabled={currentPage === 1}>{"<"}</button>
+                        <button
+                            onClick={() => handleSearch(1)}
+                            disabled={currentPage === 1}
+                        >{"<<"}</button>
+                        <button
+                            onClick={() => handleSearch(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >{"<"}</button>
                         {Array.from({ length: totalPages }, (_, i) => (
                             <button
                                 key={i}
@@ -162,8 +192,16 @@ export default function OrderRequestList() {
                                 {i + 1}
                             </button>
                         ))}
-                        <button onClick={() => handleSearch(currentPage + 1)} disabled={currentPage === totalPages}>{">"}</button>
+                        <button
+                            onClick={() => handleSearch(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >{">"}</button>
+                        <button
+                            onClick={() => handleSearch(totalPages)}
+                            disabled={currentPage === totalPages}
+                        >{">>"}</button>
                     </div>
+
                 </div>
             </div>
         </>

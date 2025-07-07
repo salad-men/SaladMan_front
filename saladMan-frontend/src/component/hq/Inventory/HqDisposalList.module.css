@@ -1,295 +1,157 @@
-/* 컨테이너: 사이드바 + 콘텐츠 */
 .container {
   display: flex;
+  background: #fff;
 }
-
-/* 콘텐츠 영역 */
 .content {
-  position: absolute;
-  top: 51px;
-  left: 230px;
-  width: calc(100% - 200px);
-  padding: 40px;
-  background-color: #f9fafb;
-  border-left: 1px solid #ddd;
-  box-sizing: border-box;
-  min-height: calc(100vh - 60px);
+  flex: 1;
+  padding: 0px;
+}
+.innerContainer {
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  padding: 0px 100px 0 130px;
+  height: 1200px;
   overflow: auto;
-}
+  margin-left: 150px;
 
-/* 제목 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
 .title {
-  margin: 0 0 20px;
-  font-size: 20px;
-  color: #3d5a40;
-  font-weight: bold;
+  font-size: 1.8rem;
+  color: #2f6042;
+  margin-bottom: 16px;
 }
 
-/* 필터 영역 */
+
 .filters {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
-
-/* 필터 줄 */
 .row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.label {
+  font-weight: 600;
+  color: #3d5a40;
 }
 
-.row label {
-  font-weight: bold;
-  font-size: 14px;
-  min-width: 70px;
-}
-
-/* 입력, 셀렉트 스타일 */
-.row input[type="date"],
-.row input[type="text"],
-.row select {
+/* 공통 폼 스타일 */
+input[type="date"],
+input[type="text"],
+select {
   padding: 6px 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid #b4c7b3;
   border-radius: 4px;
-  width: 200px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
 }
 
-.row input[type="date"]:focus,
-.row input[type="text"]:focus,
-.row select:focus {
-  border-color: #3d5a40;
-  outline: none;
+/* 검색 입력 */
+.inputSearch {
+  width: 160px;
 }
 
-/* 버튼 스타일 */
-.row button {
+/* 검색 버튼 */
+.searchBtn {
   padding: 6px 14px;
-  font-size: 14px;
+  background: #4d774e;
+  color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  background-color: #3d5a40;
+  transition: background 0.2s;
+}
+.searchBtn:hover {
+  background: #3b663b;
+}
+
+/* 기간 단축 버튼 */
+.periodButtons {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+.periodButtons button {
+  background: #f7faf8;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: #4d774e;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.periodButtons button:hover {
+  background: #4d774e;
   color: white;
 }
 
-.row button:hover {
-  background-color: #2f4a31;
+/* 테이블 */
+.tableWrap {
+  overflow-x: auto;
 }
-
-/* 초기화 버튼 별도 스타일 */
-.reset {
-  background-color: #777;
-}
-
-.reset:hover {
-  background-color: #555;
-}
-
-/* 액션 버튼 그룹 */
-.actions {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-  justify-content: flex-end;
-}
-
-/* 액션 버튼 스타일 */
-.save {
-  background-color: #2a9d8f;
-}
-
-.save:hover {
-  background-color: #20776b;
-}
-
-.cancel {
-  background-color: #e76f51;
-}
-
-.cancel:hover {
-  background-color: #bf533c;
-}
-
-/* 테이블 스타일 */
 .table {
   width: 100%;
-  min-width: 1400px;
   border-collapse: collapse;
-  font-size: 14px;
-  margin-top: 20px;
   table-layout: fixed;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
-
 .table th,
 .table td {
-  border: 1px solid #ccc;
-  padding: 10px 12px;
+  padding: 10px;
+  border: 1px solid #e4e9e7;
   text-align: center;
-  vertical-align: middle;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
-  box-sizing: border-box;
+  white-space: nowrap;
+}
+.table thead {
+  background: #eaf3eb;
+  color: #2d4836;
 }
 
-.table th {
-  background-color: #f6f6f6;
-  font-weight: bold;
-  color: #3d5a40;
+/* 열 너비 조정 */
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 140px; /* 품목명 */
+}
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 80px;  /* 분류 */
 }
 
-.checkbox {
-  width: 40px;
-  padding: 4px;
-}
-
-/* 상태 컬럼 */
-.status {
-  font-weight: bold;
-  color: #3d5a40;
-}
-
-/* 비고 컬럼 */
-.remark {
-  color: #555;
-  font-style: italic;
-}
-
-/* 데이터가 없을 때 메시지 스타일 */
+/* 데이터 없을 때 */
 .noData {
-  padding: 30px 0;
-  color: #777;
-  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+  color: #999;
 }
 
-/* 모달 배경 */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
+/* 페이징 */
+.pagination {
+  margin-top: 16px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 3000;
-  padding: 20px; /* 모바일에서 패딩 추가 */
+  gap: 6px;
 }
-
-/* 모달 박스 */
-.modalBox {
-  position: relative;
-  background: #fff;
-  padding: 30px 40px;
-  border-radius: 10px;
-  width: 1200px;      /* 적당한 크기로 축소 */
-  max-width: 95vw;
-  max-height: 80vh;  /* 세로 높이 제한 */
-  overflow-y: auto;
-  box-sizing: border-box;
-  box-shadow: 0 0 30px rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* 모달 제목 */
-.modalBox h3 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  color: #3d5a40;
-  font-weight: bold;
-}
-
-/* 모달 테이블 */
-.reject-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  table-layout: fixed;
-}
-
-.reject-table th,
-.reject-table td {
-  border: 1px solid #ccc;
-  padding: 10px 12px;
-  text-align: center;
-  vertical-align: middle;
-  box-sizing: border-box;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.reject-table th {
-  background-color: #f6f6f6;
-  font-weight: 600;
-  color: #3d5a40;
-}
-
-/* 모달 내 입력창 */
-.modalBox input[type="text"] {
-  width: 100%;
-  padding: 6px 10px;
-  font-size: 14px;
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #a2b7aa;
   border-radius: 4px;
-  border: 1px solid #ccc;
-  outline-color: #3d5a40;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.modalBox input[type="text"]:focus {
-  border-color: #3d5a40;
-  outline: none;
-}
-
-/* 모달 액션 버튼 영역 */
-.modalActions {
-  margin-top: 25px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-}
-
-/* 모달 버튼 */
-.modalActions button {
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: none;
+  background: white;
+  color: #387448;
   cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+  transition: background 0.2s;
 }
-
-.modalActions button.save {
-  background-color: #2a9d8f;
+.pagination button:hover {
+  background: #eaf3eb;
+}
+.pagination button:disabled {
+  background: #f0f4f1;
+  color: #c0cfc3;
+  cursor: not-allowed;
+}
+.active {
+  background: #57a964;
   color: white;
-}
-
-.modalActions button.save:hover {
-  background-color: #20776b;
-}
-
-.modalActions button.cancel {
-  background-color: #e76f51;
-  color: white;
-}
-
-.modalActions button.cancel:hover {
-  background-color: #bf533c;
-}
-
-/* 반응형 */
-@media (max-width: 640px) {
-  .modalBox {
-    width: 95vw;
-    max-height: 90vh;
-    padding: 20px 25px;
-  }
+  border-color: #57a964;
 }

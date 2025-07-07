@@ -5,7 +5,7 @@ import { myAxios } from "../../../config";
 import "./HeroSection.css";
 
 const HeroSection = () => {
-  const store = useAtomValue(userAtom); // jotai에서 현재 로그인된 사용자 정보 가져오기
+  const store = useAtomValue(userAtom);
   const [isAdmin, setIsAdmin] = useState(false);
   const [banner, setBanner] = useState({
     line1: "",
@@ -20,7 +20,8 @@ const HeroSection = () => {
   const [newLine3, setNewLine3] = useState("");
   const [newImage, setNewImage] = useState("");
 
-  // 배너 가져오기
+  const [arrowOpacity, setArrowOpacity] = useState(1);
+
   useEffect(() => {
     const fetchBanner = async () => {
       try {
@@ -34,25 +35,35 @@ const HeroSection = () => {
     fetchBanner();
   }, []);
 
-  // Jotai atom에서 store(유저정보) 보고 HQ 권한이면 isAdmin true
   useEffect(() => {
     if (store && store.role && store.role.trim() === "ROLE_HQ") {
       setIsAdmin(true);
     }
   }, [store]);
 
-  // 마우스 우클릭 -> 수정창
+  // 스크롤하면 화살표 흐려지기
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const maxScroll = 200;
+      const newOpacity = Math.max(0, 1 - scrollY / maxScroll);
+      setArrowOpacity(newOpacity);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleRightClick = (e) => {
     if (!isAdmin) return;
     e.preventDefault();
-    setNewLine1(banner.line1);
-    setNewLine2(banner.line2);
-    setNewLine3(banner.line3);
-    setNewImage(banner.image);
+    setNewLine1("");
+    setNewLine2("");
+    setNewLine3("");
+    setNewImage("");
     setShowModal(true);
   };
 
-  // 파일 업로드 (드래그 & 드롭 / 파일 선택)
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -89,21 +100,20 @@ const HeroSection = () => {
     }
   };
 
-  // 저장
   const handleSave = async () => {
     try {
       const instance = myAxios();
       await instance.patch("/user/banner/1", {
-        line1: newLine1,
-        line2: newLine2,
-        line3: newLine3,
-        image: newImage,
+        line1: newLine1 || banner.line1,
+        line2: newLine2 || banner.line2,
+        line3: newLine3 || banner.line3,
+        image: newImage || banner.image,
       });
       setBanner({
-        line1: newLine1,
-        line2: newLine2,
-        line3: newLine3,
-        image: newImage,
+        line1: newLine1 || banner.line1,
+        line2: newLine2 || banner.line2,
+        line3: newLine3 || banner.line3,
+        image: newImage || banner.image,
       });
       setShowModal(false);
       alert("저장되었습니다.");
@@ -125,53 +135,63 @@ const HeroSection = () => {
           {banner.line2 && <h1>{banner.line2}</h1>}
           {banner.line3 && <p>{banner.line3}</p>}
         </div>
+        <div
+          className="scroll-arrow"
+          style={{ opacity: arrowOpacity }}
+        >
+          ▼
+        </div>
       </div>
 
       {showModal && (
-        <div
-          className="modal"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-        >
-          <h3>메인 배너 수정</h3>
-          <input
-            value={newLine1}
-            onChange={(e) => setNewLine1(e.target.value)}
-            placeholder="첫 줄"
-          />
-          <input
-            value={newLine2}
-            onChange={(e) => setNewLine2(e.target.value)}
-            placeholder="중간 줄"
-          />
-          <input
-            value={newLine3}
-            onChange={(e) => setNewLine3(e.target.value)}
-            placeholder="마지막 줄"
-          />
-          <input
-            type="text"
-            value={newImage}
-            onChange={(e) => setNewImage(e.target.value)}
-            placeholder="이미지 URL"
-          />
-          <input type="file" onChange={handleFileChange} />
-          {newImage && (
-            <img
-              src={newImage}
-              alt="preview"
-              style={{ width: "100px", marginTop: "10px" }}
+        <div className="modal">
+          <div className="modal-header">메인 배너 수정</div>
+          <div className="modal-body">
+            <input
+              value={newLine1}
+              onChange={(e) => setNewLine1(e.target.value)}
+              placeholder="첫 줄"
             />
-          )}
-          <div className="modal-buttons">
-            <button
-              onClick={handleSave}
-              disabled={!newLine1 || !newLine2 || !newImage}
+            <input
+              value={newLine2}
+              onChange={(e) => setNewLine2(e.target.value)}
+              placeholder="중간 줄"
+            />
+            <input
+              value={newLine3}
+              onChange={(e) => setNewLine3(e.target.value)}
+              placeholder="마지막 줄"
+            />
+            <div
+              className="drop-area"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
             >
-              저장
-            </button>
-            <button onClick={() => setShowModal(false)}>취소</button>
+              <p>이미지를 드래그하거나 클릭해서 업로드하세요</p>
+              <label className="upload-button">
+                파일 선택
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
+            {newImage && (
+              <div style={{ textAlign: "center", marginTop: "10px" }}>
+                <img src={newImage} alt="preview" style={{ width: "100px" }} />
+              </div>
+            )}
+            <div className="modal-buttons">
+              <button
+                onClick={handleSave}
+                disabled={!newLine1 && !newLine2 && !newLine3 && !newImage}
+              >
+                저장
+              </button>
+              <button onClick={() => setShowModal(false)}>취소</button>
+            </div>
           </div>
         </div>
       )}

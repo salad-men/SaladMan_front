@@ -92,10 +92,12 @@ export default function HqComplaintList() {
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.length === complaints.length) {
+    // "전달완료"가 아닌 것만 체크할 수 있도록
+    const selectable = complaints.filter(c => c.status !== "전달완료").map(c => c.id);
+    if (selectedIds.length === selectable.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(complaints.map(c => c.id));
+      setSelectedIds(selectable);
     }
   };
 
@@ -161,9 +163,7 @@ export default function HqComplaintList() {
           />
 
           <button onClick={() => fetchComplaintList(0)}>검색</button>
-        </div>
 
-        <div className={styles.actions}>
           <button
             className={styles.forwardSelectedBtn}
             onClick={handleForwardSelected}
@@ -179,9 +179,14 @@ export default function HqComplaintList() {
               <th>
                 <input
                   type="checkbox"
-                  checked={selectedIds.length === complaints.length && complaints.length > 0}
+                  checked={
+                    complaints.filter(c => c.status !== "전달완료").length > 0 &&
+                    selectedIds.length === complaints.filter(c => c.status !== "전달완료").map(c => c.id).length
+                  }
                   onChange={toggleSelectAll}
                   aria-label="전체 선택"
+                  // 전달완료 아닌게 없으면 전체선택도 비활성화
+                  disabled={complaints.filter(c => c.status !== "전달완료").length === 0}
                 />
               </th>
               <th>제목</th>
@@ -205,6 +210,8 @@ export default function HqComplaintList() {
                       checked={selectedIds.includes(id)}
                       onChange={() => toggleSelect(id)}
                       aria-label={`선택 ${title}`}
+                      disabled={status === "전달완료"}
+                      className={status === "전달완료" ? styles.checkboxDisabled : ""}
                     />
                   </td>
                   <td className={styles.clickable} onClick={() => handleView(id)}>{title}</td>
@@ -221,10 +228,37 @@ export default function HqComplaintList() {
         </table>
 
         <div className={styles.paging}>
-          <button disabled={page === 0} onClick={() => fetchComplaintList(page - 1)}>이전</button>
+          <button
+            disabled={page === 0}
+            onClick={() => fetchComplaintList(0)}
+            aria-label="처음 페이지"
+          >
+            {'<<'}
+          </button>
+          <button
+            disabled={page === 0}
+            onClick={() => fetchComplaintList(page - 1)}
+            aria-label="이전 페이지"
+          >
+            {'<'}
+          </button>
           {renderPageButtons()}
-          <button disabled={page === totalPages - 1} onClick={() => fetchComplaintList(page + 1)}>다음</button>
+          <button
+            disabled={page === totalPages - 1}
+            onClick={() => fetchComplaintList(page + 1)}
+            aria-label="다음 페이지"
+          >
+            {'>'}
+          </button>
+          <button
+            disabled={page === totalPages - 1}
+            onClick={() => fetchComplaintList(totalPages - 1)}
+            aria-label="마지막 페이지"
+          >
+            {'>>'}
+          </button>
         </div>
+
       </main>
     </div>
   );

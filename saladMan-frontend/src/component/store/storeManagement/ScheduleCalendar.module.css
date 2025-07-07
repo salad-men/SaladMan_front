@@ -70,6 +70,35 @@
     box-shadow: 0 1px 4px #dadada44;
     padding: 12px 8px 8px 8px;
     margin-bottom: 20px;
+    position: relative;
+}
+/* Modal */
+.modalOverlay {
+    position: fixed; left:0; top:0; right:0; bottom:0;
+    background: rgba(33,37,41,0.22); z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+}
+.modalBox {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px #00000029;
+    padding: 36px 32px 24px 32px;
+    min-width: 320px;
+    min-height: 140px;
+    max-width: 90vw;
+}
+.modalRow { display: flex; align-items: center; gap: 14px; margin: 12px 0; }
+.modalRow label { min-width: 70px; font-weight: bold; }
+.modalActions { display: flex; gap: 10px; margin-top: 18px; }
+.saveBtn {
+    background: #39b35e; color: #fff; border: none; padding: 8px 22px; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer;
+}
+.saveBtn:disabled { opacity: 0.6; cursor: default;}
+.deleteBtn {
+    background: #e86262; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer;
+}
+.cancelBtn {
+    background: #eee; color: #444; border: none; padding: 8px 14px; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer;
 }
 .summaryTableBox { margin: 14px 0 0 0; }
 .summaryTableScroll {
@@ -91,3 +120,35 @@
     font-size: 14px;
 }
 .summaryTable th { background: #f4f8fb; }
+.quickAddRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 10px;
+  margin: 16px 0 6px 0;
+}
+.quickAddDate {
+  display: flex; align-items: center; gap: 2px; font-size: 15px; background: #f3f7fc; border-radius: 6px; padding: 3px 7px; min-width: 48px;
+}
+
+.addBtn:hover { background: #1c9cff; }
+
+/* 셀 내부 +버튼 */
+.cellAddBtn {
+    position: absolute;
+    top: 0;
+    right: 86px;
+    /* background: #33aaff; */
+    color: #33aaff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7em;
+    font-weight: bold;
+    line-height: 22px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.16s;
+    /* box-shadow: 0 1px 3px #0002; */
+}
+.cellAddBtn:hover { background: #1c9cff; }

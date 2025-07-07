@@ -1,5 +1,5 @@
 .heroSection {
-    font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
   padding-top: 100px;
 }
@@ -37,16 +37,17 @@
   border-radius: 0;
 }
 
-.Overlay {
+.overlay {
   position: absolute;
   top: 50%;
   left: 50%;
-   transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 2.5rem;
   color: white;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
+
 .atag {
   color: #4D774E;
   font-weight: 500;
@@ -64,10 +65,134 @@
 }
 
 .button {
-    padding: 8px 20px;
-    background-color: #4D774E;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
+  padding: 8px 20px;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
 }
+
+.dropContainer {
+  border: 2px dashed #4D774E;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s;
+  margin-top: 15px;
+}
+.dropContainer:hover {
+  transition: all 0.3s;
+  background-color: rgb(238, 238, 238);
+}
+.dragover {
+  border-color: #3b82f6;
+  background-color: #f0f8ff;
+}
+
+.dropContent img {
+  margin-bottom: 10px;
+  opacity: 0.6;
+}
+
+.dropContent p {
+  color: #969696;
+  margin-top: 5px;
+  margin-bottom: 7px;
+  font-size: 12px;
+}
+
+.dropContent button {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: #cacaca;
+  border: none;
+  border-radius: 4px;
+  cursor: not-allowed;
+}
+
+.preview {
+  position: static;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.preview img {
+  width: 320px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+.uploadButton {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  color: #333;
+}
+
+.uploadButton:hover {
+  background-color: #4D774E;
+  color: white;
+}
+.modalTitle {
+  background-color: #4D774E;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+.myModalContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.myModal {
+  position: static;
+  width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background-color: white;
+  overflow: hidden;
+}
+.modalHeader {
+  background-color: #4D774E;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.modalBody {
+  background-color: white;
+  padding: 20px;
+}
+
+.modalBody input {
+  width: 100%;
+  max-width: 344px;
+  box-sizing: border-box;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* 기존 스타일 유지: heroSection, imageBanner, overlay, dropContainer 등은 그대로 두면 기존 UI 유지됩니다. */
