@@ -22,6 +22,7 @@ export default function OrderList() {
     const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const navigate = useNavigate();
+    const [selectedRange, setSelectedRange] = useState("");
 
     const token = useAtomValue(accessTokenAtom);
 
@@ -43,7 +44,7 @@ export default function OrderList() {
                     endDate: endDate || null,
                     orderType: filters.orderType,
                     productName: filters.productName,
-                    status:filters.status
+                    status: filters.status
                 },
             });
 
@@ -63,10 +64,13 @@ export default function OrderList() {
     };
 
     const handleReset = () => {
-        setFilters({ productName: '', orderType: '', status:'' });
+        setFilters({ productName: '', orderType: '', status: '' });
         setStartDate('');
         setEndDate('');
+        setSelectedRange('');
     };
+
+
     const setDateRange = (range) => {
         const today = new Date();
         const end = today.toISOString().slice(0, 10); // yyyy-mm-dd
@@ -85,6 +89,7 @@ export default function OrderList() {
 
         setStartDate(start.toISOString().slice(0, 10));
         setEndDate(end);
+        setSelectedRange(range);
     };
     const navigateToInspection = (id) => {
         navigate(`/store/stockInspection?id=${id}`);
@@ -119,10 +124,14 @@ export default function OrderList() {
                             <span>~</span>
                             <input type="date" value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)} />
-                            <button onClick={() => setDateRange("today")}>오늘</button>
-                            <button onClick={() => setDateRange("1week")}>1주</button>
-                            <button onClick={() => setDateRange("2weeks")}>2주</button>
-                            <button onClick={() => setDateRange("1month")}>1달</button>
+                            <button
+                                onClick={() => setDateRange("today")}
+                                className={`${styles.dateButton} ${selectedRange === "today" ? styles.selected : ""}`}
+                            >오늘</button>
+                            <button onClick={() => setDateRange("1week")} className={`${styles.dateButton} ${selectedRange === "1week" ? styles.selected : ""}`}>1주</button>
+                            <button onClick={() => setDateRange("2weeks")} className={`${styles.dateButton} ${selectedRange === "2weeks" ? styles.selected : ""}`}>2주</button>
+                            <button onClick={() => setDateRange("1month")} className={`${styles.dateButton} ${selectedRange === "1month" ? styles.selected : ""}`}
+                            >1달</button>
                         </div>
                         <div className={styles.row}>
                             <label htmlFor="orderType">발주유형</label>
@@ -166,56 +175,56 @@ export default function OrderList() {
                         </div>
                     </div>
 
-                    <table className={styles.orderTable}>
-                        <thead>
-                            <tr>
-                                <th>no</th>
-                                <th>발주유형</th>
-                                <th>품명</th>
-                                <th>발주일</th>
-                                <th>상태</th>
-                                <th>입고량</th>
-                                <th>합계</th>
-                                <th>입고 검수서</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orderData.map((order, index) => (
-
-                                <tr key={order.id} onClick={() => navigateToOrderDetail(order.id)} className={styles.clickableRow}>
-                                    <td>{index + 1}</td>
-                                    <td>{order.purType}</td>
-                                    <td>{order.productNameSummary}</td>
-                                    <td>{formatDate(order.orderDateTime)}</td>
-                                    <td>{order.status}</td>
-                                    <td>{order.quantitySummary}</td>
-                                    <td>{order.totalPrice} 원</td>
-                                    <td>
-                                        <button
-
-                                            disabled={!order.receiptAvailable || order.status.trim() === "검수완료"}
-                                            className={
-                                                order.receiptAvailable && order.status.trim() !== "검수완료"
-                                                    ? styles.activeButton
-                                                    : styles.disabledButton
-                                            } onClick={(e) => {
-                                                e.stopPropagation();
-                                                if (
-                                                    order.receiptAvailable &&
-                                                    order.status.trim() !== "검수완료"
-                                                ) {
-                                                    navigateToInspection(order.id);
-                                                }
-                                            }}
-                                        >
-                                            검수서
-                                        </button>
-                                    </td>
+                    <div className={styles.orderTableWrapper}>
+                        <table className={styles.orderTable}>
+                            <thead>
+                                <tr>
+                                    <th>no</th>
+                                    <th>발주유형</th>
+                                    <th>품명</th>
+                                    <th>발주일</th>
+                                    <th>상태</th>
+                                    <th>입고량</th>
+                                    <th>합계</th>
+                                    <th>입고 검수서</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {orderData.map((order, index) => (
 
+                                    <tr key={order.id} onClick={() => navigateToOrderDetail(order.id)} className={styles.clickableRow}>
+                                        <td>{index + 1}</td>
+                                        <td>{order.purType}</td>
+                                        <td>{order.productNameSummary}</td>
+                                        <td>{formatDate(order.orderDateTime)}</td>
+                                        <td>{order.status}</td>
+                                        <td>{order.quantitySummary}</td>
+                                        <td>{(order.totalPrice ?? 0).toLocaleString()} 원</td>                                        <td>
+                                            <button
+
+                                                disabled={!order.receiptAvailable || order.status.trim() === "검수완료"}
+                                                className={
+                                                    order.receiptAvailable && order.status.trim() !== "검수완료"
+                                                        ? styles.activeButton
+                                                        : styles.disabledButton
+                                                } onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (
+                                                        order.receiptAvailable &&
+                                                        order.status.trim() !== "검수완료"
+                                                    ) {
+                                                        navigateToInspection(order.id);
+                                                    }
+                                                }}
+                                            >
+                                                검수서
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className={styles.pagination}>
                         <button onClick={() => handleSearch(currentPage - 1)} disabled={currentPage === 1}>{"<"}</button>
                         {Array.from({ length: totalPages }, (_, i) => (

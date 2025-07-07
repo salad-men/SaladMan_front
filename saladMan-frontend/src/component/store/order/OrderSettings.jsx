@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./OrderSettings.module.css";
 import OrderSidebar from "./OrderSidebar";
 import { Info, X } from "lucide-react";
@@ -108,8 +108,10 @@ export default function OrderSettings() {
                             <tr>
                                 <th>품명</th>
                                 <th>구분</th>
-                                <th>매장 설정 최소량</th>
-                                <th>자동주문량</th>
+                                <th>매장 최소 수량</th>
+                                <th>묶음단위</th>
+                                <th>묶음수</th>
+                                <th>총 자동발주량</th>
                                 <th>자동발주</th>
                             </tr>
                         </thead>
@@ -119,57 +121,60 @@ export default function OrderSettings() {
                                     <td>{item.ingredientName}</td>
                                     <td>{item.categoryName}</td>
                                     <td>
-                                        <input
-                                            type="number"
-                                            value={item.minQuantity || ""}
-                                            readOnly
-                                            onChange={(e) =>
-                                                handleItemChange(index, "minQuantity", e.target.value)
-                                            }
-                                        />
+                                        {item.minQuantity ?? 0}
                                     </td>
+                                    <td>{item.minimumOrderUnit}</td>
+<td>
+  <div className={styles.qtyControl}>
+    <button
+      type="button"
+      onClick={() => {
+        const minUnit = Number(item.minimumOrderUnit) || 1;
+        const current = Number(item.bundleCount) || 0;
+        const newBundle = Math.max(current - 1, 0);
+        const newQty = newBundle * minUnit;
+        handleItemChange(index, "bundleCount", newBundle);
+        handleItemChange(index, "autoOrderQty", newQty);
+      }}
+    >
+      -
+    </button>
+    <input
+      type="number"
+      min="0"
+      value={item.bundleCount || 0}
+      onChange={(e) => {
+        const minUnit = Number(item.minimumOrderUnit) || 1;
+        const newBundle = Number(e.target.value) || 0;
+        const newQty = newBundle * minUnit;
+        handleItemChange(index, "bundleCount", newBundle);
+        handleItemChange(index, "autoOrderQty", newQty);
+      }}
+    />
+    <button
+      type="button"
+      onClick={() => {
+        const minUnit = Number(item.minimumOrderUnit) || 1;
+        const current = Number(item.bundleCount) || 0;
+        const newBundle = current + 1;
+        const newQty = newBundle * minUnit;
+        handleItemChange(index, "bundleCount", newBundle);
+        handleItemChange(index, "autoOrderQty", newQty);
+      }}
+    >
+      +
+    </button>
+  </div>
+</td>
                                     <td>
-                                        <div className={styles.qtyControl}>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    const minUnit = Number(item.minimumOrderUnit) || 1;
-                                                    const current = Number(item.autoOrderQty) || 0;
-                                                    const newValue = Math.max(current - minUnit, 0);
-                                                    handleItemChange(index, "autoOrderQty", newValue);
-                                                }}
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                type="number"
-                                                value={item.autoOrderQty || 0}
-                                                readOnly
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    const minUnit = Number(item.minimumOrderUnit) || 1;
-                                                    const current = Number(item.autoOrderQty) || 0;
-                                                    const newValue = current + minUnit;
-                                                    handleItemChange(index, "autoOrderQty", newValue);
-                                                }}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
+                                        <span className={styles.totalQty}>{item.autoOrderQty ?? 0}</span>
                                     </td>
-
                                     <td>
                                         <input
                                             type="checkbox"
-                                            checked={item.autoOrderEnabled || false}
+                                            checked={item.autoOrderEnabled ?? false}
                                             onChange={(e) =>
-                                                handleItemChange(
-                                                    index,
-                                                    "autoOrderEnabled",
-                                                    e.target.checked
-                                                )
+                                                handleItemChange(index, "autoOrderEnabled", e.target.checked)
                                             }
                                         />
                                     </td>
