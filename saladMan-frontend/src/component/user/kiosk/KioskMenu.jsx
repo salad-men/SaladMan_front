@@ -200,10 +200,17 @@ export default function KioskMenu() {
             </button>
           </div>
         </div>
-        {!isMobile && (
+        {isMobile ? (
+          <CartBar
+            cartItems={cartItems}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemoveItem={handleRemoveItem}
+            onClearCart={handleClearCart}
+            className="fixedBar"
+          />
+        ) : (
           <div
-            className={`${styles.cartContainer} ${isCartOpen ? styles.open : styles.closed
-              }`}
+            className={`${styles.cartContainer} ${isCartOpen ? styles.open : styles.closed}`}
           >
             <button
               className={styles.toggleButton}
