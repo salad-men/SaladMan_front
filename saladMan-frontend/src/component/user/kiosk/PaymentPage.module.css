@@ -1,0 +1,33 @@
+/* PaymentTest.module.css */
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.paymentButton {
+    width: 100%;
+    padding: 16px;
+    background-color: #4d774e;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.paymentButton:hover {
+    background-color: #3a5e3b;
+}
+
+.paymentButton:active {
+    transform: scale(0.98);
+}
+
+.agreementSection {
+    margin-top: 16px;
+}
