@@ -3,9 +3,10 @@
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: #ffffff;
   box-sizing: border-box;
   font-family: 'Pretendard', sans-serif;
+  padding: 24px 100px 0px 280px;
 }
 
 .content {
@@ -13,16 +14,13 @@
   width: calc(100% - 200px);
   background-color: white;
   padding: 30px 20px;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   min-height: calc(100vh - 60px);
   overflow: auto;
 }
 
 .title {
   margin: 0 0 16px;
-  font-size: 20px;
+font-size: 28px;
   color: #3d5a40;
   font-weight: 700;
 }
@@ -47,7 +45,8 @@
 .filters select,
 .filters input {
   padding: 6px 10px;
-  font-size: 14px;
+  font-size: 16px;
+  height: 40px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
@@ -195,4 +194,10 @@
   background-color: #4d774e;
   color: white;
   border-color: #4d774e;
+}
+.filtersWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }

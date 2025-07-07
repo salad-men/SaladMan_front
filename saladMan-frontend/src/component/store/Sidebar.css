@@ -1,26 +1,49 @@
-.sidebar{
-    background-color: #4D774E;
-    color: white;
-    width: 230px;
-    margin: 0;
-    padding: 20px;
+.sidebar {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  background-color: #4D774E;
+  color: white;
+  height: 85vh;
+  width: 230px;
+  padding-top: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0 29px 29px 0;
+  z-index: 999;
 }
-.sidebar h1 {
-    margin: 10px 0 0 20px;
+
+.title {
+  margin: 10px 0 20px 20px;
+  padding-top: 10px;
+  padding-left: 20px;
+  font-size: 28px;
+  font-weight: bold;
 }
-.sidebar ul {
-    padding: 10px;
+
+.list {
+  padding: 0 0 10px;
+  margin: 0;
+  list-style: none;
+  flex-grow: 1;
 }
-.sidebar li{
-    list-style: none;
-    font-size: 20px;
-    padding: 10px 20px;
-    
+
+.listItem {
+  padding: 15px 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
-.sidebar li:hover {
-    background-color: #3F6940;
+
+.listItem:hover {
+  background-color: #133b13;
+  color: white;
 }
-.sidebar a {
-    text-decoration: none;
-    color: inherit;
+
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
 }

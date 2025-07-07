@@ -1,31 +1,23 @@
 /* 레이아웃 */
 .container {
   display: flex;
-  min-height: 100vh;
-  background: #f8fafc;
+      padding: 24px 100px 0 280px;
 }
 
 .content {
-  position: absolute;
-  top: 62px;
-  left: 200px;
+  position: relative;
   width: calc(100% - 200px);
-  padding: 48px 7vw 36px 7vw;
-  background: #fdfefd;
+  padding: 30px 20px;
+  background: #ffffff;
   min-height: calc(100vh - 62px);
-  border-left: 1.5px solid #e0ebe4;
-  box-sizing: border-box;
-  border-radius: 0 0 0 32px;
-  box-shadow: 0 10px 32px 0 rgba(60, 88, 80, 0.14);
   overflow: auto;
 }
 
 .title {
-  margin: 0 0 32px 0;
-  font-size: 1.45rem;
-  color: #183a2e;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  margin: 0 0 16px;
+  font-size: 28px;
+  color: #3d5a40;
+  font-weight: bold;
 }
 
 /* ------- Top Row: 필터/버튼 ------- */
@@ -150,17 +142,16 @@
   box-shadow: 0 6px 32px var(--shadow);
   border-radius: 6px;
   overflow: hidden;
-
+  height: auto;
   /* ↓ 고정 레이아웃 추가 */
   table-layout: fixed;
 }
 
 .table th,
 .table td {
-  padding: 14px;
+  padding: 10px 14px;
   text-align: center;
-  border-bottom: 1px solid var(--gray-200);
-
+  border-bottom: 0.5px solid #dfe8e2;
   /* ↓ 컬럼 균일화 */
   overflow: hidden;
   text-overflow: ellipsis;

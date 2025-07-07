@@ -95,7 +95,7 @@ export default function OrderSettings() {
                                 <span className={styles.slider}></span>
                             </label>
                             <div className={styles.tooltipWrap}>
-                                자동발주란&nbsp;
+                                자동발주시간&nbsp;
                                 <span className={styles.tooltipText}>
                                     자동 발주 시간은 오후 5시입니다.
                                 </span>

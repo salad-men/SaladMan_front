@@ -91,7 +91,6 @@ export default function StoreDisposalList() {
         <h2 className={styles.title}>{user.name} 폐기 신청 내역</h2>
         <div className={styles.filters}>
           <label>
-            분류
             <select
               name="category"
               value={filters.category}

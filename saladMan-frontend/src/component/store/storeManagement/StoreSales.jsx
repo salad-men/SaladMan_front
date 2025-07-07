@@ -154,7 +154,6 @@ const StoreSales = () => {
 
                 <div className={style.filterBox}>
                     <div className={style.filterRow}>
-                        <label className={style.filterLabel}>기간</label>
                         <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
                             ~ 
                         <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
