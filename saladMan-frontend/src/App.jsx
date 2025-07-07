@@ -155,14 +155,14 @@ function App() {
   return (
     <>
       {/* fcm알람 */}
-      {token && (
+      {user?.id && (
         <>
           <div onClick={openModal}
-          style={{position: "absolute", top: 8, right: 45, fontSize: 23, cursor:"pointer"}}>🔔</div>
+          style={{position: "absolute", top: 15, right: 45, fontSize: 23, cursor:"pointer"}}>🔔</div>
           {alarms.length > 0 && (
             <div style={{
               width: '5px', height: '5px', backgroundColor: 'red',
-              position: 'absolute', top: 14, right: 47, borderRadius: '50%'
+              position: 'absolute', top: 21, right: 47, borderRadius: '50%'
             }}></div>
           )}
         </>
