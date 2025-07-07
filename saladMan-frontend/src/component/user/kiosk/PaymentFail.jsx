@@ -1,25 +1,25 @@
-import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useAtomValue } from "jotai";
-import { accessTokenAtom } from "/src/atoms";
-import { myAxios } from "/src/config";
-
+import styles from "./PaymentFail.module.css";
 
 export default function PaymentFail() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const token = useAtomValue(accessTokenAtom);
 
-    const paymentKey = searchParams.get("paymentKey");
     const orderId = searchParams.get("orderId");
-    const amount = searchParams.get("amount");
 
-    return(
-        <>
-            <h1>결제실패</h1>
-            <h2>매장 직원에게 문의하세요</h2>
-            <button onClick={()=>{navigate("/kiosk/main")}}>홈으로</button>
-        </>
-    )
+    return (
+        <div className={styles.container}>
+            <div className={styles.card}>
+                <h2 className={styles.title}>❌ 결제에 실패했습니다</h2>
+                <p className={styles.message}>매장 직원에게 문의해 주세요.</p>
 
+                <button
+                    className={styles.homeButton}
+                    onClick={() => navigate("/kiosk/main")}
+                >
+                    홈으로
+                </button>
+            </div>
+        </div>
+    );
 }

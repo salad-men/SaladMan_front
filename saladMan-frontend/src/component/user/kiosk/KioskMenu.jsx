@@ -21,8 +21,9 @@ export default function KioskMenu() {
 
   const token = useAtomValue(accessTokenAtom);
   const store = useAtomValue(userAtom);
-
+  const [isCartOpen, setIsCartOpen] = useState(true);
   const pageSize = 9;
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 820);
@@ -199,22 +200,27 @@ export default function KioskMenu() {
             </button>
           </div>
         </div>
-        {isMobile ? (
-          <CartBar
-            cartItems={cartItems}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemoveItem}
-            onClearCart={handleClearCart}
-            className="fixedBar"
-          />) : (
-          <div className={styles.cartContainer}>
-            <CartBar
-              cartItems={cartItems}
-              onUpdateQuantity={handleUpdateQuantity}
-              onRemoveItem={handleRemoveItem}
-              onClearCart={handleClearCart}
-              className="staticCart"
-            />
+        {!isMobile && (
+          <div
+            className={`${styles.cartContainer} ${isCartOpen ? styles.open : styles.closed
+              }`}
+          >
+            <button
+              className={styles.toggleButton}
+              onClick={() => setIsCartOpen((prev) => !prev)}
+            >
+              {isCartOpen ? "▶" : "◀"}
+            </button>
+
+            {isCartOpen && (
+              <CartBar
+                cartItems={cartItems}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemoveItem={handleRemoveItem}
+                onClearCart={handleClearCart}
+                className="staticCart"
+              />
+            )}
           </div>
         )}
       </div>

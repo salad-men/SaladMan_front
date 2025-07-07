@@ -15,48 +15,48 @@ const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart
   const token = useAtomValue(accessTokenAtom);
   const store = useAtomValue(userAtom);
 
-const handleOrder = async () => {
-  if (cartItems.length === 0) {
-    alert("장바구니에 담긴 상품이 없습니다.");
-    return;
-  }
-  if (!store || !store.id) {
-    alert("매장 정보가 없습니다.");
-    return;
-  }
-  try {
-    const res = await myAxios(token).post("/kiosk/prepare", {
-      storeId: store.id,
-      items: cartItems.map((item) => ({
-        menuId: item.menuId,
-        quantity: item.quantity,
-        price: item.salePrice
-      }))
-    });
+  const handleOrder = async () => {
+    if (cartItems.length === 0) {
+      alert("장바구니에 담긴 상품이 없습니다.");
+      return;
+    }
+    if (!store || !store.id) {
+      alert("매장 정보가 없습니다.");
+      return;
+    }
+    try {
+      const res = await myAxios(token).post("/kiosk/prepare", {
+        storeId: store.id,
+        items: cartItems.map((item) => ({
+          menuId: item.menuId,
+          quantity: item.quantity,
+          price: item.salePrice
+        }))
+      });
 
-    const { orderId, amount } = res.data;
+      const { orderId, amount } = res.data;
 
-    // 결제 페이지로 이동 + 데이터 전달
-    navigate("/kiosk/paymentPage", {
-      state: {
-        orderId,
-        amount
-      }
-    });
+      // 결제 페이지로 이동 + 데이터 전달
+      navigate("/kiosk/paymentPage", {
+        state: {
+          orderId,
+          amount
+        }
+      });
 
-  } catch (err) {
-    console.error("결제 준비 오류", err);
-    alert("결제를 준비할 수 없습니다.");
-  }
-};
+    } catch (err) {
+      console.error("결제 준비 오류", err);
+      alert("결제를 준비할 수 없습니다.");
+    }
+  };
 
   return (
     <div className={`${styles.cartBar} ${styles[className] || ''}`}>
       <h2><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
-  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-</svg> &nbsp; 카트</h2>
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+      </svg> &nbsp; 카트</h2>
       <div className={styles.tableWrapper}>
-        
+
         <div className={styles.bodyWrapper}>
           <table className={styles.cartTable}>
             <tbody>
