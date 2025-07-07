@@ -11,8 +11,7 @@ import useChatSSE from '../Chat/useChatSSE';
 import './HqHeader.css';
 
 const HqHeader = () => {
-    const [store, setStore] = useAtom(userAtom);
-    const user = useAtomValue(userAtom);
+    const [user, setUser] = useAtom(userAtom);
     const token = useAtomValue(accessTokenAtom);
     const jwt = token?.replace(/^Bearer\s+/i, '');
     const navigate = useNavigate();
@@ -80,6 +79,7 @@ const HqHeader = () => {
   const logout = (e) => {
     e.preventDefault();
     sessionStorage.clear();
+    setUser(null);
     navigate('/');
   };
 
