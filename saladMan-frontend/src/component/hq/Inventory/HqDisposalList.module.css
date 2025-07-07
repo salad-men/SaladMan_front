@@ -88,6 +88,7 @@
 .searchBtn {
   padding: 6px 14px;
   background: #4d774e;
+  
   color: white;
   border: none;
   border-radius: 4px;
@@ -150,11 +151,11 @@
 /* 열 너비 조정 */
 .table th:nth-child(3),
 .table td:nth-child(3) {
-  width: 140px; /* 품목명 */
+  width: 140px;
 }
 .table th:nth-child(4),
 .table td:nth-child(4) {
-  width: 80px;  /* 분류 */
+  width: 80px; 
 }
 
 /* 데이터 없을 때 */

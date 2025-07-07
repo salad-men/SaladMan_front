@@ -1,49 +1,51 @@
-import { useState, useEffect } from 'react';
-import { useAtomValue } from 'jotai';
-import styles from './HqUpdateMenu.module.css';
-import HqSidebarMenu from './HqSidebarMenu';
-import { myAxios } from '../../../config';
-import { accessTokenAtom } from '/src/atoms';
+import React, { useState, useRef, useEffect } from "react";
+import { useAtomValue } from "jotai";
+import { useNavigate } from "react-router-dom";
+import HqSidebarMenu from "./HqSidebarMenu";
+import { myAxios } from "../../../config";
+import { accessTokenAtom } from "/src/atoms";
+import styles from "./HqUpdateMenu.module.css";
 
 export default function HqUpdateMenu() {
   const token = useAtomValue(accessTokenAtom);
+  const navigate = useNavigate();
 
+  // 메뉴 사진
+  const [imgFile, setImgFile] = useState(null);
+  const [imgPreview, setImgPreview] = useState("");
+  const imgInputRef = useRef(null);
+
+  // 폼 입력
+  const [menuName, setMenuName] = useState("");
+  const [salePrice, setSalePrice] = useState("");
+  const [menuCategory, setMenuCategory] = useState([]);
+  const [selectedMenuCategoryId, setSelectedMenuCategoryId] = useState("");
+
+  // 재료
+  const [ingredientDetails, setIngredientDetails] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [selectedIngredientIds, setSelectedIngredientIds] = useState([]);
-  const [ingredientDetails, setIngredientDetails] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(ingredients[0]?.categoryId || null);
-  const [Menucategory, setMenuCategory] = useState([]);
-  const [selectedMenuCategoryId, setSelectedMenuCategoryId] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   useEffect(() => {
     if (!token) return;
-    const axios = myAxios(token);
-
-    const MenuCategory = async () => {
-      try {
-        const res = await axios.get('/hq/menuCategory');
-        setMenuCategory(res.data);
-      } catch (error) {
-        console.error('카테고리 목록 불러오기 실패', error);
-      }
-  };
-
-    MenuCategory();
+    myAxios(token)
+      .get("/hq/menuCategory")
+      .then((res) => setMenuCategory(res.data))
+      .catch(console.error);
   }, [token]);
 
+  // 재료 목록 불러오기
   const fetchIngredients = async () => {
     try {
-      const res = await myAxios(token).get('/hq/ingredientInfo');
+      const res = await myAxios(token).get("/hq/ingredientInfo");
       setIngredients(res.data);
-
-      const firstCategoryId = res.data[0]?.categoryId ?? null;
-      setSelectedCategoryId(firstCategoryId);
-    } catch (error) {
-      console.error('재료 목록 불러오기 실패', error);
+      setSelectedCategoryId(res.data[0]?.categoryId ?? null);
+    } catch (e) {
+      alert("재료 목록 불러오기 실패");
     }
   };
-
 
   const openModal = async () => {
     await fetchIngredients();
@@ -51,215 +53,334 @@ export default function HqUpdateMenu() {
   };
 
   const addSelectedIngredient = () => {
-  if (selectedIngredientIds.length === 0) {
-    return alert('재료를 선택하세요');
-  }
-
-  const selectedIngredients = ingredients.filter(ing =>
-    selectedIngredientIds.includes(ing.ingredientId)
-  );
-
-  if (selectedIngredients.length === 0) {
-    return alert('재료 정보를 찾을 수 없습니다.');
-  }
-
-  // 이미 추가된 재료 중복 방지
-  setIngredientDetails(prev => {
-    const existingIds = prev.map(i => i.ingredientId);
-    const newItems = selectedIngredients
-      .filter(ing => !existingIds.includes(ing.ingredientId))
-      .map(ing => ({ ...ing, quantity: '' }));
-    return [...prev, ...newItems];
-  });
-
-  setModalOpen(false);
-  setSelectedIngredientIds([]);
-};
+    if (selectedIngredientIds.length === 0) return alert("재료를 선택하세요");
+    const selected = ingredients.filter((ing) =>
+      selectedIngredientIds.includes(ing.ingredientId)
+    );
+    setIngredientDetails((prev) => {
+      const existingIds = prev.map((i) => i.ingredientId);
+      const newItems = selected
+        .filter((ing) => !existingIds.includes(ing.ingredientId))
+        .map((ing) => ({ ...ing, quantity: "" }));
+      return [...prev, ...newItems];
+    });
+    setModalOpen(false);
+    setSelectedIngredientIds([]);
+  };
 
   const toggleIngredientSelection = (id) => {
-  setSelectedIngredientIds((prev) =>
-    prev.includes(id)
-      ? prev.filter((selectedId) => selectedId !== id)
-      : [...prev, id]
-  );
-};
+    setSelectedIngredientIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
 
-const menuData = {
-  name: '',
-  salePrice: parseInt(document.getElementById("price").value),
-  categoryId: parseInt(selectedMenuCategoryId),
-  ingredients: ingredientDetails.map(i => ({
-    ingredientId: i.ingredientId,
-    quantity: parseInt(i.quantity)
-  }))
-};
+  // 메뉴 사진 업로드(1장)
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setImgFile(file);
+      setImgPreview(ev.target.result);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+  const handleRemoveImg = () => {
+    setImgFile(null);
+    setImgPreview("");
+  };
 
-const formData = new FormData();
-formData.append("menu", JSON.stringify(menuData));
+  // 저장
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!menuName || !salePrice || !selectedMenuCategoryId) {
+      return alert("메뉴 이름, 가격, 카테고리를 모두 입력하세요.");
+    }
+    const menu = {
+      name: menuName,
+      salePrice: parseInt(salePrice),
+      categoryId: selectedMenuCategoryId,
+      ingredients: ingredientDetails.map((i) => ({
+        ingredientId: i.ingredientId,
+        quantity: parseInt(i.quantity),
+      })),
+    };
+    const formData = new FormData();
+    formData.append("menu", JSON.stringify(menu));
+    if (imgFile) formData.append("image", imgFile);
 
-const imageInput = document.getElementById("image");
-if (imageInput.files.length > 0) {
-  formData.append("image", imageInput.files[0]);
-}
-
- myAxios.post("/hq/registerMenu", formData, {
-  headers: { "Content-Type": "multipart/form-data" }
-});
+    try {
+      await myAxios(token).post("/hq/registerMenu", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      alert("메뉴 등록 성공!");
+      navigate("/hq/totalMenu");
+    } catch (err) {
+      alert("등록 실패");
+      console.error(err);
+    }
+  };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.container}>
       <HqSidebarMenu />
-      <div className={styles.content}>
-        <header className={styles.pageHeader}>
-          <h2>메뉴 등록</h2>
-        </header>
-        <form>
-          <table className={styles.table}>
-            <tbody>
-              <tr>
-                <td className={styles.labelCell}>메뉴 사진</td>
-                <td><input type="file" id="image" accept="image/*" /></td>
-                <td className={styles.labelCell}>판매가</td>
-                <td>
-                  <div className={styles.flexRow}>
-                    <input type="number" id="price" placeholder="판매가 (₩)" min="0" />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.labelCell}>메뉴 이름</td>
-                <td><input type="text" id="name" required /></td>
-                <td className={styles.labelCell}>카테고리</td>
-                  <td>
-                    <select
-                      value={selectedMenuCategoryId}
-                      onChange={(e) => setSelectedMenuCategoryId(e.target.value)}
-                      required
+      <main className={styles.content}>
+        {/* 타이틀은 innerContainer 바깥 */}
+        <h2 className={styles.title}>메뉴 등록</h2>
+        <div className={styles.innerContainer}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            {/* 메뉴 사진 */}
+            <div className={styles.formRow}>
+              <label className={styles.formLabel}>메뉴 사진</label>
+              <div className={styles.imagesContainer}>
+                {imgPreview ? (
+                  <div className={styles.imageBox}>
+                    <img
+                      src={imgPreview}
+                      alt="미리보기"
+                      className={styles.imagePreview}
+                    />
+                    <button
+                      type="button"
+                      className={styles.imgRemoveBtn}
+                      title="삭제"
+                      onClick={handleRemoveImg}
                     >
-                      <option value="">카테고리를 선택하세요</option>
-                      {Menucategory.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-              </tr>
-              <tr>
-                <td className={styles.labelCell}>메뉴 재료</td>
-                <td colSpan={3} className={styles.ingredientCell}>
-                  <div className={styles.ingredientWrapper}>
-                  <table className={styles.ingredientTable}>
-                    <thead>
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className={styles.imageBox + " " + styles.addBox}
+                    onClick={() => imgInputRef.current.click()}
+                    tabIndex={0}
+                    role="button"
+                    title="이미지 추가"
+                  >
+                    <img
+                      src="/plus.png"
+                      alt="이미지 추가"
+                      className={styles.plusIcon}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      ref={imgInputRef}
+                      onChange={handleImageChange}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 메뉴명 */}
+            <div className={styles.formRow}>
+              <label className={styles.formLabel}>메뉴명</label>
+              <input
+                type="text"
+                className={styles.input}
+                value={menuName}
+                onChange={(e) => setMenuName(e.target.value)}
+                placeholder="메뉴명을 입력하세요"
+                required
+              />
+            </div>
+
+            {/* 카테고리 */}
+            <div className={styles.formRow}>
+              <label className={styles.formLabel}>카테고리</label>
+              <select
+                className={styles.input}
+                value={selectedMenuCategoryId}
+                onChange={(e) => setSelectedMenuCategoryId(e.target.value)}
+                required
+              >
+                <option value="">카테고리를 선택하세요</option>
+                {menuCategory.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* 판매가 */}
+            <div className={styles.formRow}>
+              <label className={styles.formLabel}>판매가</label>
+              <input
+                type="number"
+                className={styles.input}
+                value={salePrice}
+                onChange={(e) => setSalePrice(e.target.value)}
+                placeholder="판매가 (₩)"
+                min="0"
+                required
+              />
+            </div>
+
+            {/* 재료 추가 */}
+            <div className={styles.formRow}>
+              <label className={styles.formLabel}>메뉴 재료</label>
+              <div className={styles.ingredientArea}>
+                <div className={styles.ingredientHeaderRow}>
+                  <span className={styles.ingredientTitle}></span>
+                  <button
+                    type="button"
+                    className={styles.btnAddIng}
+                    onClick={openModal}
+                  >
+                    + 재료추가
+                  </button>
+                </div>
+                <table className={styles.ingredientTable}>
+                  <thead>
+                    <tr>
+                      {/* <th>카테고리</th> */} {/* 카테고리 뺄 경우 */}
+                      <th>재료명</th>
+                      <th>용량</th>
+                      <th>-</th>
+                    </tr>
+                  </thead>
+                  <tbody className={styles.scrollBody}>
+                    {ingredientDetails.length === 0 && (
                       <tr>
-                        <th>카테고리</th>
-                        <th>재료명</th>
-                        <th>용량</th>
-                        <th>-</th>
+                        <td colSpan={4} className={styles.noIngredient}>재료를 추가하세요</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {ingredientDetails.map((ing) => (
-                        <tr key={ing.ingredientId}>
-                          <td>{ing.category}</td>
-                          <td>{ing.name}</td>                          
-                          <td>
+                    )}
+                    {ingredientDetails.map((ing) => (
+                      <tr key={ing.ingredientId}>
+                        {/* <td>{ing.category}</td> */}
+                        <td>{ing.name}</td>
+                        <td className={styles.qtyCell}>
+                          <div className={styles.qtyFlex}>
                             <input
                               type="number"
+                              className={styles.ingQtyInput}
                               placeholder="용량 입력"
                               value={ing.quantity}
                               min="0"
                               onChange={(e) => {
                                 const value = e.target.value;
-                                setIngredientDetails(prev =>
-                                  prev.map(item =>
-                                    item.ingredientId === ing.ingredientId ? { ...item, quantity: value } : item
+                                setIngredientDetails((prev) =>
+                                  prev.map((item) =>
+                                    item.ingredientId === ing.ingredientId
+                                      ? { ...item, quantity: value }
+                                      : item
                                   )
                                 );
                               }}
+                              required
                             />
-                            {ing.unit}
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className={styles.deleteButton}
-                              onClick={() => {
-                                setIngredientDetails(prev =>
-                                  prev.filter(item => item.ingredientId !== ing.ingredientId)
-                                );
-                              }}
-                            >
-                              삭제
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                      <tr>
-                        <td colSpan={4}>
-                           <a onClick={openModal}> + </a>
+                            <span className={styles.unit}>{ing.unit}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            className={styles.btnRemoveIng}
+                            onClick={() =>
+                              setIngredientDetails((prev) =>
+                                prev.filter((item) => item.ingredientId !== ing.ingredientId)
+                              )
+                            }
+                          >
+                            삭제
+                          </button>
                         </td>
                       </tr>
-                    </tbody>
-                  </table>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div>
-            <button type="submit" className={styles.button}>저장</button>
-          </div>
-        </form>
+                    ))}
+                  </tbody>
+                </table>
 
-        {isModalOpen && (
-          <div className={`${styles.modal} ${isModalOpen ? styles.modalOpen : ''}`}>
-            <div className={styles.modalContent}>
-              <h3>재료 선택</h3>
 
-              {/* 카테고리 탭 */}
-              <div className={styles.tabRow}>
-                {Array.from(new Set(ingredients.map(ing => ing.categoryId))).map(catId => {
-                  const catName = ingredients.find(ing => ing.categoryId === catId)?.category;
-                  return (
-                    <button
-                      key={catId}
-                      className={`${styles.tabButton} ${selectedCategoryId === catId ? styles.activeTab : ''}`}
-                      onClick={() => setSelectedCategoryId(catId)}
-                    >
-                      {catName}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* 선택된 카테고리의 재료 목록 */}
-              <div className={styles.ingredientGrid}>
-                {ingredients
-                  .filter(ing => selectedCategoryId === null || ing.categoryId === selectedCategoryId)
-                  .map(ing => (
-                    <label key={ing.ingredientId}>
-                      <input
-                        type="checkbox"
-                        value={ing.ingredientId}
-                        checked={selectedIngredientIds.includes(ing.ingredientId)}
-                        onChange={() => toggleIngredientSelection(ing.ingredientId)}
-                      />
-                      {ing.name}
-                    </label>
-                  ))}
-              </div>
-
-              <div className={styles.flexRow}>
-                <button type="button" className={styles.button} onClick={addSelectedIngredient}>확인</button>
-                <button type="button" className={styles.button} onClick={() => setModalOpen(false)}>취소</button>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+
+            {/* 버튼 */}
+            <div className={styles.btnBox}>
+              <button type="submit" className={styles.btnSubmit}>
+                저장
+              </button>
+              <button
+                type="button"
+                className={styles.btnCancel}
+                onClick={() => navigate("/hq/totalMenu")}
+              >
+                취소
+              </button>
+            </div>
+          </form>
+
+          {/* 재료 선택 모달 */}
+          {isModalOpen && (
+            <div className={styles.modalBg} onClick={() => setModalOpen(false)}>
+              <div className={styles.modalBox} onClick={(e) => e.stopPropagation()}>
+                <h3 className={styles.modalHeader}>재료 선택</h3>
+                <div className={styles.tabRow}>
+                  {Array.from(new Set(ingredients.map((ing) => ing.categoryId))).map(
+                    (catId) => {
+                      const catName = ingredients.find(
+                        (ing) => ing.categoryId === catId
+                      )?.category;
+                      return (
+                        <button
+                          key={catId}
+                          className={
+                            styles.tabButton +
+                            " " +
+                            (selectedCategoryId === catId ? styles.activeTab : "")
+                          }
+                          onClick={() => setSelectedCategoryId(catId)}
+                          type="button"
+                        >
+                          {catName}
+                        </button>
+                      );
+                    }
+                  )}
+                </div>
+                <div className={styles.ingredientGrid}>
+                  {ingredients
+                    .filter(
+                      (ing) =>
+                        selectedCategoryId === null ||
+                        ing.categoryId === selectedCategoryId
+                    )
+                    .map((ing) => (
+                      <label key={ing.ingredientId} className={styles.checkboxLabel}>
+                        <input
+                          type="checkbox"
+                          value={ing.ingredientId}
+                          checked={selectedIngredientIds.includes(ing.ingredientId)}
+                          onChange={() => toggleIngredientSelection(ing.ingredientId)}
+                        />
+                        {ing.name}
+                      </label>
+                    ))}
+                </div>
+                <div className={styles.modalFooter}>
+                  <button
+                    type="button"
+                    className={styles.btnModalSave}
+                    onClick={addSelectedIngredient}
+                  >
+                    확인
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.btnModalCancel}
+                    onClick={() => setModalOpen(false)}
+                  >
+                    취소
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
-
-
