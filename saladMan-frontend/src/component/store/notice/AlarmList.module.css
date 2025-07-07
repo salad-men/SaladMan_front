@@ -1,15 +1,16 @@
 .wrapper {
   display: flex;
   height: calc(100vh - 64px);
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow: hidden;
   overflow-y: scroll;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
   flex: 1;
   align-self: flex-start;
-  padding: 30px 0 0 0;
+  padding: 30px 0 0 20px;
   overflow-y: auto;
   max-width: 1500px;
   margin: 0 auto;
@@ -20,6 +21,12 @@
   display: flex;
   flex-direction: column;
 }
+.pageHeader h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #3d5a40;
+  font-weight: bold;
+}
 
 .inboxContainer h2 {
   margin-bottom: 20px;
@@ -29,6 +36,8 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  color: rgb(148, 148, 148);
+  font-size: 14px;
 }
 
 .inboxControls button {
@@ -40,7 +49,14 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.inboxSummary{  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  color: #666;
 
+}
 .inboxControls button:hover {
   background-color: #3F6940;
 }

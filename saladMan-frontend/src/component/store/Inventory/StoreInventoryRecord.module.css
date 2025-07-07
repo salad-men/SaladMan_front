@@ -57,10 +57,15 @@
   transition: opacity 0.2s ease;
 }
 
+.row .dateButtons {
+  display: flex;
+  gap: 8px;
+}
 .row button:hover {
   opacity: 0.9;
+  color: white;
+  background-color: #959595;
 }
-
 .btnSmall {
   background-color: #eee;
   color: #333;
@@ -73,6 +78,10 @@
 
 .reset {
   background-color: #aaa;
+  color: white;
+}
+.selected {
+  background-color: #4d774e;
   color: white;
 }
 
