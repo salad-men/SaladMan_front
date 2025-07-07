@@ -30,6 +30,7 @@ export default function EmpScheduleTable({
         return map;
     }, [schedules]);
 
+    // select 값 변경 (임시저장)
     const handleChange = (empId, day, val) => {
         setEdited(prev => ({
             ...prev,
@@ -75,7 +76,7 @@ export default function EmpScheduleTable({
         onRefresh();
     };
 
-    // 합계
+    // 합계 (row, col)
     const totalByEmp = employees.reduce((acc, emp) => {
         acc[emp.id] = days.reduce((s, d) => {
             const v = (edited[`${emp.id}_${d}`] ?? cellMap[emp.id]?.[d]);

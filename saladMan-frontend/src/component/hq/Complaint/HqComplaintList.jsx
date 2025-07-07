@@ -103,18 +103,23 @@ export default function HqComplaintList() {
     }
   };
 
-  const handleForwardSelected = () => {
+  const handleForwardSelected = async () => {
     if (selectedIds.length === 0) {
       alert("전달할 항목을 선택하세요.");
       return;
     }
-    setComplaints(prev =>
-      prev.map(item =>
-        selectedIds.includes(item.id) ? { ...item, status: "전달완료" } : item
-      )
-    );
+    try {
+      for (const id of selectedIds) {
+        await myAxios(token).post("/hq/complaint/forward", { id });
+      }
+      alert("선택한 항목이 전달되었습니다.");
+      fetchComplaintList(page);
+    } catch (e) {
+      alert("일부 항목 전달에 실패했습니다.");
+    }
     setSelectedIds([]);
   };
+
 
   const renderPageButtons = () => {
     const buttons = [];

@@ -21,21 +21,24 @@ export default function ScheduleCalendar() {
     const storeId = user?.storeId ?? user?.id;
     const today = new Date();
 
+    // 월/연도, 뷰타입
     const [viewType, setViewType] = useState("calendar");
     const [year, setYear] = useState(today.getFullYear());
     const [month, setMonth] = useState(today.getMonth() + 1);
+
+    // 데이터
     const [employees, setEmployees] = useState([]);
     const [schedules, setSchedules] = useState([]);
     const [modal, setModal] = useState(null);
 
-    // 직원 불러오기
+    // 직원 리스트 로딩
     useEffect(() => {
         if (!token || !storeId) return;
         myAxios(token).post("/store/emp/list", { storeId, page: 1 })
             .then(res => setEmployees(res.data.employees || []));
     }, [token, storeId]);
 
-    // 스케줄 불러오기
+    // 근무표 로딩(모든 뷰 공통)
     const fetchSchedules = useCallback(() => {
         if (!token || !storeId) return;
         myAxios(token).get("/store/schedule/month", {
@@ -44,30 +47,19 @@ export default function ScheduleCalendar() {
     }, [token, storeId, year, month]);
     useEffect(() => { fetchSchedules(); }, [fetchSchedules]);
 
-    // 스케줄 등록/수정/삭제 (멀티등록 포함)
+    // 등록/수정
     const upsertSchedule = async (dtos) => {
         if (!Array.isArray(dtos)) dtos = [dtos];
         await myAxios(token).post("/store/schedule/register", dtos);
         await fetchSchedules();
     };
+    // 삭제
     const deleteSchedule = async (employeeId, workDate) => {
         await myAxios(token).delete("/store/schedule", {
             params: { employeeId, workDate }
         });
         await fetchSchedules();
     };
-
-    // 합계표
-    const shiftSummary = employees.map(emp => {
-        const my = schedules.filter(s => s.employeeId === emp.id);
-        return {
-            empName: emp.name,
-            오픈: my.filter(s => s.shiftType === "오픈").length,
-            미들: my.filter(s => s.shiftType === "미들").length,
-            마감: my.filter(s => s.shiftType === "마감").length,
-            휴무: my.filter(s => s.shiftType === "휴무").length,
-        };
-    });
 
     // 월 변경
     const handleMonthChange = dir => {
@@ -80,7 +72,19 @@ export default function ScheduleCalendar() {
         }
     };
 
-    // FullCalendar events
+    // 합계표(동일로직: 테이블/캘린더 모두 연동)
+    const shiftSummary = employees.map(emp => {
+        const my = schedules.filter(s => s.employeeId === emp.id);
+        return {
+            empName: emp.name,
+            오픈: my.filter(s => s.shiftType === "오픈").length,
+            미들: my.filter(s => s.shiftType === "미들").length,
+            마감: my.filter(s => s.shiftType === "마감").length,
+            휴무: my.filter(s => s.shiftType === "휴무").length,
+        };
+    });
+
+    // 캘린더 이벤트 생성
     const events = schedules.map(sch => {
         const emp = employees.find(e => e.id === sch.employeeId);
         const conf = shiftOptions.find(opt => opt.type === sch.shiftType);
@@ -99,39 +103,9 @@ export default function ScheduleCalendar() {
         };
     });
 
-    // 이벤트 클릭(수정/삭제)
-    const handleEventClick = (info) => {
-        const { employeeId, shiftType, workDate } = info.event.extendedProps;
-        setModal({
-            mode: "edit",
-            date: workDate,
-            employeeId,
-            shiftType
-        });
-    };
-
-    // 모달-저장 (수정)
-    const handleModalSave = async () => {
-        if (!modal.employeeId || !modal.shiftType) return;
-        await upsertSchedule({
-            employeeId: modal.employeeId,
-            workDate: modal.date,
-            shiftType: modal.shiftType
-        });
-        setModal(null);
-    };
-
-    // 모달-삭제
-    const handleModalDelete = async () => {
-        await deleteSchedule(modal.employeeId, modal.date);
-        setModal(null);
-    };
-
-    // 셀 커스텀 +버튼 넣기
+    // 셀 +버튼 (멀티 등록)
     function dayCellContent(arg) {
-        // 날짜 없는 셀(이전달/다음달)은 패스
         if (!arg.date || arg.dayNumberText === "") return arg.dayNumberText;
-        // 오늘날짜 표시는 그대로
         return (
             <div style={{ position: "relative", width: "100%" }}>
                 <span>{arg.dayNumberText}</span>
@@ -154,6 +128,34 @@ export default function ScheduleCalendar() {
             </div>
         );
     }
+
+    // 이벤트 클릭 (수정/삭제)
+    const handleEventClick = (info) => {
+        const { employeeId, shiftType, workDate } = info.event.extendedProps;
+        setModal({
+            mode: "edit",
+            date: workDate,
+            employeeId,
+            shiftType
+        });
+    };
+
+    // 모달 저장
+    const handleModalSave = async () => {
+        if (!modal.employeeId || !modal.shiftType) return;
+        await upsertSchedule({
+            employeeId: modal.employeeId,
+            workDate: modal.date,
+            shiftType: modal.shiftType
+        });
+        setModal(null);
+    };
+
+    // 모달 삭제
+    const handleModalDelete = async () => {
+        await deleteSchedule(modal.employeeId, modal.date);
+        setModal(null);
+    };
 
     return (
         <div className={styles.calendarPageWrap}>
@@ -194,7 +196,7 @@ export default function ScheduleCalendar() {
                             dayCellContent={dayCellContent}
                         />
                     </div>
-                    {/* multi-add 모달 */}
+                    {/* 멀티등록 모달 */}
                     {modal && modal.mode === "multi-add" &&
                         <div className={styles.modalOverlay} onClick={() => setModal(null)}>
                             <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
@@ -207,7 +209,6 @@ export default function ScheduleCalendar() {
                                     <label>직원</label>
                                     <div style={{ maxHeight: 180, overflowY: "auto", display: "flex", flexDirection: "column", gap: 5 }}>
                                         {employees.map(e => {
-                                            // 이미 등록된 직원은 체크 불가
                                             const already = schedules.some(s =>
                                                 s.employeeId === e.id && s.workDate === modal.date
                                             );
@@ -262,7 +263,7 @@ export default function ScheduleCalendar() {
                             </div>
                         </div>
                     }
-                    {/* edit 모달 */}
+                    {/* 수정/삭제 모달 */}
                     {modal && modal.mode === "edit" &&
                         <div className={styles.modalOverlay} onClick={() => setModal(null)}>
                             <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
