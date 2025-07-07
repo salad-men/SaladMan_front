@@ -1,6 +1,6 @@
 .wrapper {
   display: flex;
-  min-height: 70vh;
+  /* min-height: 70vh; */
   background: #fff;
   overflow: hidden;
 }
@@ -9,10 +9,10 @@
   flex: 1;
   padding: 24px 100px 0 280px;
   background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.06); */
   overflow-y: auto;
   width: 1800px;
-  height: 1200px;
+  /* height: 1200px; */
   margin: 0 auto;
   position: relative;
 }

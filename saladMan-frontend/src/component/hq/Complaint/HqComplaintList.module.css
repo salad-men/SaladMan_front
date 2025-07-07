@@ -90,10 +90,11 @@
   display: flex;
   width: 100%;
   max-width: 1120px;
-  justify-content: flex-start;
+  justify-content: flex-end;
   margin-bottom: 16px;
 }
 .forwardSelectedBtn {
+  margin-left: 1580px;
   padding: 6px 18px;
   background: #57a964;
   color: white;

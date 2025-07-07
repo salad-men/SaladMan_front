@@ -9,11 +9,11 @@
 }
 .innerContainer {
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  /* border: 1px solid #ddd;
+  border-radius: 8px; */
   padding: 0 24px 10px 280px; 
-  min-height: 1230px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  /* min-height: 1230px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06); */
 }
 .title {
   font-size: 1.8rem;

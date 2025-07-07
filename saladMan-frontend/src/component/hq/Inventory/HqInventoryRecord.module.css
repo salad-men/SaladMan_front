@@ -1,7 +1,7 @@
 /* 전체 레이아웃 */
 .container { 
   display: flex;
-  background: #f7f8fa; 
+  background: #fff; 
 }
 .content {
    flex: 1;
@@ -9,11 +9,11 @@
   }
 .innerContainer {
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  /* border: 1px solid #ddd;
+  border-radius: 8px; */
   padding: 0px 100px 0 279px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  height: 1245px;
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  height: 1245px; */
   overflow: auto;
 }
 .title { font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 24px; }

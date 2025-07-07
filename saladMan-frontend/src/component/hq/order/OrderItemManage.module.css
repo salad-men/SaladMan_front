@@ -1,6 +1,6 @@
 .orderItemContainer {
     display: flex;
-    min-height: 70vh;
+    /* min-height: 70vh; */
     background: #fff;
     overflow: hidden;
 }
@@ -9,13 +9,13 @@
     padding: 25px 100px 60px 280px; 
     background: #fff;
     box-sizing: border-box;
-    border-left: 1px solid #e4e9e7;
+    /* border-left: 1px solid #e4e9e7; */
     display: flex;
     flex-direction: column;
     min-width: 0;
     position: relative;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    height: 1220px;
+    /* box-shadow: 0 4px 12px rgba(0,0,0,0.06); */
+    /* height: 1220px; */
     overflow: auto;
 }
 
