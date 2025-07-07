@@ -179,7 +179,7 @@ export default function StoreInventoryExpiration() {
           className={styles.row}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <label>분류</label>
+
             <select value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="all">전체</option>
               {categories.map((c) => (

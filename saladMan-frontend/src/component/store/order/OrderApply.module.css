@@ -2,21 +2,26 @@
 .orderApplyContainer {
     display: flex;
     height: calc(100vh - 64px);
-    background-color: #f9fafb;
     overflow: hidden;
+    padding: 24px 100px 0 280px;
 }
 .orderApplyContent {
     flex: 1;
-    padding: 40px 40px 60px;
+  padding: 30px 20px;
     background-color: white;
-    box-sizing: border-box;
-    border-left: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     min-width: 0;
     position: relative;
         overflow-y: auto; /* 내용 스크롤 */
 
+}
+
+.orderApplyContent h2{
+    margin: 0 0 16px;
+    font-size: 28px;
+    color: #3d5a40;
+    font-weight: bold;
 }
 .contentBox {
     display: flex;

@@ -1,22 +1,21 @@
 .container {
   display: flex;
+    padding: 24px 100px 0 280px;
 }
 
 .content {
   position: relative; 
-  padding: 40px;
-  background-color: #f9fafb;
-  border-left: 1px solid #ddd;
-  box-sizing: border-box;
+  padding: 30px 20px;
+  background-color: #ffffff;
   min-height: calc(100vh - 60px);
   overflow: auto;
-  width: calc(100% - 200px);
+  width: calc(100% - 280px);
 }
 
 
 .title {
-  margin: 0 0 20px;
-  font-size: 20px;
+  margin: 0 0 16px;
+  font-size: 28px;
   color: #3d5a40;
   font-weight: bold;
 }
@@ -64,10 +63,11 @@
 .row input[type="text"],
 .row select {
   padding: 6px 10px;
-  font-size: 14px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 200px;
+    height: 40px;
   box-sizing: border-box;
 }
 
@@ -121,7 +121,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .table th,

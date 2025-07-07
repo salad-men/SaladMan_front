@@ -1,17 +1,23 @@
-import { Link, Outlet } from "react-router";
-import '../Sidebar.css'
+import '../Sidebar.css';
 
 export default function OrderSidebar() {
     return (
-        <>
-            <div className="sidebar">
-                <h3>발주</h3>
-                <ul>
-                    <li><a href="/store/orderList">발주 목록</a></li>                
-                    <li><a href="/store/orderApply">발주 신청</a></li>
-                    <li><a href="/store/orderSettings">발주 설정</a></li>                
-                </ul>
-            </div>
-        </>
+        <div className="sidebar">
+            <h1 className="title">발주</h1>
+            <ul className="list">
+                <li className="listItem">
+                    <a href="/store/orderList" className="link">발주 목록</a>
+                </li>
+                <li className="listItem">
+                    <a href="/store/orderApply" className="link">발주 신청</a>
+                </li>
+                <li className="listItem">
+                    <a href="/store/stockInspection" className="link">발주입고 검수</a>
+                </li>
+                <li className="listItem">
+                    <a href="/store/orderSettings" className="link">발주 설정</a>
+                </li>
+            </ul>
+        </div>
     );
 }

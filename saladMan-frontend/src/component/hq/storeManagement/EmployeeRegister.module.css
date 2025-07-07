@@ -11,7 +11,7 @@
   align-items: center;
 }
 .pageTitle {
-  margin-top: 58px;
+  margin-top: 20px;
   margin-bottom: 34px;
   font-size: 2.2rem;
   font-weight: 800;
@@ -26,7 +26,7 @@
   background: #fff;
   border-radius: 28px;
   box-shadow: 0 4px 20px rgba(44,77,62,0.11);
-  padding: 48px 52px 48px 52px;
+  padding: 48px 52px 80px 52px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -188,35 +188,3 @@
   background-color: #2f6042;
 }
 
-@media (max-width: 1200px) {
-  .formCard {
-    width: 99vw;
-    min-width: 0;
-    padding: 22px 2vw 36px 2vw;
-  }
-  .formSection {
-    gap: 30px;
-  }
-  .avatarImageWrap {
-    width: 140px;
-    height: 140px;
-  }
-  .formLeft {
-    min-width: 180px;
-    max-width: 220px;
-  }
-}
-@media (max-width: 800px) {
-  .formCard {
-    width: 99vw;
-    padding: 12px 1vw 26px 1vw;
-  }
-  .formSection {
-    flex-direction: column;
-    gap: 28px;
-  }
-  .formLeft, .formRight {
-    min-width: 0;
-    max-width: 100%;
-  }
-}

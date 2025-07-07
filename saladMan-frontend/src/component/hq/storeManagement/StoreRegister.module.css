@@ -19,7 +19,7 @@
   font-size: 2.2rem;
   color: #2f6042;
   font-weight: 700;
-  margin-top: 80px;
+  margin-top: 40px;
   margin-bottom: 38px;
   letter-spacing: -1px;
   text-align: center;
@@ -29,15 +29,23 @@
   width: 100%;
   max-width: 1040px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column; 
   gap: 50px;
   background: #fff;
   box-shadow: 0 4px 18px rgba(0,0,0,0.09);
   border-radius: 28px;
-  padding: 20px 40px 46px 60px;
-  margin-bottom: 30px;
+  padding: 30px 40px 0px 60px;
+  margin-bottom: 10px;
   box-sizing: border-box;
+  align-items: center;
+  height: 650px;
+}
+.innerFlexRow {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
   align-items: flex-start;
+  width: 100%;
 }
 
 .regFormBox {
@@ -176,11 +184,11 @@
 
 .buttonGroup {
   display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-bottom: 40px;
-  margin-top: 16px;
+  justify-content: center;
+  gap: 32px;
+  /* margin-left: 280px; */
 }
+
 .backButton {
   padding: 14px 48px;
   border-radius: 9px;

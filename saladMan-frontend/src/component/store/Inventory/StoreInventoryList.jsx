@@ -117,9 +117,9 @@ export default function StoreInventoryList() {
     );
   };
 
-    const saveEdit = () => {
-      if (!token) return;
-    inventory.forEach(item => {
+  const saveEdit = () => {
+    if (!token) return;
+    inventory.forEach((item) => {
       myAxios(token).post("/store/inventory/update", {
         id: item.id,
         quantity: item.quantity,
@@ -142,48 +142,58 @@ export default function StoreInventoryList() {
         <h2 className={styles.title}>{user.name} 재고 조회</h2>
 
         {/* 필터 영역 */}
-        <div className={styles.filters}>
-          <label>
-            분류
-            <select name="category" value={filters.category} onChange={onFilterChange}>
-              <option value="all">전체</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div className={styles.filtersWrapper}>
+          <div className={styles.filters}>
+            <label>
+              <select
+                name="category"
+                value={filters.category}
+                onChange={onFilterChange}
+              >
+                <option value="all">전체</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          <input
-            type="text"
-            name="name"
-            value={filters.name}
-            placeholder="재료명 검색"
-            onChange={onFilterChange}
-          />
+            <input
+              type="text"
+              name="name"
+              value={filters.name}
+              placeholder="재료명 검색"
+              onChange={onFilterChange}
+            />
 
-          <button className={styles.search} onClick={handleSearchClick}>
-            검색
-          </button>
-        </div>
-
-        {/* 수정 버튼 */}
-        <div className={styles.actions}>
-          {!isEditMode ? (
-            <button className={styles.edit} onClick={() => setIsEditMode(true)}>
-              수정입력
+            <button className={styles.search} onClick={handleSearchClick}>
+              검색
             </button>
-          ) : (
-            <>
-              <button className={styles.save} onClick={saveEdit}>
-                저장하기
+          </div>
+
+          <div className={styles.actions}>
+            {!isEditMode ? (
+              <button
+                className={styles.edit}
+                onClick={() => setIsEditMode(true)}
+              >
+                수정입력
               </button>
-              <button className={styles.cancel} onClick={() => setIsEditMode(false)}>
-                취소
-              </button>
-            </>
-          )}
+            ) : (
+              <>
+                <button className={styles.save} onClick={saveEdit}>
+                  저장하기
+                </button>
+                <button
+                  className={styles.cancel}
+                  onClick={() => setIsEditMode(false)}
+                >
+                  취소
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* 재고 테이블 */}
@@ -197,7 +207,7 @@ export default function StoreInventoryList() {
               <th>단위가격</th>
               <th>재고량</th>
               <th>최소주문단위</th>
-              <th>최소보유량</th> 
+              <th>최소보유량</th>
               <th>유통기한</th>
               <th>입고날짜</th>
             </tr>
@@ -211,24 +221,25 @@ export default function StoreInventoryList() {
               inventory.map((r, i) => {
                 const isLowStock = r.quantity < r.minimumOrderUnit;
                 return (
-                  <tr key={r.id} className={isLowStock ? styles.lowStockRow : ""}>
+                  <tr
+                    key={r.id}
+                    className={isLowStock ? styles.lowStockRow : ""}
+                  >
                     <td>{r.store}</td>
                     <td>{r.name}</td>
                     <td>{r.category}</td>
                     <td>{r.unit}</td>
                     <td>
-                      <input
-                        type="number"
-                        value={r.unitCost}
-                        disabled={true}
-                      />
+                      <input type="number" value={r.unitCost} disabled={true} />
                     </td>
                     <td>
                       <input
                         type="number"
                         value={r.quantity}
                         disabled={!isEditMode}
-                        onChange={(e) => onInvChange(i, "quantity", e.target.value)}
+                        onChange={(e) =>
+                          onInvChange(i, "quantity", e.target.value)
+                        }
                       />
                     </td>
                     <td>
@@ -248,14 +259,18 @@ export default function StoreInventoryList() {
                     <td>
                       <input
                         type="date"
-                        value={r.expiredDate ? r.expiredDate.substring(0, 10) : ""}
+                        value={
+                          r.expiredDate ? r.expiredDate.substring(0, 10) : ""
+                        }
                         disabled={true}
                       />
                     </td>
                     <td>
                       <input
                         type="date"
-                        value={r.receivedDate ? r.receivedDate.substring(0, 10) : ""}
+                        value={
+                          r.receivedDate ? r.receivedDate.substring(0, 10) : ""
+                        }
                         disabled={true}
                       />
                     </td>

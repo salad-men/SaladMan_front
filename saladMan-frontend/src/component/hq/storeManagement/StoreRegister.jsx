@@ -158,6 +158,8 @@ export default function StoreRegister() {
             <div className={styles.regMainContent}>
                 <h2 className={styles.title}>매장 등록</h2>
                 <form className={styles.regFormSection} onSubmit={registerStore} autoComplete="off">
+                      <div className={styles.innerFlexRow}>
+
                 <div className={styles.regFormBox}>
                     {/* 매장 이름 */}
                     <div className={styles.formRow}>
@@ -280,11 +282,12 @@ export default function StoreRegister() {
                 <div className={styles.mapBox}>
                     <div ref={mapContainerRef} className={styles.kakaoMap} />
                 </div>
-                </form>
+                </div>
                 <div className={styles.buttonGroup}>
                 <button type="button" className={styles.backButton} onClick={() => navigate("/hq/storeAccount")}>목록</button>
                 <button type="submit" className={styles.submitButton}>저장</button>
                 </div>
+                </form>
 
             </div>
             {isOpen &&

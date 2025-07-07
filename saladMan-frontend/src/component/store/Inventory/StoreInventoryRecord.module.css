@@ -1,25 +1,21 @@
 /* 레이아웃 */
 .container {
   display: flex;
+      padding: 24px 100px 0 280px;
 }
 
 .content {
-  position: absolute;
-  top: 62px;
-  left: 200px;
-  width: calc(100% - 200px);
-  padding: 40px;
-  background-color: #f9fafb;
-  border-left: 1px solid #ddd;
-  box-sizing: border-box;
-  min-height: calc(100vh - 60px);
+  position: relative; 
+  padding: 30px 20px;
+  background-color: #ffffff;
   overflow: auto;
+  width: calc(100% - 380px);
 }
 
 /* 텍스트 스타일 */
 .title {
-  margin: 0 0 20px;
-  font-size: 20px;
+  margin: 0 0 16px;
+  font-size: 28px;
   color: #3d5a40;
   font-weight: bold;
 }
@@ -111,11 +107,10 @@
 /* 테이블 스타일 */
 .table {
   width: 100%;
-  min-width: 1400px;
   border-collapse: collapse;
   font-size: 14px;
   margin-top: 20px;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .table th,
