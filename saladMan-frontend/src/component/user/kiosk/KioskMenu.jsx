@@ -77,7 +77,7 @@ export default function KioskMenu() {
     };
 
     fetchMenus();
-  }, [token, currentPage,selectedTab]);
+  }, [token, currentPage, selectedTab]);
 
 
   const handleAddToCart = (item) => {
@@ -125,7 +125,7 @@ export default function KioskMenu() {
 
       <div className={styles.content}>
         <div className={styles.menuWrapper}>
-          
+
           <h2 className={styles.title}>메뉴를 선택하세요</h2>
 
           <div className={styles.tabs}>
@@ -133,14 +133,14 @@ export default function KioskMenu() {
               key="전체"
               className={`${styles.tab} ${selectedTab === "전체" ? styles.activeTab : ""}`}
               onClick={() => setSelectedTab("전체")}>
-                전체
+              전체
             </button>
 
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 className={`${styles.tab} ${selectedTab === cat.name ? styles.activeTab : ""}`}
-                onClick={() => {setSelectedTab(cat.name); setCurrentPage(0);}}
+                onClick={() => { setSelectedTab(cat.name); setCurrentPage(0); }}
               >
                 {cat.name}
               </button>
@@ -152,7 +152,11 @@ export default function KioskMenu() {
               <div
                 key={item.id}
                 className={styles.card}
-                onClick={() => handleAddToCart(item)}
+                onClick={() => {
+                  if (!item.isSoldOut) {
+                    handleAddToCart(item);
+                  }
+                }}
               >
                 <div className={styles.imgPlaceholder}>
                   <img
@@ -160,6 +164,9 @@ export default function KioskMenu() {
                     alt={item.name}
                     className={styles.menuImg}
                   />
+                  {item.isSoldOut && (
+                    <div className={styles.soldOutBadge}>품절</div>
+                  )}
                 </div>
                 <p className={styles.itemName}>{item.name}</p>
                 <p className={styles.itemPrice}>
