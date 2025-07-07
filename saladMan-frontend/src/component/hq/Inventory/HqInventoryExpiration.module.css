@@ -3,160 +3,268 @@
 }
 
 .content {
-  position: absolute;
-  top: 70px;
-  left: 230px;
-  width: calc(100% - 300px);
-  /* padding: 40px 20px; */
-  padding-left: 50px;
-  background-color: #ffffff;
-  box-sizing: border-box;
-  /* min-height: calc(100vh - 60px); */
-  overflow: auto;
-  margin-top: 20px;
+  margin-left: 220px;
+  flex: 1;
+  padding: 20px;
+  background: #fff;
+}
+
+.innerContainer {
+  background: #fff;
+  padding: 0px 60px 0 40px;
+  /* border-radius: 8px; */
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+    margin-bottom: 40px;
+
 }
 
 .title {
-  margin: 0 0 16px;
-  font-size: 25px;
-  color: #3d5a40;
-  font-weight: bold;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2f6042;
+  margin-bottom: 13px;
 }
 
 .filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-weight: 600;
+  min-width: 60px;
 }
 
 .periodButtons {
   display: flex;
   gap: 8px;
-  margin-left: 12px; /* 날짜 입력 옆 간격 */
+  margin-left: 10px;
 }
-.title { 
-  font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 16px; margin-top: 16px; }
-
-/* 필터 */
-.filters { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.label { font-weight: 600; min-width: 50px; }
-.periodButtons { display: flex; gap: 6px; }
 .periodButtons button {
-  padding:4px 10px; border:1px solid #57a964; border-radius:4px;
-  background:#f7faf8; color:#2b5536; cursor:pointer; transition:background .2s;
+  padding: 4px 10px;
+  border: 1px solid #57a964;
+  border-radius: 4px;
+  background: #f7faf8;
+  color: #2b5536;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.periodButtons button:hover { background:#57a964; color:#fff; }
+.periodButtons button:hover {
+  background: #57a964;
+  color: #fff;
+}
+
 .row input[type="date"], .row select {
-  padding:6px 8px; border:1px solid #b4c7b3; border-radius:4px;
-  background:#fff; font-size:14px;
+  padding: 6px 8px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
 }
-.storeSelect { min-width:140px; }
+
+.storeSelect {
+  min-width: 140px;
+}
+
 .keywordInput {
-  width:180px; padding:6px 8px; border:1px solid #b4c7b3;
-  border-radius:4px; background:#fff; font-size:14px;
+  width: 180px;
+  padding: 6px 8px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
 }
+
 .searchBtn {
-  padding:6px 14px; background:#4d774e; color:#fff; border:none;
-  border-radius:4px; cursor:pointer; transition:opacity .2s;
+  padding: 6px 14px;
+  background: #4d774e;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
-.searchBtn:hover { opacity:.9; }
-.rightActions { margin-left:auto; display:flex; align-items:center; gap:8px; }
+
+.searchBtn:hover {
+  opacity: 0.9;
+}
+
+.rightActions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
 .disposalBtn {
-  padding:6px 14px; background:#d9534f; color:#fff; border:none;
-  border-radius:4px; cursor:pointer; transition:background .2s;
+  padding: 6px 14px;
+  background: #d9534f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.disposalBtn:hover { background:#c9302c; }
+
+.disposalBtn:hover {
+  background: #c9302c;
+}
+
 .sortSelect {
-  padding:6px 8px; border:1px solid #b4c7b3; border-radius:4px;
-  background:#fff; font-size:14px; cursor:pointer;
+  padding: 6px 8px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-/* 테이블 */
-.tableWrap 
-{
-   border-radius:6px; margin-bottom:20px; overflow-x:auto; 
-   border: 1px solid #e4e9e7;
+.tableWrap {
+  border: 1px solid #e4e9e7;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 20px;
 }
+
 .table {
-  width:100%;
-  height: 570px;
-  border-collapse:collapse;
-  font-size:14px;
-  table-layout:fixed;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;
 }
+
 .table th, .table td {
- border: 1px solid #e4e9e7;
- padding:10px;
- text-align:center;
- border-bottom:1px solid #e4e9e7;
-
+  border: 1px solid #e4e9e7;
+  padding: 10px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 .table th {
-   background:#eaf3eb;
-   color:#2d4836;
-   font-weight:600; 
-  }
-
-  .table td {
-    height: 31px;
-  }
-.table tr:hover { background:#f0f8f2; }
-.expired { background:#ffe6e3 !important; color:#cb4747; }
-
-/* 체크박스 열 고정 */
-.table th.checkbox, .table td.checkbox {
-  width:40px; min-width:40px; max-width:40px;
-  text-align:center; vertical-align:middle; white-space:nowrap;
+  background: #eaf3eb;
+  color: #2d4836;
+  font-weight: 600;
 }
 
-/* 나머지 컬럼 ellipsis */
-.table th:not(.checkbox), .table td:not(.checkbox) {
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+.expired {
+  background: #ffe6e3 !important;
+  color: #cb4747;
 }
 
-/* “데이터 없음” */
+.checkbox {
+  width: 40px;
+}
+
 .noData {
-  padding:30px 0; color:#999; font-style:italic;
+  padding: 30px 0;
+  color: #999;
+  font-style: italic;
 }
 
-/* 페이지네이션 */
 .pagination {
-  display:flex; justify-content:center; gap:6px; margin-bottom:12px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
 }
+
 .pagination button {
-  padding:6px 12px; border:1px solid #a2b7aa; background:#fff;
-  color:#387448; border-radius:4px; cursor:pointer;
+  padding: 6px 12px;
+  border: 1px solid #a2b7aa;
+  background: #fff;
+  color: #387448;
+  border-radius: 4px;
+  cursor: pointer;
 }
+
 .pagination button.active {
-  background:#57a964; color:#fff; border-color:#57a964;
+  background: #57a964;
+  color: #fff;
+  border-color: #57a964;
 }
+
 .pagination button:disabled {
-  background:#f0f4f1; color:#c0cfc3; cursor:not-allowed;
+  background: #f0f4f1;
+  color: #c0cfc3;
+  cursor: not-allowed;
+}
+
+/* 개별 폐기 버튼 */
+.rowDisposalBtn {
+  padding: 4px 10px;
+  border: 1px solid #d9534f;
+  border-radius: 4px;
+  background: #fff;
+  color: #d9534f;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.rowDisposalBtn:hover {
+  background: #d9534f;
+  color: #fff;
 }
 
 /* 모달 */
 .modal {
-  position:fixed; inset:0; background:rgba(0,0,0,0.3);
-  display:flex; justify-content:center; align-items:center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.modalBox {
-  background:#fff; border-radius:10px; padding:20px 30px 30px;
-  width:90%; max-width:800px; box-shadow:0 4px 16px rgba(0,0,0,0.1);
-  position:relative;
-}
-.modalClose {
-  position:absolute; top:12px; right:12px; background:none; border:none;
-  font-size:20px; cursor:pointer;
-}
-.modalTopActions { display:flex; justify-content:flex-end; margin-bottom:12px; }
-.save {
-  background:#4caf50; color:#fff; border:none; padding:6px 14px;
-  border-radius:5px; cursor:pointer; transition:background .2s;
-}
-.save:hover { background:#3b8c63; }
-.modalTableWrapper { overflow:auto; }
-.editable {
-  width:70px; padding:5px 8px; font-size:14px;
-  border:1px solid #74bb7a; border-radius:4px; background:#f7faf8;
-}
-.editable:focus { outline:none; background:#e3f2fd; }
 
+.modalBox {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px 30px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.modalClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modalTopActions { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+
+.save {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modalTableWrapper { overflow: auto; }
+
+.editable {
+  width: 70px;
+  padding: 5px 8px;
+  font-size: 14px;
+  border: 1px solid #74bb7a;
+  border-radius: 4px;
+  background: #f7faf8;
+}
+
+.editable:focus { outline: none; background: #e3f2fd; }

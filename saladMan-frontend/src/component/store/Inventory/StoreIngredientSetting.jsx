@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import StoreInventorySidebar from "./StoreInventorySidebar";
 import { myAxios } from "../../../config";
 import { accessTokenAtom, userAtom } from "/src/atoms";
@@ -8,342 +8,376 @@ import styles from "./StoreIngredientSetting.module.css";
 export default function StoreIngredientSetting() {
   const token = useAtomValue(accessTokenAtom);
   const user = useAtomValue(userAtom);
-
   const STORE_ID = user?.id || null;
 
+  // 상태 관리
   const [settings, setSettings] = useState([]);
-  const [originalSettings, setOriginalSettings] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
-
-  const [filterCategory, setFilterCategory] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
   const [filterName, setFilterName] = useState("");
-
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingIdx, setEditingIdx] = useState(null);
+  const [editingRow, setEditingRow] = useState(null);
   const [isAddMode, setIsAddMode] = useState(false);
-  
-  const [curPage, setCurPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const [newSetting, setNewSetting] = useState({
-    categoryId: "",
-    ingredientId: "",
-    minQuantity: "",
-    maxQuantity: "",
+  const [addingRows, setAddingRows] = useState([]);
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1, startPage: 1, endPage: 1, allPage: 1
   });
 
+  // 옵션 불러오기
   useEffect(() => {
     if (!token) return;
-    myAxios(token).get("/store/inventory/categories").then(res => {
-      setCategories(res.data.categories || []);
-    });
-    myAxios(token).get("/store/inventory/ingredients").then(res => {
-      setIngredients(res.data.ingredients || []);
-    });
+    myAxios(token).get("/store/inventory/categories").then(res => setCategories(res.data.categories || []));
+    myAxios(token).get("/store/inventory/ingredients").then(res => setIngredients(res.data.ingredients || []));
   }, [token]);
 
+  // 데이터 불러오기
   useEffect(() => {
-    if (!token) return;
-    fetchSettings();
-  }, [token, STORE_ID, filterCategory, filterName,curPage]);
+    fetchSettings(pageInfo.curPage);
+    // eslint-disable-next-line
+  }, [token, filterCategory, filterName, pageInfo.curPage, STORE_ID]);
 
-  const fetchSettings = () => {
-    if (!STORE_ID) return;
+  const fetchSettings = (page = 1) => {
+    if (!token || !STORE_ID) return;
     myAxios(token)
       .get("/store/inventory/settings", {
         params: {
           storeId: STORE_ID,
-          categoryId: filterCategory || undefined,
+          categoryId: filterCategory === "all" ? undefined : filterCategory,
           keyword: filterName || undefined,
-          page: curPage,
+          page
         }
       })
       .then(res => {
         setSettings(res.data.settings || []);
-        if (!isEditMode) setOriginalSettings(res.data.settings || []);
-        setTotalPages(res.data.pageInfo?.allPage || 1);
+        setPageInfo(res.data.pageInfo || { curPage: 1, startPage: 1, endPage: 1, allPage: 1 });
+        setEditingIdx(null);
+        setEditingRow(null);
       })
       .catch(() => {
-        setSettings([]);   
-        if (!isEditMode) setOriginalSettings([]);
+        setSettings([]);
+        setPageInfo({ curPage: 1, startPage: 1, endPage: 1, allPage: 1 });
+        setEditingIdx(null);
+        setEditingRow(null);
       });
   };
 
-  const handleInputChange = (idx, field, value) => {
-    setSettings(current =>
-      current.map((row, i) => (i === idx ? { ...row, [field]: value === "" ? "" : Number(value) } : row))
-    );
+  // 페이징 이동
+  const movePage = p => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    setPageInfo(pi => ({ ...pi, curPage: p }));
+  };
+  const { curPage, startPage, endPage, allPage } = pageInfo;
+  const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+  // 필터 변경
+  const onFilterChange = setter => e => {
+    setter(e.target.value);
+    setPageInfo(pi => ({ ...pi, curPage: 1 }));
   };
 
-  const handleSaveEdit = () => {
-    const changed = settings.filter((row) => {
-      if (!row.id) return false;
-      const origin = originalSettings.find((x) => x.id === row.id);
-      return (
-        !!origin &&
-        (row.minQuantity !== origin.minQuantity ||
-          row.maxQuantity !== origin.maxQuantity)
-      );
-    });
+  // 재료명 얻기
+  const getIngredientName = (ingredientId) => {
+    const found = ingredients.find(ing => ing.id === Number(ingredientId));
+    return found ? found.name : "-";
+  };
 
-    if (changed.length === 0) {
-      alert("수정된 내용이 없습니다.");
-      setIsEditMode(false);
+  // ----------- 행 단위 수정 -----------  
+  const handleEdit = (idx) => {
+    setEditingIdx(idx);
+    setEditingRow({ ...settings[idx] });
+  };
+  const handleEditInput = (field, value) => {
+    setEditingRow(r => ({ ...r, [field]: value }));
+  };
+  const handleSaveEdit = (id) => {
+    if (!editingRow.minQuantity || !editingRow.maxQuantity) {
+      alert("최소/최대 수량을 입력하세요.");
       return;
     }
-
     myAxios(token)
-      .post("/store/inventory/settings-update", changed)
+      .post("/store/inventory/settings-update", [
+        {
+          ...editingRow,
+          storeId: STORE_ID,
+          ingredientId: editingRow.ingredientId,
+          minQuantity: Number(editingRow.minQuantity),
+          maxQuantity: Number(editingRow.maxQuantity),
+        }
+      ])
       .then(() => {
-        alert(`총 ${changed.length}건 저장 완료!`);
-        setIsEditMode(false);
-        fetchSettings();
+        alert("수정 완료!");
+        setEditingIdx(null);
+        setEditingRow(null);
+        fetchSettings(pageInfo.curPage);
       })
-      .catch((err) => {
-        console.log(err);
-        alert("저장 중 오류가 발생했습니다.");
-      });
+      .catch(() => alert("수정 중 오류 발생"));
+  };
+  const handleCancelEdit = () => {
+    setEditingIdx(null);
+    setEditingRow(null);
   };
 
-  const handleAddSave = () => {
-    if (!newSetting.categoryId || !newSetting.ingredientId ||
-        newSetting.minQuantity === "" || newSetting.maxQuantity === "") {
+  // ----------- 행 삭제 -----------  
+  const handleDelete = (id) => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    myAxios(token)
+      .post("/store/inventory/settings-delete", { id })
+      .then(() => {
+        alert("삭제 완료!");
+        fetchSettings(pageInfo.curPage);
+      })
+      .catch(() => alert("삭제 중 오류 발생"));
+  };
+
+  // ----------- 추가 row (+, x) -----------  
+  const handleAddRowInput = (key, field, value) => {
+    setAddingRows(rows =>
+      rows.map(row =>
+        row.key === key
+          ? { ...row, [field]: value, ...(field === "categoryId" ? { ingredientId: "" } : {}) }
+          : row
+      )
+    );
+  };
+  // 추가 row 저장
+  const handleAddRowSave = (row) => {
+    if (!row.categoryId || !row.ingredientId || row.minQuantity === "" || row.maxQuantity === "") {
       alert("모든 필드를 입력하세요.");
       return;
     }
     myAxios(token)
       .post("/store/inventory/settings-add", {
         storeId: STORE_ID,
-        ingredientId: Number(newSetting.ingredientId),
-        minQuantity: Number(newSetting.minQuantity),
-        maxQuantity: Number(newSetting.maxQuantity),
+        ingredientId: Number(row.ingredientId),
+        minQuantity: Number(row.minQuantity),
+        maxQuantity: Number(row.maxQuantity),
       })
       .then(() => {
-        alert("새 설정이 추가되었습니다.");
-        setIsAddMode(false);
-        setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
-        fetchSettings();
+        alert("추가 완료!");
+        // 남은 추가 row 없으면 추가모드 해제
+        setAddingRows(rows => {
+          const newRows = rows.length > 1 ? rows.filter(r => r.key !== row.key) : [];
+          if (newRows.length === 0) setIsAddMode(false);
+          return newRows;
+        });
+        fetchSettings(pageInfo.curPage);
       })
-      .catch(() => {
-        alert("추가 중 오류가 발생했습니다.");
-      });
+      .catch(() => alert("추가 중 오류 발생"));
   };
 
-  const handleNewInputChange = (field, value) => {
-    setNewSetting(prev => {
-      if (field === "categoryId") {
-        return { ...prev, categoryId: value, ingredientId: "" };
+  // 추가 row + 버튼
+  const handleAddNewRow = () => {
+    setAddingRows(rows => [
+      ...rows,
+      {
+        categoryId: "",
+        ingredientId: "",
+        minQuantity: "",
+        maxQuantity: "",
+        key: Date.now() + Math.random()
       }
-      return { ...prev, [field]: value };
-    });
+    ]);
+  };
+  // 추가 row x 버튼
+  const handleRemoveAddRow = (key) => {
+    setAddingRows(rows => rows.length === 1
+      ? []
+      : rows.filter(r => r.key !== key));
+    if (addingRows.length === 1) setIsAddMode(false);
   };
 
-  const filteredIngredients = newSetting.categoryId
-    ? ingredients.filter(ing => ing.categoryId === Number(newSetting.categoryId))
-    : [];
-
-  const getIngredientName = (ingredientId) => {
-    const found = ingredients.find(ing => ing.id === Number(ingredientId));
-    return found ? found.name : "-";
+  // [추가] 버튼 눌렀을 때만 추가 행 보임
+  const onClickAddMode = () => {
+    setIsAddMode(true);
+    setAddingRows([
+      { categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "", key: Date.now() }
+    ]);
+  };
+  // [취소] 버튼 누르면 추가모드 해제
+  const cancelAddMode = () => {
+    setIsAddMode(false);
+    setAddingRows([]);
   };
 
   return (
     <div className={styles.container}>
       <StoreInventorySidebar />
       <div className={styles.content}>
-        <h2 className={styles.title}>{user?.name || ""} 재료 설정</h2>
-
-        {/* ⭐ 필터+버튼 한줄 정렬 */}
-        <div className={styles.topRow}>
-          <form
-            className={styles.filters}
-            onSubmit={e => {
-              e.preventDefault();
-              fetchSettings();
-            }}
-          >
-            <select
-              className={styles.selectNarrow}
-              value={filterCategory}
-              onChange={e => setFilterCategory(e.target.value)}
-            >
-              <option value="">분류</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-            <input
-              className={styles.inputNarrow}
-              type="text"
-              value={filterName}
-              onChange={e => setFilterName(e.target.value)}
-              placeholder="재료명"
-            />
-            <button type="submit" className={styles.searchNarrow}>조회</button>
-          </form>
-          <div className={styles.actionBtns}>
-            {!isEditMode && !isAddMode && (
-              <>
-                <button className={styles.edit} onClick={() => {
-                  setIsEditMode(true);
-                  setOriginalSettings(JSON.parse(JSON.stringify(settings)));
-                }}>수정모드</button>
-                <button className={styles.add} onClick={() => setIsAddMode(true)}>추가</button>
-              </>
-            )}
-            {isEditMode && (
-              <>
-                <button className={styles.cancel} onClick={() => setIsEditMode(false)}>취소</button>
-                <button className={styles.save} onClick={handleSaveEdit}>저장</button>
-              </>
-            )}
-            {isAddMode && (
-              <>
-                <button className={styles.cancel} onClick={() => {
-                  setIsAddMode(false);
-                  setNewSetting({ categoryId: "", ingredientId: "", minQuantity: "", maxQuantity: "" });
-                }}>취소</button>
-                <button className={styles.save} onClick={handleAddSave}>추가 저장</button>
-              </>
-            )}
+        <div className={styles.innerContainer}>
+          <h2 className={styles.title}> 재료 설정</h2>
+          {/* 필터 */}
+          <div className={styles.filters}>
+            <div className={styles.row}>
+              <select
+                className={styles.selectBox}
+                value={filterCategory}
+                onChange={onFilterChange(setFilterCategory)}
+              >
+                <option value="all">전체 재료</option>
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                className={styles.keywordInput}
+                value={filterName}
+                onChange={onFilterChange(setFilterName)}
+                placeholder="재료명 검색"
+              />
+              <button className={styles.searchBtn} onClick={() => fetchSettings(1)}>검색</button>
+              <div className={styles.rightActions}>
+                <button className={styles.addBtn} onClick={onClickAddMode} disabled={isAddMode}>추가</button>
+              </div>
+            </div>
+          </div>
+          {/* 테이블 */}
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>분류</th>
+                  <th>재료명</th>
+                  <th>최소수량</th>
+                  <th>최대수량</th>
+                  <th style={{width:"170px"}}>관리</th>
+                </tr>
+              </thead>
+              <tbody>
+                {settings.length === 0 && !isAddMode ? (
+                  <tr>
+                    <td colSpan={5} className={styles.noData}>설정된 재료가 없습니다.</td>
+                  </tr>
+                ) : (
+                  <>
+                    {settings.map((row, idx) =>
+                      editingIdx === idx ? (
+                        <tr key={row.id || idx}>
+                          <td>
+                            {editingRow.categoryId
+                              ? (categories.find(cat => String(cat.id) === String(editingRow.categoryId))?.name || "-")
+                              : (editingRow.categoryName || "-")
+                            }
+                          </td>
+                          <td>
+                            {getIngredientName(editingRow.ingredientId)}
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              value={editingRow.minQuantity}
+                              onChange={e => handleEditInput("minQuantity", e.target.value)}
+                              className={styles.editable}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              value={editingRow.maxQuantity}
+                              onChange={e => handleEditInput("maxQuantity", e.target.value)}
+                              className={styles.editable}
+                            />
+                          </td>
+                          <td>
+                            <button className={styles.saveBtn} onClick={() => handleSaveEdit(row.id)}>저장</button>
+                            <button className={styles.cancelBtn} onClick={handleCancelEdit}>취소</button>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr key={row.id || idx}>
+                          <td>{row.categoryName || "-"}</td>
+                          <td>{getIngredientName(row.ingredientId)}</td>
+                          <td>{row.minQuantity ?? ""}</td>
+                          <td>{row.maxQuantity ?? ""}</td>
+                          <td>
+                            <button className={styles.editBtn} onClick={() => handleEdit(idx)}>수정</button>
+                            <button className={styles.deleteBtn} onClick={() => handleDelete(row.id)}>삭제</button>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                    {/* 추가 row: 추가모드일 때만 */}
+                    {isAddMode && addingRows.map((row, i) => {
+                      const filteredIngredients = row.categoryId
+                        ? ingredients.filter(ing => ing.categoryId === Number(row.categoryId))
+                        : [];
+                      return (
+                        <tr key={row.key}>
+                          <td>
+                            <select
+                              className={styles.selectBox}
+                              value={row.categoryId}
+                              onChange={e => handleAddRowInput(row.key, "categoryId", e.target.value)}
+                            >
+                              <option value="">분류 선택</option>
+                              {categories.map(cat => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td>
+                            <select
+                              className={styles.selectBox}
+                              value={row.ingredientId}
+                              onChange={e => handleAddRowInput(row.key, "ingredientId", e.target.value)}
+                            >
+                              <option value="">재료 선택</option>
+                              {filteredIngredients.map(ing => (
+                                <option key={ing.id} value={ing.id}>{ing.name}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              value={row.minQuantity}
+                              onChange={e => handleAddRowInput(row.key, "minQuantity", e.target.value)}
+                              min={0}
+                              className={styles.editable}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              value={row.maxQuantity}
+                              onChange={e => handleAddRowInput(row.key, "maxQuantity", e.target.value)}
+                              min={0}
+                              className={styles.editable}
+                            />
+                          </td>
+                          <td>
+                            <button className={styles.saveBtn} onClick={() => handleAddRowSave(row)}>저장</button>
+                            <button className={styles.addRowBtn} title="행 추가" onClick={handleAddNewRow}>＋</button>
+                            <button className={styles.deleteRowBtn} title="행 삭제" onClick={() => handleRemoveAddRow(row.key)}>✕</button>
+                            {addingRows.length === 1 && (
+                              <button className={styles.cancelBtn} onClick={cancelAddMode}>취소</button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
+          {/* 페이징 */}
+          <div className={styles.pagination}>
+            <button onClick={() => movePage(1)} disabled={curPage === 1}>&lt;&lt;</button>
+            <button onClick={() => movePage(curPage - 1)} disabled={curPage === 1}>&lt;</button>
+            {pages.map(p => (
+              <button
+                key={p}
+                className={p === curPage ? styles.active : ""}
+                onClick={() => movePage(p)}
+              >{p}</button>
+            ))}
+            <button onClick={() => movePage(curPage + 1)} disabled={curPage === allPage}>&gt;</button>
+            <button onClick={() => movePage(allPage)} disabled={curPage === allPage}>&gt;&gt;</button>
           </div>
         </div>
-
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>분류</th>
-              <th>재료명</th>
-              <th>최소수량</th>
-              <th>최대수량</th>
-            </tr>
-          </thead>
-          <tbody>
-            {settings.length === 0 ? (
-              <tr>
-                <td colSpan={4} className={styles.noData}>설정된 재료가 없습니다.</td>
-              </tr>
-            ) : (
-              settings.map((row, idx) => (
-                <tr key={row.id || idx}>
-                  <td>{row.categoryName || "-"}</td>
-                  <td>{getIngredientName(row.ingredientId)}</td>
-                  <td>
-                    <input
-                      type="number"
-                      value={row.minQuantity || ""}
-                      disabled={!isEditMode}
-                      className={isEditMode ? styles.editable : ""}
-                      onChange={e => handleInputChange(idx, "minQuantity", e.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={row.maxQuantity || ""}
-                      disabled={!isEditMode}
-                      className={isEditMode ? styles.editable : ""}
-                      onChange={e => handleInputChange(idx, "maxQuantity", e.target.value)}
-                    />
-                  </td>
-                </tr>
-              ))
-            )}
-            {isAddMode && (
-              <tr>
-                <td>
-                  <select
-                    value={newSetting.categoryId}
-                    className={styles.selectNarrow}
-                    onChange={e => handleNewInputChange("categoryId", e.target.value)}
-                  >
-                    <option value="">분류 선택</option>
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select
-                    value={newSetting.ingredientId}
-                    className={styles.selectNarrow}
-                    onChange={e => handleNewInputChange("ingredientId", e.target.value)}
-                  >
-                    <option value="">재료 선택</option>
-                    {filteredIngredients.map(ing => (
-                      <option key={ing.id} value={ing.id}>
-                        {ing.name}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    className={styles.inputNarrow}
-                    value={newSetting.minQuantity}
-                    onChange={e => handleNewInputChange("minQuantity", e.target.value)}
-                    min={0}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    className={styles.inputNarrow}
-                    value={newSetting.maxQuantity}
-                    onChange={e => handleNewInputChange("maxQuantity", e.target.value)}
-                    min={0}
-                  />
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        <div className={styles.pagination}>
-        <button
-          className={`${styles.arrow}`}
-          onClick={() => setCurPage(1)}
-          disabled={curPage <= 1}
-          aria-label="맨처음"
-        >{`<<`}</button>
-        <button
-          className={`${styles.arrow}`}
-          onClick={() => setCurPage(curPage - 1)}
-          disabled={curPage <= 1}
-          aria-label="이전"
-        >{`<`}</button>
-        {/* 페이지 버튼 (예: 1~10 등) */}
-        {Array.from({ length: totalPages }, (_, i) => i + 1)
-          .slice(Math.floor((curPage - 1) / 10) * 10, Math.floor((curPage - 1) / 10) * 10 + 10)
-          .map(page => (
-            <button
-              key={page}
-              className={curPage === page ? styles.activePage : ""}
-              onClick={() => setCurPage(page)}
-            >{page}</button>
-          ))}
-        <button
-          className={`${styles.arrow}`}
-          onClick={() => setCurPage(Math.min(curPage + 1, totalPages))}
-          disabled={curPage >= totalPages}
-          aria-label="다음"
-        >{`>`}</button>
-        <button
-          className={`${styles.arrow}`}
-          onClick={() => setCurPage(totalPages)}
-          disabled={curPage >= totalPages}
-          aria-label="맨끝"
-        >{`>>`}</button>
-      </div>
-
       </div>
     </div>
-
-    
   );
 }

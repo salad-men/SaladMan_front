@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+
+
+
+
 import interactionPlugin from "@fullcalendar/interaction";
 import { myAxios } from "/src/config";
 import { useAtomValue } from "jotai";
@@ -18,7 +22,7 @@ const shiftOptions = [
 export default function ScheduleCalendar() {
     const token = useAtomValue(accessTokenAtom);
     const user = useAtomValue(userAtom);
-    const storeId = user?.storeId ?? user?.id;
+    const storeId = user?.id;
     const today = new Date();
 
     // 월/연도, 뷰타입
@@ -105,29 +109,40 @@ export default function ScheduleCalendar() {
 
     // 셀 +버튼 (멀티 등록)
     function dayCellContent(arg) {
-        if (!arg.date || arg.dayNumberText === "") return arg.dayNumberText;
-        return (
-            <div style={{ position: "relative", width: "100%" }}>
-                <span>{arg.dayNumberText}</span>
-                <button
-                    className={styles.cellAddBtn}
-                    tabIndex={-1}
-                    type="button"
-                    onClick={e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setModal({
-                            mode: "multi-add",
-                            date: arg.date.toISOString().slice(0, 10),
-                            shiftType: shiftOptions[0].type,
-                            employeeIds: []
-                        });
-                    }}
-                    title="스케줄 추가"
-                >＋</button>
-            </div>
-        );
+    if (!arg.date || arg.dayNumberText === "") return arg.dayNumberText;
+
+    // 로컬 타임존 날짜 추출
+    function getLocalDateString(date) {
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, "0");
+        const dd = String(date.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
     }
+
+    return (
+        <div style={{ position: "relative", width: "100%" }}>
+            <span>{arg.dayNumberText}</span>
+            <button
+                className={styles.cellAddBtn}
+                tabIndex={-1}
+                type="button"
+                onClick={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setModal({
+                        mode: "multi-add",
+                        // 수정된 부분!
+                        date: getLocalDateString(arg.date),
+                        shiftType: shiftOptions[0].type,
+                        employeeIds: []
+                    });
+                }}
+                title="스케줄 추가"
+            >＋</button>
+        </div>
+    );
+}
+
 
     // 이벤트 클릭 (수정/삭제)
     const handleEventClick = (info) => {
@@ -157,6 +172,32 @@ export default function ScheduleCalendar() {
         setModal(null);
     };
 
+    // 다중등록 실제 저장 함수
+const handleMultiAdd = async () => {
+    // 1. 이미 등록된 (이 날짜의) 스케줄 모두 수집
+    const already = schedules
+      .filter(s => s.workDate === modal.date)
+      .map(s => ({
+        employeeId: s.employeeId,
+        workDate: s.workDate,
+        shiftType: s.shiftType
+      }));
+
+    // 2. 신규 등록할 직원만 추림
+    const newOnes = modal.employeeIds
+      .filter(id => !already.some(a => a.employeeId === id))
+      .map(empId => ({
+        employeeId: empId,
+        workDate: modal.date,
+        shiftType: modal.shiftType
+      }));
+
+    // 3. 기존 + 신규 모두 합쳐서 한 번에 upsert
+    await upsertSchedule([...already, ...newOnes]);
+    setModal(null);
+    };
+
+
     return (
         <div className={styles.calendarPageWrap}>
             <div className={styles.headerBar}>
@@ -182,10 +223,13 @@ export default function ScheduleCalendar() {
                         <span style={{ background: "#f58f3a" }} className={styles.legendBadge}>마감 <small>(16~22)</small></span>
                         <span style={{ background: "#bbb" }} className={styles.legendBadge}>휴무</span>
                     </div>
+
                     <div className={styles.calendarWrap}>
                         <FullCalendar
+                            key={`${year}-${month}`}
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
+                            initialDate={`${year}-${String(month).padStart(2, '0')}-01`}
                             events={events}
                             height={480}
                             headerToolbar={false}
@@ -196,6 +240,7 @@ export default function ScheduleCalendar() {
                             dayCellContent={dayCellContent}
                         />
                     </div>
+
                     {/* 멀티등록 모달 */}
                     {modal && modal.mode === "multi-add" &&
                         <div className={styles.modalOverlay} onClick={() => setModal(null)}>
@@ -247,17 +292,11 @@ export default function ScheduleCalendar() {
                                 <div className={styles.modalActions}>
                                     <button className={styles.saveBtn}
                                         disabled={modal.employeeIds.length === 0}
-                                        onClick={async () => {
-                                            await upsertSchedule(
-                                                modal.employeeIds.map(empId => ({
-                                                    employeeId: empId,
-                                                    workDate: modal.date,
-                                                    shiftType: modal.shiftType
-                                                }))
-                                            );
-                                            setModal(null);
-                                        }}
-                                    >추가</button>
+                                        onClick={handleMultiAdd}
+                                    >
+                                        추가
+                                    </button>
+
                                     <button className={styles.cancelBtn} onClick={() => setModal(null)}>취소</button>
                                 </div>
                             </div>
