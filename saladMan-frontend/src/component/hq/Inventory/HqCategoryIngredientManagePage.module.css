@@ -2,11 +2,11 @@
 .managerContent { flex: 1; overflow: hidden; }
 .managerInner {
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  /* border: 1px solid #ddd;
+  border-radius: 8px; */
   padding: 0px 100px 0px 270px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  height: 1243px;
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  height: 1243px; */
 }
 .managerTitle { font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 24px; }
 .managerFlex { display: flex; gap: 28px; }
@@ -18,7 +18,7 @@
   padding: 18px 18px 24px 18px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   min-width: 0;
-  height: 1021px;         
+  height: 680px;         
   display: flex;
   flex-direction: column;
 }

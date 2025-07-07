@@ -22,7 +22,7 @@ export default function HqComplaintList() {
   // 필터 상태
   const [storeFilter, setStoreFilter] = useState("all");
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all"); // all, 미열람, 열람, 전달완료
+  const [statusFilter, setStatusFilter] = useState("all"); 
 
   const mapStatus = (isRead, isRelay) => {
     if (isRelay) return "전달완료";
@@ -34,10 +34,12 @@ export default function HqComplaintList() {
   useEffect(() => {
     if (!token) return;
     myAxios(token)
-      .get("/hq/store/list")
+      myAxios(token)
+      .get("/hq/inventory/stores")
       .then(res => {
-        setStores(res.data.storeList);
-      })
+      const filtered = (res.data.stores || []).filter(store => store.id !== 1);
+      setStores(filtered);
+    })
       .catch(err => console.error("점포목록 조회 실패:", err));
   }, [token]);
 
@@ -135,7 +137,7 @@ export default function HqComplaintList() {
     <div className={styles.container}>
       <NoticeSidebar />
       <main className={styles.content}>
-        <h2 className={styles.title}>불편사항 목록</h2>
+        <h2 className={styles.title}>불편사항</h2>
 
         <div className={styles.filters}>
           <select value={storeFilter} onChange={e => setStoreFilter(e.target.value)}>

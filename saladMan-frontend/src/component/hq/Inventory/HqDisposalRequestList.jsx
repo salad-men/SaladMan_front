@@ -207,7 +207,7 @@ const approveSelected = async () => {
   const pages = [];
   for (let i = startPage; i <= endPage; i++) pages.push(i);
 
-  return (
+  return  (
     <div className={styles.container}>
       <HqInventorySidebar/>
       <div className={styles.content}>
@@ -221,42 +221,44 @@ const approveSelected = async () => {
               <span className={styles.label}>기간</span>
               <input
                 type="date"
+                className={styles.inputDate}
                 value={startDate}
                 onChange={e => { setStartDate(e.target.value); setPageInfo(pi => ({ ...pi, curPage:1 })); }}
               />
               <span>~</span>
               <input
                 type="date"
+                className={styles.inputDate}
                 value={endDate}
                 onChange={e => { setEndDate(e.target.value); setPageInfo(pi => ({ ...pi, curPage:1 })); }}
               />
               <div className={styles.periodButtons}>
                 {["all","today","week","month"].map(t => (
-                  <button key={t} onClick={() => onPeriodClick(t)}>
-                    {t==="all"?"전체": t==="today"?"오늘": t==="week"?"1주":"1달"}
+                  <button key={t} className={styles.periodBtn} onClick={() => onPeriodClick(t)}>
+                    {t==="all"?"전체": t==="today"?"오늘": t==="week"?"한 주":"한 달"}
                   </button>
                 ))}
               </div>
               <div className={styles.bulkActions}>
-                <button onClick={approveSelected} disabled={!checkedIds.size}>선택 승인</button>
-                <button onClick={handleBulkRejectClick} disabled={!checkedIds.size}>선택 반려</button>
+                <button className={styles.btnRow} onClick={approveSelected} disabled={!checkedIds.size}>선택 승인</button>
+                <button className={styles.btnReject} onClick={handleBulkRejectClick} disabled={!checkedIds.size}>선택 반려</button>
               </div>
             </div>
 
             <div className={styles.row}>
-              <select value={store} onChange={onFilterChange(setStore)}>
+              <select className={styles.selectBox} value={store} onChange={onFilterChange(setStore)}>
                 <option value="all">전체 지점</option>
                 {stores
                   .filter(s => s.id !== 1) 
                   .map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
 
-              <select value={category} onChange={onFilterChange(setCategory)}>
+              <select className={styles.selectBox} value={category} onChange={onFilterChange(setCategory)}>
                 <option value="all">전체 분류</option>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
 
-              <select value={status} onChange={onFilterChange(setStatus)}>
+              <select className={styles.selectBox} value={status} onChange={onFilterChange(setStatus)}>
                 <option value="all">상태</option>
                 <option value="대기">대기</option>
                 <option value="완료">완료</option>
@@ -317,6 +319,7 @@ const approveSelected = async () => {
                         <td>
                           <input
                             type="checkbox"
+                            className={styles.inputCheckbox}
                             checked={checkedIds.has(d.id)}
                             onChange={() => toggleCheck(d.id)}
                             disabled={!enabled}
@@ -336,7 +339,7 @@ const approveSelected = async () => {
                                 type="text"
                                 className={styles.rejectInput}
                                 value={rejectReasons[d.id]||""}
-                                placeholder="반례 사유"
+                                placeholder="반려 사유"
                                 onChange={e => changeReason(d.id, e.target.value)}
                               />
                               <button className={styles.btnConfirmReject} onClick={() => confirmRejectOne(d.id)}>반려</button>
@@ -359,39 +362,39 @@ const approveSelected = async () => {
 
           {/* 페이징 */}
           <div className={styles.pagination}>
-            <button onClick={() => movePage(1)} disabled={curPage === 1}>&lt;&lt;</button>
-            <button onClick={() => movePage(curPage - 1)} disabled={curPage === 1}>&lt;</button>
+            <button className={styles.pageBtn} onClick={() => movePage(1)} disabled={curPage === 1}>&lt;&lt;</button>
+            <button className={styles.pageBtn} onClick={() => movePage(curPage - 1)} disabled={curPage === 1}>&lt;</button>
             {pages.map(p => (
               <button
                 key={p}
-                className={p === curPage ? styles.active : ""}
+                className={`${styles.pageBtn} ${p === curPage ? styles.active : ""}`}
                 onClick={() => movePage(p)}
               >
                 {p}
               </button>
             ))}
-            <button onClick={() => movePage(curPage + 1)} disabled={curPage === allPage}>&gt;</button>
-            <button onClick={() => movePage(allPage)} disabled={curPage === allPage}>&gt;&gt;</button>
+            <button className={styles.pageBtn} onClick={() => movePage(curPage + 1)} disabled={curPage === allPage}>&gt;</button>
+            <button className={styles.pageBtn} onClick={() => movePage(allPage)} disabled={curPage === allPage}>&gt;&gt;</button>
           </div>
 
-
+          {/* Bulk Reject 모달 */}
           {showRejectModal && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.modalBox}>
-              <h3>선택 반려 사유 입력</h3>
-              <textarea
-                className={styles.textarea}
-                value={bulkRejectMemo}
-                onChange={e => setBulkRejectMemo(e.target.value)}
-                placeholder="반려 사유를 입력하세요."
-                rows={4}
-              />
-              <div className={styles.modalActions}>
-                <button onClick={handleConfirmBulkReject} disabled={!bulkRejectMemo.trim()}>확인</button>
-                <button onClick={() => setShowRejectModal(false)}>취소</button>
+            <div className={styles.modalOverlay}>
+              <div className={styles.modalBox}>
+                <h3>선택 반려 사유 입력</h3>
+                <textarea
+                  className={styles.textarea}
+                  value={bulkRejectMemo}
+                  onChange={e => setBulkRejectMemo(e.target.value)}
+                  placeholder="반려 사유를 입력하세요."
+                  rows={4}
+                />
+                <div className={styles.modalActions}>
+                  <button className={styles.btnConfirmReject} onClick={handleConfirmBulkReject} disabled={!bulkRejectMemo.trim()}>확인</button>
+                  <button className={styles.btnCancel} onClick={() => setShowRejectModal(false)}>취소</button>
+                </div>
               </div>
             </div>
-          </div>
           )}    
 
         </div>

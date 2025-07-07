@@ -168,8 +168,8 @@ export default function HqInventoryRecord() {
               <div className={styles.periodButtons}>
                 <button onClick={() => setPeriod("all")}>전체</button>
                 <button onClick={() => setPeriod("today")}>오늘</button>
-                <button onClick={() => setPeriod("week")}>1주</button>
-                <button onClick={() => setPeriod("month")}>1달</button>
+                <button onClick={() => setPeriod("week")}>한 주</button>
+                <button onClick={() => setPeriod("month")}>한 달</button>
               </div>
             </div>
             <div className={styles.row}>

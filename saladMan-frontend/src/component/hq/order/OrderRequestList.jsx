@@ -28,8 +28,10 @@ export default function OrderRequestList() {
         if (!token) return;
         const fetchStores = async () => {
             try {
-                const res = await myAxios(token).get("/hq/storeNames");
-                setStoreList(res.data);
+                // const res = await myAxios(token).get("/hq/storeNames");
+                const res = await myAxios(token).get("/hq/inventory/stores");
+                const filtered = (res.data.stores || []).filter(store => store.id !== 1);
+                setStoreList(filtered);
             } catch (err) {
                 console.error("점포 목록 조회 실패", err);
 

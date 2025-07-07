@@ -1,8 +1,9 @@
 .wrapper {
   display: flex;
-  height: calc(100vh - 64px);
-  background-color: #f9fafb;
-  overflow-y: scroll;
+  /* height: calc(100vh - 64px); */
+  background-color: #fff;
+  /* overflow-y: scroll; */
+  margin-left: 150px;
 }
 
 .content {

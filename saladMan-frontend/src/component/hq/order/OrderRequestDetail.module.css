@@ -1,17 +1,16 @@
 /* OrderRequestDetail.css */
 .orderDetailContainer {
     display: flex;
-    height: calc(100vh - 64px);
-    background-color: #f9fafb;
+    background-color: #fff;
     overflow: hidden;
 }
 
 .orderDetailContent {
     flex: 1;
-  padding: 24px 100px 0 280px;
+    padding: 24px 100px 0 280px;
     background-color: white;
     box-sizing: border-box;
-    border-left: 1px solid #ddd;
+    /* border-left: 1px solid #ddd; */
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -19,10 +18,10 @@
 }
 
 .orderDetailContainer h2 {
-  font-size: 1.8rem;
-  color: #2f6042;
-  margin-bottom: 16px;
-  margin-top: 16px;
+    font-size: 1.8rem;
+    color: #2f6042;
+    margin-bottom: 16px;
+    margin-top: 16px;
 }
 
 .orderInfo {

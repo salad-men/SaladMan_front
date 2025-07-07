@@ -1,15 +1,15 @@
 /* 전체 레이아웃 */
 .container {
   display: flex;
-  background: #f7f8fa; }
+  background: #fff; }
 .content { flex: 1; overflow: hidden; }
 .innerContainer {
   background: #fff; 
-  border: 1px solid #ddd; 
-  border-radius: 8px;
-  padding: 0px 100px 0 280px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  height: 1245px;
+  /* border: 1px solid #ddd; 
+  border-radius: 8px; */
+  padding: 0px 61px 0 280px;
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  height: 1245px; */
 }
 .title { font-size: 1.8rem; font-weight: 600; color: #2f6042; margin-bottom: 24px; }
 
@@ -48,11 +48,15 @@
 }
 .table {
   width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed;
+  height:620px;
 }
 .table th, .table td {
  border: 1px solid #e4e9e7;padding:10px; text-align:center; border-bottom:1px solid #e4e9e7;
 }
 .table th { background:#eaf3eb; color:#2d4836; font-weight:600; }
+.table td {
+ height: 31px;
+}
 .table tr:hover { background:#f0f8f2; }
 
 /* 나머지 컬럼 ellipsis */
@@ -119,3 +123,16 @@
   font-weight: bold;
 }
 .addRowBtn:hover { background: #3973ab; }
+.selectBox {
+  min-width: 90px;
+  padding: 6px 8px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
+  appearance: none;            
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="10" viewBox="0 0 20 20" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548a.625.625 0 0 1 .884-.032l3.578 3.382 3.578-3.382a.625.625 0 0 1 .852.916l-4 3.778a.625.625 0 0 1-.852 0l-4-3.778a.625.625 0 0 1-.032-.884z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 18px 18px;
+}

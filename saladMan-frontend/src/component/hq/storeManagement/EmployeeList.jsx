@@ -129,7 +129,7 @@ export default function EmployeeList() {
         <h2>직원 목록</h2>
         <div className={styles.topBar}>
           
-          {/* <form className={styles.searchGroup} onSubmit={handleSearch}> */}
+          <form className={styles.searchGroup} onSubmit={handleSearch}>
             <select value={storeId} onChange={e => setStoreId(e.target.value)}>
               <option value="all">전체 매장</option>
               {stores.map(s => (
@@ -150,7 +150,7 @@ export default function EmployeeList() {
               onChange={e => setSearchKeyword(e.target.value)}
             />
             <button type="submit" className={styles.searchButton}>검색</button>
-          {/* </form> */}
+          </form>
           <button className={styles.registerButton} onClick={() => navigate("/hq/empRegister")} >직원 등록</button>
         </div>
         <table className={styles.employeeTable}>

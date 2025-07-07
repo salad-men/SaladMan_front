@@ -278,38 +278,51 @@ export default function StoreAccountModify() {
                         <table className={styles.registerTable}>
                             <tbody>
                                 <tr>
-                                    <td>매장 계정</td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            name="username"
-                                            placeholder="아이디"
-                                            onChange={edit}
-                                            disabled
-                                            className={
-                                                styles.disabledInput
-                                            }
-                                            value={store.username}
-                                        />
-                                    </td>
+                                <td>매장 계정</td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="username"
+                                    placeholder="아이디"
+                                    onChange={edit}
+                                    disabled
+                                    className={
+                                        isUsernameValid === false
+                                        ? styles.inputFalse
+                                        : isUsernameValid === true
+                                        ? styles.inputSuccess
+                                        : styles.disabledInput 
+                                    }
+                                    value={store.username}
+                                    />
+                                </td>
                                 </tr>
                                 <tr>
-                                    <td>매장이름</td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            name="storeName"
-                                            onChange={edit}
-                                            className={
-                                                isStoreNameValid === false ? styles.inputFalse :
-                                                    isStoreNameValid === true ? styles.inputSuccess :
-                                                        ""
-                                            }
-                                            value={store.storeName}
-                                        />
-                                        <button type="button" className={styles.checkButton} onClick={checkStoreName}>중복확인</button>
-                                    </td>
+                                <td>매장이름</td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="storeName"
+                                    onChange={edit}
+                                    className={
+                                        isStoreNameValid === false
+                                        ? styles.inputFalse
+                                        : isStoreNameValid === true
+                                        ? styles.inputSuccess
+                                        : ""
+                                    }
+                                    value={store.storeName}
+                                    />
+                                    <button
+                                    type="button"
+                                    className={styles.checkButton}
+                                    onClick={checkStoreName}
+                                    >
+                                    중복확인
+                                    </button>
+                                </td>
                                 </tr>
+
                                 <tr>
                                     <td>매장위치</td>
                                     <td>
