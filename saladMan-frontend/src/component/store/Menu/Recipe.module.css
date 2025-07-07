@@ -1,17 +1,16 @@
 .wrapper {
   display: flex;
-  height: calc(100vh - 64px);
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow: hidden;
-  overflow-y: scroll;
-    padding: 24px 100px 0 280px;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
   flex: 1;
   align-self: flex-start;
-  padding: 30px 20px 0px 0px;
+  padding: 30px 0 0 20px;
   overflow-y: auto;
+  max-height: 100%;
   max-width: 1500px;
   margin: 0 auto;
   position: relative;
@@ -23,11 +22,12 @@
 }
 
 .pageHeader h2 {
-  margin: 0 0 16px;
+  margin: 0 0 5px;
   font-size: 28px;
   color: #3d5a40;
   font-weight: bold;
 }
+
 .cardWrapper {
   display: flex;
   flex-wrap: wrap;
@@ -38,45 +38,70 @@
 
 .recipeCard {
   display: flex;
+  flex-direction: row;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   padding: 10px;
+  width: 350px;    /* 카드 가로폭 고정 */
+  min-height: 180px; /* 카드 높이 최소 고정 */
+  box-sizing: border-box;
+}
+.recipeCard:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+  transform: translateY(-2px);
+  transition: all 0.2s ease-in-out;
+  background-color: #f8f8f8;
 }
 
-.recipeCard img {
-  width: 140px;
+.imageBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.imageBlock img {
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 8px;
-  margin: auto 10px;
+  margin-bottom: 8px;
+}
+
+.imageBlock h3 {
+  font-size: 1rem;
+  margin: 4px 0 0;
+  color: #333;
+  text-align: center;
 }
 
 .cardText {
-  width: 170px;
+  flex: 1;
+  display: flex;
+  padding-left: 10px;
+  align-items: center; /* 수직 중앙 */
 }
 
-.recipeCard h3 {
-  font-size: 1.1rem;
-  margin: 12px 0 4px;
-  color: #333;
-}
 
-.recipeCard ul {
+
+.cardText ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.recipeCard li {
-  font-size: 0.95rem;
-  padding: 2px 0;
+.cardText li {
+  font-size: 0.9rem;
+  padding: 4px 0;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 15px;
+  margin-bottom: 20px;
   gap: 4px;
 }
 
