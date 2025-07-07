@@ -98,6 +98,7 @@ import PaymentSuccess from '@user/kiosk/PaymentSuccess';
 import PaymentFail from '@user/kiosk/PaymentFail';
 import PaymentPage from '@user/kiosk/PaymentPage';
 import NewsWritePage from "@user/page/NewsWritePage";
+import OrderRequestPrint from "@hq/order/OrderRequestPrint";
 
 
 function App() {
@@ -187,11 +188,9 @@ function App() {
 
           {/*발주*/}
           <Route path="/hq/orderRequest" element={<OrderRequestList />} />
-          <Route
-            path="/hq/orderRequestDetail"
-            element={<OrderRequestDetail />}
-          />
+          <Route path="/hq/orderRequestDetail"element={<OrderRequestDetail />}/>
           <Route path="/hq/orderItemManage" element={<OrderItemManage />} />
+          <Route path="/hq/orderRequestPrint" element={<OrderRequestPrint/>}/>
 
           {/* 메뉴 */}
           <Route path="/hq/totalMenu" element={<HqTotalMenu />} />

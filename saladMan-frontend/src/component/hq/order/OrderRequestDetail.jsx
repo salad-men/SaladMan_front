@@ -64,6 +64,14 @@ export default function OrderRequestDetail() {
 
     const handleStatusChange = (index, value) => {
         const updated = [...items];
+        if (value === "승인") {
+            if (!updated[index].stockList || updated[index].stockList.length === 0) {
+                alert("선택 가능한 재고가 없습니다. 반려로 자동 변경됩니다.");
+                updated[index].approvalStatus = "반려";
+                return setItems(updated);
+            }
+        }
+
         updated[index].approvalStatus = value;
         if (value !== "반려") updated[index].rejectionReason = "";
         setItems(updated);
@@ -72,6 +80,41 @@ export default function OrderRequestDetail() {
     const handleReasonChange = (index, value) => {
         const updated = [...items];
         updated[index].rejectionReason = value;
+        setItems(updated);
+    };
+
+    const handleRejectAll = () => {
+        const updated = items.map(item => ({
+            ...item,
+            approvalStatus: "반려",
+            rejectionReason: ""
+        }));
+        setItems(updated);
+    };
+
+    const handleApproveAll = () => {
+        const updated = items.map(item => {
+            if (!item.stockList || item.stockList.length === 0) {
+                // 재고 없으면 반려
+                return {
+                    ...item,
+                    approvalStatus: "반려",
+                    rejectionReason: "본사 재고 부족"
+                };
+            } else {
+                // 재고 있으면 승인
+                return {
+                    ...item,
+                    approvalStatus: "승인"
+                };
+            }
+        });
+
+        // 안내 알림
+        if (updated.some(i => i.approvalStatus === "반려")) {
+            alert("선택 가능한 재고가 없는 품목은 반려로 처리되었습니다.");
+        }
+
         setItems(updated);
     };
 
@@ -112,6 +155,41 @@ export default function OrderRequestDetail() {
                     <p><strong>수주일:&nbsp;</strong> </p>
                     <p><strong>주문 품목 수: &nbsp;</strong> {items.length} 개</p>
                 </div>
+                {/* 일괄 반려 버튼 */}
+                {!isCompleted && (
+                    <div style={{ marginBottom: 10 }}>
+                            <button onClick={handleApproveAll}
+                                style={{
+                                backgroundColor: "#226236",
+                                color: "white",
+                                border: "none",
+                                padding: "8px 14px",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontWeight: 500
+                            }}>
+                            일괄 승인
+                        </button>
+                        <button
+                            onClick={handleRejectAll}
+                            style={{
+                                backgroundColor: "#ccc",
+                                color: "white",
+                                border: "none",
+                                padding: "8px 14px",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontWeight: 500,
+                                                                marginLeft:15
+
+                            }}
+                        >
+                            일괄 반려
+                        </button>
+
+                    </div>
+                )}
+
                 <div className={styles.tableWrapper}>
                     <table className={styles.orderDetailTable}>
                         <thead>
@@ -197,6 +275,8 @@ export default function OrderRequestDetail() {
                     {!isCompleted && (
                         <button className={styles.submitButton} onClick={handleSubmit}>저장</button>
                     )}
+
+
 
                 </div>
 

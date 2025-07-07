@@ -156,6 +156,7 @@ export default function OrderRequestList() {
                                 <th>품목개수</th>
                                 <th>합계</th>
                                 <th>승인여부</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -169,6 +170,25 @@ export default function OrderRequestList() {
                                     <td>{order.quantitySummary}</td>
                                     <td>{order.totalPrice?.toLocaleString()}원</td>
                                     <td>{order.orderStatus}</td>
+                                    <td>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                window.open(`/hq/orderRequestPrint?id=${order.id}`, "_blank");
+                                            }}
+                                            disabled={!order.orderStatus}  // 승인 여부 없으면 비활성화
+                                            style={{
+                                                backgroundColor: order.orderStatus ? "#2f6042" : "#ccc",
+                                                color: "white",
+                                                border: "none",
+                                                padding: "4px 8px",
+                                                borderRadius: "4px",
+                                                cursor: order.orderStatus ? "pointer" : "not-allowed"
+                                            }}
+                                        >
+                                            발주서 출력
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
