@@ -49,6 +49,8 @@
 .cartTable {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed; /* ✅ 고정 테이블 레이아웃 */
+
 }
 
 .cartTable th,
@@ -57,6 +59,26 @@
   border-bottom: 1px solid #ddd;
   text-align: center;
   font-size: 15px;
+}
+
+.cartTable th:nth-child(1),
+.cartTable td:nth-child(1) {
+  width: 40%; /* 품목 이름 */
+}
+
+.cartTable th:nth-child(2),
+.cartTable td:nth-child(2) {
+  width: 20%; /* 수량 */
+}
+
+.cartTable th:nth-child(3),
+.cartTable td:nth-child(3) {
+  width: 20%; /* 가격 */
+}
+
+.cartTable th:nth-child(4),
+.cartTable td:nth-child(4) {
+  width: 20%; /* 삭제 버튼 */
 }
 
 .nameCell {

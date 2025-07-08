@@ -182,14 +182,14 @@
   font-weight: bold;
 }
 
-.cartContainer {
+/* .cartContainer {
   position: sticky;
   top: 50px;
   flex: 0 0 320px;
   max-width: 320px;
   transition: all 0.3s ease;
   background: white;
-}
+} */
 
 .cartContainer.closed {
   max-width: 50px;

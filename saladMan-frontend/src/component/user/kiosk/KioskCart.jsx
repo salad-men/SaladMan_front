@@ -95,13 +95,11 @@ const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
-        <table className={styles.cartTable}>
-          <tfoot>
+            <tfoot>
             <tr>
+              {/* <td>총</td> */}
               <td colSpan={2}></td>
-              <td>
+              <td   >
                 {cartItems.length > 0 && (
                   <span>총 {totalPrice.toLocaleString()}원</span>
                 )}
@@ -118,6 +116,10 @@ const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart
               </td>
             </tr>
           </tfoot>
+          </table>
+        </div>
+        <table className={styles.cartTable}>
+          
         </table>
       </div>
 
