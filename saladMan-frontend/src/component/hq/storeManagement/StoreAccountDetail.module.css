@@ -11,7 +11,7 @@
     background: #fff;
     box-sizing: border-box;
     border-left: 1px solid #e4e9e7;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -45,7 +45,7 @@
     background: #fff;
     padding: 68px 60px;
     border-radius: 22px;
-    box-shadow: 0 2px 20px rgba(44,77,62,0.13);
+    box-shadow: 0 2px 20px rgba(44, 77, 62, 0.13);
     min-width: 440px;
     max-width: 600px;
     font-size: 20px;
@@ -78,7 +78,7 @@
     height: 555px;
     border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 2px 20px rgba(44,77,62,0.13);
+    box-shadow: 0 2px 20px rgba(44, 77, 62, 0.13);
     background: #fff;
     flex-shrink: 0;
 }
@@ -100,11 +100,14 @@
     font-size: 21px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 2px 9px rgba(76,175,80,0.10);
+    box-shadow: 0 2px 9px rgba(76, 175, 80, 0.10);
     transition: background-color 0.17s;
     letter-spacing: -0.5px;
 }
-.modifyButton:hover { background-color: #388e3c; }
+
+.modifyButton:hover {
+    background-color: #388e3c;
+}
 
 .backButton {
     padding: 16px 54px;
@@ -115,9 +118,139 @@
     font-size: 21px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 2px 9px rgba(44,77,62,0.09);
+    box-shadow: 0 2px 9px rgba(44, 77, 62, 0.09);
     transition: background-color 0.17s;
     letter-spacing: -0.5px;
 }
-.backButton:hover { background-color: #455a64; }
 
+.backButton:hover {
+    background-color: #455a64;
+}
+
+.resetPasswordButton,
+.closeStoreButton {
+    margin-left: 16px;
+    padding: 8px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.resetPasswordButton {
+    background-color: #607d8b;
+    color: #fff;
+}
+
+.resetPasswordButton:hover {
+    background-color: #455a64;
+}
+
+.closeStoreButton {
+    background-color: #607d8b;
+    color: #fff;
+}
+
+.closeStoreButton:hover {
+    background-color: #455a64;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modalContent {
+    background: #fff;
+    padding: 36px;
+    border-radius: 12px;
+    width: 420px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    text-align: center;
+}
+
+.modalContent h3 {
+    margin: 0 0 12px 0;
+    font-size: 22px;
+    color: #333;
+}
+
+.modalContent p {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.modalForm {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+}
+
+.modalForm label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.modalInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+}
+
+.modalInput:focus {
+    outline: none;
+    border-color: #4caf50;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.confirmButton {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cancelButton {
+    background-color: #9e9e9e;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.confirmButton:hover {
+    background-color: #388e3c;
+}
+
+.cancelButton:hover {
+    background-color: #757575;
+}
