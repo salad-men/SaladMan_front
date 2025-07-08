@@ -21,33 +21,20 @@ export default function HqInventoryList() {
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-
-  // 데이터 및 페이징
   const [data, setData] = useState([]);
   const [pageInfo, setPageInfo] = useState({
-    curPage: 1,
-    startPage: 1,
-    endPage: 1,
-    allPage: 1,
+    curPage: 1, startPage: 1, endPage: 1, allPage: 1,
   });
 
-  // 모달 입력 상태
+  // 추가 모달
   const [addModalOpen, setAddModalOpen] = useState(false);
-  const [newItems, setNewItems] = useState([
-    {
-      category: "",
-      ingredientId: "",
-      unit: "",
-      unitCost: 0,
-      quantity: 0,
-      minimumOrderUnit: 0,
-      expiredDate: "",
-      receivedDate: "",
-    },
-  ]);
+  const [newItems, setNewItems] = useState([{
+    categoryId: "", ingredientId: "", unit: "", unitCost: 0, quantity: 0, minimumOrderUnit: 0, expiredDate: "", receivedDate: "",
+  }]);
 
-  // 수정 모드
+  // 수정모드/폼
   const [editRow, setEditRow] = useState(null);
+  const [editForm, setEditForm] = useState({});
 
   // 옵션 불러오기
   useEffect(() => {
@@ -57,22 +44,16 @@ export default function HqInventoryList() {
       ax.get("/hq/inventory/stores"),
       ax.get("/hq/inventory/categories"),
       ax.get("/hq/inventory/ingredients"),
-    ])
-      .then(([r1, r2, r3]) => {
-        setStores(r1.data.stores.filter((s) => s.id !== 1));
-        setCategories(r2.data.categories || []);
-        setIngredients(r3.data.ingredients || []);
-      })
-      .catch(console.error);
+    ]).then(([r1, r2, r3]) => {
+      setStores(r1.data.stores.filter((s) => s.id !== 1));
+      setCategories(r2.data.categories || []);
+      setIngredients(r3.data.ingredients || []);
+    }).catch(console.error);
   }, [token]);
 
-  // 재고 조회 함수
+  // 데이터 조회
   const fetchInventory = async (
-    page = 1,
-    sd = startDate,
-    ed = endDate,
-    sort = sortOption,
-    kw = keyword
+    page = 1, sd = startDate, ed = endDate, sort = sortOption, kw = keyword
   ) => {
     if (!token) return;
     try {
@@ -88,111 +69,68 @@ export default function HqInventoryList() {
         page,
       });
       const { hqInventory = [], storeInventory = [], pageInfo: pi } = res.data;
-      const list =
-        scope === "hq"
-          ? hqInventory
-          : scope === "store"
-          ? storeInventory
-          : [...hqInventory, ...storeInventory];
-      const flat = list.map((x) => ({
+      const list = scope === "hq" ? hqInventory
+        : scope === "store" ? storeInventory
+        : [...hqInventory, ...storeInventory];
+      setData(list.map(x => ({
         id: x.id,
         store: x.storeName || "본사",
-        category: x.categoryName || "",
-        name: x.ingredientName || "",
+        categoryId: x.categoryId, category: x.categoryName || "",
+        ingredientId: x.ingredientId, name: x.ingredientName || "",
         unit: x.unit || "",
         unitCost: x.unitCost || 0,
         quantity: Number(x.quantity) || 0,
         minimumOrderUnit: Number(x.minimumOrderUnit) || 0,
         minquantity: Number(x.minquantity) || 0,
-        received: x.receivedDate?.slice(0, 10) || "",
-      }));
-      setData(flat);
+        receivedDate: x.receivedDate?.slice(0, 10) || "",
+        expiredDate: x.expiredDate?.slice(0, 10) || "",
+      })));
       setPageInfo(pi);
     } catch (e) {
-      console.error("재고 조회 실패", e);
       setData([]);
+      console.error("재고 조회 실패", e);
     }
   };
 
-  // 초기 및 필터 변경 시 호출
   useEffect(() => {
     if (!token) return;
     fetchInventory(pageInfo.curPage);
-  }, [
-    token,
-    scope,
-    store,
-    category,
-    keyword,
-    startDate,
-    endDate,
-    sortOption,
-    pageInfo.curPage,
-  ]);
+    // eslint-disable-next-line
+  }, [token, scope, store, category, keyword, startDate, endDate, sortOption, pageInfo.curPage]);
 
-  // 필터 변경 헬퍼
+  // 필터 변경
   const onFilterChange = (setter) => (e) => {
     setter(e.target.value);
     setPageInfo((pi) => ({ ...pi, curPage: 1 }));
   };
 
-  // 페이징 이동
-  const movePage = (p) => {
-    if (p < 1 || p > pageInfo.allPage) return;
-    setPageInfo((pi) => ({ ...pi, curPage: p }));
-  };
-
-  // 기간 버튼
+  // 기간버튼
   const setPeriod = (type) => {
     const today = new Date().toISOString().slice(0, 10);
-    let sd = "",
-      ed = "";
-    switch (type) {
-      case "today":
-        sd = today;
-        ed = today;
-        break;
-      case "week":
-        sd = new Date(
-          new Date().setDate(new Date().getDate() - 6)
-        )
-          .toISOString()
-          .slice(0, 10);
-        ed = today;
-        break;
-      case "month":
-        sd = new Date(
-          new Date().setMonth(new Date().getMonth() - 1)
-        )
-          .toISOString()
-          .slice(0, 10);
-        ed = today;
-        break;
-      default:
-        sd = "";
-        ed = "";
+    let sd = "", ed = "";
+    if (type === "today") sd = ed = today;
+    else if (type === "week") {
+      sd = new Date(new Date().setDate(new Date().getDate() - 6)).toISOString().slice(0, 10); ed = today;
+    } else if (type === "month") {
+      sd = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().slice(0, 10); ed = today;
     }
-    setStartDate(sd);
-    setEndDate(ed);
-    fetchInventory(1, sd, ed, sortOption, keyword);
+    setStartDate(sd); setEndDate(ed); fetchInventory(1, sd, ed, sortOption, keyword);
   };
 
-  // 검색
-  const onSearchClick = () =>
-    fetchInventory(1, startDate, endDate, sortOption, keyword);
-
-  // 정렬 변경
-  const onSortChange = (e) => {
-    setSortOption(e.target.value);
-    setPageInfo((pi) => ({ ...pi, curPage: 1 }));
+  // 테이블 인라인 수정 핸들러
+  const handleEditChange = (key, value) => {
+    setEditForm((prev) => ({ ...prev, [key]: value }));
+    // 재료명 변경 시 단위 자동
+    if (key === "ingredientId") {
+      const ing = ingredients.find(i => i.id === Number(value));
+      setEditForm((prev) => ({ ...prev, unit: ing?.unit || "" }));
+    }
+    if (key === "categoryId") setEditForm((prev) => ({ ...prev, ingredientId: "", unit: "" }));
   };
 
-  // 페이징 배열 생성
+  // 페이징
   const { startPage, endPage, curPage, allPage } = pageInfo;
-  const pages = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
-  );
+  const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
   return (
     <div className={styles.container}>
@@ -205,109 +143,49 @@ export default function HqInventoryList() {
           <div className={styles.filterArea}>
             <div className={styles.rowDate}>
               <label className={styles.labelDate}>기간</label>
-              <input
-                type="date"
-                className={styles.inputDate}
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
+              <input type="date" className={styles.inputDate}
+                value={startDate} onChange={e => setStartDate(e.target.value)} />
               <span className={styles.labelSep}>~</span>
-              <input
-                type="date"
-                className={styles.inputDate}
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-
+              <input type="date" className={styles.inputDate}
+                value={endDate} onChange={e => setEndDate(e.target.value)} />
               {["all", "today", "week", "month"].map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  className={styles.periodBtn}
-                  onClick={() => setPeriod(type)}
-                >
-                  {type === "all"
-                    ? "전체"
-                    : type === "today"
-                    ? "오늘"
-                    : type === "week"
-                    ? "한 주"
-                    : "한 달"}
+                <button key={type} type="button" className={styles.periodBtn}
+                  onClick={() => setPeriod(type)}>
+                  {type === "all" ? "전체" : type === "today" ? "오늘" : type === "week" ? "한 주" : "한 달"}
                 </button>
               ))}
-
-              {/* <button
-                type="button"
-                className={styles.btnSearch}
-                onClick={onSearchClick}
-              >
-                검색
-              </button> */}
             </div>
-
             <div className={styles.rowFilter}>
-              <select
-                className={styles.selectScope}
-                value={scope}
-                onChange={onFilterChange(setScope)}
-              >
+              <select className={styles.selectScope} value={scope} onChange={onFilterChange(setScope)}>
                 <option value="hq">본사</option>
                 <option value="store">지점</option>
                 <option value="all">전체</option>
               </select>
               {scope === "store" && (
-                <select
-                  className={styles.selectStore}
-                  value={store}
-                  onChange={onFilterChange(setStore)}
-                >
+                <select className={styles.selectStore} value={store} onChange={onFilterChange(setStore)}>
                   <option value="all">전체지점</option>
                   {stores.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
+                    <option key={s.id} value={s.id}>{s.name}</option>
                   ))}
                 </select>
               )}
-              <select
-                className={styles.selectCategory}
-                value={category}
-                onChange={onFilterChange(setCategory)}
-              >
+              <select className={styles.selectCategory} value={category} onChange={onFilterChange(setCategory)}>
                 <option value="all">전체 분류</option>
                 {categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
+                  <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
-              <input
-                type="text"
-                className={styles.inputSearch}
-                placeholder="재료명 검색"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && onSearchClick()}
-              />
-              <button
-                type="button"
-                className={styles.btnSearch}
-                onClick={onSearchClick}
-              >
+              <input type="text" className={styles.inputSearch}
+                placeholder="재료명 검색" value={keyword}
+                onChange={e => setKeyword(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && fetchInventory(1)} />
+              <button type="button" className={styles.btnSearch} onClick={() => fetchInventory(1)}>
                 검색
               </button>
-              <button
-                type="button"
-                className={styles.btnNew}
-                onClick={() => setAddModalOpen(true)}
-              >
+              <button type="button" className={styles.btnNew} onClick={() => setAddModalOpen(true)}>
                 재고추가
               </button>
-              <select
-                className={styles.selectSort}
-                value={sortOption}
-                onChange={onSortChange}
-              >
+              <select className={styles.selectSort} value={sortOption} onChange={onFilterChange(setSortOption)}>
                 <option value="default">이름순</option>
                 <option value="receivedAsc">입고일 오름</option>
                 <option value="receivedDesc">입고일 내림</option>
@@ -315,7 +193,160 @@ export default function HqInventoryList() {
             </div>
           </div>
 
-          {/* 신규 입력 모달 */}
+          {/* 메인 테이블 */}
+          <div className={styles.tableArea}>
+            <table className={styles.mainTable}>
+              <thead>
+                <tr>
+                  <th>지점</th><th>분류</th><th>재료명</th><th>단위</th>
+                  <th>단가</th><th>수량</th><th>최소주문단위</th>
+                  <th>최소수량</th><th>입고일</th><th>유통기한</th><th>수정</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.length === 0 ? (
+                  <tr><td colSpan={11}>데이터가 없습니다.</td></tr>
+                ) : data.map(r => {
+                  const low = r.quantity < r.minimumOrderUnit;
+                  const isEdit = editRow === r.id;
+                  return (
+                    <tr key={r.id} className={low ? styles.trLow : ""}>
+                      <td>{r.store}</td>
+                      <td>
+  {isEdit ? (
+    <select
+      value={
+        editForm.categoryId !== undefined && editForm.categoryId !== null
+          ? String(editForm.categoryId)
+          : (r.categoryId !== undefined && r.categoryId !== null ? String(r.categoryId) : "")
+      }
+      onChange={e => handleEditChange("categoryId", Number(e.target.value))}
+    >
+      <option value="">선택</option>
+      {categories.map((c) => (
+        <option key={c.id} value={c.id}>{c.name}</option>
+      ))}
+    </select>
+  ) : r.category}
+</td>
+
+<td>
+  {isEdit ? (
+    <select
+      value={
+        editForm.ingredientId !== undefined && editForm.ingredientId !== null
+          ? String(editForm.ingredientId)
+          : (r.ingredientId !== undefined && r.ingredientId !== null ? String(r.ingredientId) : "")
+      }
+      onChange={e => handleEditChange("ingredientId", Number(e.target.value))}
+    >
+      <option value="">선택</option>
+      {ingredients
+        .filter(i =>
+          (editForm.categoryId ?? r.categoryId)
+            ? i.categoryId === (editForm.categoryId ?? r.categoryId)
+            : true
+        )
+        .map(i => (
+          <option key={i.id} value={i.id}>{i.name}</option>
+        ))}
+    </select>
+  ) : r.name}
+</td>
+
+                      <td>
+                        {isEdit ? (
+                          <input type="text" value={editForm.unit ?? r.unit} disabled />
+                        ) : r.unit}
+                      </td>
+                      <td>
+                        {isEdit ? (
+                          <input type="number" value={editForm.unitCost ?? r.unitCost}
+                            onChange={e => handleEditChange("unitCost", Number(e.target.value))} />
+                        ) : r.unitCost}
+                      </td>
+                      <td>
+                        {isEdit ? (
+                          <input type="number" value={editForm.quantity ?? r.quantity}
+                            onChange={e => handleEditChange("quantity", Number(e.target.value))} />
+                        ) : r.quantity}
+                      </td>
+                      <td>
+                        {isEdit ? (
+                          <input type="number" value={editForm.minimumOrderUnit ?? r.minimumOrderUnit}
+                            onChange={e => handleEditChange("minimumOrderUnit", Number(e.target.value))} />
+                        ) : r.minimumOrderUnit}
+                      </td>
+                      <td>{r.minquantity}</td>
+                      <td>
+                        {isEdit ? (
+                          <input type="date" value={editForm.receivedDate ?? r.receivedDate}
+                            onChange={e => handleEditChange("receivedDate", e.target.value)} />
+                        ) : r.receivedDate}
+                      </td>
+                      <td>
+                        {isEdit ? (
+                          <input type="date" value={editForm.expiredDate ?? r.expiredDate}
+                            onChange={e => handleEditChange("expiredDate", e.target.value)} />
+                        ) : r.expiredDate}
+                      </td>
+                      <td className={styles.tdEdit}>
+                        {isEdit ? (
+                          <div className={styles.editBtns}>
+                            <button type="button" className={styles.btnSave}
+                            
+                              onClick={async () => {
+  try {
+    const payload = {
+      id: r.id,
+      categoryId: editForm.categoryId ?? r.categoryId,
+      ingredientId: editForm.ingredientId ?? r.ingredientId,
+      unit: editForm.unit ?? r.unit,
+      unitCost: editForm.unitCost ?? r.unitCost,
+      quantity: editForm.quantity ?? r.quantity,
+      minimumOrderUnit: editForm.minimumOrderUnit ?? r.minimumOrderUnit,
+      expiredDate: editForm.expiredDate ?? r.expiredDate,
+      receivedDate: editForm.receivedDate ?? r.receivedDate,
+    };
+    await myAxios(token).post("/hq/inventory/update", payload);
+    console.log("UPDATE PAYLOAD", payload);
+
+    setEditRow(null); setEditForm({});
+    fetchInventory(curPage);
+  } catch (e) {
+    alert("저장 실패"); console.error(e);
+  }
+}}
+>저장</button>
+                            <button type="button" className={styles.btnCancel}
+                              onClick={() => { setEditRow(null); setEditForm({}); }}>
+                              취소
+                            </button>
+                          </div>
+                        ) : (
+                          <button type="button" className={styles.btnEdit}
+                            onClick={() => {
+                              setEditRow(r.id);
+                              setEditForm({
+                                categoryId: r.categoryId,
+                                ingredientId: r.ingredientId,
+                                unit: r.unit, unitCost: r.unitCost,
+                                quantity: r.quantity, minimumOrderUnit: r.minimumOrderUnit,
+                                receivedDate: r.receivedDate, expiredDate: r.expiredDate,
+                              });
+                            }}>
+                            수정
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+           {/* 신규 입력 모달 */}
           {addModalOpen && (
             <div className={styles.modalBg} onClick={() => setAddModalOpen(false)}>
               <div
@@ -547,159 +578,24 @@ export default function HqInventoryList() {
                 </div>
               </div>
             </div>
-          )}
+          )}    
 
-          {/* 메인 테이블 */}
-          <div className={styles.tableArea}>
-            <table className={styles.mainTable}>
-              <thead>
-                <tr>
-                  <th>지점</th>
-                  <th>분류</th>
-                  <th>재료명</th>
-                  <th>단위</th>
-                  <th>단가</th>
-                  <th>수량</th>
-                  <th>최소주문단위</th>
-                  <th>최소수량</th>
-                  <th>입고일</th>
-                  <th>수정</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.length === 0 ? (
-                  <tr>
-                    <td colSpan={10}>데이터가 없습니다.</td>
-                  </tr>
-                ) : (
-                  data.map((r) => {
-                    const low = r.quantity < r.minimumOrderUnit;
-                    return (
-                      <tr key={r.id} className={low ? styles.trLow : ""}>
-                        <td className={styles.tdStore}>{r.store}</td>
-                        <td className={styles.tdCategory}>{r.category}</td>
-                        <td className={styles.tdName}>{r.name}</td>
-                        <td className={styles.tdUnit}>{r.unit}</td>
-                        <td className={styles.tdCost}>{r.unitCost}</td>
-                        <td className={styles.tdQty}>
-                          {editRow === r.id ? (
-                            <input
-                              type="number"
-                              className={styles.inputQty}
-                              value={r.quantity}
-                              onChange={(e) =>
-                                setData((d) =>
-                                  d.map((x) =>
-                                    x.id === r.id
-                                      ? { ...x, quantity: Number(e.target.value) }
-                                      : x
-                                  )
-                                )
-                              }
-                            />
-                          ) : (
-                            r.quantity
-                          )}
-                        </td>
-                        <td className={styles.tdMin}>{r.minimumOrderUnit}</td>
-                        <td className={styles.tdStoreMin}>{r.minquantity}</td>
-                        <td className={styles.tdReceived}>{r.received}</td>
-                        <td className={styles.tdEdit}>
-                          {editRow !== r.id ? (
-                            <button
-                              type="button"
-                              className={styles.btnEdit}
-                              onClick={() => setEditRow(r.id)}
-                            >
-                              수정
-                            </button>
-                          ) : (
-                            <>
-                              <button
-                                type="button"
-                                className={styles.btnSave}
-                                onClick={async () => {
-                                  try {
-                                    await myAxios(token).post("/hq/inventory/update", {
-                                      id: r.id,
-                                      quantity: r.quantity,
-                                      minimumOrderUnit: r.minimumOrderUnit,
-                                      unitCost: r.unitCost,
-                                      expiredDate: r.expired || new Date().toISOString().slice(0,10),
-                                      receivedDate: r.received || new Date().toISOString().slice(0,10),
-                                    });
-                                    setEditRow(null);
-                                    fetchInventory(curPage);
-                                  } catch (e) {
-                                    console.error(e);
-                                    alert("저장 실패");
-                                  }
-                                }}
-                              >
-                                저장
-                              </button>
-                              <button
-                                type="button"
-                                className={styles.btnCancel}
-                                onClick={() => setEditRow(null)}
-                              >
-                                취소
-                              </button>
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
 
           {/* 페이징 */}
           <div className={styles.paginationArea}>
-            <button
-              type="button"
-              className={styles.btnPageFirst}
-              onClick={() => movePage(1)}
-              disabled={curPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <button
-              type="button"
-              className={styles.btnPagePrev}
-              onClick={() => movePage(curPage - 1)}
-              disabled={curPage === 1}
-            >
-              &lt;
-            </button>
-            {pages.map((p) => (
-              <button
-                key={p}
-                type="button"
+            <button type="button" className={styles.btnPageFirst}
+              onClick={() => fetchInventory(1)} disabled={curPage === 1}>&lt;&lt;</button>
+            <button type="button" className={styles.btnPagePrev}
+              onClick={() => fetchInventory(curPage - 1)} disabled={curPage === 1}>&lt;</button>
+            {pages.map(p => (
+              <button key={p} type="button"
                 className={p === curPage ? styles.btnPageActive : styles.btnPage}
-                onClick={() => movePage(p)}
-              >
-                {p}
-              </button>
+                onClick={() => fetchInventory(p)}>{p}</button>
             ))}
-            <button
-              type="button"
-              className={styles.btnPageNext}
-              onClick={() => movePage(curPage + 1)}
-              disabled={curPage === allPage}
-            >
-              &gt;
-            </button>
-            <button
-              type="button"
-              className={styles.btnPageLast}
-              onClick={() => movePage(allPage)}
-              disabled={curPage === allPage}
-            >
-              &gt;&gt;
-            </button>
+            <button type="button" className={styles.btnPageNext}
+              onClick={() => fetchInventory(curPage + 1)} disabled={curPage === allPage}>&gt;</button>
+            <button type="button" className={styles.btnPageLast}
+              onClick={() => fetchInventory(allPage)} disabled={curPage === allPage}>&gt;&gt;</button>
           </div>
         </div>
       </div>
