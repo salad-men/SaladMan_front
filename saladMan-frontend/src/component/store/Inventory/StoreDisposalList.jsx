@@ -153,7 +153,7 @@ export default function StoreDisposalList() {
                     className={styles.periodBtn}
                     onClick={() => setPeriod(t)}
                   >
-                    {t === "all" ? "전체" : t === "today" ? "오늘" : t === "week" ? "1주" : "1달"}
+                    {t === "all" ? "전체" : t === "today" ? "오늘" : t === "week" ? "한주" : "한달"}
                   </button>
                 ))}
               </div>

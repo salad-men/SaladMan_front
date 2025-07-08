@@ -54,6 +54,7 @@
 }
 .row input[type="date"], .row select {
   font-family: 'Noto Sans KR', sans-serif;
+  width: 180px;
   padding: 6px 8px;
   border: 1px solid #b4c7b3;
   border-radius: 4px;
@@ -77,7 +78,7 @@
   cursor: pointer;
 }
 .searchBtn:hover {
-  opacity: 0.9;
+  background: #2d492d;
 }
 .rightActions {
   margin-left: auto;
