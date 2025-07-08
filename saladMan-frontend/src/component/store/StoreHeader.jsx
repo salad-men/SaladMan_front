@@ -101,7 +101,7 @@ const StoreHeader = () => {
 
         <div className="storeNav">
           <div className="storeDropdownContainer">
-                        <a href="#">재고</a>
+                        <a href="/store/StoreInventoryList">재고</a>
                         <div className="storeDropdown">
                             <ul>
                                 <li><a href="/store/StoreInventoryList">재고 목록</a></li>

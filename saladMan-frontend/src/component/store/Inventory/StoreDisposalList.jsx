@@ -132,7 +132,6 @@ export default function StoreDisposalList() {
           {/* 필터 */}
           <div className={styles.filters}>
             <div className={styles.row}>
-              <label className={styles.label}>기간</label>
               <input
                 type="date"
                 value={startDate}
@@ -154,7 +153,7 @@ export default function StoreDisposalList() {
                     className={styles.periodBtn}
                     onClick={() => setPeriod(t)}
                   >
-                    {t === "all" ? "전체" : t === "today" ? "오늘" : t === "week" ? "1주" : "1달"}
+                    {t === "all" ? "전체" : t === "today" ? "오늘" : t === "week" ? "한주" : "한달"}
                   </button>
                 ))}
               </div>

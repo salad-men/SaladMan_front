@@ -33,7 +33,6 @@ export default function HqIngredientSetting() {
   // 데이터 불러오기
   useEffect(() => {
     fetchSettings(pageInfo.curPage);
-    // eslint-disable-next-line
   }, [token, filterCategory, filterName, pageInfo.curPage]);
 
   const fetchSettings = (page = 1) => {

@@ -31,6 +31,7 @@
 .row input[type="date"], .row select {
   padding:6px 8px; border:1px solid #b4c7b3; border-radius:4px;
   background:#fff; font-size:14px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 .keywordInput {
   width:180px; padding:6px 8px; border:1px solid #b4c7b3;

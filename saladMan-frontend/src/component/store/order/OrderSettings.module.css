@@ -3,7 +3,7 @@
     height: calc(100vh - 64px);
     overflow: hidden;
     padding: 24px 100px 0 280px;
-    background-color: #f9fafb;
+    background-color: #f9f9f9;
 }
 
 .orderSettingContent {

@@ -1,6 +1,5 @@
 .container {
   display: flex;
-  min-height: 100vh;
   font-family: 'Pretendard', sans-serif;
   background-color: #ffffff;
   padding: 24px 100px 0 280px;

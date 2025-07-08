@@ -229,7 +229,6 @@ export default function StoreInventoryList() {
           {/* 필터 영역 */}
           <div className={styles.filterArea}>
             <div className={styles.rowDate}>
-              <label className={styles.labelDate}>기간</label>
               <input
                 type="date"
                 className={styles.inputDate}

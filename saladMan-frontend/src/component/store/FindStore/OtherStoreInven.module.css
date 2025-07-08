@@ -76,6 +76,13 @@
 
 .tableWrapper {
   max-height: 600px;
+    box-sizing: border-box;
+
+}
+.scrollBody {
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 .inventoryTableHeader{
@@ -119,4 +126,10 @@
 
 .inventoryTable thead {
   background-color: #f5f5f5;
+}
+.noData {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-size: 15px;
 }
