@@ -38,7 +38,7 @@ export default function StoreComplaintDetail() {
     <div className={styles.container}>
       <NoticeSidebar />
       <main className={styles.mainContent}>
-        <h2 className={styles.pageTitle}>불편사항</h2>
+        <h2 className={styles.pageTitle}>불편사항 상세</h2>
         <div className={styles.writeDate}>작성일 {complaint.writerDate}</div>
         <table className={styles.detailTable}>
           <tbody>

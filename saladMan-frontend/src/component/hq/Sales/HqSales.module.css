@@ -1,137 +1,239 @@
-.wrapper {
+.container {
   display: flex;
-  /* height: calc(100vh - 64px); */
-  background-color: #fff;
-  /* overflow-y: scroll; */
-  margin-left: 150px;
+  background: #fff;
+  /* min-height: 100vh; */
 }
-
 .content {
   flex: 1;
-  align-self: flex-start;
-  padding: 30px 0 0 0;
-  overflow-y: auto;
-  max-width: 1500px;
-  margin: 0 auto;
+  overflow: auto;
+}
+.innerContainer {
+  margin-left: 230px;
+  background: #fff;
+  padding: 0px 50px 0px 35px;
+  /* min-height: 100vh; */
+}
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2f6042;
+  margin-top: 38px;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+.filterArea {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(90,120,90,0.04);
+  padding: 10px 28px 16px 28px;
+  margin-bottom: 20px;
+}
+.filterRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
   position: relative;
 }
-
-.pageHeader {
+.label, .labelDate {
+  font-weight: 600;
+  color: #3d5a40;
+  min-width: 50px;
+  font-size: 1rem;
+}
+.inputDate {
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 1rem;
+  min-width: 120px;
+}
+.labelSep {
+  font-size: 1.2rem;
+  color: #3d5a40;
+}
+.periodBtn, .periodBtnActive {
+  padding: 5px 16px;
+  background: #f7faf8;
+  border: 1.5px solid #4d774e;
+  border-radius: 4px;
+  color: #4d774e;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+.periodBtnActive, .periodBtn:hover {
+  background: #4d774e;
+  color: #fff;
+}
+.btnSearch {
+  margin-left: 12px;
+  padding: 8px 28px;
+  background: #2196f3;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.04rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btnSearch:hover { background: #1976d2; }
+.unitBtnsRight {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  gap: 4px;
+}
+.dashboard {
   display: flex;
   flex-direction: column;
 }
-
-/* 필터 영역 */
-.filterBox {
-  display: flex;
-  background-color: white;
-  padding: 5px 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-.filterRow {
-  display: flex;
-  padding: 10px 0;
-}
-
-.filterLabel {
-  width: 70px;
-  font-weight: bold;
-  margin: auto;
-  padding: 5px;
-}
-
-.filterRow select,
-.filterRow input[type="date"],
-.filterRow button {
-  height: 34px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 0 10px;
-  margin-right: 5px;
-}
-
-.active {
-  background-color: #4D774E;
-  color: white;
-}
-
-/* 필터 추가 액션 */
-.filterActions {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.filterActions button {
-  padding: 8px 20px;
-  margin: 0 5px;
-  border: none;
-  background-color: #4D774E;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.filterContent input[type="text"] {
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* 차트 및 테이블 */
 .chartBox {
   display: flex;
-  margin-left: 40px;
+  gap: 32px;
+  margin-bottom: 16px;
 }
-
-.box {
-  background-color: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 10px;
-}
-
 .summaryBox {
-  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-right: 40px;
 }
-
+.box {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(120,130,120,0.06);
+  padding: 22px 36px;
+  font-size: 1.06rem;
+  margin-bottom: 8px;
+  text-align: center;
+  min-width: 180px;
+}
 .chart {
   display: flex;
+  gap: 18px;
 }
-
-.chart h4 {
-  margin: 0;
+.chartBoxWide {
+  min-width: 370px;
+  max-width: 540px;
+  flex: 1 1 400px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
-
-/* 매출 테이블 */
-.salesTable {
-  width: 930px;
-  max-height: 300px;
-  border-radius: 10px;
-  margin: auto;
-  overflow-y: auto;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.chartBoxWide h4 {
+  margin-bottom: 10px;
 }
-
-.salesTable table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.salesTable thead {
-  position: sticky;
-  top: 0;
+.salesTableWrap {
   background: #fff;
-  z-index: 1;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(80,110,80,0.04);
+  padding: 0px 16px 12px 0px;
+  margin-bottom: 0px;
 }
-
+.tableScroll {
+  max-height: calc(44px * 6); /* 헤더1 + 5행 */
+  overflow-y: auto;
+}
+.salesTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  table-layout: fixed;
+}
 .salesTable th,
 .salesTable td {
-  border-bottom: 1px solid #eee;
-  padding: 10px;
-  font-size: 13px;
   text-align: center;
+  vertical-align: middle;
+  height: 44px;
+  padding: 11px 0;
+  /* 모든 칼럼에 border는 필요하다면 추가 */
+  border-bottom: 1px solid #eaf3eb;
+}
+
+.salesTable th.dateCell,
+.salesTable td.dateCell {
+  width: 200px;      /* 날짜 컬럼 넓이 고정 */
+  min-width: 160px;
+  max-width: 220px;
+}
+
+.salesTable th.qtyCell,
+.salesTable td.qtyCell {
+  width: 120px;      /* 판매량 컬럼 넓이 고정 */
+  min-width: 90px;
+  max-width: 140px;
+}
+
+.salesTable th.priceCell,
+.salesTable td.priceCell {
+  width: 180px;      /* 매출 컬럼 넓이 고정 */
+  min-width: 120px;
+  max-width: 200px;
+}
+
+.salesTable th {
+  background: #f3f9f6;
+  color: #3d5a40;
+  font-weight: 700;
+}
+
+.salesTable tbody tr:last-child td { border-bottom: none; }
+
+
+.selectStore {
+  padding: 7px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 1rem;
+  min-width: 100px;
+  color: #223f28;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 36px;
+  box-sizing: border-box;
+  transition: border 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.selectStore:disabled {
+  background: #f5f6f6;
+  color: #c0c0c0;
+  border-color: #d2d7d3;
+  cursor: not-allowed;
+}
+.selectStore:focus {
+  border: 1.5px solid #4d774e;
+  box-shadow: 0 0 0 2px #eaf3eb;
+}
+.storeFilterRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative;
+  margin-bottom: 7px;
+}
+
+.storeUnitBtnsRight {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  gap: 4px;
+}
+.storeFilterRow .btnSearch {
+  margin-left: 14px;
 }

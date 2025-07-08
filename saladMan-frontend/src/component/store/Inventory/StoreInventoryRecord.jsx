@@ -5,13 +5,23 @@ import { myAxios } from "../../../config";
 import { accessTokenAtom, userAtom } from "/src/atoms";
 import styles from "./StoreInventoryRecord.module.css";
 
+function formatDate(dateStr) {
+  if (!dateStr) return "-";
+  const d = new Date(dateStr);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const hh = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+}
+
 export default function StoreInventoryRecord() {
-  // 1. atom 값 읽기
   const token = useAtomValue(accessTokenAtom);
   const user = useAtomValue(userAtom);
-
-  // 2. 필수 storeId 확보 (없으면 스킵)
   const storeId = user?.id;
+
+  // 동일한 상태 구조
   const [ingredients, setIngredients] = useState([]);
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
@@ -23,88 +33,59 @@ export default function StoreInventoryRecord() {
   const [changeQuantity, setChangeQuantity] = useState("");
   const [memo, setMemo] = useState("");
 
-  const [filterCategory, setFilterCategory] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
   const [filterName, setFilterName] = useState("");
   const [filterStartDate, setFilterStartDate] = useState("");
   const [filterEndDate, setFilterEndDate] = useState("");
   const [categories, setCategories] = useState([]);
+  const [selectedCategoryForModal, setSelectedCategoryForModal] = useState("");
 
-  // 날짜 포맷
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    return new Date(dateStr).toLocaleString("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
+  // 기간 선택 상태
+  const [selectedPeriod, setSelectedPeriod] = useState("전체");
+
+  // 페이징
+  const [pageInfo, setPageInfo] = useState({
+    curPage: 1,
+    allPage: 1,
+    startPage: 1,
+    endPage: 1,
+  });
+
+  // 데이터 로딩
+  useEffect(() => {
+    if (!token || !storeId) return;
+    myAxios(token).get("/store/inventory/categories").then(res => {
+      setCategories(res.data.categories || []);
+    });
+    myAxios(token).get("/store/inventory/ingredients").then(res => {
+      const list = res.data.ingredients || [];
+      setIngredients(list);
+      setSelectedIngredient(list[0]?.id || "");
+    });
+    fetchRecords(1);
+    // eslint-disable-next-line
+  }, [token, storeId]);
+
+  const fetchRecords = (page = 1) => {
+    if (!token || !storeId) return;
+    myAxios(token).get("/store/inventory/record", {
+      params: { storeId, type: activeTab, page }
+    }).then(res => {
+      setRecords(res.data.records || []);
+      setPageInfo(res.data.pageInfo || {});
     });
   };
 
-  // --- 데이터 불러오기 (최초 1회) ---
   useEffect(() => {
-    if (!token) return;
-    console.log("[useEffect-최초] token:", token, "storeId:", storeId, "user:", user);
-
-    if (!storeId) {
-      console.log("❗️storeId가 없습니다! user:", user);
-      return;
-    }
-    // --- 카테고리 불러오기 ---
-    myAxios(token).get("/store/inventory/categories")
-      .then(res => {
-        const cats = res.data.categories || [];
-        setCategories(cats);
-        setFilterCategory("");
-        console.log("카테고리 불러옴", cats);
-      })
-      .catch(e => {
-        console.error("카테고리 불러오기 실패", e);
-      });
-
-    // --- 재료 목록 불러오기 ---
-    myAxios(token).get("/store/inventory/ingredients")
-      .then(res => {
-        const list = res.data.ingredients || [];
-        setIngredients(list);
-        setSelectedIngredient(list[0]?.id || "");
-        console.log("재료 목록 불러옴", list);
-      })
-      .catch(e => {
-        console.error("재료 불러오기 실패", e);
-      });
-
-    // --- 기록 불러오기 ---
-    myAxios(token).get("/store/inventory/record", {
-      params: { storeId, type: activeTab }
-    }).then(res => {
-      setRecords(res.data.records || []);
-      console.log("기록 불러옴", res.data.records);
-    }).catch(e => {
-      console.error("기록 불러오기 실패", e);
-    });
-  }, [token, storeId]);
-
-  // --- 탭(입고/출고) 바뀔 때 기록만 새로고침 ---
-  useEffect(() => {
-    if (!token) return;
-    if (!storeId) return;
-    myAxios(token).get("/store/inventory/record", {
-      params: { storeId, type: activeTab }
-    }).then(res => {
-      setRecords(res.data.records || []);
-      console.log("탭 변경, 기록 새로 불러옴", res.data.records);
-    }).catch(e => {
-      console.error("탭 변경 후 기록 불러오기 실패", e);
-    });
+    if (!token || !storeId) return;
+    fetchRecords(1);
+    // eslint-disable-next-line
   }, [activeTab, token, storeId]);
 
-  // --- 필터링 ---
   useEffect(() => {
-    let temp = records.filter(r => (r.changeType?.trim() === activeTab.trim()));
-    if (filterCategory !== "") temp = temp.filter(r => r.categoryName === filterCategory);
-    if (filterName) temp = temp.filter(r => r.ingredientName?.includes(filterName));
+    let temp = records;
+    if (filterCategory !== "all") temp = temp.filter(r => r.categoryName === filterCategory);
+    if (filterName) temp = temp.filter(r => r.ingredientName.includes(filterName));
     if (filterStartDate) temp = temp.filter(r => new Date(r.date) >= new Date(filterStartDate));
     if (filterEndDate) {
       const end = new Date(filterEndDate);
@@ -112,180 +93,267 @@ export default function StoreInventoryRecord() {
       temp = temp.filter(r => new Date(r.date) <= end);
     }
     setFilteredRecords(temp);
-  }, [records, activeTab, filterCategory, filterName, filterStartDate, filterEndDate]);
+  }, [records, filterCategory, filterName, filterStartDate, filterEndDate]);
 
-  // --- 모달 오픈 ---
+  // 기간 버튼 핸들러
+  const setPeriod = (type) => {
+    const today = new Date();
+    if (type === "today") {
+      const d = today.toISOString().slice(0, 10);
+      setFilterStartDate(d);
+      setFilterEndDate(d);
+      setSelectedPeriod("오늘");
+    } else if (type === "week") {
+      const t = new Date(today);
+      t.setDate(t.getDate() - 6);
+      setFilterStartDate(t.toISOString().slice(0, 10));
+      setFilterEndDate(today.toISOString().slice(0, 10));
+      setSelectedPeriod("1주");
+    } else if (type === "month") {
+      const t = new Date(today);
+      t.setMonth(t.getMonth() - 1);
+      t.setDate(t.getDate() + 1);
+      setFilterStartDate(t.toISOString().slice(0, 10));
+      setFilterEndDate(today.toISOString().slice(0, 10));
+      setSelectedPeriod("1달");
+    } else {
+      setFilterStartDate("");
+      setFilterEndDate("");
+      setSelectedPeriod("전체");
+    }
+  };
+
+  // 모달 핸들러
   const openModal = () => {
-    setSelectedIngredient(ingredients[0]?.id || "");
+    setSelectedCategoryForModal("");
+    setSelectedIngredient("");
     setChangeQuantity("");
     setMemo("");
     setModalOpen(true);
   };
-
   const closeModal = () => setModalOpen(false);
 
-  // --- 등록(저장) ---
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!changeQuantity || Number(changeQuantity) <= 0) {
       alert("수량을 입력해주세요.");
       return;
     }
-    if (!selectedIngredient) {
-      alert("재료를 선택하세요.");
-      return;
-    }
-    myAxios(token).post("/store/inventory/record-add", {
-      ingredientId: Number(selectedIngredient),
-      storeId,
-      quantity: Number(changeQuantity),
-      memo,
-      changeType: activeTab,
-    }).then(() => {
-      alert("저장 완료!");
-      closeModal();
-      return myAxios(token).get("/store/inventory/record", {
-        params: { storeId, type: activeTab }
+    myAxios(token)
+      .post("/store/inventory/record-add", {
+        ingredientId: Number(selectedIngredient),
+        storeId,
+        quantity: Number(changeQuantity),
+        memo,
+        changeType: activeTab,
+      })
+      .then(() => {
+        alert("저장 완료!");
+        closeModal();
+        fetchRecords(1);
+      })
+      .catch(() => {
+        alert("등록에 실패했습니다.");
       });
-    }).then(res => {
-      setRecords(res.data.records || []);
-      console.log("등록 후 기록 새로고침", res.data.records);
-    }).catch(err => {
-      console.error("등록 실패", err);
-      alert("등록에 실패했습니다.");
-    });
   };
 
-  // 날짜 필터 유틸
-  const setToday = () => {
-    const today = new Date().toISOString().slice(0, 10);
-    setFilterStartDate(today);
-    setFilterEndDate(today);
-  };
+  // 페이징
+  const { curPage, startPage, endPage, allPage } = pageInfo;
+  const pages = Array.from({ length: (endPage || 1) - (startPage || 1) + 1 }, (_, i) => (startPage || 1) + i);
 
-  const setLastDays = (days) => {
-    const to = new Date();
-    const from = new Date();
-    from.setDate(to.getDate() - days);
-    setFilterStartDate(from.toISOString().slice(0, 10));
-    setFilterEndDate(to.toISOString().slice(0, 10));
+  const movePage = (p) => {
+    if (p < 1 || p > allPage) return;
+    fetchRecords(p);
   };
 
   return (
     <div className={styles.container}>
       <StoreInventorySidebar />
       <div className={styles.content}>
-        <h2 className={styles.title}>재고 입출고 기록</h2>
-
-        {/* 필터 */}
-        <div className={styles.filters}>
-          <div className={styles.row}>
-            <label>기간</label>
-            <input type="date" value={filterStartDate} onChange={e => setFilterStartDate(e.target.value)} />
-            <span>~</span>
-            <input type="date" value={filterEndDate} onChange={e => setFilterEndDate(e.target.value)} />
-            <div className={styles.dateButtons}>
-              <button onClick={() => { setFilterStartDate(""); setFilterEndDate(""); }}>전체</button>
-              <button onClick={setToday}>오늘</button>
-              <button onClick={() => setLastDays(7)}>1주</button>
-              <button onClick={() => setLastDays(30)}>1달</button>
+        <div className={styles.innerContainer}>
+          <h2 className={styles.title}>재고 기록</h2>
+          {/* 필터 */}
+          <div className={styles.filters}>
+            <div className={styles.row}>
+              <span className={styles.label}>기간</span>
+              <input type="date" value={filterStartDate} onChange={e => setFilterStartDate(e.target.value)} />
+              <span>~</span>
+              <input type="date" value={filterEndDate} onChange={e => setFilterEndDate(e.target.value)} />
+              <div className={styles.periodButtons}>
+                <button
+                  className={selectedPeriod === "전체" ? styles.tabActive : ""}
+                  onClick={() => setPeriod("all")}
+                  type="button"
+                >전체</button>
+                <button
+                  className={selectedPeriod === "오늘" ? styles.tabActive : ""}
+                  onClick={() => setPeriod("today")}
+                  type="button"
+                >오늘</button>
+                <button
+                  className={selectedPeriod === "1주" ? styles.tabActive : ""}
+                  onClick={() => setPeriod("week")}
+                  type="button"
+                >1주</button>
+                <button
+                  className={selectedPeriod === "1달" ? styles.tabActive : ""}
+                  onClick={() => setPeriod("month")}
+                  type="button"
+                >1달</button>
+              </div>
             </div>
-          </div>
-
-          <div className={styles.row}>
-            <label>분류</label>
-            <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-              <option value="">전체</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder="재료명 검색"
-              value={filterName}
-              onChange={e => setFilterName(e.target.value)}
-            />
-            <button type="button">검색</button>
-            <button type="button" onClick={() => {
-              setFilterStartDate(""); setFilterEndDate("");
-              setFilterCategory(""); setFilterName("");
-            }}>초기화</button>
-          </div>
-        </div>
-
-        {/* 탭 + 등록 */}
-        <div className={styles.actions}>
-          <button type="button" className={activeTab === "입고" ? styles.edit : ""} onClick={() => setActiveTab("입고")}>입고</button>
-          <button type="button" className={activeTab === "출고" ? styles.edit : ""} onClick={() => setActiveTab("출고")}>출고</button>
-          <button type="button" className={styles.add} onClick={openModal}>+ 등록</button>
-        </div>
-
-        {/* 테이블 */}
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>재료명</th>
-              <th>분류</th>
-              <th>수량</th>
-              <th>메모</th>
-              <th>날짜</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRecords.length > 0 ? (
-              filteredRecords.map(r => (
-                <tr key={r.id}>
-                  <td>{r.ingredientName}</td>
-                  <td>{r.categoryName}</td>
-                  <td>{r.quantity}</td>
-                  <td>{r.memo || "-"}</td>
-                  <td>{formatDate(r.date)}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5">기록이 없습니다.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        {/* 모달 */}
-        {modalOpen && (
-          <div className={styles.modal} onClick={closeModal}>
-            <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
-              <h3>{activeTab} 등록</h3>
-              <form onSubmit={handleSubmit} className={styles.form}>
-                <label>
-                  재료
-                  <select value={selectedIngredient} onChange={e => setSelectedIngredient(e.target.value)} required>
-                  {ingredients.map(i => (
-                    <option key={i.id} value={i.id}>
-                      {i.name}{i.categoryName ? ` (${i.categoryName})` : ""}
-                    </option>
-                  ))}
-                </select>
-
-                </label>
-                <label>
-                  수량
-                  <input type="number" min="1" value={changeQuantity} onChange={e => setChangeQuantity(e.target.value)} required />
-                </label>
-                <label>
-                  메모
-                  <textarea value={memo} onChange={e => setMemo(e.target.value)} />
-                </label>
-                <div className={styles.modalActions}>
-                  <button type="button" className={styles.cancel} onClick={closeModal}>취소</button>
-                  <button type="submit" className={styles.save}>저장</button>
+            <div className={styles.row}>
+              <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
+                <option value="all">전체</option>
+                {categories.map(c => (
+                  <option key={c.id} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                placeholder="재료명 검색"
+                value={filterName}
+                onChange={e => setFilterName(e.target.value)}
+                className={styles.keywordInput}
+              />
+              <button className={styles.searchBtn} type="button" onClick={() => fetchRecords(1)}>검색</button>
+              <button
+                className={styles.resetBtn}
+                type="button"
+                onClick={() => {
+                  setFilterStartDate(""); setFilterEndDate("");
+                  setFilterCategory("all"); setFilterName("");
+                  setSelectedPeriod("전체");
+                  fetchRecords(1);
+                }}>초기화</button>
+              <div className={styles.rightActions}>
+                <button className={styles.addBtn} type="button" onClick={openModal}>+ 등록</button>
+                <div className={styles.tabBtns}>
+                  <button
+                    className={activeTab === "입고" ? styles.tabActive : ""}
+                    onClick={() => setActiveTab("입고")}
+                    type="button"
+                  >입고</button>
+                  <button
+                    className={activeTab === "출고" ? styles.tabActive : ""}
+                    onClick={() => setActiveTab("출고")}
+                    type="button"
+                  >출고</button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
-        )}
+          {/* 테이블 */}
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>분류</th>
+                  <th>재료명</th>
+                  <th>수량</th>
+                  <th>메모</th>
+                  <th>날짜</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRecords.length > 0 ? (
+                  filteredRecords.map(r => (
+                    <tr key={r.id}>
+                      <td>{r.categoryName}</td>
+                      <td>{r.ingredientName}</td>
+                      <td>{r.quantity}</td>
+                      <td>{r.memo || "-"}</td>
+                      <td>{formatDate(r.date)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className={styles.noData}>기록이 없습니다.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          {/* 페이지네이션 */}
+          <div className={styles.pagination}>
+            <button onClick={() => movePage(1)} disabled={curPage === 1}>&lt;&lt;</button>
+            <button onClick={() => movePage(curPage - 1)} disabled={curPage === 1}>&lt;</button>
+            {pages.map(p => (
+              <button
+                key={p}
+                className={p === curPage ? styles.active : ""}
+                onClick={() => movePage(p)}
+              >{p}</button>
+            ))}
+            <button onClick={() => movePage(curPage + 1)} disabled={curPage === allPage}>&gt;</button>
+            <button onClick={() => movePage(allPage)} disabled={curPage === allPage}>&gt;&gt;</button>
+          </div>
+          {/* 등록 모달 */}
+          {modalOpen && (
+            <div className={styles.modal} onClick={closeModal}>
+              <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
+                <button className={styles.modalClose} onClick={closeModal}>&times;</button>
+                <h3>{activeTab} 등록</h3>
+                <form>
+                  {/* 분류(카테고리) 선택 */}
+                  <div className={styles.formRow}>
+                    <label>분류</label>
+                    <select
+                      value={selectedCategoryForModal}
+                      onChange={e => {
+                        setSelectedCategoryForModal(e.target.value);
+                        setSelectedIngredient("");
+                      }}
+                    >
+                      <option value="">분류 선택</option>
+                      {categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  {/* 재료 선택 */}
+                  <div className={styles.formRow}>
+                    <label>재료</label>
+                    <select
+                      value={selectedIngredient}
+                      onChange={e => setSelectedIngredient(e.target.value)}
+                      disabled={!selectedCategoryForModal}
+                    >
+                      <option value="">재료 선택</option>
+                      {ingredients
+                        .filter(i => String(i.categoryId) === String(selectedCategoryForModal))
+                        .map(i => (
+                          <option key={i.id} value={i.id}>
+                            {i.name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                  {/* 수량 */}
+                  <div className={styles.formRow}>
+                    <label>수량</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={changeQuantity}
+                      onChange={e => setChangeQuantity(e.target.value)}
+                      className={styles.editable}
+                    />
+                  </div>
+                  {/* 메모 */}
+                  <div className={styles.formRow}>
+                    <label>메모</label>
+                    <textarea value={memo} onChange={e => setMemo(e.target.value)} />
+                  </div>
+                  <div className={styles.modalActions}>
+                    <button type="button" onClick={closeModal}>취소</button>
+                    <button type="submit" onClick={handleSubmit}>저장</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

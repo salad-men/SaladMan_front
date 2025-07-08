@@ -89,7 +89,7 @@ function AlarmList() {
             <button onClick={markAsReadSelected}>읽음 처리</button>
             <button onClick={deleteSelected}>삭제</button>
           </div>
-          <div>
+          <div className={styles.inboxSummary}>
             읽지 않음 {alarmList.filter(n => !n.isRead).length}개 / 총 {alarmList.length}개
           </div>
         </div>

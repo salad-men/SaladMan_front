@@ -1,7 +1,7 @@
 /* OrderApply.module.css */
 .orderApplyContainer {
     display: flex;
-    height: calc(100vh - 64px);
+    /* height: calc(100vh - 64px); */
     overflow: hidden;
     padding: 24px 100px 0 280px;
 }
@@ -13,7 +13,7 @@
     flex-direction: column;
     min-width: 0;
     position: relative;
-        overflow-y: auto; /* 내용 스크롤 */
+    overflow-y: auto;
 
 }
 

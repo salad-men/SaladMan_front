@@ -1,117 +1,146 @@
 .container {
   display: flex;
-
-  padding: 24px 100px 0 280px;
+  background: #fff;
 }
-
 .content {
-  position: absolute;
-  padding: 30px 20px;
-  width: calc(100% - 280px);
-  background-color: #ffffff;
-  min-height: calc(100vh - 60px);
+  flex: 1;
+  padding: 0px;
+}
+.innerContainer {
+  background: #fff;
+  padding: 30px 65px 0 130px;
   overflow: auto;
+  margin-left: 150px;
 }
-
 .title {
-  margin: 0 0 16px;
-  font-size: 28px;
-  color: #3d5a40;
-  font-weight: bold;
+  font-size: 1.8rem;
+  color: #2f6042;
+  margin-bottom: 16px;
+  margin-top: 38px;
 }
-
 .filters {
+  margin-bottom: 16px;
+}
+.row {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
-
-.filters label {
-  font-weight: bold;
-  font-size: 14px;
+.label {
+  font-weight: 600;
+  color: #3d5a40;
 }
-
-.filters select,
-.filters input[type="text"] {
+.inputDate {
   padding: 6px 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #b4c7b3;
   border-radius: 4px;
-  width: 200px;
-      height: 40px;
-  box-sizing: border-box;
+  font-size: 1.02rem;
+  min-width: 120px;
+  background: #fff;
 }
-
-.search {
-  background-color: #4d774e;
+.inputDate:focus {
+  border-color: #4d774e;
+}
+.inputSearch {
+  width: 160px;
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  font-size: 1.02rem;
+  background: #fff;
+}
+.inputSearch:focus {
+  border-color: #4d774e;
+}
+.selectBox {
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  font-size: 1.02rem;
+  background: #fff;
+}
+.selectBox:focus {
+  border-color: #4d774e;
+}
+.searchBtn {
+  padding: 6px 14px;
+  background: #4d774e;
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 6px 14px;
-  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 1.02rem;
+  transition: background 0.2s;
 }
-.search:hover {
-  background-color: #3b5a3b;
+.searchBtn:hover {
+  background: #3b663b;
 }
-
+.periodButtons {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+.periodBtn {
+  background: #f7faf8;
+  border: 1px solid #4d774e;
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: #4d774e;
+  cursor: pointer;
+  font-size: 0.99rem;
+  transition: background 0.2s;
+}
+.periodBtn:hover {
+  background: #4d774e;
+  color: white;
+}
+.tableWrap {
+  overflow-x: auto;
+}
 .table {
-  width: auto;
-  border-collapse: collapse;
   font-size: 14px;
+  width: 100%;
+  border-collapse: collapse;
   table-layout: fixed;
-  margin-bottom: 16px;
 }
-
 .table th,
 .table td {
-  border: 1px solid #ccc;
-  padding: 8px 40px;
+  padding: 10px;
+  border: 1px solid #e4e9e7;
   text-align: center;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
-.table th {
-  background: #f6f6f6;
-  font-weight: bold;
-  color: #3d5a40;
+.table thead {
+  background: #eaf3eb;
+  color: #2d4836;
 }
-
+.table td {
+  height: 32px;
+}
+.noData {
+  text-align: center;
+  padding: 20px 0;
+  color: #999;
+}
 .pagination {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 20px;
+  display: flex; justify-content: center; gap: 6px;
+  margin-top: 21px;
 }
-
 .pagination button {
-  padding: 6px 12px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  background-color: white;
-  color: #333;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 6px 12px; border: 1px solid #a2b7aa; background: #fff;
+  color: #387448; border-radius: 4px; cursor: pointer;
 }
-
 .pagination button.active {
-  background-color: #4d774e;
-  color: white;
-  border-color: #4d774e;
+  background: #57a964; color: #fff; border-color: #57a964;
 }
-
-.pagination button:hover:not(.active):not(:disabled) {
-  background-color: #f0f0f0;
-}
-
 .pagination button:disabled {
-  color: #aaa;
-  background-color: #fafafa;
-  border-color: #eee;
-  cursor: default;
+  background: #f0f4f1; color: #c0cfc3; cursor: not-allowed;
+}
+.active {
+  background: #57a964;
+  color: white;
+  border-color: #57a964;
 }

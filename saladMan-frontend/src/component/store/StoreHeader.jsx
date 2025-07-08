@@ -106,7 +106,7 @@ const StoreHeader = () => {
                             <ul>
                                 <li><a href="/store/StoreInventoryList">재고 목록</a></li>
                                 <li><a href="/store/StoreInventoryExpiration">유통기한 목록</a></li>
-                                <li><a href="/store/StoreDisposalList">폐기 목록</a></li>
+                                <li><a href="/store/StoreDisposalList">폐기신청 목록</a></li>
                                 <li><a href="/store/StoreIngredientSetting">재료 설정</a></li>
                                 <li><a href="/store/StoreInventoryRecord">재고 기록</a></li>
                             </ul>
@@ -118,7 +118,6 @@ const StoreHeader = () => {
                             <ul>
                                 <li><a href="/store/orderList">발주 목록</a></li>
                                 <li><a href="/store/orderApply">발주 신청</a></li>
-                                <li><a href="/store/stockInspection">발주입고 검수</a></li>
                                 <li><a href="/store/orderSettings">발주 설정</a></li>
                             </ul>
                         </div>

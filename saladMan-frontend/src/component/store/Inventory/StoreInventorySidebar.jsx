@@ -54,7 +54,7 @@ export default function StoreInventorySidebar() {
           <a href="/store/StoreInventoryExpiration" className={styles.link}>유통기한 목록</a>
         </li>
         <li className={styles.listItem}>
-          <a href="/store/StoreDisposalList" className={styles.link}>폐기 목록</a>
+          <a href="/store/StoreDisposalList" className={styles.link}>폐기신청 목록</a>
         </li>
         <li className={styles.listItem}>
           <a href="/store/StoreIngredientSetting" className={styles.link}>재료 설정</a>

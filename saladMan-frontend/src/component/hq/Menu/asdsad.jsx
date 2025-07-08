@@ -57,7 +57,6 @@ export default function HqInventoryExpiration() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [sortOption, setSortOption] = useState("default");
-const [disposalReasons, setDisposalReasons] = useState({});
 
   // 옵션 리스트
   const [stores, setStores] = useState([]);
@@ -134,41 +133,20 @@ const [disposalReasons, setDisposalReasons] = useState({});
     openModalSingle(selectedIds);
   };
   const closeModal = ()=>setIsModalOpen(false);
-  const onAmount=(id,val)=>{ 
-    const maxQ=data.find(i=>i.id===id)?.quantity||0; 
-    const num=Math.max(0,Math.min(Number(val)||0,maxQ)); 
-    setDisposalAmounts(d=>({...d,[id]:num})); 
+  const onAmount=(id,val)=>{ const maxQ=data.find(i=>i.id===id)?.quantity||0; const num=Math.max(0,Math.min(Number(val)||0,maxQ)); setDisposalAmounts(d=>({...d,[id]:num})); };
+  const submit=()=>{
+    const items=selectedIds.map(id=>{ const it=data.find(r=>r.id===id); if(!isHqItem(it))return null; return {id,quantity:disposalAmounts[id]||0,storeId:1}; }).filter(i=>i&&i.quantity>0);
+    if(!items.length) return alert('폐기량을 입력하세요.');
+    myAxios(token).post('/hq/inventory/disposal-request',items)
+      .then(()=>{ alert(`총 ${items.length}건 폐기 신청 완료!`); closeModal(); fetchInventory(pageInfo.curPage); })
+      .catch(()=>alert('폐기 신청 실패'));
   };
-  const submit = () => {
-  const items = selectedIds.map(id => {
-    const it = data.find(r => r.id === id);
-    if (!isHqItem(it)) return null;
-    const memo = (disposalReasons[id] || "").trim(); 
-    return {
-      id,
-      quantity: disposalAmounts[id] || 0,
-      storeId: 1,
-      memo,    
-    };
-  }).filter(i => i && i.quantity > 0 && i.memo);
 
-  if (!items.length) return alert('폐기량과 사유를 입력하세요.');
-  myAxios(token).post('/hq/inventory/disposal-request', items)
-    .then(()=>{ alert(`총 ${items.length}건 폐기 신청 완료!`); closeModal(); fetchInventory(pageInfo.curPage); })
-    .catch(()=>alert('폐기 신청 실패'));
-};
-
-const onReason = (id, val) => {
-  setDisposalReasons(d => ({ ...d, [id]: val }));
-};
   // 페이지네이션
   const movePage=p=>{ if(p<1||p>pageInfo.allPage)return; setPageInfo(pi=>({...pi,curPage:p})); };
   const {curPage,startPage,endPage,allPage}=pageInfo;
   const pages=Array.from({length:endPage-startPage+1},(_,i)=>startPage+i);
-const onFilterChange = setter => e => {
-  setter(e.target.value);
-  setPageInfo(pi => ({ ...pi, curPage: 1 }));
-};
+
   return (
     <div className={styles.container}>
       <HqInventorySidebar />
@@ -224,7 +202,7 @@ const onFilterChange = setter => e => {
 
               <div className={styles.rightActions}>
                 {(scope === "hq" || scope === "all") && (
-                  <button className={styles.disposalBtn} onClick={openModalBulk}>
+                  <button className={styles.disposalBtn} onClick={openModal}>
                     폐기
                   </button>
                 )}
@@ -289,33 +267,20 @@ const onFilterChange = setter => e => {
                 <div className={styles.modalTableWrapper}>
                   <table className={styles.table}>
                     <thead>
-                      <tr><th>품목명</th><th>단위</th><th>폐기량</th> <th>폐기 사유</th></tr>
+                      <tr><th>품목명</th><th>단위</th><th>폐기량</th></tr>
                     </thead>
                     <tbody>
                       {selectedIds.map(id=>{
-                        const it = data.find(r=>r.id===id);
+                        const it=data.find(r=>r.id===id);
                         return (
                           <tr key={id}>
                             <td>{it.name}</td>
                             <td>{it.unit}</td>
-                            <td>
-                              <input type="number" min={0} max={it.quantity} value={disposalAmounts[id]||0}
-                                onChange={e=>onAmount(id,e.target.value)} className={styles.editable} />
-                            </td>
-                            <td>
-                              <input type="text"
-                                placeholder="폐기 사유"
-                                value={disposalReasons[id] || ""}
-                                onChange={e => onReason(id, e.target.value)}
-                                className={styles.editable}
-                                style={{minWidth:100}}
-                              />
-                            </td>
+                            <td><input type="number" min={0} max={it.quantity} value={disposalAmounts[id]||0} onChange={e=>onAmount(id,e.target.value)} className={styles.editable} /></td>
                           </tr>
                         );
                       })}
                     </tbody>
-
                   </table>
                 </div>
               </div>

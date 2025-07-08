@@ -313,6 +313,7 @@ console.log("categories", categories);
                         <tr key={row.key}>
                           <td>
                             <select
+                              className={styles.selectBox}
                               value={row.categoryId}
                               onChange={e => handleAddRowInput(row.key, "categoryId", e.target.value)}
                             >
@@ -324,6 +325,7 @@ console.log("categories", categories);
                           </td>
                           <td>
                             <select
+                            className={styles.selectBox}
                               value={row.ingredientId}
                               onChange={e => handleAddRowInput(row.key, "ingredientId", e.target.value)}
                             >

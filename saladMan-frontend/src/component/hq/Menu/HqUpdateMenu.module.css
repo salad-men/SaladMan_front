@@ -1,197 +1,429 @@
-.wrapper {
+.container {
   display: flex;
-  height: calc(100vh - 55px);
-  background-color: #f9fafb;
-  overflow-y: scroll;
+  background: #fff;
+  font-family: 'Pretendard', sans-serif;
+  /* min-height: 100vh; */
+  width: 100%;
 }
-
 .content {
   flex: 1;
-  align-self: flex-start;
-  padding: 30px 0 0 0;
-  max-width: 1500px;
-  margin: 0 auto;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-.pageHeader {
+.title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #2f6042;
+  letter-spacing: -1.5px;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 18px;
+}
+.innerContainer {
+  width: 900px;
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: 0 8px 40px rgba(51,85,64, 0.10), 0 1.5px 16px rgba(0,0,0,0.08);
+  padding: 44px 36px 38px 36px;
   display: flex;
   flex-direction: column;
 }
-
-.innerbox{
-  width: 1000px;
-  margin: 0 auto;
-}
-
-.table {
-    min-height: 500px;
-    border-collapse: collapse;
-    background-color: white;
-    table-layout: fixed;
-    margin: 0 auto;
-}
-
-.table td:nth-child(2),
-.table td:nth-child(4) {
-  padding: 5px;
-}
-
-.table>tbody>tr:nth-child(1),
-.table>tbody>tr:nth-child(2) {
-  height: 100px;
-}
-
-.tableborder {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.labelCell {
-    width: 150px;
-    font-weight: bold;
-    text-align: right;
-    padding: 10px;
-    background-color: #b3b3b3;
-}
-
-.table input[type="number"],
-.table input[type="text"] {
-  border: none;
-  border-bottom: 1px solid #ccc;
-  outline: none;
-  width: 200px;
-}
-
-.button {
+.form {
+  width: 100%;
+  /* background: #f8faf9; */
+  border-radius: 18px;
+  /* border: 1.3px solid #dde7dd; */
+  /* padding: 0px 24px 20px 10px; */
   display: flex;
-    padding: 8px 20px;
-    background-color: #4D774E;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-    justify-content: flex-end;
-    border-radius: 5px;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
+}
+.formRow {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 26px;
+}
+.formLabel {
+  flex: 0 0 105px;
+  font-weight: 600;
+  font-size: 1.13rem;
+  color: #23422f;
+  text-align: right;
+  margin-right: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  padding-top: 10px;
+}
+.input, textarea.input {
+  flex: 1;
+  font-size: 1.09rem;
+  padding: 8px 15px;
+  border: 1.3px solid #bdd1b8;
+  border-radius: 9px;
+  background: #f9fbfa;
+  box-sizing: border-box;
+  color: #232;
+  outline: none;
+  min-width: 0;
+  transition: border 0.19s, box-shadow 0.19s;
+}
+.input:focus, textarea.input:focus {
+  border-color: #4ea36d;
+  box-shadow: 0 0 8px #cde2d0;
+}
+textarea.input {
+  height: 110px;
+  min-height: 80px;
+  max-height: 250px;
+  resize: vertical;
 }
 
-.button:hover {
-    background-color: #3b5f3c;
+/* 이미지 업로드 */
+.imagesContainer {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.imageBox {
+  width: 104px;
+  height: 104px;
+  background: #f8faf8;
+  border: 2.2px dashed #a6d1af;
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: border 0.16s, box-shadow 0.12s;
+}
+.imageBox:hover, .imageBox:focus {
+  border: 2.2px solid #4ea36d;
+  box-shadow: 0 0 8px #cde2d0;
+}
+.addBox {
+  min-width: 104px;
+  min-height: 104px;
+  background: #f8faf8;
+  border: 2.2px dashed #a6d1af;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+.plusIcon {
+  width: 37px;
+  height: 37px;
+  opacity: 0.7;
+  filter: drop-shadow(0 1px 2px #ddebe2);
+}
+.imagePreview {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 9px;
+  object-fit: cover;
+  box-shadow: 0 0 2px #b5cabb;
+}
+.imgRemoveBtn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: #234e2be9;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.17rem;
+  width: 23px;
+  height: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.18s;
+  z-index: 2;
+  box-shadow: 0 2px 7px #dbe7db99;
+}
+.imgRemoveBtn:hover {
+  background: #e53935;
+  color: #fff;
 }
 
-.ingredientCell {
-  vertical-align: top;
+/* ====== 재료 ====== */
+.ingredientArea { width: 100%; }
+.ingredientHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+.ingredientTitle {
+  font-weight: 600;
+  color: #2d6040;
+  font-size: 1.06rem;
+  letter-spacing: -0.5px;
+}
+.btnAddIng {
+  padding: 5px 13px;
+  background-color: #2196f3;
+  color: #ffffff;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.99rem;
+  margin-left: 8px;
+  box-shadow: 0 1px 5px #b4c7b3;
+  transition: background 0.15s;
+}
+.btnAddIng:hover { background-color: #1976d2; }
+.ingredientTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #f7faf8;
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 15px;
+  margin-top: 0;
+  box-shadow: 0 2px 12px #e3eae6a8;
+  table-layout: fixed; 
+}
+.ingredientTable th, .ingredientTable td {
+  text-align: center;
+  border-bottom: 1px solid #e2e9e2;
+  padding: 9px 8px;
+  background: #fff;
+  vertical-align: middle;
+  height: 48px;    
+}
+.ingredientTable th {
+  background: #eaf3eb;
+  color: #2d4836;
+  font-weight: 600;
+  border-bottom: 2px solid #dde7dd;
+}
+
+.ingredientTable thead,
+.ingredientTable tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.ingredientTable tbody {
+  display: block;
+  width: 100%;
+}
+.scrollBody {
+  display: block;
+  max-height: 152px; 
+  overflow-y: auto;
+  width: 100%;
+}
+.noIngredient {
+  color: #bbb;
+  font-style: italic;
+  font-size: 0.98rem;
+  background: #f8fbf9;
+}
+.qtyCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 48px;
   padding: 0;
 }
-
-.ingredientWrapper {
-  width: 100%;
-  max-height: 250px;
-  overflow-y: auto;
+.qtyFlex {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-
-.ingredientTable th:nth-child(1),
-.ingredientTable td:nth-child(1) {
-    width: 200px;
-}
-
-.ingredientTable td:nth-child(3) {
-    width: 300px;
-}
-
-.ingredientTable {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-.ingredientTable th,
-.ingredientTable td {
-    text-align: center;
-    border: 1px solid #ccc;
-    padding: 6px;
-    font-size: 13px;
-}
-
-.ingredientTable input[type="number"] {
-  border: none;
-  border-bottom: 1px solid #ccc;
-  outline: none;
-  width: 100px;
+.ingQtyInput {
+  width: 86px;
+  padding: 6px 9px;
+  border: 1.1px solid #b4c7b3;
+  border-radius: 6px;
   text-align: center;
+  font-size: 15px;
+  background: #f7faf8;
+  height: 20px;
+  line-height: 34px;
 }
-
-.deleteButton {
+.unit {
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+}
+.btnRemoveIng {
+  background: #eef0f3;
+  color: #7e858a;
+  font-weight: 600;
   border: none;
-  padding: 4px 8px;
   cursor: pointer;
-  border-radius: 4px;
+  padding: 5px 13px;
+  font-size: 0.97rem;
+  border-radius: 6px;
+  margin-left: 4px;
+  transition: background 0.14s;
+}
+.btnRemoveIng:hover { background: #eae3e3; color: #e53935; }
+
+.btnBox {
+  display: flex;
+  gap: 38px;
+  margin-top: 5px;
+  justify-content: center;
+  align-items: center;
+}
+.btnSubmit, .btnCancel {
+  border-radius: 13px;
+  padding: 14px 60px;
+  font-size: 1.13rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(60, 90, 70, 0.10);
+  transition: background 0.14s, color 0.12s;
+  letter-spacing: -0.6px;
+}
+.btnSubmit {
+  background: #3b7845;
+  color: #fff;
+}
+.btnSubmit:hover, .btnSubmit:focus {
+  background: #255f31;
+  color: #fff;
+}
+.btnCancel {
+  background: #eef0f3;
+  color: #7e858a;
+}
+.btnCancel:hover, .btnCancel:focus {
+  background: #d2dad3;
+  color: #212;
 }
 
-.flexRow {
-    display: flex;
-    gap: 20px;
-    margin-top: 10px;
-    justify-content: center;
+/* ====== 재료 선택 모달 ====== */
+.modalBg {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.13);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
 }
-
-.flexRow > div {
-    flex: 1;
+.modalBox {
+  background: #fff;
+  border-radius: 22px;
+  width: 410px;
+  min-height: 220px;
+  padding: 32px 30px 26px 30px;
+  box-shadow: 0 6px 32px rgba(51,85,64, 0.13), 0 1.5px 12px rgba(0,0,0,0.11);
+  animation: modal-fade-in 0.13s;
+  display: flex;
+  flex-direction: column;
 }
+@keyframes modal-fade-in { from { opacity: 0; transform: translateY(18px);} to { opacity: 1; transform: none;} }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modalOpen {
-  display: block;
-}
-
-.modalContent {
-    background-color: white;
-    border-radius: 10px;
-    margin: 10% auto;
-    padding: 20px;
-    width: 300px;
-    border: 1px solid #ccc;
-}
-
-.ingredientGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 20px;
-}
-
-.ingredientGrid label {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    width: 45%;
+.modalHeader {
+  font-size: 1.19rem;
+  color: #245b36;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
 }
 
 .tabRow {
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  gap: 9px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-
 .tabButton {
-  padding: 6px 12px;
+  padding: 7px 15px;
   border: none;
-  background: #f0f0f0;
+  background: #f4f5f7;
   cursor: pointer;
-  border-radius: 5px 5px 0 0 ;
+  border-radius: 6px 6px 0 0;
+  font-size: 1.06rem;
+  color: #3a5c42;
+  font-weight: 600;
+  transition: background 0.14s;
+}
+.tabButton:hover, .tabButton:focus {
+  background: #e5f1ea;
+  color: #254f36;
+}
+.activeTab {
+  background: #4ea36d;
+  color: #fff;
+  font-weight: 700;
 }
 
-.activeTab {
-  background: #4D774E;
+.ingredientGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-bottom: 22px;
+  min-height: 48px;
+  justify-content: flex-start;
+}
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  font-size: 0.99rem;
+  padding: 4px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.11s;
+  user-select: none;
+}
+.checkboxLabel input[type="checkbox"] {
+  margin-right: 7px;
+  accent-color: #387b48;
+  width: 18px;
+  height: 18px;
+}
+.checkboxLabel:hover {
+  background: #f4faf3;
+}
+
+.modalFooter {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+  justify-content: center;
+}
+.btnModalSave, .btnModalCancel {
+  padding: 10px 38px;
+  border-radius: 9px;
+  font-size: 1.13rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1.5px 7px #bde7c7a9;
+  transition: background 0.13s, color 0.12s;
+  letter-spacing: -0.5px;
+}
+.btnModalSave {
+  background: #338f55;
   color: #fff;
-  font-weight: bold;
+}
+.btnModalSave:hover, .btnModalSave:focus {
+  background: #245b36;
+}
+.btnModalCancel {
+  background: #eef0f3;
+  color: #7e858a;
+}
+.btnModalCancel:hover, .btnModalCancel:focus {
+  background: #d2dad3;
+  color: #212;
 }
