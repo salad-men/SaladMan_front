@@ -8,7 +8,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 20px;
+  padding: 10px 20px;
   border-bottom: 1px solid #ccc;
   font-family: 'Pretendard', sans-serif;
   font-size: 16px;
