@@ -244,7 +244,6 @@ export default function StoreInventoryExpiration() {
           {/* 필터/정렬 */}
           <div className={styles.filters}>
             <div className={styles.row}>
-              <span className={styles.label}>기간</span>
               <input type="date" value={startDate} onChange={onFilterChange(setStartDate)} />
               <span>~</span>
               <input type="date" value={endDate} onChange={onFilterChange(setEndDate)} />
