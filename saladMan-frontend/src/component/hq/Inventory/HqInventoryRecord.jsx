@@ -156,7 +156,7 @@ export default function HqInventoryRecord() {
       <HqInventorySidebar />
       <div className={styles.content}>
         <div className={styles.innerContainer}>
-          <h2 className={styles.title}>재고 기록</h2>
+          <h2 className={styles.title}>입/출고 기록</h2>
 
           {/* 필터 */}
           <div className={styles.filters}>

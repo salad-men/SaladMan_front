@@ -109,7 +109,18 @@ const [disposalReasons, setDisposalReasons] = useState({});
       })
       .catch(()=>setData([]));
   };
-
+  //기간 필터
+  function setPeriodFn(type) {
+  if (type === "all") {
+    setStartDate("");
+    setEndDate("");
+  } else {
+    const { start, end } = getPeriod(type);
+    setStartDate(start);
+    setEndDate(end);
+  }
+  setPageInfo(pi => ({ ...pi, curPage: 1 }));
+}
   // 초기 및 상태 변경 시 호출
   useEffect(()=>{ fetchInventory(pageInfo.curPage); }, [token,scope,store,category,keyword,startDate,endDate,sortOption,pageInfo.curPage]);
 
@@ -168,6 +179,10 @@ const onReason = (id, val) => {
 const onFilterChange = setter => e => {
   setter(e.target.value);
   setPageInfo(pi => ({ ...pi, curPage: 1 }));
+
+
+
+
 };
   return (
     <div className={styles.container}>

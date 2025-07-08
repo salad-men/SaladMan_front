@@ -105,7 +105,7 @@
 
 .disposalBtn {
   padding: 6px 14px;
-  background: #d9534f;
+  background: #c44f4b;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -156,8 +156,8 @@
 }
 
 .expired {
-  background: #ffe6e3 !important;
-  color: #cb4747;
+  background: #ffeaea !important;
+  color: #000000;
 }
 
 .checkbox {
