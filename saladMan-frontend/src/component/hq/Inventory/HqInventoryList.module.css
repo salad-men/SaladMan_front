@@ -145,3 +145,58 @@
 .trLow {
   background: #ffeaea !important;
 }
+
+
+/* 테이블 내 입력 필드 스타일 (모달/테이블 둘 다 적용) */
+.mainTable input[type="text"],
+.mainTable input[type="number"],
+.mainTable input[type="date"],
+.mainTable select,
+.modalTable input[type="text"],
+.modalTable input[type="number"],
+.modalTable input[type="date"],
+.modalTable select {
+  width: 100%;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  font-size: 15px;
+  color: #222;
+  border: 1.5px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+/* 비활성화 인풋 */
+.mainTable input[disabled],
+.modalTable input[disabled] {
+  background: #f5f5f5;
+  color: #888;
+  border-color: #e0e0e0;
+}
+
+/* 입력창 포커스 */
+.mainTable input:focus,
+.mainTable select:focus,
+.modalTable input:focus,
+.modalTable select:focus {
+  border-color: #2196f3;
+  background: #f0f7ff;
+  outline: none;
+}
+
+/* 입력행(필수값 누락 등 에러시) */
+.input-row-error td,
+tr.input-row-error td {
+  background: #ffeaea !important;  /* 아주 연한 레드 */
+}
+
+/* 드롭다운 select 기본 */
+.mainTable select,
+.modalTable select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff url('data:image/svg+xml;charset=UTF-8,<svg fill="gray" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center/14px 14px;
+  padding-right: 24px;
+}
