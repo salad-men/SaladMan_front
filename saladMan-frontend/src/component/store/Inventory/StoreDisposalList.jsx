@@ -132,7 +132,6 @@ export default function StoreDisposalList() {
           {/* 필터 */}
           <div className={styles.filters}>
             <div className={styles.row}>
-              <label className={styles.label}>기간</label>
               <input
                 type="date"
                 value={startDate}

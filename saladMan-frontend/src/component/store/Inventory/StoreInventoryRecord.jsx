@@ -175,7 +175,6 @@ export default function StoreInventoryRecord() {
           {/* 필터 */}
           <div className={styles.filters}>
             <div className={styles.row}>
-              <span className={styles.label}>기간</span>
               <input type="date" value={filterStartDate} onChange={e => setFilterStartDate(e.target.value)} />
               <span>~</span>
               <input type="date" value={filterEndDate} onChange={e => setFilterEndDate(e.target.value)} />
