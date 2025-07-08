@@ -71,7 +71,7 @@ const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart
                       >
                         -
                       </button>
-                      <span>{item.quantity}개</span>
+                      <span>{item.quantity}</span>
                       <button
                         onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                       >

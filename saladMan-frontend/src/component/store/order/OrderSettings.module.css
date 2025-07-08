@@ -249,3 +249,13 @@ input:checked+.slider::before {
 .autoTable input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.footerSticky {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 1rem;
+  text-align: right;
+  border-top: 1px solid #ccc;
+  z-index: 10;
+}
