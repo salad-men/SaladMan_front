@@ -3,7 +3,6 @@
 .innerContainer {
   background: #fff;
   padding: 50px 65px 0 280px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   overflow: auto;
 }
 .title { font-size: 1.8rem; color: #2f6042; margin-bottom: 16px; margin-top: 16px;  }
@@ -12,7 +11,8 @@
 .filterArea { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
 .rowDate { display: flex; align-items: center; gap: 8px; }
 .labelDate { font-weight: 600; width: 60px; color: #3d5a40; }
-.inputDate { padding: 6px; border: 1px solid #b4c7b3; border-radius: 4px; }
+.inputDate {
+  font-family: 'Noto Sans KR', sans-serif; padding: 6px; border: 1px solid #b4c7b3; border-radius: 4px; }
 .labelSep { font-size: 1.2rem; color: #3d5a40; }
 .periodBtn {
   padding: 4px 10px;

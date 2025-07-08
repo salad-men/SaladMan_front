@@ -129,3 +129,47 @@
   color: white;
   font-weight: bold;
 }
+.tabNav {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 32px;
+  margin: 6px 0 25px 0;
+  position: relative;
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  font-weight: 500;
+  color: #4D774E;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+  position: relative;
+  padding: 0 14px 5px 14px;
+  transition: color 0.2s;
+}
+
+.tabBtn:not(:last-child)::after {
+  content: "";
+  display: inline-block;
+  width: 1.5px;
+  height: 18px;
+  background: #bfcdb8;
+  position: absolute;
+  right: -18px;
+  top: 3px;
+}
+
+.tabBtn:hover,
+.tabBtn:focus {
+  color: #1e4230;
+}
+
+.activeTab {
+  font-weight: 700;
+  color: #1e4230;
+  border-bottom: 3px solid #4D774E;
+  padding-bottom: 2px;
+}

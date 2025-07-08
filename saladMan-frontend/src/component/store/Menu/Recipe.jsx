@@ -5,6 +5,12 @@ import { myAxios } from "/src/config.jsx";
 import SidebarMenu from "./SidebarMenu";
 import styles from "./Recipe.module.css";
 
+const CATEGORY_LIST = [
+  { id: 1, name: '샐러볼' },
+  { id: 2, name: '포케볼' },
+  { id: 3, name: '비건볼' }
+];
+
 const Recipe = () => {
   const [menus, setMenus] = useState([]);
   const [pageInfo, setPageInfo] = useState({
@@ -14,20 +20,21 @@ const Recipe = () => {
     endPage: 1,
   });
   const [pageNums, setPageNums] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(1);
   const [token] = useAtom(accessTokenAtom);
 
   useEffect(() => {
     if (token) {
-      submit(1);
+      submit(1, activeCategory);
     }
-  }, [token]);
+  }, [token, activeCategory]);
 
-  const submit = (page) => {
+  const submit = (page, category = activeCategory) => {
     if (!token) return;
     const axios = myAxios(token);
 
     axios
-      .get(`/recipe?page=${page}`)
+      .get(`/recipe?page=${page}&category_id=${category}`)
       .then((res) => {
         const data = res.data.menus.map((menu) => ({
           ...menu,
@@ -57,11 +64,26 @@ const Recipe = () => {
       <div className={styles.content}>
         <header className={styles.pageHeader}>
           <h2>레시피 조회</h2>
+
+          {/* ✅ 카테고리 탭 */}
+          <nav className={styles.tabNav}>
+            {CATEGORY_LIST.map((cat) => (
+              <button
+                key={cat.id}
+                className={`${styles.tabBtn} ${activeCategory === cat.id ? styles.activeTab : ''}`}
+                onClick={() => setActiveCategory(cat.id)}
+                type="button"
+                aria-current={activeCategory === cat.id ? "page" : undefined}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </nav>
         </header>
 
         <div className={styles.cardWrapper}>
           {menus.map((menu) => (
-            <div className={styles.recipeCard}>
+            <div className={styles.recipeCard} key={menu.id}>
               <div className={styles.imageBlock}>
                 <img
                   src={`/${menu.name}.png`}
