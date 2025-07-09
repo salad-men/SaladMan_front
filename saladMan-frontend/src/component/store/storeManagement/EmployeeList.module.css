@@ -15,7 +15,7 @@
 .employeeListContent h2 {
     margin: 0 0 16px;
     font-size: 28px;
-    color: #3d5a40;
+    color: #286180;
     font-weight: bold;
 }
 .topBar {
@@ -27,14 +27,14 @@
 .registerButton {
   padding: 6px 16px;
   font-size: 14px;
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 .registerButton:hover {
-  background-color: #3a5e3b;
+  background-color: #286180;
 }
 .searchGroup {
   display: flex;
@@ -51,14 +51,14 @@
 .searchButton {
   padding: 6px 16px;
   font-size: 14px;
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 .searchButton:hover {
-  background-color: #3a5e3b;
+  background-color: #194760;
 }
 .employeeTable {
   width: 100%;

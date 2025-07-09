@@ -1,42 +1,44 @@
 .container { display: flex; min-height: 70vh; background: #ffffff; }
-.content { flex: 1; margin: 0px; overflow: hidden; }
+.content { flex: 1; margin: 0px; overflow: hidden; 
+  padding: 24px 100px 0 280px;}
 .innerContainer {
   background: #fff;
-  padding: 50px 65px 0 280px;
+  margin: 30px 20px;
   overflow: auto;
 }
-.title { font-size: 1.8rem; color: #2f6042; margin-bottom: 16px; margin-top: 16px;  }
+.title { font-size: 1.8rem; color: #286180; margin-bottom: 16px; font-weight: 600;
+  margin-top: 0px; }
 
 /* 필터 영역 */
 .filterArea { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
 .rowDate { display: flex; align-items: center; gap: 8px; }
-.labelDate { font-weight: 600; width: 60px; color: #3d5a40; }
+.labelDate { font-weight: 600; width: 60px; color: #286180; }
 .inputDate {
-  font-family: 'Noto Sans KR', sans-serif; padding: 6px; border: 1px solid #b4c7b3; border-radius: 4px; }
-.labelSep { font-size: 1.2rem; color: #3d5a40; }
+  font-family: 'Noto Sans KR', sans-serif; padding: 6px; border: 1px solid #d5dceb; border-radius: 4px; }
+.labelSep { font-size: 1.2rem; color: #286180; }
 .periodBtn {
   padding: 4px 10px;
-  border: 1px solid #4d774e; background: #f7faf8;
-  color: #4d774e; border-radius: 4px;
+  border: 1px solid #286180; background: #f7f7fa;
+  color: #286180; border-radius: 4px;
   cursor: pointer; font-size: 13px;
   transition: background 0.2s;
 }
-.periodBtn:hover { background: #4d774e; color: white; }
+.periodBtn:hover { background: #286180; color: white; }
 .rowFilter { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .selectCategory,
 .selectSort {
-  padding: 6px 10px; border: 1px solid #b4c7b3;
+  padding: 6px 10px; border: 1px solid #286180;
   border-radius: 4px; background: #fff; font-size: 14px; cursor: pointer;
 }
 .inputSearch {
   padding: 6px 10px; border-radius: 4px;
-  border: 1px solid #b4c7b3; font-size: 14px; width: 160px;
+  border: 1px solid #286180; font-size: 14px; width: 160px;
 }
 .btnSearch {
-  padding: 6px 14px; background-color: #4d774e; color: #ffffff;
+  padding: 6px 14px; background-color: #286180; color: #ffffff;
   border-radius: 4px; border: none; cursor: pointer; margin-right: 8px;
 }
-.btnSearch:hover { background-color: #3b663b; }
+.btnSearch:hover { background-color: #1a445a; }
 .btnNew {
   padding: 6px 14px; background-color: #2196f3; color: #ffffff;
   border-radius: 4px; border: none; cursor: pointer; margin-left: auto;
@@ -51,7 +53,7 @@
   background: #ffffff; border-radius: 8px; width: 95%; max-width: 1000px;
   padding: 20px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
-.modalHeader { font-size: 1.5rem; color: #2f6042; text-align: center; margin-bottom: 16px; }
+.modalHeader { font-size: 1.5rem; color: #286180; text-align: center; margin-bottom: 16px; }
 .modalTable { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
 .modalTable th, .modalTable td {
   padding: 8px 12px; border: 1px solid #ddd;
@@ -66,7 +68,7 @@
 .modalTable th:nth-child(6), .modalTable td:nth-child(6) { width: 10%; }
 .modalTable select, .modalTable input[type="text"], .modalTable input[type="number"], .modalTable input[type="date"] {
   width: 100%; box-sizing: border-box; padding: 6px 8px; font-size: 14px;
-  border: 1px solid #b4c7b3; border-radius: 4px; text-align: center;
+  border: 1px solid #a8bcc6; border-radius: 4px; text-align: center;
 }
 .btnRemoveRow {
   background: transparent; color: #f44336; font-weight: bold;
@@ -92,8 +94,8 @@
 
 .tableArea { overflow-x: auto; margin-bottom: 24px; }
 .mainTable { width: 100%; border-collapse: collapse; font-size: 14px; }
-.mainTable th, .mainTable td { padding: 10px; border: 1px solid #e4e9e7; text-align: center; }
-.mainTable th { background: #eaf3eb; color: #2d4836; font-weight: 600; }
+.mainTable th, .mainTable td { padding: 10px; border: 1px solid #dce3e9; text-align: center; }
+.mainTable th { background: #dce3e9; color: #2d4836; font-weight: 600; }
 .tdCategory { width: 12%; }
 .tdName { width: 15%; }
 .tdStore { width: 10%; }
@@ -101,17 +103,17 @@
 .tdCost, .tdQty, .tdMin, .tdStoreMin { width: 10%; }
 .tdReceived { width: 9%; }
 .tdEdit { width: 10%; }
-.inputQty { width: 80px; padding: 4px; border: 1px solid #74bb7a; border-radius: 4px; }
+.inputQty { width: 80px; padding: 4px; border: 1px solid #286180; border-radius: 4px; }
 .btnEdit {
   padding: 6px 14px; background: #607d8b; color: #ffffff; border: none;
   border-radius: 4px; cursor: pointer;
 }
 .btnEdit:hover { background: #455a64; }
 .btnSave {
-  padding: 6px 14px; background: #4caf50; color: #ffffff;
+  padding: 6px 14px; background: #286180; color: #ffffff;
   margin-right: 4px; border: none; border-radius: 4px; cursor: pointer;
 }
-.btnSave:hover { background: #3b8c63; }
+.btnSave:hover { background: #286180; }
 .btnCancel {
   padding: 6px 14px; background: #f44336; color: #ffffff; border: none;
   border-radius: 4px; cursor: pointer;
@@ -120,14 +122,14 @@
 
 .paginationArea { display: flex; justify-content: center; gap: 6px; }
 .btnPageFirst, .btnPagePrev, .btnPage, .btnPageActive, .btnPageNext, .btnPageLast {
-  padding: 6px 12px; border: 1px solid #a2b7aa; border-radius: 4px;
-  font-size: 14px; cursor: pointer; background: #ffffff; color: #387448;
+  padding: 6px 12px; border: 1px solid #9bb7c6; border-radius: 4px;
+  font-size: 14px; cursor: pointer; background: #ffffff; color: #286180;
 }
-.btnPageFirst:hover, .btnPagePrev:hover, .btnPageNext:hover, .btnPageLast:hover { background: #eaf3eb; }
+.btnPageFirst:hover, .btnPagePrev:hover, .btnPageNext:hover, .btnPageLast:hover { background: hsl(240, 100%, 99%); }
 .btnPageFirst:disabled, .btnPagePrev:disabled, .btnPageNext:disabled, .btnPageLast:disabled {
-  background: #f0f4f1; color: #c0cfc3; cursor: not-allowed;
+  background: #f0f1f4; color: #c0c7cf; cursor: not-allowed;
 }
 .btnPage { margin: 0 4px; }
-.btnPage:hover { background: #eaf3eb; }
-.btnPageActive { background: #57a964; color: #ffffff; border-color: #57a964; }
-.trLow { background: #ffeaea !important; }
+.btnPage:hover { background: hsl(240, 100%, 99%); }
+.btnPageActive { background: #286180; color: #ffffff; border-color: #286180; }
+.trLow { background: #eaf3ff !important; }

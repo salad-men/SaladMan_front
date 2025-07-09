@@ -20,7 +20,7 @@ const BrandIntro = () => {
       <section className={styles.story}>
         <h2 className={styles.sectionTitle}>Story</h2>
         <p>
-          샐러리맨은 매일을 살아내는 수많은 직장인들의 삶에서 시작됐습니다.
+          샐러드맨은 매일을 살아내는 수많은 직장인들의 삶에서 시작됐습니다.
           <br />
           이른 아침 지하철, 반복되는 회의, 빠듯한 점심시간.
           <br />
@@ -38,7 +38,7 @@ const BrandIntro = () => {
           그 해답은 바로 ‘한 끼’였습니다.
           <br />
           <br />
-          샐러리맨은
+          샐러드맨은
           <br />
           <b>출근 준비만큼 빠르게,</b>
           <br />
@@ -51,7 +51,7 @@ const BrandIntro = () => {
           <br />
           그 결과, 우리는 단순한 샐러드 브랜드가 아닌
           <br />
-          ***직장인의 건강 루틴 파트너***가 되기로 했습니다.
+          <b>직장인의 건강 루틴 파트너</b>가 되기로 했습니다.
         </p>
       </section>
 

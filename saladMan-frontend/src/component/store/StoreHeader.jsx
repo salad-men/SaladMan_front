@@ -95,7 +95,7 @@ const StoreHeader = () => {
       <div className="storeHeader">
         <div className="logo">
           <a href="/store/StoreDashboard">
-            <img src="/샐러드맨로고(그린).png" alt="로고" />
+            <img src="/샐러드맨로고(블루).png" alt="로고" />
           </a>
         </div>
 

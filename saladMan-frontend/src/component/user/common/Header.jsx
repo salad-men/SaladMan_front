@@ -65,9 +65,9 @@ const Header = ({ staticScrolled = false, onSelectCategory }) => {
       label: "소식",
       href: "/news",
       sub: [
+        { label: "공지사항", href: "/News" },
         { label: "칭찬매장", href: "/PraiseStore" },
         { label: "이벤트", href: "/Event" },
-        { label: "공지사항", href: "/News" },
       ],
     },
   ];
@@ -88,7 +88,7 @@ const Header = ({ staticScrolled = false, onSelectCategory }) => {
           </a>
           {isHq && (
             <div className={styles.hqBtn}>
-              <a href="/hq/HqDashboard">관리 페이지로  &nbsp;▶</a>
+              <a href="/hq/HqDashboard">관리 페이지로 &nbsp;▶</a>
             </div>
           )}
         </div>
