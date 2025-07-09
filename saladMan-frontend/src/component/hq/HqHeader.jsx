@@ -100,12 +100,12 @@ const HqHeader = () => {
             <a href="/hq/HqInventoryList">재고</a>
             <div className="dropdown">
                 <ul>
-                    <li><a href="/hq/HqInventoryList">재고 목록</a></li>
+                    <li><a href="/hq/HqInventoryList">재고 관리</a></li>
                     <li><a href="/hq/HqInventoryExpiration">유통기한 목록</a></li>
                     <li><a href="/hq/HqDisposalList">폐기 목록</a></li>
                     <li><a href="/hq/HqDisposalRequestList">폐기 요청 목록</a></li>
                     <li><a href="/hq/HqIngredientSetting">재료 설정</a></li>
-                    <li><a href="/hq/HqInventoryRecord">재고 기록</a></li>
+                    <li><a href="/hq/HqInventoryRecord">입/출고 기록</a></li>
                     <li><a href="/hq/HqCategoryIngredientManagePage">카테고리/재료 관리</a></li>
                 </ul>
             </div>

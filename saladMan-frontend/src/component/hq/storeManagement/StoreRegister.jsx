@@ -271,7 +271,7 @@ export default function StoreRegister() {
                         <input
                         type="password"
                         name="storePassword"
-                        value={store.storePassword}
+                        // value={store.storePassword}
                         placeholder="비밀번호"
                         onChange={edit}
                         className={[styles.inputBase, styles.passwordInput].join(" ")}

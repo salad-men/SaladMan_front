@@ -17,6 +17,8 @@ export default function HqIngredientSetting() {
   const [editingRow, setEditingRow] = useState(null);
   const [isAddMode, setIsAddMode] = useState(false);
   const [addingRows, setAddingRows] = useState([]);
+  const [ingError, setIngError] = useState("");
+
   const [pageInfo, setPageInfo] = useState({
     curPage: 1, startPage: 1, endPage: 1, allPage: 1
   });
@@ -147,29 +149,37 @@ console.log("categories", categories);
   };
   // 추가 row 저장
   const handleAddRowSave = (row) => {
-    if (!row.categoryId || !row.ingredientId || row.minQuantity === "" || row.maxQuantity === "") {
-      alert("모든 필드를 입력하세요.");
-      return;
-    }
-    myAxios(token)
-      .post("/hq/inventory/settings-add", {
-        storeId: STORE_ID,
-        ingredientId: Number(row.ingredientId),
-        minQuantity: Number(row.minQuantity),
-        maxQuantity: Number(row.maxQuantity),
-      })
-      .then(() => {
-        alert("추가 완료!");
-        // 남은 추가 row 없으면 추가모드 해제
-        setAddingRows(rows => {
-          const newRows = rows.length > 1 ? rows.filter(r => r.key !== row.key) : [];
-          if (newRows.length === 0) setIsAddMode(false);
-          return newRows;
-        });
-        fetchSettings(pageInfo.curPage);
-      })
-      .catch(() => alert("추가 중 오류 발생"));
-  };
+  if (!row.categoryId || !row.ingredientId || row.minQuantity === "" || row.maxQuantity === "") {
+    alert("모든 필드를 입력하세요.");
+    return;
+  }
+  myAxios(token)
+    .post("/hq/inventory/settings-add", {
+      storeId: STORE_ID,
+      ingredientId: Number(row.ingredientId),
+      minQuantity: Number(row.minQuantity),
+      maxQuantity: Number(row.maxQuantity),
+    })
+    .then(() => {
+      alert("추가 완료!");
+      setIngError(""); // 성공 시 에러 초기화
+      setAddingRows(rows => {
+        const newRows = rows.length > 1 ? rows.filter(r => r.key !== row.key) : [];
+        if (newRows.length === 0) setIsAddMode(false);
+        return newRows;
+      });
+      fetchSettings(pageInfo.curPage);
+    })
+    .catch((err) => {
+  if (err.response?.status === 409) {
+    alert(err.response.data?.error || "이미 등록된 재료입니다.");
+  } else {
+    alert("저장 중 오류가 발생했습니다.");
+  }
+});
+
+};
+
 
   // 추가 row + 버튼
   const handleAddNewRow = () => {

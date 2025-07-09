@@ -101,7 +101,7 @@ export default function StoreAccountList() {
                     <table className={styles.storeAccountTable}>
                         <thead>
                             <tr>
-                                <th>매장번호</th>
+                                {/* <th>매장번호</th> */}
                                 <th>지역</th>
                                 <th>매장명</th>
                                 <th>매장주소</th>
@@ -115,7 +115,7 @@ export default function StoreAccountList() {
                         <tbody>
                             {stores.map((store) => (
                                 <tr key={store.id} onClick={() => navigateToDetail(store.id)} className={styles.clickableRow}>
-                                    <td>{store.id}</td>
+                                    {/* <td>{store.id}</td> */}
                                     <td>{store.location}</td>
                                     <td>{store.name}</td>
                                     <td>{store.address}</td>

@@ -264,7 +264,7 @@ const onFilterChange = setter => e => {
               <thead>
                 <tr>
                   {showHeaderCheckbox && <th className={styles.checkbox}><input type="checkbox" checked={data.filter(isHqItem).length>0&&data.filter(isHqItem).every(i=>selectedIds.includes(i.id))} onChange={toggleAll} /></th>}
-                  <th>지점</th><th>분류</th><th>품목명</th><th>단위</th><th>재고량</th><th>단가</th><th>유통기한</th><th>남은 날짜</th><th>폐기</th>
+                  <th>분류</th><th>품목명</th><th>단위</th><th>재고량</th><th>단가</th><th>유통기한</th><th>남은 날짜</th><th>폐기</th>
                 </tr>
               </thead>
               <tbody>
@@ -274,7 +274,7 @@ const onFilterChange = setter => e => {
                   data.map(it=>(
                     <tr key={it.id} className={it.dday.includes('D+')?styles.expired:''}>
                       {showHeaderCheckbox&&<td className={styles.checkbox}>{isHqItem(it)&&<input type="checkbox" checked={selectedIds.includes(it.id)} onChange={()=>toggleSelect(it.id)} />}</td>}
-                      <td>{it.store}</td><td>{it.category}</td><td>{it.name}</td><td>{it.unit}</td><td>{it.quantity}</td><td>{it.price}</td><td>{it.expiry}</td><td>{it.dday}</td>
+                      <td>{it.category}</td><td>{it.name}</td><td>{it.unit}</td><td>{it.quantity}</td><td>{it.price}</td><td>{it.expiry}</td><td>{it.dday}</td>
                       <td>{isHqItem(it)&&<button className={styles.rowDisposalBtn} onClick={()=>openModalSingle([it.id])}>폐기</button>}</td>
                     </tr>
                   ))

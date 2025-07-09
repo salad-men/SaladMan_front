@@ -594,6 +594,7 @@ export default function HqInventoryList() {
             </div>
           )}    
 
+          
 
           {/* 페이징 */}
           <div className={styles.paginationArea}>

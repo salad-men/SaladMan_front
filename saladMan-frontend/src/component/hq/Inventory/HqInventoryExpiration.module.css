@@ -42,6 +42,8 @@
 .label {
   font-weight: 600;
   min-width: 60px;
+    color: #3d5a40;
+
 }
 
 .periodButtons {
@@ -162,6 +164,11 @@
 
 .checkbox {
   width: 40px;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
 }
 
 .noData {
