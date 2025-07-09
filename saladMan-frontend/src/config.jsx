@@ -65,7 +65,7 @@ export const themeObj = {
 //       baseURL = "http://localhost:8090";
 //    } else {
 //       // 같은 네트워크(아이패드, 다른 PC)
-//       baseURL = "http://192.168.0.9:8090";
+//       baseURL = "http://192.168.0.15:8090";
 //    }
 
 //    console.log("현재 baseURL:", baseURL);

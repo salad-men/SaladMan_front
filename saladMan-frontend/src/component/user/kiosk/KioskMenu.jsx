@@ -4,6 +4,7 @@ import styles from './KioskMenu.module.css';
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
 import { userAtom } from "/src/atoms";
+import { useLocation } from 'react-router-dom';
 
 import { myAxios } from "/src/config";
 
@@ -13,6 +14,9 @@ export default function KioskMenu() {
   const [cartItems, setCartItems] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 950);
 
+  const location = useLocation();
+  const orderType = location.state?.orderType || '매장'; // 기본값 매장
+
   const [menuData, setMenuData] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -21,7 +25,6 @@ export default function KioskMenu() {
 
   const token = useAtomValue(accessTokenAtom);
   const store = useAtomValue(userAtom);
-  const [isCartOpen, setIsCartOpen] = useState(true);
   const pageSize = 9;
 
   useEffect(() => {
@@ -200,36 +203,30 @@ export default function KioskMenu() {
             </button>
           </div>
         </div>
-        {isMobile ? (
-          <CartBar
-            cartItems={cartItems}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemoveItem}
-            onClearCart={handleClearCart}
-            className="fixedBar"
-          />
-        ) : (
-          <div
-            className={`${styles.cartContainer} ${isCartOpen ? styles.open : styles.closed}`}
-          >
-            <button
-              className={styles.toggleButton}
-              onClick={() => setIsCartOpen((prev) => !prev)}
-            >
-              {isCartOpen ? "▶" : "◀"}
-            </button>
 
-            {isCartOpen && (
+        <div className={styles.cartContainer}>
+          {isMobile ? (
+            <CartBar
+              cartItems={cartItems}
+              onUpdateQuantity={handleUpdateQuantity}
+              onRemoveItem={handleRemoveItem}
+              onClearCart={handleClearCart}
+              orderType={orderType}
+              className="fixedBar"
+            />
+          ) : (
+            <div className={styles.cartContainer}>
               <CartBar
                 cartItems={cartItems}
                 onUpdateQuantity={handleUpdateQuantity}
                 onRemoveItem={handleRemoveItem}
                 onClearCart={handleClearCart}
-                className="staticCart"
+                orderType={orderType}
+                className={isMobile ? "fixedBar" : "staticCart"}
               />
-            )}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
 
     </div>

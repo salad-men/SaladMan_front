@@ -38,8 +38,12 @@ export default function StockInspection() {
         const fetchDetail = async () => {
             try {
                 const res = await myAxios(token).get(`/store/stockInspection/${id}`);
-                setItems(res.data);
-                setOrderDate(res.data[0]?.orderDateTime);
+                const data = res.data.map(item => ({
+                    ...item,
+                    inspection: item.inspection ?? "검수완료", 
+                }));
+                setItems(data);
+                setOrderDate(data[0]?.orderDateTime);
             } catch (err) {
                 console.error("검수 조회 실패", err);
             }
@@ -86,16 +90,8 @@ export default function StockInspection() {
                 <div className={styles.infoBox}>
                     <p>발주번호: No.{id}</p>
                     <p>발주일자: {formatDate(orderDate)}</p>
-                    <p>주문자: </p>
                 </div>
-                <div className={styles.inspectorBox}>
-                    <span>
-                        <span style={{ width: 100 }}>검수자:</span>{" "}
-                        <select>
-                            <option></option>
-                        </select>
-                    </span>
-                </div>
+
 
                 <div className={styles.inspectionTableWrapper}>
                     <table className={styles.inspectionTable}>
@@ -106,8 +102,6 @@ export default function StockInspection() {
                                 <th>발주량</th>
                                 <th>입고 처리</th>
                                 <th>비고</th>
-                                <th>단가</th>
-                                <th>합계</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -148,7 +142,7 @@ export default function StockInspection() {
                                         ) : (
                                             <input
                                                 type="text"
-                                                defaultValue={item.inspectionNote}
+                                                value={item.inspectionNote ?? ""}
                                                 className={styles.textArea}
                                                 onChange={(e) =>
                                                     handleInputChange(
@@ -160,8 +154,7 @@ export default function StockInspection() {
                                             />
                                         )}
                                     </td>
-                                    <td>{(item.unitCost ?? 0).toLocaleString()} 원</td>
-                                    <td>{(item.totalPrice ?? 0).toLocaleString()} 원</td>
+
                                 </tr>
                             ))}
                         </tbody>

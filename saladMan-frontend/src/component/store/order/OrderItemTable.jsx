@@ -3,7 +3,7 @@ import styles from "./OrderItemTable.module.css";
 import { myAxios } from "/src/config"; // ← 유틸 함수
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
-import { TestTube } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function OrderItemTable() {
 
@@ -16,7 +16,7 @@ export default function OrderItemTable() {
 
     const [category, setCategory] = useState("전체");
     const [keyword, setKeyword] = useState("");
-
+    const navigate = useNavigate();
     const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
@@ -104,6 +104,8 @@ export default function OrderItemTable() {
             const res = await myAxios(token).post("/store/orderApply", payload);
             alert("발주 신청이 완료되었습니다.");
             setStockList([]); // 초기화
+            navigate(`/store/orderDetail?id=${res.data.orderId}`);
+
         } catch (err) {
             console.error("발주 신청 실패", err);
             alert("신청에 실패했습니다.");
@@ -206,7 +208,7 @@ export default function OrderItemTable() {
                                 {modalItems.map((item) => (
                                     <tr key={item.ingredientId}>
                                         <td>{item.name}</td>
-                                        <td>{item.category}</td>
+                                        <td>{item.categoryName}</td>
                                         <td>{item.unit}</td>
                                         <td>{item.quantity}</td>
                                         <td>{item.incoming}</td>

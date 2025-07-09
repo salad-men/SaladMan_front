@@ -44,7 +44,6 @@ export default function PaymentSuccess() {
 
     return (
         <div className={styles.container}>
-                  <div className={styles.header} />
             
             <div className={styles.card}>
                 <h2 className={styles.title}>✅ 결제가 완료되었습니다</h2>
