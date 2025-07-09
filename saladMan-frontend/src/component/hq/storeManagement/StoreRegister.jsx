@@ -192,6 +192,7 @@ export default function StoreRegister() {
                         type="text"
                         name="address"
                         value={store.address}
+                        autoComplete="off"
                         placeholder="주소"
                         onChange={edit}
                         readOnly

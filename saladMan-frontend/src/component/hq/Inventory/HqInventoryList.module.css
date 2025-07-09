@@ -19,10 +19,12 @@
 .labelSep { font-size: 1.2rem; color: #3d5a40; }
 .periodBtn {
   padding: 4px 10px;
-  border: 1px solid #4d774e; background: #f7faf8;
+  border: 1px solid #57a964;
   color: #4d774e; border-radius: 4px;
   cursor: pointer; font-size: 13px;
   transition: background 0.2s;
+    background: #f7faf8;
+
 }
 .periodBtn:hover { background: #4d774e; color: white; }
 .rowFilter { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -107,7 +109,7 @@
 .tdName { width: 15%; }
 /* 나머지 컬럼 비율 조정 */
 .tdStore { width: 10%; }
-.tdUnit  { width: 9%; }
+.tdUnit  { width: 4%; }
 .tdCost, .tdQty, .tdMin, .tdStoreMin { width: 10%; }
 .tdReceived { width: 9%; }
 .tdEdit { width: 10%; }
@@ -200,3 +202,13 @@ tr.input-row-error td {
   background: #fff url('data:image/svg+xml;charset=UTF-8,<svg fill="gray" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center/14px 14px;
   padding-right: 24px;
 }
+
+/* HqInventoryList.module.css */
+
+.editCategory     { width: 110px !important; }
+.editIngredient   { width: 130px !important; }
+.editUnit         { width: 55px !important; }
+.editUnitCost     { width: 70px !important; text-align: right; }
+.editQuantity     { width: 70px !important; text-align: right; }
+.editMinOrderUnit { width: 80px !important; text-align: right; }
+.editDate         { width: 110px !important; }

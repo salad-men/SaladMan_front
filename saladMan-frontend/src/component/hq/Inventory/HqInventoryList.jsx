@@ -212,71 +212,84 @@ export default function HqInventoryList() {
                   return (
                     <tr key={r.id} className={low ? styles.trLow : ""}>
                       <td>{r.store}</td>
-                      <td>
+<td>
   {isEdit ? (
     <select
-      value={
-        editForm.categoryId !== undefined && editForm.categoryId !== null
-          ? String(editForm.categoryId)
-          : (r.categoryId !== undefined && r.categoryId !== null ? String(r.categoryId) : "")
-      }
+      className={styles.editCategory}
+      value={editForm.categoryId !== undefined
+        ? String(editForm.categoryId)
+        : (r.categoryId !== undefined ? String(r.categoryId) : "")}
       onChange={e => handleEditChange("categoryId", Number(e.target.value))}
     >
-      <option value="">선택</option>
-      {categories.map((c) => (
-        <option key={c.id} value={c.id}>{c.name}</option>
+      {categories.map(c => (
+        <option key={c.id} value={String(c.id)}>{c.name}</option>
       ))}
     </select>
   ) : r.category}
 </td>
-
 <td>
   {isEdit ? (
     <select
-      value={
-        editForm.ingredientId !== undefined && editForm.ingredientId !== null
-          ? String(editForm.ingredientId)
-          : (r.ingredientId !== undefined && r.ingredientId !== null ? String(r.ingredientId) : "")
-      }
+      className={styles.editIngredient}
+      value={editForm.ingredientId !== undefined
+        ? String(editForm.ingredientId)
+        : (r.ingredientId !== undefined ? String(r.ingredientId) : "")}
       onChange={e => handleEditChange("ingredientId", Number(e.target.value))}
     >
-      <option value="">선택</option>
       {ingredients
         .filter(i =>
-          (editForm.categoryId ?? r.categoryId)
-            ? i.categoryId === (editForm.categoryId ?? r.categoryId)
-            : true
+          (editForm.categoryId !== undefined
+            ? editForm.categoryId
+            : r.categoryId
+          ) === i.categoryId
         )
         .map(i => (
-          <option key={i.id} value={i.id}>{i.name}</option>
+          <option key={i.id} value={String(i.id)}>{i.name}</option>
         ))}
     </select>
   ) : r.name}
 </td>
+<td>
+  {isEdit ? (
+    <input
+      type="text"
+      className={styles.editUnit}
+      value={editForm.unit ?? r.unit}
+      disabled
+    />
+  ) : r.unit}
+</td>
+<td>
+  {isEdit ? (
+    <input
+      type="number"
+      className={styles.editUnitCost}
+      value={editForm.unitCost ?? r.unitCost}
+      onChange={e => handleEditChange("unitCost", Number(e.target.value))}
+    />
+  ) : r.unitCost}
+</td>
+<td>
+  {isEdit ? (
+    <input
+      type="number"
+      className={styles.editQuantity}
+      value={editForm.quantity ?? r.quantity}
+      onChange={e => handleEditChange("quantity", Number(e.target.value))}
+    />
+  ) : r.quantity}
+</td>
+<td>
+  {isEdit ? (
+    <input
+      type="number"
+      className={styles.editMinOrderUnit}
+      value={editForm.minimumOrderUnit ?? r.minimumOrderUnit}
+      onChange={e => handleEditChange("minimumOrderUnit", Number(e.target.value))}
+    />
+  ) : r.minimumOrderUnit}
+</td>
 
-                      <td>
-                        {isEdit ? (
-                          <input type="text" value={editForm.unit ?? r.unit} disabled />
-                        ) : r.unit}
-                      </td>
-                      <td>
-                        {isEdit ? (
-                          <input type="number" value={editForm.unitCost ?? r.unitCost}
-                            onChange={e => handleEditChange("unitCost", Number(e.target.value))} />
-                        ) : r.unitCost}
-                      </td>
-                      <td>
-                        {isEdit ? (
-                          <input type="number" value={editForm.quantity ?? r.quantity}
-                            onChange={e => handleEditChange("quantity", Number(e.target.value))} />
-                        ) : r.quantity}
-                      </td>
-                      <td>
-                        {isEdit ? (
-                          <input type="number" value={editForm.minimumOrderUnit ?? r.minimumOrderUnit}
-                            onChange={e => handleEditChange("minimumOrderUnit", Number(e.target.value))} />
-                        ) : r.minimumOrderUnit}
-                      </td>
                       <td>{r.minquantity}</td>
                       <td>
                         {isEdit ? (
@@ -327,6 +340,7 @@ export default function HqInventoryList() {
                           <button type="button" className={styles.btnEdit}
                             onClick={() => {
                               setEditRow(r.id);
+                              console.log(r);
                               setEditForm({
                                 categoryId: r.categoryId,
                                 ingredientId: r.ingredientId,
@@ -580,6 +594,7 @@ export default function HqInventoryList() {
             </div>
           )}    
 
+          
 
           {/* 페이징 */}
           <div className={styles.paginationArea}>

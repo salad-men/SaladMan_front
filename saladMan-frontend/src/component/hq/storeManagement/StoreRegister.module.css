@@ -1,15 +1,16 @@
 .storeRegisterContainer {
   display: flex;
-  background: #f9fafb;
+  background: #fff;
 }
 
 .regMainContent {
   flex: 1;
+  margin-left: 165px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #fff;
-  border-left: 1px solid #e4e9e7;
+  /* border-left: 1px solid #e4e9e7; */
   min-width: 0;
   padding: 0;
   position: relative;
@@ -19,15 +20,15 @@
   font-size: 2.2rem;
   color: #2f6042;
   font-weight: 700;
-  margin-top: 40px;
-  margin-bottom: 38px;
+  margin-top: 47px;
+  margin-bottom: 20px;
   letter-spacing: -1px;
   text-align: center;
 }
 
 .regFormSection {
-  width: 100%;
-  max-width: 1040px;
+  /* width: 100%; */
+  width: 1100px;
   display: flex;
   flex-direction: column; 
   gap: 50px;
