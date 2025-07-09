@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
-import { useNavigate, useParams } from "react-router-dom";
+import { useAtomValue  } from "jotai";
+import { useNavigate,useParams } from "react-router-dom";
 import NoticeSidebar from "../Notice/NoticeSidebar";
 import styles from "./HqComplaintDetail.module.css";
 import { myAxios } from "../../../config";
 import { accessTokenAtom } from "/src/atoms";
 
 export default function HqComplaintDetail() {
-  const { id } = useParams();
+    const { id } = useParams();
+
   const navigate = useNavigate();
   const token = useAtomValue(accessTokenAtom);
 
@@ -22,15 +23,12 @@ export default function HqComplaintDetail() {
   });
 
   useEffect(() => {
-    if (!token) return;
-    if (id) {
-      myAxios(token)
-        .get("/hq/complaint/detail", { params: { id } })
-        .then(res => {
-          if (res.data.complaint) setComplaint(res.data.complaint);
-        })
-        .catch(err => console.error("불편사항 불러오기 실패:", err));
-    }
+    if (!token || !id) return;
+    myAxios(token)
+      .get("/hq/complaint/detail", { params: { id } })
+      .then(res => {
+        if (res.data.complaint) setComplaint(res.data.complaint);
+      });
   }, [id, token]);
 
   const handleListClick = () => navigate(-1);
