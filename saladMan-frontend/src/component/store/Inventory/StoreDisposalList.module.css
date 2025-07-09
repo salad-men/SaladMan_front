@@ -93,6 +93,9 @@
 }
 .tableWrap {
   overflow-x: auto;
+  border-radius:6px;
+  
+    border: 1px solid #dce3e9;
 }
 .table {
   font-size: 14px;

@@ -242,6 +242,8 @@
 .tableArea {
   overflow-x: auto;
   margin-bottom: 24px;
+  border-radius:6px;
+    border: 1px solid #dce3e9;
 }
 .mainTable {
   width: 100%;
