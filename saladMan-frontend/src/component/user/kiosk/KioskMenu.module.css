@@ -1,28 +1,28 @@
 .content {
   display: flex;
-  gap: 24px;
+  flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  flex-direction: row; /* 기본 가로 배치 */
+  gap: 16px; /* 기존 24px → 조금 줄이기 */
+
 }
 
 .menuWrapper {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  max-width: 500px; /* 필요 시 폭 제한 */
+  flex: 1;
+  max-width: 600px; /* 기존 720px → 줄이기 */
 }
 
 .cartContainer {
-  margin-top: 50px;
-  flex: 0 0 450px;
-  max-width: 450px;
-  height: 550px;          /* 고정 높이 필요 없습니다 */
-  position: sticky;      /* sticky 고정 */
-  top: 50px;             /* 상단에서 20px 떨어짐 */
-  align-self: flex-start;/* 상단 정렬 */
-  box-sizing: border-box;
+  flex: 0 0 400px;
+  max-width: 400px;
+  position: sticky;
+  top: 50px;
+  height: auto;
+  margin-top: 66px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 10;
 }
 
 /* 모바일 및 아이패드 세로 */
@@ -180,34 +180,4 @@
 .pageInfo {
   font-size: 1.1rem;
   font-weight: bold;
-}
-
-/* .cartContainer {
-  position: sticky;
-  top: 50px;
-  flex: 0 0 320px;
-  max-width: 320px;
-  transition: all 0.3s ease;
-  background: white;
-} */
-
-.cartContainer.closed {
-  max-width: 50px;
-  flex: 0 0 50px;
-}
-
-.toggleButton {
-  width: 100%;
-  background-color: #4d774e;
-  color: white;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
-
-.toggleButton:hover {
-  background-color: #3a5e3b;
 }
