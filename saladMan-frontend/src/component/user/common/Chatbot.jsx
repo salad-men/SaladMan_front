@@ -161,12 +161,20 @@ export default function ChatbotWidget() {
           setMode("store");
           setStep(1);
           addMessage("bot", "찾고 싶은 지역을 입력해주세요.");
+          addMessage("bot", {
+            type: "buttons",
+            buttons: [{ label: "처음으로", value: "reset" }],
+          });
           return;
 
         case "complaint":
           setMode("complaint");
           setStep(1);
           addMessage("bot", "어느 지역 매장에 불편사항이 있었나요?");
+          addMessage("bot", {
+            type: "buttons",
+            buttons: [{ label: "처음으로", value: "reset" }],
+          });
           return;
 
         case "ingredient":
@@ -396,8 +404,7 @@ export default function ChatbotWidget() {
       setStep(2);
     } else if (step === 2) {
       setComplaintStore(text);
-      addMessage("bot", `${text} 매장의 어떤 점이 불편하셨나요?`);
-      setStep(3);
+      addMessage("bot", `${text} 매장의 어떤 점이 불편하셨나요?`), setStep(3);
     } else if (step === 3) {
       setComplaintText(text);
       addMessage("bot", "작성자 이름을 입력해주세요.");
@@ -409,7 +416,7 @@ export default function ChatbotWidget() {
     } else if (step === 5) {
       const writerEmail = text;
 
-      // 🔍 storeId 조회 먼저!
+      // storeId 조회 
       const storeId = await fetchStoreIdByName(complaintStore);
       if (!storeId) {
         addMessage("bot", "죄송합니다. 매장을 찾을 수 없습니다.");
@@ -419,7 +426,7 @@ export default function ChatbotWidget() {
 
       const dto = {
         storeId,
-        title: complaintText.slice(0, 20), // ✨ 간단한 제목 생성
+        title: complaintText.slice(0, 20), // 제목 생성
         content: complaintText,
         writerDate: new Date().toISOString().split("T")[0],
         writerEmail: writerEmail,

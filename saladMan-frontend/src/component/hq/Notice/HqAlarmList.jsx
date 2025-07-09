@@ -21,7 +21,7 @@ function HqAlarmList() {
   const toggleSelectAll = (checked) => {
     setSelected(checked ? alarmList.map(n => n.id) : []);
   };
-
+  
   const toggleSelect = (id) => {
     setSelected(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]

@@ -2,187 +2,245 @@
   display: flex;
   background: #fff;
 }
+
 .content {
   flex: 1;
   padding: 0px;
 }
+
 .innerContainer {
+  margin-left: 235px;
   background: #fff;
-  padding: 0px 65px 0 130px;
-  overflow: auto;
-  margin-left: 150px;
+  padding: 10px 60px 0 40px;
+  margin-bottom: 40px;
 }
 
 .title {
   font-size: 1.8rem;
+  font-weight: 600;
   color: #2f6042;
-  margin-bottom: 16px;
+  margin-bottom: 13px;
   margin-top: 38px;
 }
 
+/* ======================= 필터 행 ======================= */
 .filters {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
+
 .row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 }
+
 .label {
   font-weight: 600;
   color: #3d5a40;
+  font-size: 16px;
+  min-width: 56px;
 }
 
-/* 날짜 입력 */
-.inputDate {
-  padding: 6px 10px;
-  border: 1px solid #b4c7b3;
+/* ======================= 입력/셀렉트/버튼 통일 ======================= */
+.row input[type="date"],
+.row select,
+.keywordInput,
+.searchBtn,
+.periodButtons button {
+  height: 32px;
+  font-size: 14px;
   border-radius: 4px;
-  font-size: 1.02rem;
+  border: 1px solid #b4c7b3;
+  background: #fff;
+  padding: 0 10px;
+  box-sizing: border-box;
+  margin: 0;
+  outline: none;
+  appearance: none;
+}
+
+.row input[type="date"]:focus,
+.row select:focus,
+.keywordInput:focus {
+  border-color: #4d774e;
+}
+
+.row input[type="date"] {
   min-width: 120px;
-  background: #fff;
-}
-.inputDate:focus {
-  border-color: #4d774e;
+  max-width: 140px;
 }
 
-/* 텍스트 입력 */
-.inputText {
-  padding: 6px 10px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-  font-size: 1.02rem;
-  background: #fff;
-}
-.inputText:focus {
-  border-color: #4d774e;
+.row select {
+  min-width: 110px;
+  max-width: 160px;
 }
 
-/* 검색 입력 */
-.inputSearch {
-  width: 160px;
-  padding: 6px 10px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-  font-size: 1.02rem;
-  background: #fff;
-}
-.inputSearch:focus {
-  border-color: #4d774e;
+.keywordInput {
+  width: 180px;
 }
 
-/* select */
-.selectBox {
-  padding: 6px 10px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-  font-size: 1.02rem;
-  background: #fff;
-}
-.selectBox:focus {
-  border-color: #4d774e;
-}
-
-/* 검색 버튼 */
+/* ======================= 검색 버튼 ======================= */
 .searchBtn {
-  padding: 6px 14px;
   background: #4d774e;
-  
-  color: white;
-  border: none;
-  border-radius: 4px;
+  color: #fff;
+  border: 1px solid #4d774e;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 1.02rem;
-  transition: background 0.2s;
-}
-.searchBtn:hover {
-  background: #3b663b;
+  padding: 0 16px;
+  transition: background 0.13s, color 0.13s;
 }
 
-/* 기간 단축 버튼 */
+.searchBtn:hover, .searchBtn:active {
+  background: #35553c;
+  color: #fff;
+  border-color: #35553c;
+}
+
+/* ======================= 기간 버튼 ======================= */
 .periodButtons {
   display: flex;
   gap: 6px;
   margin-left: 8px;
 }
-.periodBtn {
-  background: #f7faf8;
-  border: 1px solid #4d774e;
-  border-radius: 4px;
-  padding: 4px 10px;
+
+.periodButtons button {
+  
   color: #4d774e;
-  cursor: pointer;
-  font-size: 0.99rem;
-  transition: background 0.2s;
-}
-.periodBtn:hover {
-  background: #4d774e;
-  color: white;
+    background: #f7faf8;
+border: 1px solid #57a964;
+  /* font-weight: 500; */
+  border-radius: 4px;
+  height: 28px;
+  width: 49px;
+  padding: 0 6px;
+  font-size: 14px;
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
 }
 
-/* 테이블 */
-.tableWrap {
-  overflow-x: auto;
+.periodButtons button:hover, .periodButtons button:active {
+  background: #4d774e;
+  color: #fff;
+  border-color: #4d774e;
 }
+
+/* ======================= 테이블 ======================= */
+.tableWrap {
+  border: 1px solid #e4e9e7;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
 .table {
-  font-size:14px;
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
   table-layout: fixed;
 }
-.table th,
-.table td {
-  padding: 10px;
+
+.table th, .table td {
   border: 1px solid #e4e9e7;
+  padding: 10px;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.table thead {
+
+.table th {
   background: #eaf3eb;
   color: #2d4836;
-}
-.table td {
-  height: 32px;
+  font-weight: 600;
 }
 
-/* 열 너비 조정 */
-.table th:nth-child(3),
-.table td:nth-child(3) {
-  width: 140px;
-}
-.table th:nth-child(4),
-.table td:nth-child(4) {
-  width: 80px; 
+.expired {
+  background: #ffeaea !important;
+  color: #000000;
 }
 
-/* 데이터 없을 때 */
+.checkbox {
+  width: 40px;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+}
+
 .noData {
-  text-align: center;
-  padding: 20px 0;
+  padding: 30px 0;
   color: #999;
+  font-style: italic;
 }
 
-/* 페이징 */
-/* 페이지네이션 */
+/* ======================= 페이지네이션 ======================= */
 .pagination {
-  display:flex; justify-content:center; gap:6px;
-  margin-top: 21px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
 }
+
 .pagination button {
-  padding:6px 12px; border:1px solid #a2b7aa; background:#fff;
-  color:#387448; border-radius:4px; cursor:pointer;
+  padding: 6px 12px;
+  border: 1px solid #a2b7aa;
+  background: #fff;
+  color: #387448;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
+
 .pagination button.active {
-  background:#57a964; color:#fff; border-color:#57a964;
+  background: #57a964;
+  color: #fff;
+  border-color: #57a964;
 }
+
 .pagination button:disabled {
-  background:#f0f4f1; color:#c0cfc3; cursor:not-allowed;
+  background: #f0f4f1;
+  color: #c0cfc3;
+  cursor: not-allowed;
 }
+
 .active {
   background: #57a964;
   color: white;
   border-color: #57a964;
+}
+
+.inputSearch {
+  height: 32px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #b4c7b3;
+  background: #fff;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.inputSearch:focus {
+  border-color: #4d774e;
+}
+
+.searchBtn {
+  height: 32px;
+  font-size: 14px;
+  border-radius: 4px;
+  background: #4d774e;
+  color: #fff;
+  border: 1px solid #4d774e;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 16px;
+  transition: background 0.13s, color 0.13s;
+  margin-left: 0;
+}
+
+.searchBtn:hover, .searchBtn:active {
+  background: #35553c;
+  color: #fff;
+  border-color: #35553c;
 }

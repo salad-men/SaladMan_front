@@ -28,7 +28,7 @@ const NewsWrite = () => {
 
   useEffect(() => {
     try {
-      const storeStr = localStorage.getItem("store");
+      const storeStr = sessionStorage.getItem("store");
       if (storeStr) {
         const storeData = JSON.parse(storeStr);
         if ((storeData.role || "").trim() === "ROLE_HQ") {

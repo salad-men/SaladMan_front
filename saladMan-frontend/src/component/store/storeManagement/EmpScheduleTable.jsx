@@ -101,7 +101,7 @@ export default function EmpScheduleTable({
         }, 0);
         return acc;
     }, {});
-
+    
     return (
         <div className={styles.wrapper}>
             <div style={{ overflowX: "auto" }}>

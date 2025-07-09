@@ -216,7 +216,10 @@ const approveSelected = async () => {
           <h2 className={styles.title}>폐기요청 목록</h2>
 
           {/* 필터 + Bulk */}
-          <div className={styles.filters}>
+ 
+            
+            <div className={styles.filters}>
+            {/* 1행: 기간 + 기간버튼 + Bulk(선택 승인/반려) + 오른쪽 정렬 */}
             <div className={styles.row}>
               <span className={styles.label}>기간</span>
               <input
@@ -233,61 +236,78 @@ const approveSelected = async () => {
                 onChange={e => { setEndDate(e.target.value); setPageInfo(pi => ({ ...pi, curPage:1 })); }}
               />
               <div className={styles.periodButtons}>
-                {["all","today","week","month"].map(t => (
-                  <button key={t} className={styles.periodBtn} onClick={() => onPeriodClick(t)}>
-                    {t==="all"?"전체": t==="today"?"오늘": t==="week"?"한 주":"한 달"}
-                  </button>
-                ))}
+                <button type="button" className={styles.periodBtn} onClick={() => onPeriodClick("all")}>전체</button>
+                <button type="button" className={styles.periodBtn} onClick={() => onPeriodClick("today")}>오늘</button>
+                <button type="button" className={styles.periodBtn} onClick={() => onPeriodClick("week")}>한 주</button>
+                <button type="button" className={styles.periodBtn} onClick={() => onPeriodClick("month")}>한 달</button>
               </div>
+              {/* 오른쪽 끝으로 정렬 */}
+              <div style={{ flex: 1 }} />
               <div className={styles.bulkActions}>
-                <button className={styles.btnRow} onClick={approveSelected} disabled={!checkedIds.size}>선택 승인</button>
-                <button className={styles.btnReject} onClick={handleBulkRejectClick} disabled={!checkedIds.size}>선택 반려</button>
+                <button
+                  type="button"
+                  className={styles.btnRow}
+                  onClick={approveSelected}
+                  disabled={!checkedIds.size}
+                >선택 승인</button>
+                <button
+                  type="button"
+                  className={styles.btnReject}
+                  onClick={handleBulkRejectClick}
+                  disabled={!checkedIds.size}
+                >선택 반려</button>
               </div>
             </div>
-
+            {/* 2행: select/select/select/input/button + 정렬 옵션 오른쪽 정렬 */}
             <div className={styles.row}>
               <select className={styles.selectBox} value={store} onChange={onFilterChange(setStore)}>
                 <option value="all">전체 지점</option>
-                {stores
-                  .filter(s => s.id !== 1) 
-                  .map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                {stores.filter(s => s.id !== 1).map(s => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
               </select>
-
               <select className={styles.selectBox} value={category} onChange={onFilterChange(setCategory)}>
                 <option value="all">전체 분류</option>
-                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {categories.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
               </select>
-
               <select className={styles.selectBox} value={status} onChange={onFilterChange(setStatus)}>
                 <option value="all">상태</option>
                 <option value="대기">대기</option>
                 <option value="완료">완료</option>
                 <option value="반려됨">반려됨</option>
               </select>
-
               <input
                 type="text"
                 className={styles.inputSearch}
                 placeholder="재료명 입력"
                 value={ingredientName}
                 onChange={e => setIngredientName(e.target.value)}
-                onKeyDown={e => e.key==="Enter" && onSearchClick()}
+                onKeyDown={e => e.key === "Enter" && onSearchClick()}
               />
-              <button className={styles.searchBtn} onClick={onSearchClick}>검색</button>
-
-              <div className={styles.rightActions}>
-                <select
-                  className={styles.sortSelect}
-                  value={sortOption}
-                  onChange={e => { setSortOption(e.target.value); setPageInfo(pi => ({ ...pi, curPage:1 })); }}
-                >
-                  <option value="dateDesc">요청일↓</option>
-                  <option value="dateAsc">요청일↑</option>
-                  <option value="default">분류·품목·요청일</option>
-                </select>
-              </div>
+              <button
+                type="button"
+                className={styles.searchBtn}
+                onClick={onSearchClick}
+              >검색</button>
+              {/* 오른쪽 끝으로 정렬 */}
+              <div style={{ flex: 1 }} />
+              <select
+                className={styles.sortSelect}
+                value={sortOption}
+                onChange={e => {
+                  setSortOption(e.target.value);
+                  setPageInfo(pi => ({ ...pi, curPage: 1 }));
+                }}
+              >
+                <option value="dateDesc">요청일↓</option>
+                <option value="dateAsc">요청일↑</option>
+                <option value="default">분류·품목·요청일</option>
+              </select>
             </div>
           </div>
+
 
           {/* 테이블 */}
           <div className={styles.tableWrap}>

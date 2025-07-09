@@ -6,9 +6,9 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 28px;
+  width: 70px;
+  height: 70px;
+  font-size: 34px;
   cursor: pointer;
   z-index: 1000;
 }

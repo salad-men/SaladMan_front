@@ -171,7 +171,7 @@ export default function StoreInventoryRecord() {
       <StoreInventorySidebar />
       <div className={styles.content}>
         <div className={styles.innerContainer}>
-          <h2 className={styles.title}>재고 기록</h2>
+          <h2 className={styles.title}>입/출고 기록</h2>
           {/* 필터 */}
           <div className={styles.filters}>
             <div className={styles.row}>
@@ -227,6 +227,7 @@ export default function StoreInventoryRecord() {
                 }}>초기화</button>
               <div className={styles.rightActions}>
                 <button className={styles.addBtn} type="button" onClick={openModal}>+ 등록</button>
+                
                 <div className={styles.tabBtns}>
                   <button
                     className={activeTab === "입고" ? styles.tabActive : ""}
@@ -234,11 +235,17 @@ export default function StoreInventoryRecord() {
                     type="button"
                   >입고</button>
                   <button
-                    className={activeTab === "출고" ? styles.tabActive : ""}
-                    onClick={() => setActiveTab("출고")}
+                    className={activeTab === "사용" ? styles.tabActive : ""}
+                    onClick={() => setActiveTab("사용")}
                     type="button"
-                  >출고</button>
+                  >사용</button>
+                  <button
+                    className={activeTab === "폐기" ? styles.tabActive : ""}
+                    onClick={() => setActiveTab("폐기")}
+                    type="button"
+                  >폐기</button>
                 </div>
+
               </div>
             </div>
           </div>

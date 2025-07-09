@@ -36,12 +36,12 @@
   bottom: 0;
   height: 2px;
   width: 0%;
-  background-color: #4D774E;
+  background-color: #286180;
   transition: width 0.3s ease;
 }
 
 .storeDropdownContainer:hover > a {
-  color: #4D774E;
+  color: #286180;
 }
 
 .storeDropdownContainer:hover > a::after {
@@ -87,7 +87,7 @@
 
 .storeDropdown li a:hover {
   background-color: #f7f7f7;
-  color: #4D774E;
+  color: #286180;
 }
 
 .storeUserInfo {

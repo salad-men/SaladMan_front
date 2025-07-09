@@ -95,7 +95,7 @@ const StoreHeader = () => {
       <div className="storeHeader">
         <div className="logo">
           <a href="/store/StoreDashboard">
-            <img src="/샐러드맨로고(그린).png" alt="로고" />
+            <img src="/샐러드맨로고(블루).png" alt="로고" />
           </a>
         </div>
 
@@ -104,11 +104,11 @@ const StoreHeader = () => {
                         <a href="/store/StoreInventoryList">재고</a>
                         <div className="storeDropdown">
                             <ul>
-                                <li><a href="/store/StoreInventoryList">재고 목록</a></li>
+                                <li><a href="/store/StoreInventoryList">재고 관리</a></li>
                                 <li><a href="/store/StoreInventoryExpiration">유통기한 목록</a></li>
                                 <li><a href="/store/StoreDisposalList">폐기신청 목록</a></li>
                                 <li><a href="/store/StoreIngredientSetting">재료 설정</a></li>
-                                <li><a href="/store/StoreInventoryRecord">재고 기록</a></li>
+                                <li><a href="/store/StoreInventoryRecord">입/출고 기록</a></li>
                             </ul>
                         </div>
                     </div>

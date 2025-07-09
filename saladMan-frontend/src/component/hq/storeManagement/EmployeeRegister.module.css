@@ -4,15 +4,15 @@
 }
 .pageContent {
   flex: 1;
-  margin-top: 25px;
-  padding: 0 0 0 0;
+  margin-top: 28px;
+  margin-left: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .pageTitle {
   margin-top: 20px;
-  margin-bottom: 34px;
+  margin-bottom: 22px;
   font-size: 2.2rem;
   font-weight: 800;
   color: #245434;
@@ -20,8 +20,7 @@
   text-align: center;
 }
 .formCard {
-  width: 980px;
-  min-width: 860px;
+  width: 993px;
   margin: 0 auto;
   background: #fff;
   border-radius: 28px;
@@ -31,15 +30,15 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 60px;
+  height: 520px;
 }
 .formSection {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   width: 100%;
-  gap: 62px; 
+  gap: 62px;
 }
-
 .formLeft {
   min-width: 280px;
   max-width: 320px;
@@ -55,8 +54,8 @@
   width: 100%;
 }
 .avatarImageWrap {
-  width: 180px;   
-  height: 180px;  
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   overflow: hidden;
   background: #f4faf7;
@@ -87,12 +86,6 @@
   background: #4D774E;
   color: #fff;
 }
-.fileName {
-  color: #888;
-  font-size: 15px;
-  margin-top: 7px;
-}
-
 .formRight {
   flex: 1;
   min-width: 340px;
@@ -147,17 +140,11 @@
   border: 1.5px solid #4D774E;
   outline: none;
 }
-.formRow span {
-  font-size: 16px;
-  color: #2f6042;
-  margin-left: 5px;
-  font-weight: 500;
-}
 .buttonGroup {
   display: flex;
   justify-content: center;
   gap: 44px;
-  margin-top: 54px;
+  margin-top: 75px;
 }
 .backButton {
   padding: 15px 64px;
@@ -187,4 +174,3 @@
 .submitButton:hover {
   background-color: #2f6042;
 }
-

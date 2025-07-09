@@ -96,8 +96,8 @@
   border-collapse: collapse;
   table-layout: fixed;
   margin-top: 0;
-  min-width: 900px;
-  height: 610px;
+  /* min-width: 900px; */
+  /* height: 610px; */
 }
 
 .table th,
@@ -111,6 +111,10 @@
   font-size: 15px;
 }
 
+.table td {
+  height: 33px;
+}
+
 .table thead {
   background: #eaf3eb;
   color: #2d4836;
@@ -118,24 +122,45 @@
 
 .table th:nth-child(1), /* 번호 */
 .table td:nth-child(1) {
-  width: 30px;
+  width: 50px;
 }
 
 .table th:nth-child(2), /* 제목 */
 .table td:nth-child(2) {
-  width: 65%;
-  max-width: 380px;
+  width: 400px;
   text-align: center;
 }
 
-.table th:nth-child(3),
-.table td:nth-child(3) {
-  width: 50px;
+/* 내용 */
+.preview { 
+  width: 400px;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #444;
+  font-size: 0.98rem;
 }
+.table th, .table td {
+  text-align: center;
+  padding: 10px 8px;
+}
+.row {
+  cursor: pointer;
+  transition: background 0.13s;
+}
+.row:hover {
+  background: #f7fafc;
+}
+
 
 .table th:nth-child(4),
 .table td:nth-child(4) {
-  width: 50px;
+  width: 100px;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  width: 100px;
 }
 
 /* 행 호버 */
@@ -196,3 +221,5 @@
   outline: none;
   z-index: 1;
 }
+
+

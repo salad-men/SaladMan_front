@@ -22,16 +22,12 @@ export default function StoreComplaintDetail() {
   });
 
   useEffect(() => {
-    
-    if (!token) return;
-    if (id) {
-      myAxios(token)
-        .get("/store/complaint/detail", { params: { id } })
-        .then(res => {
-          if (res.data.complaint) setComplaint(res.data.complaint);
-        })
-        .catch(err => console.error("불편사항 불러오기 실패:", err));
-    }
+    if (!token || !id) return;
+    myAxios(token)
+      .get("/store/complaint/detail", { params: { id } })
+      .then(res => {
+        if (res.data.complaint) setComplaint(res.data.complaint);
+      });
   }, [id, token]);
 
   return (

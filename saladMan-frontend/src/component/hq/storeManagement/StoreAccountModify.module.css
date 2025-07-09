@@ -1,206 +1,204 @@
-.storeRegisterContainer {
+.storeDetailContainer {
     display: flex;
     background: #f9fafb;
 }
-
-.mainContent {
+.detailMainContent {
     flex: 1;
-    height: 1245px;
-    padding: 0;
-    background: #fff;
-    box-sizing: border-box;
-    border-left: 1px solid #e4e9e7;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    margin-left: 165px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    background: #fff;
     min-width: 0;
+    padding: 0;
     position: relative;
 }
-
-.mainContent h2 {
-    text-align: center;
-    margin: 56px 0 38px 0;
-    font-size: 2.1rem;
+.title {
+    font-size: 2.2rem;
     color: #2f6042;
     font-weight: 700;
+    margin-top: 47px;
+    margin-bottom: 30px;
     letter-spacing: -1px;
+    text-align: center;
 }
-
-.formSection {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 64px;
-    margin: 0 auto;
-    padding: 0;
-    max-width: 1400px;
-    width: 100%;
-}
-
-.registerCard {
+.detailCard {
+    width: 1100px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 600px;
-    height: 600px;
     background: #fff;
-    border-radius: 22px;
-    box-shadow: 0 2px 20px rgba(44,77,62,0.13);
-    padding: 10px 46px; 
+    box-shadow: 0 4px 18px rgba(0,0,0,0.09);
+    border-radius: 28px;
+    padding: 40px 20px 10px 20px;
+    margin-bottom: 30px;
     box-sizing: border-box;
-    overflow: hidden;   
+    align-items: center;
+    gap: 38px;
 }
-
-.registerTable {
-    border-collapse: collapse;
+.infoMapRow {
     width: 100%;
-    font-size: 20px;
-    border: none;
-    margin: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    align-items: flex-start;
+    justify-content: center;
+}
+.detailInfoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 34px;
+    width: 540px;
     background: transparent;
-    padding: 10px 0px;    
-    box-sizing: border-box;
-    table-layout: fixed; 
+    align-items: start;
 }
-.registerTable td, .registerTable th {
-    padding: 7px 10px;
-    vertical-align: middle;
-    font-size: 19px;
-    word-break: break-all;
+.detailItemWide {
+    grid-column: 1 / span 2;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    height: 34px;
 }
-.registerTable td:first-child {
-    width: 120px;
-    font-weight: 700;
-    text-align: center;
+.detailItemWide .detailLabel {
+    min-width: 80px;
+    color: #355b3b;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-right: 7px;
     white-space: nowrap;
-    color: #42734f;
-    font-size: 17px;
 }
-
-
-
-
-.registerTable input[type="text"],
-.registerTable input[type="password"] {
-    width: 260px;
-    padding: 12px 16px;
-    border: 1.5px solid #b4c7b3;
-    border-radius: 7px;
-    font-size: 17px;
-    box-sizing: border-box;
+.detailItemWide .detailValue {
+    flex: 0 0 auto;
+    color: #222;
+    font-size: 1.08rem;
+    font-weight: 500;
     margin-right: 5px;
-    margin-bottom: 10px;
-    background: #fff;
+    white-space: nowrap;
 }
-
-.registerTable input[type="button"],
+.detailItem {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 7px;
+    height: 32px;
+}
+.detailLabel {
+    min-width: 80px;
+    color: #355b3b;
+    font-size: 1.07rem;
+    font-weight: 600;
+    text-align: left;
+    margin-right: 7px;
+    white-space: nowrap;
+}
+.detailValue {
+    font-size: 1.07rem;
+    color: #222;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    min-width: 0;
+    margin-right: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.inputBase {
+    width: 100%;
+    height: 40px;
+    padding: 0 13px;
+    font-size: 1.05rem;
+    border: 1.2px solid #b4c7b3;
+    border-radius: 6px;
+    background: #fff;
+    color: #222;
+    outline: none;
+    transition: border-color 0.16s;
+}
+.inputBase:focus {
+    border-color: #4d774e;
+}
 .checkButton {
-    padding: 10px 20px;
-    background-color: #4D774E;
+    padding: 8px 18px;
+    background-color: #4d774e;
     color: #fff;
     border: none;
-    border-radius: 7px;
+    border-radius: 6px;
     font-size: 15px;
-    cursor: pointer;
-    transition: background-color 0.2s;
     margin-left: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
-
-.registerTable input[type="button"]:hover,
 .checkButton:hover {
     background-color: #226236;
 }
-
-.disabledInput {
-    background-color: #f0f0f0 !important;
-    border: 1px solid #ccc !important;
-    color: #777 !important;
-    padding: 10px;
-}
-
 .mapBox {
-    width: 600px;
-    height: 600px;    
-    border-radius: 22px;
+    width: 420px;
+    height: 420px;
+    background: #eef3ed;
+    border: 1.4px solid #b4c7b3;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 2px 20px rgba(44,77,62,0.13);
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 20px rgba(44, 77, 62, 0.13);
 }
-
+.emptyMap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 1.18rem;
+    background: #f6f8f8;
+    border-radius: 18px;
+}
 .buttonGroup {
     display: flex;
     justify-content: center;
-    gap: 38px;
-    margin-top: 64px;
+    gap: 32px;
+    margin-top: 18px;
     margin-bottom: 16px;
 }
-
-.submitButton {
-    padding: 16px 54px;
-    background-color: #4D774E;
-    color: #fff;
-    border: none;
+.modifyButton {
+    padding: 14px 48px;
     border-radius: 9px;
-    font-size: 21px;
+    border: none;
+    background: #4d774e;
+    color: #fff;
+    font-size: 1.13rem;
     font-weight: 700;
+    box-shadow: 0 2px 6px rgba(33,90,70,0.10);
     cursor: pointer;
-    box-shadow: 0 2px 9px rgba(76,175,80,0.10);
-    transition: background-color 0.17s;
-    letter-spacing: -0.5px;
+    transition: background 0.16s;
+    letter-spacing: 2px;
 }
-.submitButton:hover {
-    background-color: #3a5e3b;
+.modifyButton:hover {
+    background: #3b663b;
 }
-
 .backButton {
-    padding: 16px 54px;
-    background-color: #607d8b;
-    color: #fff;
-    border: none;
+    padding: 14px 48px;
     border-radius: 9px;
-    font-size: 21px;
+    border: none;
+    background: #8a908a;
+    color: #fff;
+    font-size: 1.13rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 2px 9px rgba(44,77,62,0.09);
-    transition: background-color 0.17s;
-    letter-spacing: -0.5px;
+    transition: background 0.16s;
+    margin-left: 8px;
 }
 .backButton:hover {
-    background-color: #455a64;
+    background: #6b746b;
 }
 
-.inputFalse:focus {
-    background-color: #ffe5e5 !important;
-    border: 1px solid #ff4d4f !important;
-    outline: none;
-    box-shadow: none;
-}
-.inputSuccess:focus {
-    background-color: #e5ffe6 !important;
-    border: 1px solid #51f759 !important;
-    outline: none;
-    box-shadow: none;
-}
-input[type="text"].inputFalse {
-    background-color: #ffe5e5 !important;
-    border: 1px solid #ff4d4f !important;
-}
-input[type="text"].inputSuccess {
-    background-color: #e5ffe6 !important;
-    border: 1px solid #51f759 !important;
-}
-input.inputFalse:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
-    box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
-    border: 1px solid #ff4d4f !important;
-}
-input.inputSuccess:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
-    box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
-    border: 1px solid #51f759 !important;
+.ant-modal-content {
+    border-radius: 14px !important;
 }
 
+.addressInput {
+    width: 340px !important;   
+    min-width: 240px;
+    max-width: 100%;
+}
