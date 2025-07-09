@@ -4,7 +4,7 @@
   background-color: #ffffff;
   overflow: hidden;
   overflow-y: scroll;
-    padding: 24px 100px 0 280px;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
@@ -21,114 +21,144 @@
   display: flex;
   flex-direction: column;
 }
+
 .pageHeader h2 {
   margin: 0 0 16px;
   font-size: 28px;
   color: #286180;
   font-weight: bold;
 }
+
 .filterBox {
-    display: flex;
-    background-color: white;
-    padding: 5px 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+  display: flex;
+  background-color: white;
+  padding: 5px 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
 .filterRow {
-    display: flex;
-    padding: 10px 0;
+  display: flex;
+  padding: 10px 0;
 }
 
 .filterLabel {
-    flex: 0 0 120px;
-    font-weight: bold;
-    padding-top: 6px;
+  flex: 0 0 120px;
+  font-weight: bold;
+  padding-top: 6px;
 }
 
 .filterRow input[type="date"] {
-    width: 150px;
+  width: 150px;
   margin-right: 5px;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #a8bcc6;
   border-radius: 5px;
-}
-.filterRow button {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 5px;
-    padding: 0 10px;
+  color: #286180;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-.active {
-  background-color: #4D774E;
+.filterRow button {
+  border: 1px solid #a8bcc6;
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 0 10px;
+  color: #286180;
+  background: #edf4f7;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.filterRow button:hover {
+  background: #dce3e9;
+}
+.filterRow button.active {
+  background-color: #1a445a;
   color: white;
+  border-color: #1a445a;
 }
 
 .filterActions {
-    text-align: center;
-    display: flex;
+  text-align: center;
+  display: flex;
 }
 
 .filterActions button {
-    padding: 0px 20px;
-    margin: 10px 0px;
-    margin-left: 10px;
-    height: 30px;
-    border: none;
-    background-color: #285829;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+  padding: 0 20px;
+  margin: 10px 0 10px 10px;
+  height: 30px;
+  border: none;
+  background-color: #286180;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.filterActions button:hover {
+  background-color: #1a445a;
 }
 
 .filterContent input[type="text"] {
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  padding: 6px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  color: #286180;
 }
+
 .chartBox {
-    display: flex;
+  display: flex;
 }
+
 .box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 20px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 20px;
 }
+
 .summaryBox {
-    width: 240px;
+  width: 240px;
 }
+
 .chart {
-    display: flex;
+  display: flex;
 }
+
 .chart h4 {
-    margin: 0;
+  margin: 0;
+  color: #286180;
 }
+
 .salesTable {
-    max-height: 300px;
-    overflow-y: auto;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .salesTable table {
-    border-collapse: collapse;
-    width: 100%;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 .salesTable thead {
   position: sticky;
   top: 0;
-  background: #fff;
+  background: #dce3e9;
   z-index: 1;
 }
 
 .salesTable th,
 .salesTable td {
-    border-bottom: 1px solid #eee;
-    padding: 10px;
-    font-size: 13px;
-    text-align: center;
+  border-bottom: 1px solid #dce3e9;
+  padding: 10px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.salesTable th {
+  color: #286180;
+  font-weight: 600;
 }

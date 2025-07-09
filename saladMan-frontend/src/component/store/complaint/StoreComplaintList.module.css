@@ -17,7 +17,7 @@
 .title {
   margin: 0 0 12px;
   font-size: 28px;
-  color: #53756e;
+  color: #286180;
   font-weight: bold;
 }
 
@@ -32,7 +32,7 @@
   width: 180px;
   padding: 6px 10px;
   font-size: 15px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #a8bcc6;
   border-radius: 4px;
 }
 
@@ -41,7 +41,7 @@
   font-size: 15px;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #5a8158;
+  background-color: #286180;
   color: white;
   border: none;
   font-weight: 600;
@@ -49,7 +49,7 @@
 }
 
 .filters button:hover {
-  background-color: #406340;
+  background-color: #1f4d66;
 }
 
 .detailTable {
@@ -57,30 +57,30 @@
   border-collapse: collapse;
   font-size: 15px;
   margin-bottom: 32px;
-  color: #3b4263;
+  color: #32465a;
   min-width: 750px;
 }
 
 .detailTable th,
 .detailTable td {
   padding: 10px 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #d6e1eb;
   text-align: center;
   vertical-align: middle;
   word-break: break-word;
 }
 
 .detailTable th {
-  background-color: #f9fafb;
+  background-color: #eef3f7;
   font-weight: 600;
-  color: #374151;
+  color: #286180;
   white-space: nowrap;
   font-size: 15px;
 }
 
 .numberCell {
   font-weight: bold;
-  color: #5a8158;
+  color: #286180;
 }
 
 .titleText {
@@ -106,8 +106,8 @@
 
 .clickable:hover {
   text-decoration: underline;
-  color: #40784f;
-  background-color: #f0f5f0;
+  color: #1f4d66;
+  background-color: #f1f7fa;
 }
 
 .statusCell {
@@ -117,15 +117,15 @@
 }
 
 .miyeollam {
-  color: #b91c1c; /* 미열람: 진한 빨강 */
+  color: #b91c1c; /* 미열람: 빨강 그대로 */
 }
 
 .yeollam {
-  color: #2563eb; /* 열람: 파랑 */
+  color: #2563eb; /* 열람: 파란색 유지 */
 }
 
 .unread {
-  background-color: #fff7f7;
+  background-color: #fff7f7; /* 연파랑 */
 }
 
 .noData {
@@ -143,9 +143,9 @@
 .paging button {
   margin: 0 6px;
   padding: 6px 14px;
-  border: 1px solid #5a8158;
+  border: 1px solid #286180;
   background-color: white;
-  color: #5a8158;
+  color: #286180;
   cursor: pointer;
   border-radius: 5px;
   font-weight: 600;
@@ -160,6 +160,6 @@
 }
 
 .paging button:not(:disabled):hover {
-  background-color: #5a8158;
+  background-color: #286180;
   color: white;
 }

@@ -15,7 +15,7 @@
 .title {
   margin: 0 0 12px;
   font-size: 28px;
-  color: #53756e;
+  color: #286180; /* 파란톤 */
   font-weight: bold;
 }
 
@@ -27,33 +27,40 @@
 }
 
 .filters select {
-  width: 100px;
-  padding: 5px 8px;
-  font-size: 13px;
+font-family: 'Noto Sans KR', sans-serif;
+  width: 130px;
+  padding: 6px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
 }
 
 .filters input {
-  width: 150px;
-  padding: 5px 8px;
-  font-size: 13px;
+  width: 180px;
+  padding: 6px 10px;
+  font-size: 15px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
 }
 
 .filters button {
-  padding: 5px 14px;
-  font-size: 13px;
-  border-radius: 5px;
+  padding: 6px 18px;
+  font-size: 15px;
+  border-radius: 4px;
   cursor: pointer;
-  background-color: #5a8158;
+  background-color: #286180;
   color: white;
   border: none;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  transition: background-color 0.2s;
 }
 
 .filters button:hover {
-  background-color: #4a6848;
+  background-color: #1f4d66;
 }
 
-/* 공지등록 버튼 없음! */
+/* 공지등록 버튼 없음 */
 
 .table {
   width: 100%;
@@ -63,23 +70,21 @@
 }
 
 .table thead th {
-  background-color: #f6f6f6;
-  color: #3d5a40;
+  background-color: #e7eff3; /* 밝은 파랑 */
+  color: #286180; /* 파란 글자 */
   font-weight: 600;
   padding: 12px 10px;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #b3cedb; /* 연파란 경계 */
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* 번호 컬럼 */
 .table thead th:nth-child(1) {
   width: 10%;
 }
 
-/* 제목 컬럼 좁게 + 줄임 표시 */
 .table thead th:nth-child(2) {
   width: 60%;
   max-width: 360px;
@@ -94,7 +99,7 @@
 
 .table tbody td {
   padding: 14px 10px;
-  color: #555;
+  color: #444;
   text-align: center;
   vertical-align: middle;
   overflow: hidden;
@@ -111,12 +116,12 @@
 }
 
 .row {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e3eff3;
   transition: background-color 0.2s ease;
 }
 
 .row:hover {
-  background-color: #f0f7f0;
+  background-color: #f0f7fa; /* 연파란 hover */
   cursor: pointer;
 }
 
@@ -142,9 +147,9 @@
 .paging button {
   margin: 0 8px;
   padding: 5px 10px;
-  border: 1px solid #5a8158;
+  border: 1px solid #286180;
   background-color: white;
-  color: #5a8158;
+  color: #286180;
   cursor: pointer;
   border-radius: 5px;
   font-weight: 600;
@@ -153,7 +158,7 @@
 }
 
 .paging button:hover {
-  background-color: #5a8158;
+  background-color: #286180;
   color: white;
 }
 

@@ -17,7 +17,7 @@
   font-size: 1.8rem;
   font-weight: 600;
   color: #286180;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   margin-top: 0px;
 }
 
@@ -45,6 +45,7 @@
   border-radius:4px;
   background:#fff;
   font-size:14px;
+  width: 190px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .keywordInput {

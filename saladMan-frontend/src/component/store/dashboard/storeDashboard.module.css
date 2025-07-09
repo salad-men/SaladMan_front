@@ -17,36 +17,42 @@
   box-sizing: border-box;
   overflow-y: auto;
 }
+
 .dashboardHeader {
   font-size: 32px;
   font-weight: bold;
-  color: #2F5D44;
+  color: #286180;
   text-align: left;
   margin-bottom: 24px;
 }
+
 .dashboardGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
+
 .card {
   background: white;
   border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   padding: 5px 15px 5px 15px;
 }
+
 .card h3 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #3D5A40;
-  border-left: 4px solid #4D774E;
+  color: #3D5A80;
+  border-left: 4px solid #286180;
   padding-left: 10px;
 }
+
 .noticeList {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .noticeList li {
   padding: 10px 0;
   border-bottom: 1px dashed #d4d4d4;
@@ -55,60 +61,71 @@
   align-items: center;
   gap: 6px;
 }
+
 .strong {
   font-size: 18px;
   font-weight: bold;
-  color: #2F5D44;
+  color: #286180;
   margin-bottom: 6px;
 }
+
 .highlightTitle {
   font-size: 19px;
   font-weight: bold;
-  color: #4D774E;
+  color: #286180;
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #dcdcdc;
   margin-bottom: 6px;
 }
+
 .scheduleTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
+
 .scheduleTable th,
 .scheduleTable td {
   padding: 10px;
   border: 1px solid #e0e0e0;
   text-align: center;
 }
+
 .scheduleTable th {
-  background-color: #e6f2ec;
-  color: #2F5D44;
+  background-color: #e6eef5;
+  color: #286180;
 }
+
 canvas {
   width: 100% !important;
   height: 280px !important;
 }
+
 .chartLabel {
   text-align: center;
   font-size: 13px;
   color: #666;
   margin-top: 6px;
 }
+
 .scheduleCard {
   grid-column: span 2;
 }
+
 .popularItemsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px 32px;
   padding-top: 12px;
 }
+
 .popularItemsGrid li {
   border: none;
   padding: 4px 0;
   font-size: 15px;
 }
+
 .subInfo {
   font-size: 15px;
   font-weight: normal;

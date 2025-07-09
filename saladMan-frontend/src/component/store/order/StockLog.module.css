@@ -10,7 +10,7 @@
     padding: 40px 40px 60px;
     background-color: white;
     box-sizing: border-box;
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #dce3e9;
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -21,6 +21,7 @@
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 24px;
+    color: #286180;
 }
 
 .filterSection {
@@ -30,9 +31,13 @@
     gap: 10px;
     width: 80%;
 }
-.filterSection input {
 
+.filterSection input {
     width: 150px;
+    padding: 6px 8px;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
 .tabButtons {
@@ -40,17 +45,25 @@
 }
 
 .tabButtons button {
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
+    background-color: #f7f9fa;
+    border: 1px solid #a8bcc6;
+    color: #286180;
     padding: 6px 12px;
     margin-right: 4px;
     cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.tabButtons button:hover {
+    background-color: #eaf3fa;
 }
 
 .active {
-    background-color: #53756e;
+    background-color: #286180;
     color: white;
     font-weight: bold;
+    border: 1px solid #286180;
 }
 
 .table {
@@ -61,11 +74,17 @@
 
 .table th,
 .table td {
-    border: 1px solid #ccc;
+    border: 1px solid #dce3e9;
     padding: 10px;
     text-align: center;
 }
 
 .table th {
-    background-color: #f8f8f8;
+    background-color: #dce3e9;
+    color: #2d4836;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: #edf4f7;
 }

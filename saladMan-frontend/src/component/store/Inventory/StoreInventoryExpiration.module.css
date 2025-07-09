@@ -14,7 +14,7 @@
   font-size: 1.8rem;
   font-weight: 600;
   color: #286180;
-  margin-bottom: 13px;
+  margin-bottom: 16px;
 }
 .filters {
   display: flex;
@@ -25,7 +25,7 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 .label {
@@ -35,7 +35,6 @@
 .periodButtons {
   display: flex;
   gap: 8px;
-  margin-left: 10px;
 }
 .periodButtons button {
   padding: 4px 10px;
@@ -52,8 +51,8 @@
 }
 .row input[type="date"], .row select {
   font-family: 'Noto Sans KR', sans-serif;
-  width: 180px;
-  padding: 6px 8px;
+  width: 190px;
+  padding: 6px;
   border: 1px solid #a8bcc6;
   border-radius: 4px;
   background: #fff;
@@ -211,7 +210,7 @@
   margin-bottom: 12px;
 }
 .save {
-  background: #4caf50;
+  background: #f44336;
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -225,11 +224,11 @@
   width: 70px;
   padding: 5px 8px;
   font-size: 14px;
-  border: 1px solid #74bb7a;
+  border: 1px solid #286180;
   border-radius: 4px;
-  background: #f7faf8;
+  background: #fbfbfd;
 }
 .editable:focus {
   outline: none;
-  background: #e3f2fd;
+  background: #f8fcff;
 }

@@ -111,7 +111,7 @@ export default function StoreEmployeeList() {
         <h2>직원 목록</h2>
         <div className={styles.topBar}>
           <form className={styles.searchGroup} onSubmit={handleSearch}>
-            <select value={grade} onChange={e => setGrade(e.target.value)}>
+            <select className={styles.selectName}value={grade} onChange={e => setGrade(e.target.value)}>
               <option value="all">전체 직급</option>
               <option value="점장">점장</option>
               <option value="매니저">매니저</option>

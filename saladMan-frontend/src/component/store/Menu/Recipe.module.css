@@ -40,19 +40,20 @@
   display: flex;
   flex-direction: row;
   background: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #dce3e9;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   padding: 10px;
-  width: 350px;    /* 카드 가로폭 고정 */
-  min-height: 180px; /* 카드 높이 최소 고정 */
+  width: 350px;
+  min-height: 180px;
   box-sizing: border-box;
 }
+
 .recipeCard:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transform: translateY(-2px);
   transition: all 0.2s ease-in-out;
-  background-color: #f8f8f8;
+  background-color: #f9f9f9;
 }
 
 .imageBlock {
@@ -73,7 +74,7 @@
 .imageBlock h3 {
   font-size: 1rem;
   margin: 4px 0 0;
-  color: #333;
+  color: #286180;
   text-align: center;
 }
 
@@ -81,10 +82,8 @@
   flex: 1;
   display: flex;
   padding-left: 10px;
-  align-items: center; /* 수직 중앙 */
+  align-items: center;
 }
-
-
 
 .cardText ul {
   list-style: none;
@@ -109,14 +108,14 @@
   background: none;
   border: none;
   padding: 6px 12px;
-  color: #333;
+  color: #286180;
   font-size: 18px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #f0f0f0;
+  background-color: #edf4f7;
 }
 
 .pagination button:disabled {
@@ -125,10 +124,12 @@
 }
 
 .pagination .active {
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   font-weight: bold;
+  border-radius: 4px;
 }
+
 .tabNav {
   display: flex;
   justify-content: center;
@@ -156,7 +157,7 @@
   display: inline-block;
   width: 1.5px;
   height: 18px;
-  background: #bfcdb8;
+  background: #dce3e9;
   position: absolute;
   right: -18px;
   top: 3px;
@@ -164,12 +165,12 @@
 
 .tabBtn:hover,
 .tabBtn:focus {
-  color: #132543;
+  color: #1a445a;
 }
 
 .activeTab {
   font-weight: 700;
-  color: #132543;
+  color: #1a445a;
   border-bottom: 3px solid #286180;
   padding-bottom: 2px;
 }
