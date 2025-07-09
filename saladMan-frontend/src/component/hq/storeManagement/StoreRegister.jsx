@@ -192,6 +192,7 @@ export default function StoreRegister() {
                         type="text"
                         name="address"
                         value={store.address}
+                        autoComplete="off"
                         placeholder="주소"
                         onChange={edit}
                         readOnly
@@ -271,7 +272,7 @@ export default function StoreRegister() {
                         <input
                         type="password"
                         name="storePassword"
-                        // value={store.storePassword}
+                        value={store.storePassword}
                         placeholder="비밀번호"
                         onChange={edit}
                         className={[styles.inputBase, styles.passwordInput].join(" ")}
