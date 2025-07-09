@@ -86,27 +86,33 @@ export default function HqNoticeList() {
                 <tr>
                   <th>번호</th>
                   <th>제목</th>
+                  <th>내용</th>
                   <th>작성자</th>
                   <th>작성일</th>
                 </tr>
               </thead>
               <tbody>
                 {notices.length > 0 ? notices.map((notice, idx) => (
-                  <tr
-                    key={notice.id}
-                    onClick={() => navigate(`/hq/HqNoticeDetail/${notice.id}`)}
-                  >
-                    {/* 번호는 현재 페이지별 역순(1,2,3...) */}
-                    <td>{page * size + idx + 1}</td>
-                    <td>{notice.title}</td>
-                    <td>{notice.author ?? "관리자"}</td>
-                    <td>{notice.postedAt}</td>
-                  </tr>
-                )) : (
-                  <tr>
-                    <td colSpan={4} className={styles.noData}>데이터가 없습니다.</td>
-                  </tr>
-                )}
+                    <tr
+                      key={notice.id}
+                      onClick={() => navigate(`/hq/HqNoticeDetail/${notice.id}`)}
+                      className={styles.row}
+                    >
+                      <td>{page * size + idx + 1}</td>
+                      <td>{notice.title}</td>
+                      <td className={styles.preview}>
+                        {notice.content?.length > 40
+                          ? notice.content.slice(0, 40) + '...'
+                          : notice.content}
+                      </td>
+                      <td>{notice.author ?? "관리자"}</td>
+                      <td>{notice.postedAt}</td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan={5} className={styles.noData}>데이터가 없습니다.</td>
+                    </tr>
+                  )}
               </tbody>
             </table>
           </div>

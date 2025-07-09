@@ -1,17 +1,12 @@
 .employeeListContainer {
   display: flex;
-  /* min-height: 70vh; */
   background: #ffffff;
 }
 .employeeListContent {
   flex: 1;
   background: #fff;
   padding: 29px 100px 0 280px;
-  /* box-shadow: 0 4px 12px rgba(0,0,0,0.06); */
   min-width: 0;
-  /* height: 1220px; */
-  /* overflow: auto; */
-  /* border-left: 1px solid #e4e9e7; */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -22,8 +17,6 @@
   margin-bottom: 16px;
   margin-top: 16px;
 }
-
-/* 상단 바 */
 .topBar {
   display: flex;
   justify-content: flex-end;
@@ -31,8 +24,6 @@
   margin-bottom: 24px;
   gap: 12px;
 }
-
-/* 직원등록 버튼 */
 .registerButton {
   padding: 6px 14px;
   background-color: #2196f3;
@@ -47,16 +38,12 @@
 .registerButton:hover {
   background-color: #1976d2;
 }
-
-/* 검색 영역 */
 .searchGroup {
   display: flex;
   gap: 8px;
   align-items: center;
   background: white;
   padding: 5px 0px;
-  /* box-shadow: 0 2px 5px rgba(0,0,0,0.08); */
-  /* border-radius: 10px; */
 }
 .searchGroup select {
   padding: 6px 10px;
@@ -85,8 +72,6 @@
 .searchButton:hover {
   background-color: #3b663b;
 }
-
-/* 테이블 영역 */
 .employeeTable {
   width: 100%;
   border-collapse: collapse;
@@ -111,13 +96,12 @@
   background: #f1f7f3;
 }
 .tableProfile {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid #ddd;
 }
-
-/* 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -150,97 +134,153 @@
   cursor: not-allowed;
 }
 
-/* 상세/수정 모달 스타일 */
+/* --- 상세/수정 모달(등록폼 스타일) --- */
 .modalOverlay {
-  position: fixed;
-  z-index: 2000;
-  inset: 0;
-  background: rgba(0,0,0,0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: fixed; z-index: 2000; inset: 0;
+  background: rgba(0,0,0,0.16); display: flex; align-items: center; justify-content: center;
 }
-.modalBox {
+.modalBoxWide {
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 32px #2222;
-  padding: 38px 36px 32px;
-  max-width: 520px;
-  width: 100%;
-  min-width: 320px;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px #2222;
+  padding: 48px 60px;
+  min-width: 900px;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
 }
-.modalBox h3 {
-  font-size: 1.5rem;
-  color: #2f6042;
+.modalTitle {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #275237;
   text-align: center;
-  margin-bottom: 18px;
+  margin-bottom: 30px;
+  letter-spacing: -1px;
 }
-.detailGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px 14px;
-  margin: 20px 0;
+.formWideWrap {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 70px;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
-.detailGrid label {
-  font-size: 13px;
-  color: #3d5a40;
-  min-width: 56px;
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 260px;
+  margin-right: 15px;
+  
 }
-.detailGrid input,
-.detailGrid select {
-  width: 120px;
-  padding: 6px 8px;
-  font-size: 14px;
-  border: 1px solid #b4c7b3;
-  border-radius: 4px;
-  background: #fff;
-}
-.detailGrid span {
-  font-size: 14px;
-  color: #222;
-  padding-left: 2px;
-}
-.detailGrid img {
-  vertical-align: middle;
-  width: 38px;
-  height: 38px;
+.profileBig2 {
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid #eee;
-  margin-right: 2px;
+  background: #f4faf6;
+  border: 2.5px solid #8bc7ab;
+  margin-top: 100px;
+  margin-bottom: 20px;
 }
-.detailModalBtnRow {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 28px;
-}
-.editButton, .saveButton {
-  padding: 7px 18px;
-  border-radius: 6px;
-  border: none;
-  background: #4d774e;
-  color: #fff;
-  font-size: 15px;
+.fileInput { display: none; }
+.fileLabelWide {
+  background: #fff;
+  border: 1.5px solid #adcdb8;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 9px 32px;
+  color: #26543e;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.13s;
+  margin-bottom: 6px;
 }
-.editButton:hover, .saveButton:hover { background: #3a5e3b; }
-.cancelButton {
-  padding: 7px 18px;
+.fileLabelWide:hover { background: #f3f7f5; }
+.deleteBtnWide {
+  margin-top: 7px;
+  padding: 6px 20px;
+  background: #ff7163;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.18s;
+}
+.deleteBtnWide:hover { background: #e9412c; }
+
+.fieldsSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.twoColWide {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 44px;
+  margin-bottom: 16px;
+}
+.twoColWide > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.twoColWide label {
+  font-size: 15px;
+  color: #274d39;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.inputWide {
+  font-size: 16px;
+  border: 1.6px solid #adcdb8;
   border-radius: 6px;
+  padding: 9px 13px;
+  background: #f9fbfa;
+  min-width: 0;
+}
+.inputWide[readonly] { background: #f6f6f6; color: #888; }
+.inputWide:disabled { background: #f7f7f7; color: #bbb; }
+
+.bottomBtnRowWide {
+  margin-top: 38px;
+  display: flex;
+  gap: 18px;
+  justify-content: flex-end;
+}
+.smallBtnWide {
+  padding: 10px 38px;
+  border-radius: 8px;
+  border: none;
+  background: #347c47;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.smallBtnWide:hover { background: #22562b; }
+.cancelBtnWide {
+  padding: 10px 38px;
+  border-radius: 8px;
   border: none;
   background: #f44336;
   color: #fff;
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: 800;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.16s;
 }
-.cancelButton:hover { background: #d32f2f; }
-
+.cancelBtnWide:hover { background: #d32f2f; }
 .errorMsg {
-  color: crimson;
-  font-size: 13px;
-  margin: 8px 0 0 4px;
+  color: #d32f2f;
+  font-size: 15px;
+  margin-top: 11px;
+  text-align: left;
 }

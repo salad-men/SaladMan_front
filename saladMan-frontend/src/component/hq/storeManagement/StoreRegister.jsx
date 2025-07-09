@@ -141,9 +141,11 @@ export default function StoreRegister() {
         try {
             const axiosInstance = myAxios(token);
             const response = await axiosInstance.post("/hq/storeRegister", payload);
-            if (response.data === true) {
+            console.log("등록 응답:", response.data);
+
+            if (response.data && response.data.success) {
                 alert("매장 등록 완료");
-                navigate("/hq/storeAccount");
+                navigate(`/hq/storeAccountDetail?id=${response.data.id}`);
             } else {
                 alert("등록 실패");
             }

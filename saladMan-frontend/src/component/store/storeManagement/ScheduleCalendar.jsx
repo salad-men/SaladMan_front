@@ -25,6 +25,9 @@ export default function ScheduleCalendar() {
     const storeId = user?.id;
     const today = new Date();
 
+    const shiftOrder = { "오픈": 1, "미들": 2, "마감": 3 };
+
+
     // 월/연도, 뷰타입
     const [viewType, setViewType] = useState("calendar");
     const [year, setYear] = useState(today.getFullYear());
@@ -89,7 +92,15 @@ export default function ScheduleCalendar() {
     });
 
     // 캘린더 이벤트 생성
-    const events = schedules.map(sch => {
+    const events = schedules
+    .filter(sch => sch.shiftType !== "휴무")  // 휴무 제외
+    .sort((a, b) => {
+        // 1. 날짜 오름차순
+        if (a.workDate !== b.workDate) return a.workDate.localeCompare(b.workDate);
+        // 2. 타입별 오픈→미들→마감 정렬
+        return (shiftOrder[a.shiftType] || 99) - (shiftOrder[b.shiftType] || 99);
+    })
+    .map(sch => {
         const emp = employees.find(e => e.id === sch.employeeId);
         const conf = shiftOptions.find(opt => opt.type === sch.shiftType);
         return {
@@ -103,7 +114,8 @@ export default function ScheduleCalendar() {
                 employeeId: sch.employeeId,
                 shiftType: sch.shiftType,
                 workDate: sch.workDate
-            }
+            },
+            order: shiftOrder[sch.shiftType] || 99
         };
     });
 
@@ -155,16 +167,40 @@ export default function ScheduleCalendar() {
         });
     };
 
-    // 모달 저장
-    const handleModalSave = async () => {
-        if (!modal.employeeId || !modal.shiftType) return;
-        await upsertSchedule({
+// 모달 저장
+const handleModalSave = async () => {
+    if (!modal.employeeId || !modal.shiftType) return;
+
+    // 1. 해당 날짜의 기존 모든 직원 스케줄을 가져온다
+    const oldSchedules = schedules.
+                filter(s => s.workDate === modal.date && s.shiftType !== "휴무");
+
+    // 2. 수정할 직원만 값 변경, 나머지는 기존 값 유지
+    const newSchedules = oldSchedules.map(s => {
+        if (s.employeeId === modal.employeeId) {
+            return {
+                ...s,
+                shiftType: modal.shiftType
+            };
+        } else {
+            return s;
+        }
+    });
+
+    // 혹시 수정하려는 직원이 기존에 없으면 새로 추가
+    if (!oldSchedules.some(s => s.employeeId === modal.employeeId)) {
+        newSchedules.push({
             employeeId: modal.employeeId,
             workDate: modal.date,
             shiftType: modal.shiftType
         });
-        setModal(null);
+    }
+
+    // 3. 기존 해당 날짜의 전체 스케줄을 한 번에 upsert
+    await upsertSchedule(newSchedules);
+    setModal(null);
     };
+
 
     // 모달 삭제
     const handleModalDelete = async () => {
@@ -231,6 +267,7 @@ const handleMultiAdd = async () => {
                             initialView="dayGridMonth"
                             initialDate={`${year}-${String(month).padStart(2, '0')}-01`}
                             events={events}
+                            eventOrder="order" 
                             height={480}
                             headerToolbar={false}
                             locale="ko"

@@ -62,8 +62,7 @@
     font-weight: 500;
 }
 .calendarWrap {
-    min-width: 760px;
-    max-width: 900px;
+    width: 900px;
     margin: 0 auto 0 auto;
     background: #fafbfc;
     border-radius: 8px;
@@ -86,11 +85,63 @@
     min-width: 320px;
     min-height: 140px;
     max-width: 90vw;
+        display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.modalRow { display: flex; align-items: center; gap: 14px; margin: 12px 0; }
-.modalRow label { min-width: 70px; font-weight: bold; }
-.modalActions { display: flex; gap: 10px; margin-top: 18px; }
-.saveBtn {
+.modalBox h3 {
+    margin: 0 0 18px 0;
+    font-size: 1.22rem;
+    color: #143336;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    /* 중앙 정렬 */
+    text-align: center;
+    width: 100%;
+}
+.modalBox select, .modalBox input[type="text"], .modalBox input[type="date"] {
+    background: #f7fafd;
+    border: 1.3px solid #b7d6e0;
+    border-radius: 6px;
+    font-size: 15px;
+    padding: 7px 12px;
+    color: #204050;
+    outline: none;
+    margin-left: 0;
+    min-width: 120px;
+    transition: border 0.18s;
+}
+
+.modalBox select:focus, .modalBox input:focus {
+    border: 1.6px solid #39b35e;
+    background: #eafff4;
+}
+
+.modalRow {
+    display: flex;
+    flex-direction: row;   
+    align-items: center;      
+    gap: 6px;
+    margin: 12px 0 4px 0;
+    width: 100%;
+}
+
+.modalRow label {
+    min-width: 70px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #204050;
+    margin-bottom: 2px;
+    text-align: center; 
+}
+
+.modalActions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    justify-content: center;
+    width: 100%;
+}.saveBtn {
     background: #39b35e; color: #fff; border: none; padding: 8px 22px; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer;
 }
 .saveBtn:disabled { opacity: 0.6; cursor: default;}

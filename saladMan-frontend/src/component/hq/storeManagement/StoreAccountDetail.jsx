@@ -71,6 +71,20 @@ export default function StoreAccountDetail() {
         }
     };
 
+    // 긴 주소 2줄로(최대 32자 기준) 줄바꿈 처리 함수
+    function wrapAddress(addr, maxLen = 32) {
+        if (!addr || addr.length <= maxLen) return addr;
+        const first = addr.slice(0, maxLen);
+        const second = addr.slice(maxLen);
+        return (
+            <>
+                {first}
+                <br />
+                {second}
+            </>
+        );
+    }
+
     return (
         <div className={styles.storeDetailContainer}>
             <EmpSidebar />
@@ -82,7 +96,7 @@ export default function StoreAccountDetail() {
                         <div className={styles.detailInfoGrid}>
                             <DetailItem label="지역" value={store.location} />
                             <DetailItem label="매장명" value={store.name} />
-                            <DetailItem label="주소" value={store.address} />
+                            <DetailItem label="주소" value={wrapAddress(store.address)} />
                             <DetailItem label="전화번호" value={store.phoneNumber} />
                             <DetailItem label="오픈시간" value={store.openTime} />
                             <DetailItem label="마감시간" value={store.closeTime} />
@@ -97,10 +111,13 @@ export default function StoreAccountDetail() {
                             </DetailItem>
                             <DetailItem label="자동발주" value={store.autoOrderEnabled ? "활성화" : "비활성화"} />
                             <DetailItem label="배달소요일수" value={store.deliveryDay ? `${store.deliveryDay}일` : "미설정"} />
-                            <DetailItem label="계정" value={store.username} wide>
-                            <button className={styles.resetPasswordButton} onClick={() => setIsResetModalOpen(true)}>
-                                비밀번호 재설정
-                            </button>
+                            <DetailItem label="계정" wide>
+                                <span className={styles.detailValue + " " + styles.accountValue}>
+                                    {store.username}
+                                </span>
+                                <button className={styles.resetPasswordButton} onClick={() => setIsResetModalOpen(true)}>
+                                    비밀번호 재설정
+                                </button>
                             </DetailItem>
                         </div>
                         {/* 지도 */}
@@ -174,15 +191,28 @@ export default function StoreAccountDetail() {
 // 2열 정보 item
 function DetailItem({ label, value, children, wide }) {
     return (
-    <div className={wide ? styles.detailItemWide : styles.detailItem}>
+        <div className={wide ? styles.detailItemWide : styles.detailItem}>
             <span className={styles.detailLabel}>{label}</span>
-            <span className={styles.detailValue}>{value}</span>
-            {children}
+            {children ? (
+                value !== undefined && value !== null && value !== "" ? (
+                    // 값이 있을 경우 detailValue와 버튼 모두 보여줌
+                    <>
+                        <span className={styles.detailValue}>{value}</span>
+                        {children}
+                    </>
+                ) : (
+                    // 값이 없으면 버튼만(예비)
+                    <>{children}</>
+                )
+            ) : (
+                // 기본값
+                <span className={styles.detailValue}>{value}</span>
+            )}
         </div>
     );
 }
 
-// 일관된 모달 UI
+// 모달
 function Modal({ title, children, onCancel, onConfirm, confirmText = "확인" }) {
     return (
         <div className={styles.modalOverlay}>

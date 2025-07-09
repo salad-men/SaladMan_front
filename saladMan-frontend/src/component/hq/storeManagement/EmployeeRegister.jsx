@@ -1,19 +1,93 @@
+import { useRef, useState, useEffect } from "react";
 import EmpSidebar from "./EmpSidebar";
 import styles from "./EmployeeRegister.module.css";
-import { useRef, useState } from "react";
+import { myAxios } from "/src/config";
+import { accessTokenAtom } from "/src/atoms";
+import { useAtomValue } from "jotai";
+import { useNavigate } from "react-router-dom";
+
+const HQ_GRADES = ["사원", "대리", "과장", "부장", "이사", "사장"];
+const STORE_GRADES = ["파트타이머", "직원", "매니저"];
 
 export default function EmployeeRegister() {
+  const token = useAtomValue(accessTokenAtom);
+  const navigate = useNavigate();
   const [profileUrl, setProfileUrl] = useState("");
-  const [selectedFileName, setSelectedFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef();
+
+  // 매장 목록 불러오기
+  const [stores, setStores] = useState([]);
+  useEffect(() => {
+    if (!token) return;
+    myAxios(token).get("/hq/emp/stores").then(res => setStores(res.data.stores || []));
+  }, [token]);
+
+  // 입력값
+  const [form, setForm] = useState({
+    name: "",
+    grade: "",
+    storeId: "",
+    hireDate: "",
+    phone: "",
+    email: "",
+    gender: "",
+    birthday: "",
+    address: "",
+    empStatus: "",
+  });
+
+  // 매장 선택 시 직급 초기화
+  function handleChange(e) {
+    const { name, value } = e.target;
+    if (name === "storeId") {
+      setForm(prev => ({
+        ...prev,
+        storeId: value,
+        grade: "" // 매장 바꾸면 grade 초기화
+      }));
+    } else {
+      setForm(prev => ({ ...prev, [name]: value }));
+    }
+  }
 
   function handleFileChange(e) {
     const file = e.target.files[0];
     if (!file) return;
-    setSelectedFileName(file.name);
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onload = () => setProfileUrl(reader.result);
     reader.readAsDataURL(file);
+  }
+
+  // 매장명 찾아서 직급 옵션 결정
+  const selectedStore = stores.find(s => String(s.id) === String(form.storeId));
+  const isHq = selectedStore && selectedStore.name.includes("본사");
+  const gradeOptions = isHq ? HQ_GRADES : STORE_GRADES;
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!form.name || !form.grade || !form.phone || !form.hireDate || !form.storeId || !form.email) {
+      alert("필수값을 모두 입력하세요.");
+      return;
+    }
+    const formData = new FormData();
+    ["name", "grade", "phone", "hireDate", "address", "gender", "birthday", "empStatus", "storeId", "email"].forEach(k =>
+      formData.append(k, form[k] || "")
+    );
+    if (selectedFile) formData.append("img", selectedFile);
+
+    try {
+      await myAxios(token).post("/hq/emp/add", formData);
+      alert("직원 등록이 완료되었습니다.");
+      navigate("/hq/empList");
+    } catch (err) {
+      alert("등록 실패: " + (err.response?.data?.message || err.message));
+    }
+  }
+
+  function handleBack() {
+    navigate("/hq/empList");
   }
 
   return (
@@ -22,8 +96,7 @@ export default function EmployeeRegister() {
       <div className={styles.pageContent}>
         <h2 className={styles.pageTitle}>직원 등록</h2>
         <div className={styles.formCard}>
-          <form className={styles.formSection}>
-            {/* 왼쪽: 프로필 (사진 업로드) */}
+          <form className={styles.formSection} onSubmit={handleSubmit}>
             <div className={styles.formLeft}>
               <div className={styles.avatarWrap}>
                 <div className={styles.avatarImageWrap}>
@@ -37,59 +110,93 @@ export default function EmployeeRegister() {
                   )}
                 </div>
                 <button
-                  className={styles.uploadBtn} onClick={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}
-                  type="button">
+                  className={styles.uploadBtn}
+                  onClick={e => {
+                    e.preventDefault();
+                    fileInputRef.current?.click();
+                  }}
+                  type="button"
+                >
                   파일 선택
                 </button>
-                <input type="file" ref={fileInputRef} style={{ display: "none" }} accept="image/*"
-                  onChange={handleFileChange} />
-                {/* <div className={styles.fileName}>{selectedFileName || "선택된 파일 없음"}</div> */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
               </div>
             </div>
-            {/* 오른쪽: 입력 폼 */}
             <div className={styles.formRight}>
               <div className={styles.formRow}>
                 <label>이름</label>
-                <input type="text" placeholder="이름" />
-                <label>직급</label>
-                <input type="text" placeholder="직급" />
+                <input name="name" type="text" placeholder="이름" value={form.name} onChange={handleChange} />
+                <label>매장</label>
+                <select name="storeId" value={form.storeId} onChange={handleChange}>
+                  <option value="">매장 선택</option>
+                  {stores.map(store => (
+                    <option key={store.id} value={store.id}>
+                      {store.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className={styles.formRow}>
-                <label>매장</label>
-                <select>
-                  <option>매장 선택</option>
-                  <option>본사</option>
-                  <option>강남점</option>
+                <label>직급</label>
+                <select
+                  name="grade"
+                  value={form.grade}
+                  onChange={handleChange}
+                  disabled={!form.storeId}
+                >
+                  <option value="">직급 선택</option>
+                  {gradeOptions.map((g, i) => (
+                    <option key={i} value={g}>
+                      {g}
+                    </option>
+                  ))}
                 </select>
                 <label>입사일</label>
-                <input type="date" />
+                <input name="hireDate" type="date" value={form.hireDate} onChange={handleChange} />
               </div>
               <div className={styles.formRow}>
                 <label>연락처</label>
-                <input type="text" placeholder="010-0000-0000" />
+                <input name="phone" type="text" placeholder="010-0000-0000" value={form.phone} onChange={handleChange} />
                 <label>이메일</label>
-                <input type="email" placeholder="user@domain.com" />
+                <input name="email" type="email" placeholder="user@domain.com" value={form.email} onChange={handleChange} />
               </div>
               <div className={styles.formRow}>
                 <label>성별</label>
-                <select>
-                  <option>선택</option>
-                  <option>남</option>
-                  <option>여</option>
+                <select name="gender" value={form.gender} onChange={handleChange}>
+                  <option value="">선택</option>
+                  <option value="남">남</option>
+                  <option value="여">여</option>
                 </select>
                 <label>생년월일</label>
-                <input type="date" />
+                <input name="birthday" type="date" value={form.birthday} onChange={handleChange} />
               </div>
               <div className={styles.formRow}>
                 <label>주소</label>
-                <input type="text" className={styles.longInput} placeholder="주소 입력" />
+                <input
+                  name="address"
+                  type="text"
+                  className={styles.longInput}
+                  placeholder="주소 입력"
+                  value={form.address}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={styles.buttonGroup}>
+                <button type="button" className={styles.backButton} onClick={handleBack}>
+                  목록
+                </button>
+                <button type="submit" className={styles.submitButton}>
+                  저장
+                </button>
               </div>
             </div>
           </form>
-          <div className={styles.buttonGroup}>
-            <button className={styles.backButton}>목록</button>
-            <button className={styles.submitButton}>저장</button>
-          </div>
         </div>
       </div>
     </div>

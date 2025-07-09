@@ -46,7 +46,7 @@
 .detailInfoGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 47px 34px;
+    gap: 40px 34px;
     width: 540px;
     background: transparent;
     align-items: start;
@@ -195,4 +195,10 @@
 
 .ant-modal-content {
     border-radius: 14px !important;
+}
+
+.addressInput {
+    width: 340px !important;   
+    min-width: 240px;
+    max-width: 100%;
 }

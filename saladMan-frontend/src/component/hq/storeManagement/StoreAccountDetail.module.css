@@ -1,9 +1,7 @@
 .storeDetailContainer {
     display: flex;
-    /* min-height: 100vh; */
     background: #f9fafb;
 }
-
 .detailMainContent {
     flex: 1;
     margin-left: 165px;
@@ -11,11 +9,9 @@
     flex-direction: column;
     align-items: center;
     background: #fff;
-    
     padding: 0;
     position: relative;
 }
-
 .title {
     font-size: 2.2rem;
     color: #2f6042;
@@ -25,7 +21,6 @@
     letter-spacing: -1px;
     text-align: center;
 }
-
 .detailCard {
     width: 1100px;
     display: flex;
@@ -40,7 +35,6 @@
     align-items: center;
     gap: 10px;
 }
-
 .infoMapRow {
     width: 100%;
     display: flex;
@@ -49,12 +43,11 @@
     align-items: flex-start;
     justify-content: center;
 }
-
 .detailInfoGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 47px 34px;
-    width: 540px;        
+    width: 540px;
     background: transparent;
     align-items: start;
 }
@@ -62,12 +55,12 @@
     grid-column: 1 / span 2;
     display: flex;
     align-items: center;
+    gap: 8px;
     min-width: 0;
     margin-top: 4px;
     margin-bottom: 2px;
     height: 34px;
 }
-
 .detailItemWide .detailLabel {
     min-width: 80px;
     color: #355b3b;
@@ -76,27 +69,34 @@
     margin-right: 7px;
     white-space: nowrap;
 }
-.detailItemWide .detailValue {
-    flex: 0 0 auto;
+.detailItemWide .detailValue,
+.accountValue {
     color: #222;
     font-size: 1.08rem;
     font-weight: 500;
-    margin-right: 5px;
     white-space: nowrap;
+    margin-right: 0;
+    vertical-align: middle;
+    /* 줄어들 수 있게 */
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
 }
 .detailItemWide .resetPasswordButton {
-    margin-left: 16px;
+    margin-left: 6px !important;
+    margin-right: 0 !important;
+    vertical-align: middle;
     white-space: nowrap;
+    height: 30px;
+    padding: 5px 13px;
 }
-
-/* 개별 정보 행 */
 .detailItem {
     display: flex;
     align-items: center;
     min-width: 0;
-    gap: 7px;    
-    height: 32px; 
-
+    gap: 7px;
+    height: 32px;
 }
 .detailLabel {
     min-width: 80px;
@@ -107,18 +107,16 @@
     margin-right: 7px;
     white-space: nowrap;
 }
-
 .detailValue {
     font-size: 1.07rem;
     color: #222;
     font-weight: 500;
-    flex: 1;
-    white-space: nowrap;
-    min-width: 0;
-    margin-right: 2px;           
+    white-space: normal;
+    word-break: break-all;
+    line-height: 1.6;
+    margin-right: 0;
+    display: inline-block;
 }
-
-
 .mapBox {
     width: 420px;
     height: 420px;
@@ -140,7 +138,6 @@
     background: #f6f8f8;
     border-radius: 18px;
 }
-
 .buttonGroup {
     display: flex;
     justify-content: center;
@@ -148,7 +145,6 @@
     margin-top: 18px;
     margin-bottom: 16px;
 }
-
 .modifyButton {
     padding: 14px 48px;
     border-radius: 9px;
@@ -182,7 +178,6 @@
 }
 .resetPasswordButton,
 .closeStoreButton {
-    margin-left: 7px;
     padding: 5px 13px;
     font-size: 14px;
     border: none;
@@ -193,17 +188,16 @@
     color: #fff;
     transition: background 0.2s;
     white-space: nowrap;
+    height: 30px;
 }
 .resetPasswordButton:hover,
 .closeStoreButton:hover {
     background: #455a64;
 }
 .resetPasswordButton {
-    margin-left: 30px;
+    vertical-align: middle;
     white-space: nowrap;
 }
-
-/* Modal */
 .modalOverlay {
     position: fixed;
     top: 0; left: 0;
@@ -286,4 +280,3 @@
 .cancelButton:hover {
     background-color: #6b746b;
 }
-

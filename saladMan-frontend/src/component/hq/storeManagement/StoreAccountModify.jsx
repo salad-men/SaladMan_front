@@ -29,6 +29,21 @@ export default function StoreAccountModify() {
     const navigate = useNavigate();
     const token = useAtomValue(accessTokenAtom);
     const id = new URLSearchParams(location.search).get("id");
+    
+    // 주소에서 도로명과 상세주소 분리 (마지막 토큰이 상세주소라고 가정)
+    function splitAddress(fullAddress) {
+        if (!fullAddress) return { address: '', detailAddress: '' };
+        // 마지막 숫자가 상세주소라면 (더 안전하게 하고 싶으면 정규표현식 활용)
+        const arr = fullAddress.trim().split(' ');
+        if (arr.length < 2) {
+            return { address: fullAddress, detailAddress: '' };
+        }
+        // 상세주소가 꼭 마지막에 온다는 전제 (더 복잡하게 할 수도 있음)
+        return {
+            address: arr.slice(0, -1).join(' '),
+            detailAddress: arr.slice(-1)[0]
+        };
+    }
 
     useEffect(() => {
         if (!token || !id) return;
@@ -36,18 +51,22 @@ export default function StoreAccountModify() {
             try {
                 const res = await myAxios(token).get("/hq/storeAccountDetail", { params: { id } });
                 const data = res.data;
+                const { address, detailAddress } = splitAddress(data.address);
+
                 setStore({
                     id: data.id || "",
                     storeName: data.name || "",
-                    address: data.address || "",
-                    detailAddress: "",
+                    address: address || "",
+                    detailAddress: detailAddress || "",
                     phoneNumber: data.phoneNumber || "",
                     region: data.location || "",
                     openTime: data.openTime || "",
                     closeTime: data.closeTime || "",
                     breakDay: data.breakDay || "",
                     deliveryDay: data.deliveryDay || "",
-                    username: data.username || ""
+                    username: data.username || "",
+                    createdAt: data.createdAt || ""
+
                 });
                 setCoords({
                     lat: data.latitude || 37.5665,
@@ -125,6 +144,8 @@ export default function StoreAccountModify() {
         }
     };
 
+
+
     return (
         <div className={styles.storeDetailContainer}>
             <EmpSidebar />
@@ -139,25 +160,27 @@ export default function StoreAccountModify() {
                             <ModifyItem label="매장명">
                                 <input type="text" name="storeName" value={store.storeName} onChange={edit} className={styles.inputBase} />
                             </ModifyItem>
-                            <ModifyItem label="주소">
-                                <input
-                                    type="text"
-                                    name="address"
-                                    value={store.address}
-                                    className={styles.inputBase}
-                                    readOnly
-                                />
-                                <button type="button" className={styles.checkButton} onClick={() => setIsOpen(true)}>검색</button>
-                            </ModifyItem>
-                            <ModifyItem label="상세주소">
-                                <input
-                                    type="text"
-                                    name="detailAddress"
-                                    value={store.detailAddress}
-                                    onChange={edit}
-                                    className={styles.inputBase}
-                                />
-                            </ModifyItem>
+                            <ModifyItem label="주소" wide>
+                            <input
+                                type="text"
+                                name="address"
+                                value={store.address}
+                                className={`${styles.inputBase} ${styles.addressInput}`}
+                                readOnly
+                            />
+                            <button type="button" className={styles.checkButton} onClick={() => setIsOpen(true)}>검색</button>
+                        </ModifyItem>
+                        <ModifyItem label="상세주소" wide>
+                            <input
+                                type="text"
+                                name="detailAddress"
+                                value={store.detailAddress}
+                                onChange={edit}
+                                className={styles.inputBase}
+                                placeholder="상세주소"
+                            />
+                        </ModifyItem>
+
                             <ModifyItem label="전화번호">
                                 <input
                                     type="text"
@@ -234,7 +257,7 @@ export default function StoreAccountModify() {
                         </div>
                     </div>
                     <div className={styles.buttonGroup}>
-                        <button type="button" className={styles.backButton} onClick={() => navigate(-1)}>목록</button>
+                        <button type="button" className={styles.backButton} onClick={() => navigate(-1)}>이전</button>
                         <button type="submit" className={styles.modifyButton} onClick={updateStore}>저장</button>
                     </div>
                 </div>
