@@ -162,9 +162,7 @@ export default function HqNoticeWrite() {
             </div>
           </div>
           <div className={styles.btnBox}>
-            <button type="submit" className={styles.btnSubmit}>
-              등록
-            </button>
+
             <button
               type="button"
               className={styles.btnCancel}
@@ -172,6 +170,10 @@ export default function HqNoticeWrite() {
             >
               목록
             </button>
+            <button type="submit" className={styles.btnSubmit}>
+              등록
+            </button>
+            
           </div>
         </form>
       </main>

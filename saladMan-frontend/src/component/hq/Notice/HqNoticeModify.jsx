@@ -191,7 +191,6 @@ export default function HqNoticeModify() {
             </div>
           </div>
           <div className={styles.btnBox}>
-            <button type="submit" className={styles.btnSubmit}>수정 완료</button>
             <button
               type="button"
               className={styles.btnCancel}
@@ -199,6 +198,7 @@ export default function HqNoticeModify() {
             >
               취소
             </button>
+            <button type="submit" className={styles.btnSubmit}>수정</button>
           </div>
         </form>
       </main>
