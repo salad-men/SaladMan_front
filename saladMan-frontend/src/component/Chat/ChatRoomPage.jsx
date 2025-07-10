@@ -98,7 +98,7 @@ export default function ChatRoomPage({ roomId, onClose, setRooms }) {
           <div key={i}
             className={msg.senderUsername === user.username ? styles.sent : styles.received}
           >
-            <b>{msg.senderUsername}:</b> {msg.message}
+            <b>{msg.senderStoreName}:</b> {msg.message}
           </div>
         ))}
       </div>
