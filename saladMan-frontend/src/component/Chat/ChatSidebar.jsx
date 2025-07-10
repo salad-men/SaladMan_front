@@ -48,7 +48,7 @@ export default function ChatSidebar({
           그룹채팅목록
         </button>
         <button onClick={() => setActiveTab("store")} className={activeTab === "store" ? styles.active : ""}>
-          Store 목록
+          매장 목록
         </button>
       </div>
       <div className={styles.tabContent}>
