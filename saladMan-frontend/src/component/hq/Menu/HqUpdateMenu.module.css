@@ -370,16 +370,16 @@ textarea.input {
 .ingredientGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 20px;
   margin-bottom: 22px;
   min-height: 48px;
-  justify-content: flex-start;
+  min-width: 420px;
 }
 .checkboxLabel {
+  min-width: 120px;
   display: flex;
   align-items: center;
   font-size: 0.99rem;
-  padding: 4px 8px;
+  padding: 4px 6px;
   border-radius: 7px;
   cursor: pointer;
   transition: background 0.11s;

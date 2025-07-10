@@ -129,7 +129,7 @@ function HqAlarmList() {
                     <td>{noti.title}</td>
                     <td>{noti.content}</td>
                     <td>{noti.isRead ? '읽음' : '안읽음'}</td>
-                    <td>{noti.sentAt}</td>
+                    <td>{noti.sendAt}</td>
                   </tr>
                 ))
               )}
