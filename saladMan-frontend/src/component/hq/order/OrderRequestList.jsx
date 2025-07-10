@@ -139,7 +139,7 @@ export default function OrderRequestList() {
                                 <option value="대기중">대기중</option>
                                 <option value="입고완료">입고완료</option>
                                 <option value="검수완료">검수완료</option>
-                                <option value="반려">반려</option>
+                                <option value="주문취소">주문취소</option>
                             </select>
 
                             <button className={styles.searchButton} onClick={() => handleSearch(1)}>검색</button>

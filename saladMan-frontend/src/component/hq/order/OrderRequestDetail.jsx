@@ -133,10 +133,10 @@ export default function OrderRequestDetail() {
                 purchaseOrderId: id,
                 selectedStockIds: item.selectedStockIds
             })));
-            alert("저장 완료");
-            navigate("/hq/orderRequest");
+            alert("승인 완료");
+            navigate(0);
         } catch (e) {
-            console.error("저장 실패", e);
+            console.error("승인 실패", e);
             alert("저장 중 오류 발생");
         }
     };
@@ -273,7 +273,7 @@ export default function OrderRequestDetail() {
                     <button className={styles.backButton} onClick={() => navigate(-1)} style={{ marginRight: 10 }}>목록</button>
 
                     {!isCompleted && (
-                        <button className={styles.submitButton} onClick={handleSubmit}>저장</button>
+                        <button className={styles.submitButton} onClick={handleSubmit}>승인</button>
                     )}
 
 
