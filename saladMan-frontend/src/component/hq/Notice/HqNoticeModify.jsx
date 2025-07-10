@@ -110,6 +110,7 @@ export default function HqNoticeModify() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className={styles.input}
+              maxLength={255}
               required
               placeholder="제목을 입력하세요"
             />
