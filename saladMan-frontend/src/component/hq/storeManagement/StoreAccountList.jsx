@@ -9,7 +9,7 @@ import { accessTokenAtom } from "/src/atoms";
 
 export default function StoreAccountList() {
     const [location, setLocation] = useState("전체 지역");
-    const [status, setStatus] = useState("전체 상태");
+    const [status, setStatus] = useState("");
     const [keyword, setKeyword] = useState("");
     const [stores, setStores] = useState([]);
     const navigate = useNavigate();
@@ -19,10 +19,15 @@ export default function StoreAccountList() {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        if(!token) return;
+        if (!token) return;
 
         fetchStores();
     }, [token]);
+
+    useEffect(() => {
+    if (!token) return;
+    fetchStores(0);
+}, [location, status]);
 
     const fetchStores = async (page = 0) => {
         try {
@@ -53,6 +58,13 @@ export default function StoreAccountList() {
 
     const handleSearch = () => {
         fetchStores(0);
+    };
+
+    const handleReset = () => {
+        setLocation("전체 지역");
+        setStatus("");
+        setKeyword("");
+        setCurrentPage(0);
     };
 
     return (
@@ -86,16 +98,19 @@ export default function StoreAccountList() {
                                 <option>세종</option>
                             </select>
 
-                            {/* <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                                <option>매장 상태</option>
-                                <option value="true">운영</option>
-                                <option value="false">폐점</option>
-                                </select> */}
+                            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                                <option value="">운영상태</option>
+                                <option value="운영중">운영중</option>
+                                <option value="운영종료">운영종료</option>
+                            </select>
 
                             <input type="text" placeholder="검색어 입력" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
                             <button className={styles.searchButton} onClick={handleSearch}>검색</button>
-                                <button className={styles.registerButton} onClick={() => navigate("/hq/storeRegister")}>매장등록</button>
+                            <button className={styles.resetButton} onClick={handleReset}>초기화</button>
+
                         </div>
+                        <button className={styles.registerButton} onClick={() => navigate("/hq/storeRegister")}>매장등록</button>
+
                     </div>
 
                     <table className={styles.storeAccountTable}>
@@ -108,7 +123,7 @@ export default function StoreAccountList() {
                                 <th>전화번호</th>
                                 <th>계정</th>
                                 <th>계정 생성일</th>
-                                <th>상태</th>
+                                <th>운영상태</th>
                                 <th>수정</th>
                             </tr>
                         </thead>
@@ -150,9 +165,9 @@ export default function StoreAccountList() {
                                     </td>
                                     <td>
                                         <button className={styles.editButton} onClick={(e) => {
-            e.stopPropagation(); // ← 중요! tr 클릭 이벤트 방지
-            navigateToModify(store.id); // 수정 페이지로 이동
-        }}>수정</button>
+                                            e.stopPropagation(); // ← 중요! tr 클릭 이벤트 방지
+                                            navigateToModify(store.id); // 수정 페이지로 이동
+                                        }}>수정</button>
                                     </td>
                                 </tr>
                             ))}

@@ -257,7 +257,7 @@ export default function StoreAccountModify() {
                         </div>
                     </div>
                     <div className={styles.buttonGroup}>
-                        <button type="button" className={styles.backButton} onClick={() => navigate(-1)}>이전</button>
+                        <button type="button" className={styles.backButton} onClick={() => navigate("/hq/storeAccount")}>이전</button>
                         <button type="submit" className={styles.modifyButton} onClick={updateStore}>저장</button>
                     </div>
                 </div>

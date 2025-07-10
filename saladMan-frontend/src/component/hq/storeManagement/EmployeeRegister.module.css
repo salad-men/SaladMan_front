@@ -89,7 +89,7 @@
 .formRight {
   flex: 1;
   min-width: 340px;
-  max-width: 510px;
+  max-width: 535px;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -117,11 +117,11 @@
   padding: 13px 16px;
   border: 1.5px solid #b4c7b3;
   border-radius: 7px;
-  font-size: 17px;
+  font-size: 16px;
   background: #fff;
   box-sizing: border-box;
   flex: 1;
-  min-width: 100px;
+  min-width: 150px;
   margin-right: 10px;
 }
 .formRow input[type="password"] {
