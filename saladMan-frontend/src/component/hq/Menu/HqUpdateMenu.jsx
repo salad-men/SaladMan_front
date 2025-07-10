@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import HqSidebarMenu from "./HqSidebarMenu";
 import { myAxios } from "../../../config";
 import { accessTokenAtom } from "/src/atoms";
+import { useMemo } from "react";
 import styles from "./HqUpdateMenu.module.css";
 
 export default function HqUpdateMenu() {
@@ -61,7 +62,7 @@ export default function HqUpdateMenu() {
       const existingIds = prev.map((i) => i.ingredientId);
       const newItems = selected
         .filter((ing) => !existingIds.includes(ing.ingredientId))
-        .map((ing) => ({ ...ing, quantity: "" }));
+        .map((ing) => ({ ...ing, quantity: 0 }));
       return [...prev, ...newItems];
     });
     setModalOpen(false);
@@ -97,6 +98,9 @@ export default function HqUpdateMenu() {
     if (!menuName || !salePrice || !selectedMenuCategoryId) {
       return alert("메뉴 이름, 가격, 카테고리를 모두 입력하세요.");
     }
+    if (ingredientDetails.length < 5 || ingredientDetails.length > 8) {
+      return alert("재료는 5개 이상 8개 이하로 선택해주세요.");
+    }
     const menu = {
       name: menuName,
       salePrice: parseInt(salePrice),
@@ -121,6 +125,26 @@ export default function HqUpdateMenu() {
       console.error(err);
     }
   };
+
+  //원가계산
+  const originPrice = useMemo(() => {
+  return ingredientDetails.reduce((sum, ing) => {
+    const qty = parseFloat(ing.quantity);
+    const price = parseFloat(ing.price);
+    if (!isNaN(qty) && !isNaN(price)) {
+      return sum + qty * price;
+    }
+    return sum;
+  }, 0);
+}, [ingredientDetails]);
+
+useEffect(() => {
+  const rawPrice = originPrice * 2.5;
+  const rounded = Math.ceil(rawPrice / 100) * 100;
+  if (!isNaN(rounded)) setSalePrice(rounded.toString());
+}, [originPrice]);
+
+
 
   return (
     <div className={styles.container}>
@@ -210,13 +234,23 @@ export default function HqUpdateMenu() {
             <div className={styles.formRow}>
               <label className={styles.formLabel}>판매가</label>
               <input
-                type="number"
+                type="text"
                 className={styles.input}
                 value={salePrice}
                 onChange={(e) => setSalePrice(e.target.value)}
                 placeholder="판매가 (₩)"
                 min="0"
                 required
+              />
+              {/* 원가 */}
+              <label className={styles.formLabel}>원가</label>
+              <input
+                type="text"
+                className={styles.input}
+                value={originPrice.toLocaleString()}
+                placeholder="판매가 (₩)"
+                min="0"
+                readOnly
               />
             </div>
 
@@ -237,9 +271,10 @@ export default function HqUpdateMenu() {
                 <table className={styles.ingredientTable}>
                   <thead>
                     <tr>
-                      {/* <th>카테고리</th> */} {/* 카테고리 뺄 경우 */}
                       <th>재료명</th>
                       <th>용량</th>
+                      <th>단가</th>
+                      <th>원가</th>
                       <th>-</th>
                     </tr>
                   </thead>
@@ -275,6 +310,12 @@ export default function HqUpdateMenu() {
                             />
                             <span className={styles.unit}>{ing.unit}</span>
                           </div>
+                        </td>
+                        <td>{ing.price}원</td>
+                        <td>
+                          {ing.quantity && !isNaN(ing.quantity)
+                            ? `${(Number(ing.quantity) * Number(ing.price)).toLocaleString()}원`
+                            : "-"}
                         </td>
                         <td>
                           <button

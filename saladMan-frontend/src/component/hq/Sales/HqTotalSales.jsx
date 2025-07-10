@@ -38,9 +38,10 @@ export default function HqTotalSales() {
   const donutChartRef = useRef(null);
   const [token] = useAtom(accessTokenAtom);
 
-  const [startDate, setStartDate] = useState(
-    new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().slice(0, 10)
-  );
+  const [startDate, setStartDate] = useState(() => {
+    const date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    return date.toLocaleDateString("sv-SE");
+  });
   const [endDate, setEndDate] = useState(getToday());
 
   // 단위(일/주/월) 변경시 바로 조회
@@ -65,16 +66,6 @@ export default function HqTotalSales() {
     }
   };
 
-  // 검색 수동(날짜 바꾼 뒤 누르면)
-  const handleSearch = () => {
-    if (!token) return;
-    if (!startDate || !endDate) return alert('날짜를 선택해주세요');
-    const axios = myAxios(token);
-    axios.get('/hq/totalSales', { params: { startDate, endDate, groupType } })
-      .then(res => setSalesData(res.data))
-      .catch(() => alert("매출 데이터 불러오기 실패"));
-  };
-
   useEffect(() => {
     if (!salesData) return;
     const raw = [...salesData.popularMenus].sort((a, b) => b.quantity - a.quantity);
@@ -90,15 +81,6 @@ export default function HqTotalSales() {
       data: {
         labels: salesData.daily.map(d => d.date),
         datasets: [
-          {
-            label: '판매량',
-            data: salesData.daily.map(d => d.quantity),
-            borderColor: '#4D774E',
-            backgroundColor: '#eaf3eb',
-            yAxisID: 'y',
-            tension: 0.3,
-            fill: true
-          },
           {
             label: '매출',
             data: salesData.daily.map(d => d.revenue),
@@ -186,6 +168,30 @@ export default function HqTotalSales() {
                   <h4>인기 판매 항목</h4>
                   <canvas ref={donutChartRef} width={400} height={310}/>
                 </div>
+                <div className={styles.salesTableWrap} style={{ marginTop: '2rem' }}>
+                <h3 className={styles.subTitle}>메뉴별 판매 수량</h3>
+                <div className={styles.tableScroll}>
+                  <table className={styles.salesTable}>
+                    <thead>
+                      <tr>
+                        <th className={styles.menuCell}>메뉴명</th>
+                        <th className={styles.qtyCell}>판매 수량</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     {[...salesData.popularMenus]
+                        .sort((a, b) => b.quantity - a.quantity)
+                        .slice(0, 5)
+                        .map((m) => (
+                        <tr key={m.menuName}>
+                          <td className={styles.left}>{m.menuName}</td>
+                          <td className={styles.right}>{m.quantity.toLocaleString()}건</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
                 <div className={`${styles.box} ${styles.chartBoxWide}`}>
                   <h4>판매 추이</h4>
                   <canvas ref={barChartRef} width={510} height={310}/>
@@ -198,9 +204,11 @@ export default function HqTotalSales() {
                     <table className={styles.salesTable}>
                     <thead>
                         <tr>
-                        <th className={styles.dateCell}>날짜</th>
+                        <th className={styles.qtyCell}>날짜</th>
                         <th className={styles.qtyCell}>판매량</th>
-                        <th className={styles.priceCell}>매출</th>
+                        <th className={styles.qtyCell}>매출</th>
+                        <th className={styles.qtyCell}>원가</th>
+                        <th className={styles.qtyCell}>순이익</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -213,6 +221,8 @@ export default function HqTotalSales() {
                             </td>
                             <td className={styles.qtyCell}>{d.quantity}</td>
                             <td className={styles.priceCell}>₩{d.revenue.toLocaleString()}</td>
+                            <td className={styles.priceCell}>₩{d.cost.toLocaleString()}</td>
+                            <td className={styles.priceCell}>₩{d.profit.toLocaleString()}</td>
                         </tr>
                         ))}
                     </tbody>
