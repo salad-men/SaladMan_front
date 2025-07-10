@@ -34,7 +34,7 @@
   cursor: pointer;
 }
 .registerButton:hover {
-  background-color: #286180;
+  background-color: #194760;
 }
 .searchGroup {
   display: flex;
@@ -59,6 +59,15 @@
 }
 .searchButton:hover {
   background-color: #194760;
+}
+.selectName{
+  font-family: 'Noto Sans KR', sans-serif;
+  width: 120px;
+  padding: 6px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
 }
 .employeeTable {
   width: 100%;
@@ -97,7 +106,7 @@
   cursor: pointer;
 }
 .pagination .active, .pagination button:active {
-  background: #4D774E;
+  background: #286180;
   color: #fff;
 }
 
@@ -138,6 +147,7 @@
   width: 120px;
   padding: 4px 6px;
   font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 .detailGrid span {
   font-size: 14px;
@@ -154,7 +164,7 @@
   padding: 7px 18px;
   border-radius: 6px;
   border: none;
-  background: #4D774E;
+  background: #286180;
   color: #fff;
   font-size: 15px;
   cursor: pointer;
@@ -168,20 +178,6 @@
   font-size: 15px;
   cursor: pointer;
 }
-.editButton:hover, .saveButton:hover { background: #3a5e3b; }
-.cancelButton:hover { background: #333; }
-.detailGrid label { min-width: 56px; }
-.detailGrid input, .detailGrid select { width: 120px; padding: 4px 6px; font-size: 14px; }
-.detailGrid img { vertical-align: middle; }
-.detailModalBtnRow { display: flex; justify-content: flex-end; gap: 10px; margin-top: 28px; }
-.editButton, .saveButton {
-  padding: 7px 18px; border-radius: 6px; border: none;
-  background: #4D774E; color: #fff; font-size: 15px; cursor: pointer;
-}
-.cancelButton {
-  padding: 7px 18px; border-radius: 6px; border: none;
-  background: #888; color: #fff; font-size: 15px; cursor: pointer;
-}
-.editButton:hover, .saveButton:hover { background: #3a5e3b; }
+.editButton:hover, .saveButton:hover { background: #194760; }
 .cancelButton:hover { background: #333; }
 .errorMsg { color: crimson; font-size: 13px; margin: 8px 0 0 4px; }

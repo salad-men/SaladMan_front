@@ -1,13 +1,12 @@
 .stockInspectionContainer {
     display: flex;
-    height: calc(100vh - 64px);
     overflow: hidden;
-        padding: 24px 100px 0 280px;
+    padding: 24px 100px 0 280px;
 }
 
 .stockInspectionContent {
     flex: 1;
-  padding: 30px 20px;
+    padding: 30px 20px;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -16,22 +15,23 @@
 }
 
 .title {
-  margin: 0 0 16px;
-  font-size: 28px;
-  color: #53756e;
-  font-weight: bold;
+    margin: 0 0 16px;
+    font-size: 28px;
+    color: #286180;
+    font-weight: bold;
 }
 
 .infoBox {
     margin-bottom: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #dce3e9;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: #f7f9fa;
 }
 
 .infoBox p {
     margin: 4px 0;
     font-size: 14px;
+    color: #286180;
 }
 
 .inspectorBox {
@@ -43,126 +43,14 @@
 }
 
 .inspectorBox span {
-
     display: inline-flex;
 }
 
 .inspectorBox select {
     padding: 6px;
     margin-left: 4px;
-}
-
-.inspectionTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.inspectionTable th,
-.inspectionTable td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-}
-
-.inspectionTable th {
-    background-color: #e9f3e9;
-    font-weight: bold;
-}
-
-.inspectionTable .inputBox {
-    width: 80px;
-    padding: 6px;
-}
-
-.inspectionTable .selectBox {
-    padding: 6px;
-}
-
-.inspectionTable .textArea {
-    width: 90%;
-    height: 20px;
-    padding: 6px;
-    resize: none;
-}
-
-.footerSection {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 20px;
-    width: 100%;
-}
-
-.completeButton {
-    background-color: #4D774E;
-    color: white;
-    border: none;
-    padding: 10px 16px;
+    border: 1px solid #a8bcc6;
     border-radius: 4px;
-    cursor: pointer;
-}
-
-.completeButton:hover {
-    background-color: #3a5e3b;
-}
-
-.statusText {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-
-/* 모바일: flex-direction column */
-@media (max-width: 768px) {
-    .stockInspectionContainer {
-        flex-direction: column;
-        height: auto;
-    }
-}
-
-
-/* 모바일 padding 축소 */
-@media (max-width: 768px) {
-    .stockInspectionContent {
-        padding: 20px 16px;
-        border-left: none;
-    }
-}
-
-
-@media (max-width: 768px) {
-    .title {
-        font-size: 20px;
-        margin-bottom: 20px;
-    }
-}
-
-.infoBox {
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-
-.infoBox p {
-    margin: 4px 0;
-    font-size: 14px;
-}
-
-/* inspectorBox 모바일에서는 왼쪽 정렬 */
-.inspectorBox {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin: 10px 0;
-    font-size: 14px;
-}
-
-@media (max-width: 768px) {
-    .inspectorBox {
-        justify-content: flex-start;
-    }
 }
 
 .inspectionTableWrapper {
@@ -173,39 +61,48 @@
 .inspectionTable {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
 .inspectionTable th,
 .inspectionTable td {
-    border: 1px solid #ccc;
+    border: 1px solid #dce3e9;
     padding: 12px;
     text-align: center;
     white-space: nowrap;
     font-size: 14px;
 }
 
-@media (max-width: 768px) {
-
-    .inspectionTable th,
-    .inspectionTable td {
-        padding: 8px;
-        font-size: 15px;
-    }
-}
-
 .inspectionTable th {
-    background-color: #e9f3e9;
+    background-color: #dce3e9;
+    color: #2d4836;
+    font-weight: bold;
 }
 
-.selectBox {
-    padding: 6px;
-    min-width: 100px;
+.inspectionTable tbody tr:hover {
+    background-color: #edf4f7;
 }
 
-.textArea {
-    width: 100%;
-    height: 28px;
+.inspectionTable .inputBox {
+    width: 80px;
     padding: 6px;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
+}
+
+.inspectionTable .selectBox {
+    padding: 6px;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
+}
+
+.inspectionTable .textArea {
+    width: 90%;
+    height: 20px;
+    padding: 6px;
+    resize: none;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
 }
 
 .footerSection {
@@ -215,7 +112,7 @@
 }
 
 .completeButton {
-    background-color: #4D774E;
+    background-color: #286180;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -223,8 +120,39 @@
     border-radius: 4px;
     cursor: pointer;
     width: 100%;
+    transition: background-color 0.2s;
 }
 
 .completeButton:hover {
-    background-color: #3a5e3b;
+    background-color: #1a445a;
+}
+
+.statusText {
+    font-size: 14px;
+    font-weight: bold;
+    color: #286180;
+}
+
+/* 모바일: flex-direction column */
+@media (max-width: 768px) {
+    .stockInspectionContainer {
+        flex-direction: column;
+        height: auto;
+    }
+    .stockInspectionContent {
+        padding: 20px 16px;
+        border-left: none;
+    }
+    .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    .inspectorBox {
+        justify-content: flex-start;
+    }
+    .inspectionTable th,
+    .inspectionTable td {
+        padding: 8px;
+        font-size: 15px;
+    }
 }

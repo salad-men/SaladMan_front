@@ -226,7 +226,7 @@ export default function StoreInventoryRecord() {
                   fetchRecords(1);
                 }}>초기화</button>
               <div className={styles.rightActions}>
-                <button className={styles.addBtn} type="button" onClick={openModal}>+ 등록</button>
+                <button className={styles.addBtn} type="button" onClick={openModal}>+ 등록하기</button>
                 
                 <div className={styles.tabBtns}>
                   <button

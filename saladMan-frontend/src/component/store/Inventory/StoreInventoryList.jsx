@@ -237,7 +237,7 @@ export default function StoreInventoryList() {
                 value={filters.startDate}
                 onChange={onFilterChange}
               />
-              <span className={styles.labelSep}>~</span>
+              <span>~</span>
               <input
                 type="date"
                 className={styles.inputDate}
@@ -298,7 +298,7 @@ export default function StoreInventoryList() {
                 className={styles.btnNew}
                 onClick={() => setAddModalOpen(true)}
               >
-                재고추가
+                + 재고추가
               </button>
               <select
                 className={styles.selectSort}

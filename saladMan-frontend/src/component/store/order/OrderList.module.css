@@ -1,7 +1,5 @@
-/* OrderList.module.css */
 .orderListContainer {
     display: flex;
-    height: calc(100vh - 64px);
     overflow: hidden;
     padding: 24px 100px 0 280px;
 }
@@ -15,8 +13,6 @@
     min-width: 0;
     position: relative;
     overflow-y: auto;
-    /* 내용 스크롤 */
-
 }
 
 .orderListContent h2 {
@@ -27,7 +23,7 @@
 }
 
 .filters {
-    margin-bottom: 40px;
+    margin-bottom: 22px;
     width: 80%;
 }
 
@@ -41,25 +37,21 @@
 .filters label {
     font-weight: bold;
     font-size: 14px;
+    color: #286180;
 }
 
-.filters input[type="date"] {
-    padding: 6px 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200px;
-}
-
-.filters input[type="text"] {
- font-family: 'Noto Sans KR', sans-serif; padding: 6px; border: 1px solid #b4c7b3; border-radius: 4px; }
-
-
+.filters input[type="date"],
+.filters input[type="text"],
 .filters select {
     padding: 6px 10px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid #a8bcc6;
     border-radius: 4px;
+    background: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.filters select {
     width: 175px;
     margin-right: 10px;
 }
@@ -79,34 +71,41 @@
 .dateButton {
     padding: 6px 10px;
     font-size: 14px;
-    border: none;
+    background: #f7f9fa;
+    color: #286180;
+    border: 1px solid #286180;
     border-radius: 4px;
     cursor: pointer;
 }
 
 .dateButton:hover {
-    background-color: #f0f0f0;
+    background-color: #286180;
+    color: #fff;
 }
 
 .dateButton.selected {
-    background-color: #4D774E;
+    background-color: #286180;
     color: white;
-    border: 1px solid #4D774E;
+    border: 1px solid #286180;
 }
 
-
 .searchButton {
-  padding: 6px 14px; background-color: #4d774e; color: #ffffff;
-  border-radius: 4px; border: none; cursor: pointer; margin-right: 2px;
+    padding: 6px 14px;
+    background-color: #286180;
+    color: #ffffff;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-right: 2px;
 }
 
 .resetButton {
-    background-color: #aaa;
+    background-color: #9aa9b0;
     color: white;
 }
 
 .activeButton {
-    background-color: #4D774E;
+    background-color: #286180;
     color: white;
     border: none;
     border-radius: 4px;
@@ -114,9 +113,13 @@
     cursor: pointer;
 }
 
+.activeButton:hover {
+    background-color: #1a445a;
+}
+
 .disabledButton {
-    background-color: #ddd;
-    color: #aaa;
+    background-color: #f0f1f4;
+    color: #c0cfc3;
     border: none;
     border-radius: 4px;
     padding: 4px 10px;
@@ -128,11 +131,9 @@
     margin-bottom: 20px;
     overflow-x: auto;
     max-width: 1100px;
-    border: 1px solid #e4e9e7;
+    border: 1px solid #dce3e9;
     overflow-y: auto;
-    /* 수직 스크롤 */
     max-height: 500px;
-    /* 원하는 높이 */
 }
 
 .orderTableWrapper::-webkit-scrollbar {
@@ -145,20 +146,16 @@
 }
 
 .orderTableWrapper::-webkit-scrollbar-thumb {
-    background-color: #4D774E;
+    background-color: #286180;
     border-radius: 4px;
-    border: 1px solid #3a5e3b;
+    border: 1px solid #1a445a;
 }
 
 .orderTableWrapper::-webkit-scrollbar-thumb:hover {
-    background: #3a5e3b;
+    background: #1a445a;
 }
 
-/* 화살표, 스크롤 버튼 완전 제거 */
-.orderTableWrapper::-webkit-scrollbar-button,
-.orderTableWrapper::-webkit-scrollbar-button:single-button,
-.orderTableWrapper::-webkit-scrollbar-button:decrement,
-.orderTableWrapper::-webkit-scrollbar-button:increment {
+.orderTableWrapper::-webkit-scrollbar-button {
     display: none;
     width: 0;
     height: 0;
@@ -170,97 +167,41 @@
     border-collapse: collapse;
     font-size: 14px;
     table-layout: fixed;
-    /* 열 너비 고정 */
-
 }
 
 .orderTable thead th {
     position: sticky;
     top: 0;
-    background-color: #e9f3e9;
+    background-color: #dce3e9;
     z-index: 1;
 }
 
 .orderTable th,
 .orderTable td {
-    border: 1px solid #ccc;
-    padding: 10px;
+    border: 1px solid #dce3e9;
+    padding: 9px;
     text-align: center;
 }
 
 .orderTable th {
-    background-color: #e9f3e9;
+    background-color: #dce3e9;
+    color: #2d4836;
     font-weight: bold;
 }
 
 .orderTable td {
     white-space: nowrap;
-    /* 줄바꿈 방지 */
     overflow: hidden;
-    /* 넘친 내용 숨김 */
     text-overflow: ellipsis;
-    /* 말줄임표 처리 */
-}
-
-/* 각 열 가로 폭 고정 */
-.orderTable th:nth-child(1),
-.orderTable td:nth-child(1) {
-    width: 50px;
-    /* 주문 번호 */
-}
-
-.orderTable th:nth-child(2),
-.orderTable td:nth-child(2) {
-    width: 80px;
-    /* 발주유형 */
-}
-
-.orderTable th:nth-child(3),
-.orderTable td:nth-child(3) {
-    width: 120px;
-    /* 품명 */
-}
-
-.orderTable th:nth-child(4),
-.orderTable td:nth-child(4) {
-    width: 200px;
-    /* 발주일 */
-}
-
-.orderTable th:nth-child(5),
-.orderTable td:nth-child(5) {
-    width: 120px;
-    /* 상태 */
-}
-
-.orderTable th:nth-child(6),
-.orderTable td:nth-child(6) {
-    width: 80px;
-    /* 입고량 */
-}
-
-.orderTable th:nth-child(7),
-.orderTable td:nth-child(7) {
-    width: 150px;
-    /* 합계 */
-}
-
-.orderTable th:nth-child(8),
-.orderTable td:nth-child(8) {
-    width: 100px;
-    /* 기타 */
 }
 
 .orderTable tbody tr {
     cursor: pointer;
-    /* 마우스 커서를 손가락으로 */
     transition: background-color 0.2s ease;
-    /* 부드러운 색 전환 */
 }
 
 .orderTable tbody tr:hover {
-    background-color: #f0f5f0;
-    /* 살짝 연녹색 호버 색상 */
+    background-color: #edf4f7;
 }
 
 .pagination {
@@ -272,15 +213,18 @@
 
 .pagination button {
     padding: 6px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #9bb7c6;
     background-color: white;
+    color: #286180;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .pagination .active {
-    background-color: #4D774E;
+    background-color: #286180;
     color: white;
     font-weight: bold;
+    border-color: #286180;
 }
 
 .clickableRow {

@@ -228,7 +228,7 @@ export default function StoreIngredientSetting() {
               />
               <button className={styles.searchBtn} onClick={() => fetchSettings(1)}>검색</button>
               <div className={styles.rightActions}>
-                <button className={styles.addBtn} onClick={onClickAddMode} disabled={isAddMode}>추가</button>
+                <button className={styles.addBtn} onClick={onClickAddMode} disabled={isAddMode}>+ 추가하기</button>
               </div>
             </div>
           </div>

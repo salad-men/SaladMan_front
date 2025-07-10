@@ -1,6 +1,5 @@
 .orderSettingContainer {
     display: flex;
-    height: calc(100vh - 64px);
     overflow: hidden;
     padding: 24px 100px 0 280px;
     background-color: #f9f9f9;
@@ -17,7 +16,6 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     max-width: 1000px;
-    /* ✅ 원하는 최대 폭 (예: 900~1200px 사이 추천) */
     margin: 0 auto;
 }
 
@@ -59,10 +57,7 @@
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background-color: #ccc;
     transition: 0.4s;
     border-radius: 34px;
@@ -81,7 +76,7 @@
 }
 
 input:checked+.slider {
-    background-color: #4d774e;
+    background-color: #286180;
 }
 
 input:checked+.slider::before {
@@ -123,7 +118,7 @@ input:checked+.slider::before {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    border: 1px solid #e1e4e8;
+    border: 1px solid #dce3e9;
     border-radius: 8px;
     overflow: hidden;
 }
@@ -136,7 +131,8 @@ input:checked+.slider::before {
 }
 
 .autoTable th {
-    background-color: #f0f4f2;
+    background-color: #dce3e9;
+    color: #2d4836;
     font-weight: 600;
 }
 
@@ -146,13 +142,13 @@ input:checked+.slider::before {
 }
 
 .autoTable tbody tr:hover {
-    background-color: #f7f9f8;
+    background-color: #edf4f7;
 }
 
 .autoTable input[type="number"] {
     width: 70px;
     padding: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid #a8bcc6;
     border-radius: 4px;
 }
 
@@ -171,21 +167,23 @@ input:checked+.slider::before {
     width: 30px;
     height: 30px;
     border: none;
-    background: #e2e8e4;
+    background: #dce3e9;
+    color: #286180;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
+    transition: background 0.2s;
 }
 
 .qtyControl button:hover {
-    background: #d3ddd8;
+    background: #c6d5e0;
 }
 
 .qtyControl input {
     width: 60px;
     text-align: center;
-    border: 1px solid #ccc;
+    border: 1px solid #a8bcc6;
     border-radius: 4px;
     height: 30px;
 }
@@ -197,7 +195,7 @@ input:checked+.slider::before {
 }
 
 .saveButton {
-    background-color: #4d774e;
+    background-color: #286180;
     color: white;
     border: none;
     padding: 10px 24px;
@@ -208,54 +206,50 @@ input:checked+.slider::before {
 }
 
 .saveButton:hover {
-    background-color: #3a5c3b;
+    background-color: #1a445a;
 }
 
+/* 스크롤바 */
 .orderSettingContent::-webkit-scrollbar {
-  width: 10px;             /* 세로 스크롤 너비 */
-  height: 10px;            /* 가로 스크롤 높이 */
+    width: 10px;
+    height: 10px;
 }
 
 .orderSettingContent::-webkit-scrollbar-track {
-  background: #f0f0f0;     /* 스크롤 트랙 색상 */
-  border-radius: 4px;
+    background: #f0f0f0;
+    border-radius: 4px;
 }
 
 .orderSettingContent::-webkit-scrollbar-thumb {
-  background-color: #4D774E; /* 초록색 스크롤바 */
-  border-radius: 4px;
-  border: 2px solid #f0f0f0;
+    background-color: #286180;
+    border-radius: 4px;
+    border: 2px solid #f0f0f0;
 }
 
-/* Firefox */
 .orderSettingContent {
-  scrollbar-color: #4D774E #f0f0f0;
-  scrollbar-width: thin;
+    scrollbar-color: #286180 #f0f0f0;
+    scrollbar-width: thin;
 }
 
-/* 위아래 화살표 제거 (크롬/엣지) */
 .orderSettingContent::-webkit-scrollbar-button {
-  display: none;
+    display: none;
 }
 
-/* input type=number의 기본 화살표 없애기 (크롬, 사파리, 엣지) */
 .autoTable input[type="number"]::-webkit-inner-spin-button,
 .autoTable input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
-
-/* Firefox */
 .autoTable input[type="number"] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .footerSticky {
-  position: sticky;
-  bottom: 0;
-  background-color: white;
-  padding: 1rem;
-  text-align: right;
-  border-top: 1px solid #ccc;
-  z-index: 10;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    padding: 1rem;
+    text-align: right;
+    border-top: 1px solid #dce3e9;
+    z-index: 10;
 }

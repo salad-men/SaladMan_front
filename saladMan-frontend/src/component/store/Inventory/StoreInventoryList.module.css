@@ -5,8 +5,8 @@
 }
 .content {
   flex: 1;
-  margin: 0px;
   overflow: hidden;
+  padding: 24px 100px 0 280px;
 }
 .innerContainer {
   background: #fff;
@@ -15,9 +15,10 @@
 }
 .title {
   font-size: 1.8rem;
-  color: #2f6042;
+  color: #286180;
   margin-bottom: 16px;
-  margin-top: 16px;
+  font-weight: 600;
+  margin-top: 0px;
 }
 
 /* 필터 영역 */
@@ -35,30 +36,31 @@
 .labelDate {
   font-weight: 600;
   width: 60px;
-  color: #3d5a40;
+  color: #286180;
 }
 .inputDate {
   font-family: 'Noto Sans KR', sans-serif;
   padding: 6px;
-  border: 1px solid #b4c7b3;
+  border: 1px solid #a8bcc6;
   border-radius: 4px;
+  font-size: 14px;
+  width: 190px;
 }
 .labelSep {
-  font-size: 1.2rem;
-  color: #3d5a40;
+  color: #286180;
 }
 .periodBtn {
   padding: 4px 10px;
-  border: 1px solid #4d774e;
-  background: #f7faf8;
-  color: #4d774e;
+  border: 1px solid #286180;
+  background: #f7f9fa;
+  color: #286180;
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
   transition: background 0.2s;
 }
 .periodBtn:hover {
-  background: #4d774e;
+  background: #286180;
   color: white;
 }
 .rowFilter {
@@ -68,24 +70,24 @@
   flex-wrap: wrap;
 }
 .selectCategory,
-.selectSort {
-  padding: 6px 10px;
-  border: 1px solid #b4c7b3;
+.selectSort {  font-family: 'Noto Sans KR', sans-serif;
+  width: 190px;
+  padding: 6px;
+  border: 1px solid #a8bcc6;
   border-radius: 4px;
   background: #fff;
   font-size: 14px;
-  cursor: pointer;
 }
 .inputSearch {
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 4px;
-  border: 1px solid #b4c7b3;
+  border: 1px solid #a8bcc6;
   font-size: 14px;
-  width: 160px;
+  width: 180px;
 }
 .btnSearch {
   padding: 6px 14px;
-  background-color: #4d774e;
+  background-color: #286180;
   color: #ffffff;
   border-radius: 4px;
   border: none;
@@ -93,11 +95,11 @@
   margin-right: 8px;
 }
 .btnSearch:hover {
-  background-color: #3b663b;
+  background-color: #1a445a;
 }
 .btnNew {
   padding: 6px 14px;
-  background-color: #2196f3;
+  background-color: #607d8b;
   color: #ffffff;
   border-radius: 4px;
   border: none;
@@ -105,7 +107,7 @@
   margin-left: auto;
 }
 .btnNew:hover {
-  background-color: #1976d2;
+  background-color: #455a64;
 }
 
 /* 모달 관련 */
@@ -128,7 +130,7 @@
 }
 .modalHeader {
   font-size: 1.5rem;
-  color: #2f6042;
+  color: #286180;
   text-align: center;
   margin-bottom: 16px;
 }
@@ -140,22 +142,18 @@
 .modalTable th,
 .modalTable td {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #dce3e9;
   text-align: center;
   font-size: 14px;
   vertical-align: middle;
 }
 .modalTr:nth-child(even) {
-  background-color: #fafafa;
+  background-color: #f8fafb;
 }
 .modalTable th:nth-child(1),
-.modalTable td:nth-child(1) {
-  width: 20%;
-}
+.modalTable td:nth-child(1) { width: 20%; }
 .modalTable th:nth-child(2),
-.modalTable td:nth-child(2) {
-  width: 25%;
-}
+.modalTable td:nth-child(2) { width: 25%; }
 .modalTable th:nth-child(3),
 .modalTable td:nth-child(3),
 .modalTable th:nth-child(4),
@@ -163,9 +161,7 @@
 .modalTable th:nth-child(5),
 .modalTable td:nth-child(5),
 .modalTable th:nth-child(6),
-.modalTable td:nth-child(6) {
-  width: 10%;
-}
+.modalTable td:nth-child(6) { width: 10%; }
 .modalTable select,
 .modalTable input[type="text"],
 .modalTable input[type="number"],
@@ -174,7 +170,7 @@
   box-sizing: border-box;
   padding: 6px 8px;
   font-size: 14px;
-  border: 1px solid #b4c7b3;
+  border: 1px solid #a8bcc6;
   border-radius: 4px;
   text-align: center;
 }
@@ -207,13 +203,11 @@
 .btnAddRow:hover {
   background-color: #455a64;
 }
-.btnModalSave,
-.btnModalCancel {
+.btnModalSave {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 36px;
-  line-height: 1;
   padding: 0 18px;
   background-color: #4caf50;
   color: white;
@@ -223,14 +217,22 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-.btnModalSave {
-  background-color: #4caf50;
-}
 .btnModalSave:hover {
   background-color: #3b8c63;
 }
 .btnModalCancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 18px;
   background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 .btnModalCancel:hover {
   background-color: #d32f2f;
@@ -240,6 +242,8 @@
 .tableArea {
   overflow-x: auto;
   margin-bottom: 24px;
+  border-radius:6px;
+    border: 1px solid #dce3e9;
 }
 .mainTable {
   width: 100%;
@@ -249,42 +253,18 @@
 .mainTable th,
 .mainTable td {
   padding: 10px;
-  border: 1px solid #e4e9e7;
+  border: 1px solid #dce3e9;
   text-align: center;
 }
 .mainTable th {
-  background: #eaf3eb;
+  background: #dce3e9;
   color: #2d4836;
   font-weight: 600;
-}
-.tdCategory {
-  width: 12%;
-}
-.tdName {
-  width: 15%;
-}
-.tdStore {
-  width: 10%;
-}
-.tdUnit {
-  width: 9%;
-}
-.tdCost,
-.tdQty,
-.tdMin,
-.tdStoreMin {
-  width: 10%;
-}
-.tdReceived {
-  width: 9%;
-}
-.tdEdit {
-  width: 10%;
 }
 .inputQty {
   width: 80px;
   padding: 4px;
-  border: 1px solid #74bb7a;
+  border: 1px solid #a8bcc6;
   border-radius: 4px;
 }
 .btnEdit {
@@ -300,7 +280,7 @@
 }
 .btnSave {
   padding: 6px 14px;
-  background: #57a964;
+  background: #4caf50;
   color: #ffffff;
   margin: 0 3px;
   border: none;
@@ -309,11 +289,11 @@
   font-weight: 600;
 }
 .btnSave:hover {
-  background: #378649;
+  background: #3b8c63;
 }
 .btnCancel {
   padding: 6px 14px;
-  background: #e06666;
+  background: #f44336;
   color: #ffffff;
   margin: 0 3px;
   border: none;
@@ -325,14 +305,14 @@
   background: #d32f2f;
 }
 
-/* 인라인 수정 입력 요소 스타일 */
+/* 인라인 수정 입력 */
 .editInput,
 .editSelect,
 .editUnit {
   font-family: 'Noto Sans KR', sans-serif;
   padding: 6px 8px;
   font-size: 14px;
-  border: 1.5px solid #b4c7b3;
+  border: 1.5px solid #a8bcc6;
   border-radius: 4px;
   background: #fff;
   text-align: center;
@@ -342,7 +322,7 @@
 .editInput:focus,
 .editSelect:focus,
 .editUnit:focus {
-  border-color: #57a964;
+  border-color: #286180;
   outline: none;
 }
 .editUnit[disabled] {
@@ -354,12 +334,10 @@
   font-size: 14px;
 }
 
-/* 수정 중인 행 배경 */
+/* 수정중, 부족 알람 */
 .trEdit {
-  background: #fff7f6 !important;
+  background: #f8fafd !important;
 }
-
-/* 수량 부족(알람) 행 배경 */
 .trLow {
   background: #ffeaea !important;
 }
@@ -377,35 +355,30 @@
 .btnPageNext,
 .btnPageLast {
   padding: 6px 12px;
-  border: 1px solid #a2b7aa;
+  border: 1px solid #9bb7c6;
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
   background: #ffffff;
-  color: #387448;
+  color: #286180;
 }
 .btnPageFirst:hover,
 .btnPagePrev:hover,
 .btnPageNext:hover,
-.btnPageLast:hover {
-  background: #eaf3eb;
+.btnPageLast:hover,
+.btnPage:hover {
+  background: #dce3e9;
 }
 .btnPageFirst:disabled,
 .btnPagePrev:disabled,
 .btnPageNext:disabled,
 .btnPageLast:disabled {
-  background: #f0f4f1;
-  color: #c0cfc3;
+  background: #f0f1f4;
+  color: #c0c7cf;
   cursor: not-allowed;
 }
-.btnPage {
-  margin: 0 4px;
-}
-.btnPage:hover {
-  background: #eaf3eb;
-}
 .btnPageActive {
-  background: #57a964;
+  background: #286180;
   color: #ffffff;
-  border-color: #57a964;
+  border-color: #286180;
 }
