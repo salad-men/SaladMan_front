@@ -85,6 +85,7 @@ export default function HqNoticeWrite() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className={styles.input}
+              maxLength={255}
               required
               placeholder="제목을 입력하세요"
             />
@@ -95,10 +96,12 @@ export default function HqNoticeWrite() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className={styles.input}
+              maxLength={1000}
               required
               placeholder="내용을 입력하세요"
             />
           </div>
+          <div className={styles.charCount}>{content.length} / 1000</div>
           <div className={styles.formRow}>
             <label className={styles.label}>이미지</label>
             <div className={styles.imagesContainer}>

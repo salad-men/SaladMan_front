@@ -124,6 +124,7 @@ export default function HqNoticeModify() {
               placeholder="내용을 입력하세요"
             />
           </div>
+          <div className={styles.charCount}>{content.length} / 1000</div>
           <div className={styles.formRow}>
             <label className={styles.label}>이미지</label>
             <div className={styles.imagesContainer}>
