@@ -88,25 +88,28 @@
   display: flex;
   justify-content: center;
   margin-top: 30px;
-  gap: 4px;
+  gap: 6px;
 }
 
 .pagination button {
-  background: none;
-  border: none;
   padding: 6px 12px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
   color: #286180;
-  font-size: 18px;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #e3edf3; /* 연한 파란 hover */
+  background-color: #dce3e9;
 }
 
 .pagination button:disabled {
-  opacity: 0.5;
+  background-color: #f0f1f4;
+  color: #c0c7cf;
   cursor: not-allowed;
 }
 
@@ -114,4 +117,5 @@
   background-color: #286180;
   color: white;
   font-weight: bold;
+  border-color: #286180;
 }

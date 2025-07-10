@@ -65,16 +65,21 @@ export default function StoreInventoryRecord() {
     fetchRecords(1);
     // eslint-disable-next-line
   }, [token, storeId]);
-
-  const fetchRecords = (page = 1) => {
-    if (!token || !storeId) return;
-    myAxios(token).get("/store/inventory/record", {
-      params: { storeId, type: activeTab, page }
-    }).then(res => {
-      setRecords(res.data.records || []);
-      setPageInfo(res.data.pageInfo || {});
+const fetchRecords = (page = 1) => {
+  if (!token || !storeId) return;
+  myAxios(token).get("/store/inventory/record", {
+    params: { storeId, type: activeTab, page }
+  }).then(res => {
+    setRecords(res.data.records || []);
+    const pi = res.data.pageInfo || {};
+    setPageInfo({
+      curPage: pi.curPage || 1,
+      allPage: pi.allPage || 1,
+      startPage: pi.startPage || 1,
+      endPage: pi.endPage || 1
     });
-  };
+  });
+};
 
   useEffect(() => {
     if (!token || !storeId) return;

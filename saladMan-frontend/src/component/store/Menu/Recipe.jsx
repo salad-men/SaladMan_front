@@ -43,19 +43,27 @@ const Recipe = () => {
         }));
 
         setMenus(data);
-        setPageInfo(res.data.pageInfo);
+
+        const pi = {
+          curPage: page,
+          allPage: res.data.pageInfo.allPage,
+          startPage: res.data.pageInfo.startPage,
+          endPage: res.data.pageInfo.endPage,
+        };
+        setPageInfo(pi);
 
         const pages = [];
-        for (
-          let i = res.data.pageInfo.startPage;
-          i <= res.data.pageInfo.endPage;
-          i++
-        ) {
+        for (let i = pi.startPage; i <= pi.endPage; i++) {
           pages.push(i);
         }
         setPageNums(pages);
       })
       .catch((err) => console.error(err));
+  };
+
+  const movePage = (p) => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    submit(p);
   };
 
   return (
@@ -107,27 +115,21 @@ const Recipe = () => {
         </div>
 
         <div className={styles.pagination}>
-          <button
-            onClick={() => submit(pageInfo.curPage - 1)}
-            disabled={pageInfo.curPage === 1}
-          >
-            &lt;
-          </button>
+          <button onClick={() => movePage(1)} disabled={pageInfo.curPage === 1}>{"<<"}</button>
+          <button onClick={() => movePage(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>{"<"}</button>
+
           {pageNums.map((p) => (
             <button
               key={p}
-              onClick={() => submit(p)}
+              onClick={() => movePage(p)}
               className={p === pageInfo.curPage ? styles.active : ""}
             >
               {p}
             </button>
           ))}
-          <button
-            onClick={() => submit(pageInfo.curPage + 1)}
-            disabled={pageInfo.curPage >= pageInfo.allPage}
-          >
-            &gt;
-          </button>
+
+          <button onClick={() => movePage(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>{">"}</button>
+          <button onClick={() => movePage(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>{">>"}</button>
         </div>
       </div>
     </div>

@@ -12,8 +12,8 @@ export default function StoreComplaintList() {
   const navigate = useNavigate();
 
   const [complaints, setComplaints] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+  const [pageNums, setPageNums] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const size = 10;
 
@@ -33,8 +33,19 @@ export default function StoreComplaintList() {
           ...c,
           status: c.isStoreRead ? "열람" : "미열람",
         })));
-        setPage(pi.curPage || pageParam);
-        setTotalPages(pi.allPage || 1);
+        const newPageInfo = {
+          curPage: pi.curPage || pageParam,
+          allPage: pi.allPage || 1,
+          startPage: pi.startPage || 1,
+          endPage: pi.endPage || (pi.allPage || 1),
+        };
+        setPageInfo(newPageInfo);
+
+        const pages = [];
+        for (let i = newPageInfo.startPage; i <= newPageInfo.endPage; i++) {
+          pages.push(i);
+        }
+        setPageNums(pages);
       });
   };
 
@@ -42,7 +53,10 @@ export default function StoreComplaintList() {
 
   const handleSearch = () => fetchComplaintList(1, searchKeyword);
 
-  const handlePageChange = (newPage) => fetchComplaintList(newPage, searchKeyword);
+  const gotoPage = (p) => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    fetchComplaintList(p, searchKeyword);
+  };
 
   return (
     <div className={styles.container}>
@@ -79,7 +93,7 @@ export default function StoreComplaintList() {
             ) : (
               complaints.map((c, idx) => (
                 <tr key={c.id} className={!c.isStoreRead ? styles.unread : ""}>
-                  <td>{(page - 1) * size + idx + 1}</td>
+                  <td>{(pageInfo.curPage - 1) * size + idx + 1}</td>
                   <td className={styles.clickable}
                       onClick={() => navigate(`/store/StoreComplaintDetail/${c.id}`)}>
                     {c.title}
@@ -97,10 +111,23 @@ export default function StoreComplaintList() {
             )}
           </tbody>
         </table>
+
         <div className={styles.paging}>
-          <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)}>이전</button>
-          <span>{page} / {totalPages}</span>
-          <button disabled={page >= totalPages} onClick={() => handlePageChange(page + 1)}>다음</button>
+          <button onClick={() => gotoPage(1)} disabled={pageInfo.curPage === 1}>{"<<"}</button>
+          <button onClick={() => gotoPage(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>{"<"}</button>
+
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              onClick={() => gotoPage(p)}
+              className={p === pageInfo.curPage ? styles.active : ""}
+            >
+              {p}
+            </button>
+          ))}
+
+          <button onClick={() => gotoPage(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>{">"}</button>
+          <button onClick={() => gotoPage(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>{">>"}</button>
         </div>
       </main>
     </div>
