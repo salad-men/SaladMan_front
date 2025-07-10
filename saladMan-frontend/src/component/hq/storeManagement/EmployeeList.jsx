@@ -1,5 +1,5 @@
 import styles from "./EmployeeList.module.css";
-import { useState,useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import EmpSidebar from "./EmpSidebar";
 import { myAxios } from "/src/config";
 import { accessTokenAtom } from "/src/atoms";
@@ -22,7 +22,7 @@ export default function EmployeeList() {
   const [editImgFile, setEditImgFile] = useState(null);
   const [editImgPreview, setEditImgPreview] = useState("");
   const [editError, setEditError] = useState("");
-  const [isSaving, setIsSaving] = useState(false); 
+  const [isSaving, setIsSaving] = useState(false);
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
   const timerRef = useRef(null);
   const HQ_GRADES = ["사원", "대리", "과장", "부장", "이사", "사장"];
@@ -58,7 +58,7 @@ export default function EmployeeList() {
     setEditMode(false);
     setEditForm(emp);
     setEditImgFile(null);
-    setEditImgPreview(emp.imgUrl || "/images/profile-placeholder.png");
+    setEditImgPreview(emp.imgUrl || "/profile-placeholder.png");
     setEditError("");
   };
   const closeModal = () => {
@@ -68,10 +68,10 @@ export default function EmployeeList() {
     setEditImgPreview("");
     setEditError("");
     setIsSaving(false);
-        setIsBtnDisabled(false);
+    setIsBtnDisabled(false);
     clearTimeout(timerRef.current);
   };
-const startEdit = () => {
+  const startEdit = () => {
     setEditMode(true);
     setIsBtnDisabled(true);
     // 0.7초 후 버튼 활성화
@@ -83,11 +83,11 @@ const startEdit = () => {
     const { name, value } = e.target;
     (f => ({ ...f, [name]: value }));
     if (name === "storeId") {
-  setEditForm(f => ({
-    ...f,
-    storeId: value,
-    grade: "" 
-  }));
+      setEditForm(f => ({
+        ...f,
+        storeId: value,
+        grade: ""
+      }));
     } else {
       setEditForm(f => ({ ...f, [name]: value }));
     }
@@ -205,23 +205,23 @@ const startEdit = () => {
               <h2 className={styles.modalTitle}>직원 {editMode ? "수정" : "상세정보"}</h2>
               <form className={styles.formWideWrap} onSubmit={handleEditSave}>
                 <div className={styles.profileSection}>
-                  <img src={editImgPreview || "/images/profile-placeholder.png"}
-                       alt="profile"
-                       className={styles.profileBig2}
+                  <img src={editImgPreview || "/profile-placeholder.png"}
+                    alt="profile"
+                    className={styles.profileBig2}
                   />
                   {editMode && (
                     <>
                       <input type="file"
-                             id="profile-upload"
-                             accept="image/*"
-                             className={styles.fileInput}
-                             onChange={handleEditImgChange}
+                        id="profile-upload"
+                        accept="image/*"
+                        className={styles.fileInput}
+                        onChange={handleEditImgChange}
                       />
                       <label htmlFor="profile-upload" className={styles.fileLabelWide}>파일 선택</label>
                       {(editImgFile || editForm.imgUrl) && (
                         <button type="button"
-                                className={styles.deleteBtnWide}
-                                onClick={handleEditImgDelete}>삭제</button>
+                          className={styles.deleteBtnWide}
+                          onClick={handleEditImgDelete}>삭제</button>
                       )}
                     </>
                   )}
@@ -236,53 +236,53 @@ const startEdit = () => {
                       <label>이름</label>
                       <input className={styles.inputWide} name="name" value={editForm.name || ""} onChange={handleEditChange} readOnly={!editMode} />
                     </div>
-  <div>
-      <label>소속</label>
-      {editMode ? (
-        <select
-          className={styles.inputWide}
-          name="storeId"
-          value={editForm.storeId || ""}
-          onChange={handleEditChange}
-        >
-          <option value="">선택</option>
-          {stores.map(s => (
-            <option key={s.id} value={s.id}>{s.name}</option>
-          ))}
-        </select>
-      ) : (
-        <input className={styles.inputWide} value={selected.storeName} readOnly tabIndex={-1} />
-      )}
-    </div>
-<div>
-      <label>직급</label>
-      {editMode ? (
-        <select
-          className={styles.inputWide}
-          name="grade"
-          value={editForm.grade || ""}
-          onChange={handleEditChange}
-          disabled={!editForm.storeId}
-        >
-          <option value="">직급 선택</option>
-          {(() => {
-            const selectedStore = stores.find(s => String(s.id) === String(editForm.storeId));
-            const isHq = selectedStore && selectedStore.name.includes("본사");
-            const options = isHq ? HQ_GRADES : STORE_GRADES;
-            return options.map((g, i) => (
-              <option key={i} value={g}>{g}</option>
-            ));
-          })()}
-        </select>
-      ) : (
-        <input
-          className={styles.inputWide}
-          value={selected.grade}
-          readOnly
-          tabIndex={-1}
-        />
-      )}
-    </div>
+                    <div>
+                      <label>소속</label>
+                      {editMode ? (
+                        <select
+                          className={styles.inputWide}
+                          name="storeId"
+                          value={editForm.storeId || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="">선택</option>
+                          {stores.map(s => (
+                            <option key={s.id} value={s.id}>{s.name}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input className={styles.inputWide} value={selected.storeName} readOnly tabIndex={-1} />
+                      )}
+                    </div>
+                    <div>
+                      <label>직급</label>
+                      {editMode ? (
+                        <select
+                          className={styles.inputWide}
+                          name="grade"
+                          value={editForm.grade || ""}
+                          onChange={handleEditChange}
+                          disabled={!editForm.storeId}
+                        >
+                          <option value="">직급 선택</option>
+                          {(() => {
+                            const selectedStore = stores.find(s => String(s.id) === String(editForm.storeId));
+                            const isHq = selectedStore && selectedStore.name.includes("본사");
+                            const options = isHq ? HQ_GRADES : STORE_GRADES;
+                            return options.map((g, i) => (
+                              <option key={i} value={g}>{g}</option>
+                            ));
+                          })()}
+                        </select>
+                      ) : (
+                        <input
+                          className={styles.inputWide}
+                          value={selected.grade}
+                          readOnly
+                          tabIndex={-1}
+                        />
+                      )}
+                    </div>
 
 
 
