@@ -10,6 +10,7 @@ const HQ_GRADES = ["사원", "대리", "과장", "부장", "이사", "사장"];
 const STORE_GRADES = ["파트타이머", "직원", "매니저"];
 
 export default function EmployeeRegister() {
+
   const token = useAtomValue(accessTokenAtom);
   const navigate = useNavigate();
   const [profileUrl, setProfileUrl] = useState("");
@@ -40,6 +41,22 @@ export default function EmployeeRegister() {
   // 매장 선택 시 직급 초기화
   function handleChange(e) {
     const { name, value } = e.target;
+
+    // 전화번호: 숫자 + 하이픈만 허용 + 13자 제한
+    if (name === "phone") {
+      const formatted = formatPhoneNumber(value);
+      if (formatted.length <= 13) {
+        setForm(prev => ({ ...prev, phone: formatted }));
+      }
+      return;
+    }
+
+    // 이름: 10자 제한
+    if (name === "name" && value.length > 10) return;
+
+    // 주소: 50자 제한
+    if (name === "address" && value.length > 50) return;
+
     if (name === "storeId") {
       setForm(prev => ({
         ...prev,
@@ -59,6 +76,18 @@ export default function EmployeeRegister() {
     reader.onload = () => setProfileUrl(reader.result);
     reader.readAsDataURL(file);
   }
+
+  function formatPhoneNumber(value) {
+    // 숫자만 남기기
+    const digits = value.replace(/\D/g, '');
+
+    // 형식에 맞게 하이픈 추가
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 7) return digits.replace(/(\d{3})(\d+)/, '$1-$2');
+    return digits.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
+  }
+
+
 
   // 매장명 찾아서 직급 옵션 결정
   const selectedStore = stores.find(s => String(s.id) === String(form.storeId));
@@ -131,7 +160,7 @@ export default function EmployeeRegister() {
             <div className={styles.formRight}>
               <div className={styles.formRow}>
                 <label>이름</label>
-                <input name="name" type="text" placeholder="이름" value={form.name} onChange={handleChange} />
+                <input name="name" type="text" maxLength={10} placeholder="이름" value={form.name} onChange={handleChange} />
                 <label>매장</label>
                 <select name="storeId" value={form.storeId} onChange={handleChange}>
                   <option value="">매장 선택</option>
@@ -162,7 +191,7 @@ export default function EmployeeRegister() {
               </div>
               <div className={styles.formRow}>
                 <label>연락처</label>
-                <input name="phone" type="text" placeholder="010-0000-0000" value={form.phone} onChange={handleChange} />
+                <input name="phone" type="text" inputMode="numeric" placeholder="010-0000-0000" value={form.phone} onChange={handleChange} />
                 <label>이메일</label>
                 <input name="email" type="email" placeholder="user@domain.com" value={form.email} onChange={handleChange} />
               </div>
@@ -181,6 +210,7 @@ export default function EmployeeRegister() {
                 <input
                   name="address"
                   type="text"
+                  maxLength={45}
                   className={styles.longInput}
                   placeholder="주소 입력"
                   value={form.address}

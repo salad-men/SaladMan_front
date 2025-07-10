@@ -105,6 +105,7 @@ function AlarmList() {
               </th>
               <th>제목</th>
               <th>내용</th>
+              <th>읽음여부</th>
               <th>수신일시</th>
             </tr>
           </thead>
@@ -125,7 +126,8 @@ function AlarmList() {
                   </td>
                   <td>{noti.title}</td>
                   <td>{noti.content}</td>
-                  <td>{noti.sentAt}</td>
+                  <td>{noti.isRead ? '읽음' : '안읽음'}</td>
+                  <td>{noti.sendAt}</td>
                 </tr>
               ))
             )}

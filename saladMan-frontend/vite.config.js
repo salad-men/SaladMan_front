@@ -22,16 +22,16 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173, // (선택) 포트 고정
     cors: true,
-    hmr: {
-      clientPort: 5173,
-      host: '192.168.0.13',
-    },
-    origin: 'http://192.168.0.13:5173',
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8090', // ✅ Spring 서버 주소
-        changeOrigin: true,
-      }
-    }
+    // hmr: {
+    //   clientPort: 5173,
+    //   host: '192.168.0.13',
+    // },
+    // origin: 'http://192.168.0.13:5173',
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8090', // ✅ Spring 서버 주소
+    //     changeOrigin: true,
+    //   }
+    // }
   }
 })

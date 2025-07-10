@@ -65,7 +65,7 @@ export default function StoreAccountDetail() {
             });
             alert("폐업 처리 완료");
             setIsCloseModalOpen(false);
-            navigate("/hq/storeAccount");
+            navigate(0);
         } catch (err) {
             alert("폐업 처리 중 오류가 발생했습니다.");
         }

@@ -123,7 +123,6 @@
 }
 .chartBoxWide {
   min-width: 370px;
-  max-width: 540px;
   flex: 1 1 400px;
   height: 350px;
   display: flex;
@@ -155,17 +154,10 @@
 .salesTable td {
   text-align: center;
   vertical-align: middle;
-  height: 44px;
+  height: 20px;
   padding: 11px 0;
   /* 모든 칼럼에 border는 필요하다면 추가 */
   border-bottom: 1px solid #eaf3eb;
-}
-
-.salesTable th.dateCell,
-.salesTable td.dateCell {
-  width: 200px;      /* 날짜 컬럼 넓이 고정 */
-  min-width: 160px;
-  max-width: 220px;
 }
 
 .salesTable th.qtyCell,
@@ -173,13 +165,6 @@
   width: 120px;      /* 판매량 컬럼 넓이 고정 */
   min-width: 90px;
   max-width: 140px;
-}
-
-.salesTable th.priceCell,
-.salesTable td.priceCell {
-  width: 180px;      /* 매출 컬럼 넓이 고정 */
-  min-width: 120px;
-  max-width: 200px;
 }
 
 .salesTable th {
