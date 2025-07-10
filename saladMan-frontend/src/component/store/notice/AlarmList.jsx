@@ -61,9 +61,8 @@ function AlarmList() {
       .catch(err => console.error('삭제 실패:', err));
   };
 
-
-
   const submit = (page) => {
+    if (page < 1 || page > pageInfo.allPage) return;
     myAxios(token).get(`/alarmList?page=${page}`)
       .then(res => {
         setAlarmList(res.data.data);
@@ -134,17 +133,21 @@ function AlarmList() {
         </table>
 
         <div className={styles.pagination}>
-          <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
-            &lt;
-          </button>
-          {pageNums.map(p => (
-            <button key={p} onClick={() => submit(p)} className={p === pageInfo.curPage ? styles.active : ''}>
+          <button onClick={() => submit(1)} disabled={pageInfo.curPage === 1}>{"<<"}</button>
+          <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>{"<"}</button>
+
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              onClick={() => submit(p)}
+              className={p === pageInfo.curPage ? styles.active : ""}
+            >
               {p}
             </button>
           ))}
-          <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage >= pageInfo.allPage}>
-            &gt;
-          </button>
+
+          <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>{">"}</button>
+          <button onClick={() => submit(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>{">>"}</button>
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ const StoreSales = () => {
     const [token] = useAtom(accessTokenAtom);
 
     const handleSearch = () => {
-        if (!token) return;
+        if (!token) return; 
         const axios = myAxios(token);
 
         if (!startDate || !endDate) return alert('날짜를 선택해주세요');
@@ -172,8 +172,8 @@ const StoreSales = () => {
                 <div className={style.dashboard}>
                     <div className={style.chartBox}>
                         <div className={style.summaryBox}>
-                            <div className={style.box}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
-                            <div className={style.box}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue.toLocaleString()}</strong></div>
+                            <div className={style.boxbox}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
+                            <div className={style.boxbox}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue.toLocaleString()}</strong></div>
                         </div>
                         <div className={style.chart}>
                             <div className={style.box}>

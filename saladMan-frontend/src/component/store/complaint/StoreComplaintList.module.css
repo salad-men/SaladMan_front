@@ -136,30 +136,37 @@
 }
 
 .paging {
-  margin-top: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 6px;
 }
 
 .paging button {
-  margin: 0 6px;
-  padding: 6px 14px;
-  border: 1px solid #286180;
-  background-color: white;
+  padding: 6px 12px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
   color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 15px;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+}
+
+.paging button:hover:not(:disabled) {
+  background-color: #dce3e9;
 }
 
 .paging button:disabled {
-  border-color: #ddd;
-  color: #ddd;
+  background-color: #f0f1f4;
+  color: #c0c7cf;
   cursor: not-allowed;
 }
 
-.paging button:not(:disabled):hover {
+.paging .active {
   background-color: #286180;
   color: white;
+  font-weight: bold;
+  border-color: #286180;
 }

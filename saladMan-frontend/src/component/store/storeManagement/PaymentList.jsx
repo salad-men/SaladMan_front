@@ -27,9 +27,7 @@ const PaymentList = () => {
   );
 
   useEffect(() => {
-    if (token) {
-      submit(1);
-    }
+    if (token) submit(1);
   }, [token]);
 
   const submit = (page) => {
@@ -47,15 +45,17 @@ const PaymentList = () => {
       })
       .then((res) => {
         setPayments(res.data.content);
-        setPageInfo(res.data.pageInfo);
-        console.log(res.data.pageInfo);
+
+        const pi = {
+          curPage: page,
+          allPage: res.data.pageInfo.allPage,
+          startPage: res.data.pageInfo.startPage,
+          endPage: res.data.pageInfo.endPage
+        };
+        setPageInfo(pi);
 
         const pages = [];
-        for (
-          let i = res.data.pageInfo.startPage;
-          i <= res.data.pageInfo.endPage;
-          i++
-        ) {
+        for (let i = pi.startPage; i <= pi.endPage; i++) {
           pages.push(i);
         }
         setPageNums(pages);
@@ -63,6 +63,11 @@ const PaymentList = () => {
       .catch((err) => {
         console.error("매출 데이터 불러오기 실패:", err);
       });
+  };
+
+  const movePage = (p) => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    submit(p);
   };
 
   const handleSearch = () => {
@@ -173,27 +178,21 @@ const PaymentList = () => {
         </table>
 
         <div className={styles.pagination}>
-          <button
-            onClick={() => submit(pageInfo.curPage - 1)}
-            disabled={pageInfo.curPage === 1}
-          >
-            &lt;
-          </button>
+          <button onClick={() => movePage(1)} disabled={pageInfo.curPage === 1}>{"<<"}</button>
+          <button onClick={() => movePage(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>{"<"}</button>
+
           {pageNums.map((p) => (
             <button
               key={p}
-              onClick={() => submit(p)}
+              onClick={() => movePage(p)}
               className={p === pageInfo.curPage ? styles.active : ""}
             >
               {p}
             </button>
           ))}
-          <button
-            onClick={() => submit(pageInfo.curPage + 1)}
-            disabled={pageInfo.curPage >= pageInfo.allPage}
-          >
-            &gt;
-          </button>
+
+          <button onClick={() => movePage(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>{">"}</button>
+          <button onClick={() => movePage(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>{">>"}</button>
         </div>
       </div>
     </div>

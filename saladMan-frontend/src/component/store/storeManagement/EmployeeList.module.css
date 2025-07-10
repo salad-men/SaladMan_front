@@ -13,10 +13,10 @@
   position: relative;
 }
 .employeeListContent h2 {
-    margin: 0 0 16px;
-    font-size: 28px;
-    color: #286180;
-    font-weight: bold;
+  margin: 0 0 16px;
+  font-size: 28px;
+  color: #286180;
+  font-weight: bold;
 }
 .topBar {
   display: flex;
@@ -60,7 +60,7 @@
 .searchButton:hover {
   background-color: #194760;
 }
-.selectName{
+.selectName {
   font-family: 'Noto Sans KR', sans-serif;
   width: 120px;
   padding: 6px;
@@ -92,22 +92,37 @@
   object-fit: cover;
 }
 
+/* PaymentList 스타일로 완전히 동일화된 pagination */
 .pagination {
-  margin: 32px 0 0 0;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 6px;
 }
 .pagination button {
-  margin: 0 3px;
-  padding: 5px 14px;
-  border: none;
-  border-radius: 5px;
-  background: #f0f0f0;
-  font-size: 15px;
+  padding: 6px 12px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
+  color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
-.pagination .active, .pagination button:active {
-  background: #286180;
-  color: #fff;
+.pagination button:hover:not(:disabled) {
+  background-color: #dce3e9;
+}
+.pagination button:disabled {
+  background-color: #f0f1f4;
+  color: #c0c7cf;
+  cursor: not-allowed;
+}
+.pagination .active {
+  background-color: #286180;
+  color: white;
+  font-weight: bold;
+  border-color: #286180;
 }
 
 /* 상세/수정 모달 스타일 */

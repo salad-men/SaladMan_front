@@ -159,29 +159,41 @@
 
 /* 페이지네이션 */
 .pagination {
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  margin-bottom:12px;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 6px;
 }
+
 .pagination button {
-  padding:6px 12px;
-  border:1px solid #9bb7c6;
-  background:#fff;
-  color:#286180;
-  border-radius:4px;
-  cursor:pointer;
+  padding: 6px 12px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
+  color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-.pagination button.active {
-  background:#286180;
-  color:#fff;
-  border-color:#286180;
+
+.pagination button:hover:not(:disabled) {
+  background-color: #dce3e9;
 }
+
 .pagination button:disabled {
-  background:#f0f1f4;
-  color:#c0c7cf;
-  cursor:not-allowed;
+  background-color: #f0f1f4;
+  color: #c0c7cf;
+  cursor: not-allowed;
 }
+
+.pagination .active {
+  background-color: #286180;
+  color: white;
+  font-weight: bold;
+  border-color: #286180;
+}
+
 
 /* 모달 */
 .modal {
