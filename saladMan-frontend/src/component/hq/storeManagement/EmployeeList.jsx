@@ -177,7 +177,7 @@ const startEdit = () => {
             ) : employees.map(emp => (
               <tr key={emp.id} onClick={() => handleRowClick(emp)} style={{ cursor: 'pointer' }}>
                 <td>{emp.id}</td>
-                <td><img src={emp.imgUrl || "/images/profile-placeholder.png"} alt="profile" className={styles.tableProfile} /></td>
+                <td><img src={emp.imgUrl || "/profile-placeholder.png"} alt="profile" className={styles.tableProfile} /></td>
                 <td>{emp.name}</td>
                 <td>{emp.grade}</td>
                 <td>{emp.storeName}</td>

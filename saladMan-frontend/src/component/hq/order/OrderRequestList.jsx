@@ -137,7 +137,7 @@ export default function OrderRequestList() {
                             <select name="status" value={filters.status} onChange={handleChange}>
                                 <option value="">전체</option>
                                 <option value="대기중">대기중</option>
-                                <option value="입고완료">입고완료</option>
+                                <option value="입고완료">수주완료</option>
                                 <option value="검수완료">검수완료</option>
                                 <option value="주문취소">주문취소</option>
                             </select>
@@ -168,9 +168,8 @@ export default function OrderRequestList() {
                                     <td>{order.storeName}</td>
                                     <td>{order.productNameSummary}</td>
                                     <td>{order.orderDateTime?.split("T")[0]}</td>
-                                    <td>{order.status}</td>
+                                    <td>{order.status === '입고완료' ? '수주 완료' : order.status}</td>
                                     <td>{order.quantitySummary}</td>
-                                    <td>{order.totalPrice?.toLocaleString()}원</td>
                                     <td>{order.orderStatus}</td>
                                     <td>
                                         <button
