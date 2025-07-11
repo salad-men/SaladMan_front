@@ -1,204 +1,335 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
+import { useAtomValue } from "jotai";
+import { accessTokenAtom, userAtom } from "/src/atoms";
+import { myAxios } from "/src/config";
 import styles from "./storeDashboard.module.css";
-import Chart from "chart.js/auto";
+import {
+  ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  PieChart, Pie, Cell
+} from "recharts";
+
+const PIE_COLORS = ["#74c69d", "#82ca9d", "#9ad0ec", "#f6c85f", "#e7717d"];
+
+// ISO week 계산
+function getISOWeek(date) {
+  const target = new Date(date.valueOf());
+  const dayNr = (date.getDay() + 6) % 7;
+  target.setDate(target.getDate() - dayNr + 3);
+  const jan4 = new Date(target.getFullYear(), 0, 4);
+  const dayDiff = (target - jan4) / 86400000;
+  return 1 + Math.floor(dayDiff / 7);
+}
+
+function getToday() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getWeekAgo() {
+  const d = new Date();
+  d.setDate(d.getDate() - 6);
+  return d.toISOString().slice(0, 10);
+}
+
+function getMonthAgo() {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 1);
+  return d.toISOString().slice(0, 10);
+}
 
 export default function StoreDashboard() {
-  // 하드코딩 데이터
-  const salesSummary = {
-    total: 1240000,
-    count: 276,
-    order: 312,
-    completed: 298,
-    refund: 14,
-    labels: ["1주차", "2주차", "3주차", "4주차"],
-    chartData: [1020000, 1340000, 1120000, 900000],
+  const token = useAtomValue(accessTokenAtom);
+  const user = useAtomValue(userAtom);
+
+  const [summary, setSummary] = useState(null);
+  const [error, setError] = useState("");
+  const [groupType, setGroupType] = useState("day"); // 그래프의 그룹 타입
+  const [dateRange, setDateRange] = useState({ start: getWeekAgo(), end: getToday() }); // 기간 필터
+
+  const today = new Date();
+  const [curYear, setCurYear] = useState(today.getFullYear());
+  const [curWeek, setCurWeek] = useState(getISOWeek(today));
+  const [weekSchedule, setWeekSchedule] = useState([]);
+  const [weekEmpNames, setWeekEmpNames] = useState([]);
+  const [weekError, setWeekError] = useState("");
+const topMenus = summary?.topMenus || [];  
+
+  // 대시보드 fetch
+  useEffect(() => {
+    if (!token) return;
+    setError("");
+    myAxios(token)
+      .get("/store/dashboard/summary", {
+        params: {
+          storeId: user.id,
+          startDate: dateRange.start,
+          endDate: dateRange.end,
+          groupType
+        }
+      })
+      .then(res => {
+        setSummary(res.data);
+        console.log("[대시보드 응답 데이터]", res.data);
+      })
+      .catch(err => {
+        setError("대시보드 정보를 불러올 수 없습니다.");
+        setSummary(null);
+        console.error("[대시보드 fetch error]", err);
+      });
+  }, [token, user, groupType, dateRange.start, dateRange.end]);
+
+  // 주간 근무표 fetch
+  useEffect(() => {
+    if (!token) return;
+    setWeekError("");
+    myAxios(token)
+      .get("/store/dashboard/week-schedule", {
+        params: { storeId: user.id, weekNo: curWeek }
+      })
+      .then(res => {
+        const { table, empNames } = res.data || {};
+        setWeekSchedule(table || []);
+        setWeekEmpNames(empNames || []);
+        console.log("[주간 근무표 응답]", res.data);
+      })
+      .catch(err => {
+        setWeekSchedule([]);
+        setWeekEmpNames([]);
+        setWeekError("주간 근무표 정보를 불러올 수 없습니다.");
+        console.error("[주간근무표 fetch error]", err);
+      });
+  }, [token, user, curYear, curWeek]);
+
+  // 매출/주문 차트 데이터
+  const sales = summary?.sales || {};
+  const salesData =
+  (groupType === "week"
+    ? sales.weekly?.map((d, idx) => ({
+        date: `${curYear}년 ${idx + 1}주`,
+        판매량: d.quantity,
+        매출: d.revenue,
+      }))
+    : groupType === "month"
+    ? sales.monthly?.map((d, idx) => ({
+        date: `${idx + 1}월`,
+        판매량: d.quantity,
+        매출: d.revenue,
+      }))
+    : sales.daily?.map((d) => ({
+        date: d.date,
+        판매량: d.quantity,
+        매출: d.revenue,
+      }))) || [];
+
+const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) || [];
+
+
+  // 하단 카드 데이터
+  const expireSummary = summary?.expireSummary || {};
+  const autoOrderExpectedCount = summary?.autoOrderExpectedCount ?? 0;
+  const mainStocks = summary?.mainStocks || [];
+  const notices = summary?.notices || [];
+  const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
+
+  const setPeriod = (type) => {
+    if (type === "today") setDateRange({ start: getToday(), end: getToday() });
+    if (type === "week") setDateRange({ start: getWeekAgo(), end: getToday() });
+    if (type === "month") setDateRange({ start: getMonthAgo(), end: getToday() });
   };
 
-  const popularity = {
-    labels: ["시그니처 샐러드", "닭가슴살 샐러드", "발사믹 토마토", "아보카도 베이컨", "옥수수 샐러드"],
-    data: [112, 72, 55, 42, 38],
+  const handleGroupTypeClick = (type) => {
+    setGroupType(type);
+    // 기간을 새로 설정하지 않음, 그래프만 그룹화 방식 변경
   };
 
-  const mainInventory = [
-    { name: "🥬 양상추", remain: "잔여 200g" },
-    { name: "🥕 당근", remain: "잔여 100g" },
-    { name: "📦 포장용기", remain: "잔여 50개" },
-    { name: "🥄 숫가락", remain: "잔여 120개" },
-    { name: "🥢 젓가락 세트", remain: "잔여 115개" },
-  ];
+  const goPrevWeek = () => {
+    if (curWeek === 1) {
+      setCurYear(y => y - 1);
+      setCurWeek(52);
+    } else {
+      setCurWeek(w => w - 1);
+    }
+  };
 
-  const schedule = [
-    ["김진수", "08:00~16:00", "휴무", "08:00~16:00", "휴무", "08:00~12:00"],
-    ["이정훈", "10:00~18:00", "10:00~18:00", "휴무", "10:00~18:00", "휴무"],
-    ["박민지", "휴무", "14:00~20:00", "14:00~20:00", "14:00~20:00", "14:00~20:00"],
-    ["이하늘", "11:00~17:00", "11:00~17:00", "휴무", "11:00~17:00", "휴무"],
-    ["최영수", "휴무", "09:00~15:00", "09:00~15:00", "09:00~15:00", "09:00~15:00"],
-  ];
+  const goNextWeek = () => {
+    if (curWeek === 52) {
+      setCurYear(y => y + 1);
+      setCurWeek(1);
+    } else {
+      setCurWeek(w => w + 1);
+    }
+  };
 
-  // 차트 ref
-  const salesChartRef = useRef(null);
-  const popularityChartRef = useRef(null);
-
-  // Chart.js: 매출
-  useEffect(() => {
-    if (!salesChartRef.current) return;
-    if (salesChartRef.current.chartInstance) salesChartRef.current.chartInstance.destroy();
-    const chart = new Chart(salesChartRef.current, {
-      type: "bar",
-      data: {
-        labels: salesSummary.labels,
-        datasets: [{
-          label: "월간 매출 (₩)",
-          data: salesSummary.chartData,
-          backgroundColor: "#4D774E"
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { font: { size: 14 } }
-          },
-          x: {
-            ticks: { font: { size: 14 } }
-          }
-        },
-        plugins: {
-          legend: {
-            display: false,
-            labels: { font: { size: 16 } }
-          },
-          title: {
-            display: true,
-            text: "월간 매출 현황",
-            font: { size: 18 }
-          }
-        }
-      }
-    });
-    salesChartRef.current.chartInstance = chart;
-    return () => chart.destroy();
-  }, []); // 최초 1번만
-
-  // Chart.js: 인기메뉴
-  useEffect(() => {
-    if (!popularityChartRef.current) return;
-    if (popularityChartRef.current.chartInstance) popularityChartRef.current.chartInstance.destroy();
-    const chart = new Chart(popularityChartRef.current, {
-      type: "doughnut",
-      data: {
-        labels: popularity.labels,
-        datasets: [{
-          data: popularity.data,
-          backgroundColor: [
-            "#4D774E", "#6BAF8B", "#A8D5BA", "#CDEBD3", "#e0e0e0"
-          ]
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: {
-            position: "bottom",
-            labels: { font: { size: 16 } }
-          },
-          title: {
-            display: true,
-            text: "TOP 5 인기 메뉴 비율",
-            font: { size: 18 }
-          }
-        }
-      }
-    });
-    popularityChartRef.current.chartInstance = chart;
-    return () => chart.destroy();
-  }, []); // 최초 1번만
+  const renderGroupTypeBtns = () => (
+    <div className={styles.groupTypeBtns}>
+      <button className={groupType === "day" ? styles.active : ""} onClick={() => handleGroupTypeClick("day")}>일별</button>
+      <button className={groupType === "week" ? styles.active : ""} onClick={() => handleGroupTypeClick("week")}>주별</button>
+      <button className={groupType === "month" ? styles.active : ""} onClick={() => handleGroupTypeClick("month")}>월별</button>
+    </div>
+  );
 
   return (
-    <div className={styles.layout}>
-      <div className={styles.dashboard}>
-        <div className={styles.dashboardHeader}>대시보드</div>
-        <div className={styles.dashboardGrid}>
-          {/* 매출/주문 현황 */}
-          <div className={styles.card}>
-            <h3>📊 매출 및 주문 현황</h3>
-            <div style={{ width: "100%", height: 280 }}>
-              <canvas ref={salesChartRef} />
-            </div>
-            <ul className={styles.noticeList}>
-              <li className={styles.strong}>
-                💰 오늘 총 매출: ₩1,240,000
-                <span className={styles.subInfo}>(판매 수량: 276개)</span>
-              </li>
-              <li>📦 주문 건수: 312건</li>
-              <li>✅ 완료: 298건 / ❌ 환불: 14건</li>
-            </ul>
+    <div className={styles.dashboardWrap}>
+      <div className={styles.header}>
+        <div className={styles.title}>매장 대시보드</div>
+        <div className={styles.periodFilter}>
+          <input
+            type="date"
+            name="start"
+            value={dateRange.start}
+            onChange={e => setDateRange(prev => ({ ...prev, start: e.target.value }))} 
+            max={dateRange.end}
+          />
+          <span> ~ </span>
+          <input
+            type="date"
+            name="end"
+            value={dateRange.end}
+            onChange={e => setDateRange(prev => ({ ...prev, end: e.target.value }))} 
+            min={dateRange.start}
+          />
+          <button onClick={() => setPeriod("today")} className={styles.periodBtn}>오늘</button>
+          <button onClick={() => setPeriod("week")} className={styles.periodBtn}>1주</button>
+          <button onClick={() => setPeriod("month")} className={styles.periodBtn}>1달</button>
+        </div>
+        {renderGroupTypeBtns()}
+      </div>
+
+      {error && <div className={styles.error}>{error}</div>}
+
+      <div className={styles.grid}>
+        <div className={styles.gridCol2}>
+          <div className={styles.sectionTitle}>매출 및 주문 현황</div>
+          <div className={styles.salesCharts}>
+            {salesData.length === 0 ? (
+              <div style={{ color: "#bbb", textAlign: "center", padding: "60px 0 30px 0" }}>
+                매출 및 주문 데이터가 없습니다.
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height={250}>
+                <ComposedChart data={salesData} margin={{ top: 24, right: 30, left: 5, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis yAxisId="left" label={{ value: "판매량", position: "top", offset: 8 }} />
+                  <YAxis yAxisId="right" orientation="right" label={{ value: "매출(₩)", angle: 0, position: "top", offset: 12 }} />
+                  <Tooltip formatter={v => v?.toLocaleString()} />
+                  <Legend />
+                  <Bar yAxisId="left" dataKey="판매량" fill="#74c69d" barSize={24} />
+                  <Line yAxisId="right" type="monotone" dataKey="매출" stroke="#2196f3" strokeWidth={3} dot={true} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            )}
           </div>
-          {/* 인기 현황 */}
-          <div className={styles.card}>
-            <h3>🔥 판매 인기 현황</h3>
-            <div style={{ width: "100%", height: 280 }}>
-              <canvas ref={popularityChartRef} />
-            </div>
-            <div className={styles.chartLabel}>TOP 5 비율 시각화</div>
-            <ul className={`${styles.noticeList} ${styles.popularItemsGrid}`}>
-              {popularity.labels.map((name, idx) => (
-                <li key={name}>{name} - {popularity.data[idx]}개</li>
+        </div>
+
+        <div className={styles.gridCol1}>
+          <div className={styles.sectionTitle}>인기 메뉴 TOP5</div>
+          <ResponsiveContainer width="100%" height={250}>
+            {pieData.length === 0 ? (
+              <div style={{ color: "#bbb", textAlign: "center", padding: "60px 0 30px 0" }}>
+                인기 메뉴 데이터가 없습니다.
+              </div>
+            ) : (
+              <PieChart>
+                <Pie data={pieData} cx="50%" cy="50%" outerRadius={86} dataKey="value" label={({ name }) => name}>
+                  {pieData.map((entry, idx) => (
+                    <Cell key={`cell-${idx}`} fill={PIE_COLORS[idx % PIE_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Legend />
+                <Tooltip formatter={v => v?.toLocaleString() + "건"} />
+              </PieChart>
+            )}
+          </ResponsiveContainer>
+          <ul className={styles.pieLegendList}>
+            {pieData.length === 0
+              ? <li style={{ color: "#bbb" }}>인기 메뉴 없음</li>
+              : pieData.map((d, idx) => (
+                <li key={d.name}>
+                  <span className={styles.pieColor} style={{ background: PIE_COLORS[idx % PIE_COLORS.length] }} />
+                  {d.name}
+                  <span className={styles.pieValue}>{d.value?.toLocaleString()}건</span>
+                </li>
               ))}
-            </ul>
+          </ul>
+        </div>
+      </div>
+
+      <div className={styles.rowCards}>
+        <div className={`${styles.infoCard} ${styles.scheduleCard}`}>
+          <div className={styles.infoTitle}>
+            주간 근무표
+            <span style={{ float: "right" }}>
+              <button onClick={goPrevWeek} style={{ marginRight: 6 }}>이전주</button>
+              <b style={{ margin: "0 6px" }}>{curYear}년 {curWeek}주차</b>
+              <button onClick={goNextWeek}>다음주</button>
+            </span>
           </div>
-          {/* 재고 관리 현황 */}
-          <div className={styles.card}>
-            <h3>📦 재고 관리 현황</h3>
-            <ul className={styles.noticeList}>
-              <li className={styles.strong}>⚠️ 폐기 예정 재고: 5종</li>
-              <li className={styles.strong}>🔄 자동 발주 예정 품목: 3종</li>
-              <li className={styles.highlightTitle}>📋 주요 재고 현황</li>
-              {mainInventory.map((item, idx) => (
-                <li key={item.name}>{item.name} - {item.remain}</li>
-              ))}
-            </ul>
-          </div>
-          {/* 주간 근무표(2칸) */}
-          <div className={`${styles.card} ${styles.scheduleCard}`}>
-            <h3>👥 전체 직원 주간 근무표</h3>
-            <table className={styles.scheduleTable}>
-              <thead>
-                <tr>
-                  <th>이름</th>
-                  <th>월</th>
-                  <th>화</th>
-                  <th>수</th>
-                  <th>목</th>
-                  <th>금</th>
-                </tr>
-              </thead>
-              <tbody>
-                {schedule.map((row, idx) => (
-                  <tr key={idx}>
-                    {row.map((cell, i) => <td key={i}>{cell}</td>)}
+          {weekError ? (
+            <div className={styles.scheduleEmptyMsg}>{weekError}</div>
+          ) : weekSchedule.length === 0 ? (
+            <div className={styles.scheduleEmptyMsg}>등록된 근무표가 없습니다.</div>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              <table className={styles.scheduleTable}>
+                <thead>
+                  <tr>
+                    <th>이름</th>
+                    <th>월</th>
+                    <th>화</th>
+                    <th>수</th>
+                    <th>목</th>
+                    <th>금</th>
+                    <th>토</th>
+                    <th>일</th>
                   </tr>
+                </thead>
+                <tbody>
+                  {weekSchedule.map((row, i) => (
+                    <tr key={i}>
+                      <td style={{ fontWeight: 600 }}>{weekEmpNames[i] ?? ''}</td>
+                      {row.map((cell, j) => <td key={j}>{cell}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.infoCard}>
+          <div className={styles.infoTitle}>재고 관리 현황</div>
+          <ul>
+            <li>⚠️ 임박/폐기 예정 재고: <b>{expireSummary.totalCount ?? 0}</b>종</li>
+            <li>🔄 자동 발주 예정 품목: <b>{autoOrderExpectedCount}</b>종</li>
+            <li className={styles.blockLine}>📋 주요 재고 현황</li>
+            {mainStocks.length === 0
+              ? <li style={{ color: "#bbb" }}>주요 재고 없음</li>
+              : mainStocks.map(item => (
+                <li key={item.ingredientName}>{item.ingredientName} - {item.remainQuantity}{item.unit}</li>
+              ))}
+          </ul>
+        </div>
+
+        <div className={styles.infoCard}>
+          <div className={styles.infoTitle}>공지 및 고객 문의</div>
+          <ul>
+            <li className={styles.blockLine}>최근 공지사항:</li>
+            <ul className={styles.top3List}>
+              {notices.length === 0
+                ? <li style={{ color: "#bbb" }}>공지 없음</li>
+                : notices.slice(0, 5).map((n, idx) => (
+                  <li key={n.id}>
+                    <b>{n.title}</b>
+                    <span className={styles.noticeDate}>{n.regDate?.slice(0, 10)}</span>
+                  </li>
                 ))}
-              </tbody>
-            </table>
-          </div>
-          {/* 공지사항 */}
-          <div className={styles.card}>
-            <h3>📢 공지사항</h3>
-            <ul className={styles.noticeList}>
-              <li>⏰ 신메뉴 출시 예정 (6월 1일)</li>
-              <li>🔧 시스템 점검 (5월 30일 00시)</li>
-              <li>📌 폐기 신청 마감일 (5월 25일)</li>
-              <li>📢 여름 한정 메뉴 테스트 시작</li>
-              <li>📦 재고 전수조사 일정 안내</li>
-              <li>📋 전직원 위생교육 필참</li>
             </ul>
-          </div>
+            <li className={styles.blockLine}>
+              읽지 않은 고객문의: <b>{unreadComplaintCount}</b>건
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   );
-}
+} 
