@@ -293,7 +293,7 @@ export default function HqDashboard() {
                     className={idx === orderTop3.length - 1 && orderTop3.length > 0 ? styles.bottomLine : ""}
                   >
                     <span className={styles.top3name}>{item.ingredientName}</span>
-                    <span className={styles.graySmall}>({item.quantity ?? "-"} {item.unit ?? ""})</span>
+                    <span className={styles.graySmall}>({item.orderCount ?? "-"} {item.unit ?? ""})</span>
                   </li>
                 ))}
               </ul>

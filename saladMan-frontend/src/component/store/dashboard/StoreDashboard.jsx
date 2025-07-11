@@ -54,6 +54,8 @@ export default function StoreDashboard() {
   const [weekSchedule, setWeekSchedule] = useState([]);
   const [weekEmpNames, setWeekEmpNames] = useState([]);
   const [weekError, setWeekError] = useState("");
+  const lowStockCount = summary?.lowStockCount ?? 0;
+
 
   const topMenus = summary?.topMenus || [];
 
@@ -82,23 +84,24 @@ export default function StoreDashboard() {
 
   // 주간 근무표 fetch
   useEffect(() => {
-    if (!token) return;
-    setWeekError("");
-    myAxios(token)
-      .get("/store/dashboard/week-schedule", {
-        params: { storeId: user.id, weekNo: curWeek }
-      })
-      .then(res => {
-        const { table, empNames } = res.data || {};
-        setWeekSchedule(table || []);
-        setWeekEmpNames(empNames || []);
-      })
-      .catch(() => {
-        setWeekSchedule([]);
-        setWeekEmpNames([]);
-        setWeekError("주간 근무표 정보를 불러올 수 없습니다.");
-      });
+  if (!token) return;
+  setWeekError("");
+  myAxios(token)
+    .get("/store/dashboard/week-schedule", {
+      params: { storeId: user.id, weekNo: curWeek }
+    })
+    .then(res => {
+      const { table, empNames } = res.data || {};
+      setWeekSchedule(table || []);
+      setWeekEmpNames(empNames || []);
+    })
+    .catch(() => {
+      setWeekSchedule([]);
+      setWeekEmpNames([]);
+      setWeekError("주간 근무표 정보를 불러올 수 없습니다.");
+    });
   }, [token, user, curYear, curWeek]);
+
 
   // 매출/주문 차트 데이터 (최신이 오른쪽!)
   const sales = summary?.sales || {};
@@ -199,11 +202,11 @@ export default function StoreDashboard() {
           <div className={styles.sectionTitle}>매출 및 주문 현황</div>
           <div className={styles.salesCharts}>
             {salesData.length === 0 ? (
-              <div style={{ color: "#bbb", textAlign: "center", padding: "60px 0 30px 0" }}>
+              <div style={{ color: "#bbb", textAlign: "center", padding: "20px 0 30px 0" }}>
                 매출 및 주문 데이터가 없습니다.
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={350}>
                 <ComposedChart data={salesData} margin={{ top: 24, right: 30, left: 5, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
@@ -299,6 +302,8 @@ export default function StoreDashboard() {
           <ul>
             <li>⚠️ 임박/폐기 예정 재고: <b>{expireSummary.totalCount ?? 0}</b>종</li>
             <li>🔄 자동 발주 예정 품목: <b>{autoOrderExpectedCount}</b>종</li>
+            <li>🛑 재고 부족 품목: <b>{lowStockCount}</b>종</li> 
+
             <li className={styles.blockLine}>📋 주요 재고 현황</li>
             {mainStocks.length === 0
               ? <li style={{ color: "#bbb" }}>주요 재고 없음</li>
