@@ -254,9 +254,9 @@ export default function HqDashboard() {
           <div className={styles.infoCard}>
             <div className={styles.infoTitle}>유통기한 임박/재고 부족 관리</div>
             <ul>
-              <li>전체 임박 품목 수: <b>{expireTotalCount}</b>건</li>
-              <li>D-1(내일) 임박: <b>{d1Count}</b>건</li>
-              <li>D-DAY(오늘) 임박: <b>{todayCount}</b>건</li>
+              {/* <li>전체 임박 품목 수: <b>{expireTotalCount}</b>건</li> */}
+              <li>유통기한 D-1(내일) 임박: <b>{d1Count}</b>건</li>
+              <li>유통기한 D-DAY(오늘) 임박: <b>{todayCount}</b>건</li>
               <li>재고 부족 품목: <b>{lowStockCount}</b>건</li>
             </ul>
           </div>
@@ -281,10 +281,10 @@ export default function HqDashboard() {
           </div>
           {/* 발주/폐기 */}
           <div className={styles.infoCard}>
-            <div className={styles.infoTitle}>발주 및 폐기 현황</div>
+            <div className={styles.infoTitle}>수주 및 폐기요청 현황</div>
             <ul>
               <li className={styles.blockLine}>
-                발주 전체 건수: <b>{orderTotalCount}</b>건
+                수주 전체 건수: <b>{orderTotalCount}</b>건
               </li>
               <ul className={styles.top3List}>
                 {orderTop3.map((item, idx) => (
@@ -301,7 +301,7 @@ export default function HqDashboard() {
                 금일 신규 발주 품목: <b>0</b>건 | 자동발주 예정 품목: <b>0</b>건
               </li>
               <li className={styles.blockLine}>
-                폐기 전체 건수: <b>{disposalTotalCount}</b>건
+                폐기 요청 건수: <b>{disposalTotalCount}</b>건
               </li>
               <ul className={styles.top3List}>
                 {disposalTop3.map((item, idx) => (

@@ -8,13 +8,8 @@ import {
   PieChart, Pie, Cell
 } from "recharts";
 
-// 1. 색상 팔레트 본사와 동일하게!
 const COLORS = [
-  "#70d6ff", // 하늘색
-  "#ff70a6", // 핑크
-  "#ffd670", // 노랑
-  "#ff9770", // 오렌지
-  "#6eeb83", // 연두
+  "#70d6ff", "#ff70a6", "#ffd670", "#ff9770", "#6eeb83",
 ];
 
 function getISOWeek(date) {
@@ -45,7 +40,7 @@ export default function StoreDashboard() {
 
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState("");
-  const [groupType, setGroupType] = useState("day"); // 일별/주별/월별
+  const [groupType, setGroupType] = useState("day");
   const [dateRange, setDateRange] = useState({ start: getWeekAgo(), end: getToday() });
 
   const today = new Date();
@@ -54,56 +49,18 @@ export default function StoreDashboard() {
   const [weekSchedule, setWeekSchedule] = useState([]);
   const [weekEmpNames, setWeekEmpNames] = useState([]);
   const [weekError, setWeekError] = useState("");
-  const lowStockCount = summary?.lowStockCount ?? 0;
 
-
+  // 하단 카드 데이터들
   const topMenus = summary?.topMenus || [];
+  const expireSummary = summary?.expireSummary || {};
+  const autoOrderExpectedCount = summary?.autoOrderExpectedCount ?? 0;
+  const mainStocks = summary?.mainStocks || [];
+  const notices = summary?.notices || [];
+  const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
+  const lowStockCount = summary?.lowStockCount ?? 0;
+  const disposalSummary = summary?.disposalSummary || { 신청: 0, 완료: 0, 반려: 0 };
 
-  // 대시보드 fetch
-  useEffect(() => {
-    if (!token) return;
-    setError("");
-    myAxios(token)
-      .get("/store/dashboard/summary", {
-        params: {
-          storeId: user.id,
-          startDate: dateRange.start,
-          endDate: dateRange.end,
-          groupType
-        }
-      })
-      .then(res => {
-        setSummary(res.data);
-        // console.log("[대시보드 응답 데이터]", res.data);
-      })
-      .catch(err => {
-        setError("대시보드 정보를 불러올 수 없습니다.");
-        setSummary(null);
-      });
-  }, [token, user, groupType, dateRange.start, dateRange.end]);
-
-  // 주간 근무표 fetch
-  useEffect(() => {
-  if (!token) return;
-  setWeekError("");
-  myAxios(token)
-    .get("/store/dashboard/week-schedule", {
-      params: { storeId: user.id, weekNo: curWeek }
-    })
-    .then(res => {
-      const { table, empNames } = res.data || {};
-      setWeekSchedule(table || []);
-      setWeekEmpNames(empNames || []);
-    })
-    .catch(() => {
-      setWeekSchedule([]);
-      setWeekEmpNames([]);
-      setWeekError("주간 근무표 정보를 불러올 수 없습니다.");
-    });
-  }, [token, user, curYear, curWeek]);
-
-
-  // 매출/주문 차트 데이터 (최신이 오른쪽!)
+  // 차트 데이터
   const sales = summary?.sales || {};
   let salesData = [];
   if (groupType === "week") {
@@ -128,12 +85,47 @@ export default function StoreDashboard() {
 
   const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) || [];
 
-  // 하단 카드 데이터
-  const expireSummary = summary?.expireSummary || {};
-  const autoOrderExpectedCount = summary?.autoOrderExpectedCount ?? 0;
-  const mainStocks = summary?.mainStocks || [];
-  const notices = summary?.notices || [];
-  const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
+  // fetch summary
+  useEffect(() => {
+    if (!token) return;
+    setError("");
+    myAxios(token)
+      .get("/store/dashboard/summary", {
+        params: {
+          storeId: user.id,
+          startDate: dateRange.start,
+          endDate: dateRange.end,
+          groupType
+        }
+      })
+      .then(res => {
+        setSummary(res.data);
+      })
+      .catch(() => {
+        setError("대시보드 정보를 불러올 수 없습니다.");
+        setSummary(null);
+      });
+  }, [token, user, groupType, dateRange.start, dateRange.end]);
+
+  // fetch week schedule
+  useEffect(() => {
+    if (!token) return;
+    setWeekError("");
+    myAxios(token)
+      .get("/store/dashboard/week-schedule", {
+        params: { storeId: user.id, weekNo: curWeek }
+      })
+      .then(res => {
+        const { table, empNames } = res.data || {};
+        setWeekSchedule(table || []);
+        setWeekEmpNames(empNames || []);
+      })
+      .catch(() => {
+        setWeekSchedule([]);
+        setWeekEmpNames([]);
+        setWeekError("주간 근무표 정보를 불러올 수 없습니다.");
+      });
+  }, [token, user, curYear, curWeek]);
 
   const setPeriod = (type) => {
     if (type === "today") setDateRange({ start: getToday(), end: getToday() });
@@ -160,14 +152,7 @@ export default function StoreDashboard() {
     }
   };
 
-  const renderGroupTypeBtns = () => (
-    <div className={styles.groupTypeBtns}>
-      <button className={groupType === "day" ? styles.active : ""} onClick={() => handleGroupTypeClick("day")}>일별</button>
-      <button className={groupType === "week" ? styles.active : ""} onClick={() => handleGroupTypeClick("week")}>주별</button>
-      <button className={groupType === "month" ? styles.active : ""} onClick={() => handleGroupTypeClick("month")}>월별</button>
-    </div>
-  );
-
+  // === 화면 ===
   return (
     <div className={styles.dashboardWrap}>
       <div className={styles.header}>
@@ -189,10 +174,14 @@ export default function StoreDashboard() {
             min={dateRange.start}
           />
           <button onClick={() => setPeriod("today")} className={styles.periodBtn}>오늘</button>
-          <button onClick={() => setPeriod("week")} className={styles.periodBtn}>1주</button>
-          <button onClick={() => setPeriod("month")} className={styles.periodBtn}>1달</button>
+          <button onClick={() => setPeriod("week")} className={styles.periodBtn}>한 주</button>
+          <button onClick={() => setPeriod("month")} className={styles.periodBtn}>한 달</button>
         </div>
-        {renderGroupTypeBtns()}
+        <div className={styles.groupTypeBtns}>
+          <button className={groupType === "day" ? styles.active : ""} onClick={() => handleGroupTypeClick("day")}>일별</button>
+          <button className={groupType === "week" ? styles.active : ""} onClick={() => handleGroupTypeClick("week")}>주별</button>
+          <button className={groupType === "month" ? styles.active : ""} onClick={() => handleGroupTypeClick("month")}>월별</button>
+        </div>
       </div>
 
       {error && <div className={styles.error}>{error}</div>}
@@ -202,11 +191,11 @@ export default function StoreDashboard() {
           <div className={styles.sectionTitle}>매출 및 주문 현황</div>
           <div className={styles.salesCharts}>
             {salesData.length === 0 ? (
-              <div style={{ color: "#bbb", textAlign: "center", padding: "20px 0 30px 0" }}>
+              <div style={{ color: "#bbb", textAlign: "center", padding: "60px 0 30px 0" }}>
                 매출 및 주문 데이터가 없습니다.
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height={350}>
+              <ResponsiveContainer width="100%" height={250}>
                 <ComposedChart data={salesData} margin={{ top: 24, right: 30, left: 5, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
@@ -297,19 +286,23 @@ export default function StoreDashboard() {
           )}
         </div>
 
+        {/* 재고/임박/폐기 한 줄 카드 */}
         <div className={styles.infoCard}>
-          <div className={styles.infoTitle}>재고 관리 현황</div>
+          <div className={styles.infoTitle}>재고 관리/폐기 현황</div>
           <ul>
-            <li>⚠️ 임박/폐기 예정 재고: <b>{expireSummary.totalCount ?? 0}</b>종</li>
-            <li>🔄 자동 발주 예정 품목: <b>{autoOrderExpectedCount}</b>종</li>
-            <li>🛑 재고 부족 품목: <b>{lowStockCount}</b>종</li> 
-
-            <li className={styles.blockLine}>📋 주요 재고 현황</li>
-            {mainStocks.length === 0
-              ? <li style={{ color: "#bbb" }}>주요 재고 없음</li>
-              : mainStocks.map(item => (
-                <li key={item.ingredientName}>{item.ingredientName} - {item.remainQuantity}{item.unit}</li>
-              ))}
+            <li>
+              <b>재고 부족</b>: {lowStockCount}종
+              &nbsp;|&nbsp;
+              <b>D-1 임박</b>: {expireSummary.d1Count ?? 0}종
+              &nbsp;|&nbsp;
+              <b>D-day 임박</b>: {expireSummary.todayCount ?? 0}종
+              &nbsp;|&nbsp;
+              <b>폐기 신청</b>: {disposalSummary.신청 ?? 0}건
+              &nbsp;|&nbsp;
+              <b>폐기 완료</b>: {disposalSummary.완료 ?? 0}건
+              &nbsp;|&nbsp;
+              <b>폐기 반려</b>: {disposalSummary.반려 ?? 0}건
+            </li>
           </ul>
         </div>
 
