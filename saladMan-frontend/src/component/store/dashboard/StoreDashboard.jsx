@@ -291,17 +291,22 @@ export default function StoreDashboard() {
           <div className={styles.infoTitle}>재고 관리/폐기 현황</div>
           <ul>
             <li>
-              <b>재고 부족</b>: {lowStockCount}종
-              &nbsp;|&nbsp;
-              <b>D-1 임박</b>: {expireSummary.d1Count ?? 0}종
-              &nbsp;|&nbsp;
-              <b>D-day 임박</b>: {expireSummary.todayCount ?? 0}종
-              &nbsp;|&nbsp;
-              <b>폐기 신청</b>: {disposalSummary.신청 ?? 0}건
-              &nbsp;|&nbsp;
-              <b>폐기 완료</b>: {disposalSummary.완료 ?? 0}건
-              &nbsp;|&nbsp;
-              <b>폐기 반려</b>: {disposalSummary.반려 ?? 0}건
+              <b>재고 부족</b>: {lowStockCount}종<br/>
+            </li>
+            <li>
+              <b>D-1 임박</b>: {expireSummary.d1Count ?? 0}종<br/>
+            </li>
+            <li>
+              <b>D-day 임박</b>: {expireSummary.todayCount ?? 0}종<br/>
+            </li>
+            <li>
+              <b>폐기 신청</b>: {disposalSummary.신청 ?? 0}건<br/>
+            </li>
+            <li>
+              <b>폐기 완료</b>: {disposalSummary.완료 ?? 0}건<br/>
+            </li>
+            <li>
+              <b>폐기 반려</b>: {disposalSummary.반려 ?? 0}건<br/>
             </li>
           </ul>
         </div>
