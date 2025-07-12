@@ -20,23 +20,24 @@ export default function HqNoticeDetail() {
   });
 
   useEffect(() => {
-    if (!token) return;
-    if (id) {
-      myAxios(token).get("/hq/notice/detail", { params: { id } })
-        .then(res => setNotice(res.data.notice))
-        .catch((err) =>console.error("공지 불러오기 실패:", err));
-    }
+    if (!token || !id) return;
+    myAxios(token)
+      .get("/hq/notice/detail", { params: { id } })
+      .then(res => setNotice(res.data.notice))
+      .catch(err => console.error("공지 불러오기 실패:", err));
   }, [id, token]);
 
-  const getFileNameFromUrl = (url) => {
-    if (!url) return "";
-    return url.substring(url.lastIndexOf("/") + 1);
-  };
+  const imageList = Array.isArray(notice.imgFileName)
+    ? notice.imgFileName
+    : notice.imgFileName
+      ? [notice.imgFileName]
+      : [];
 
-  // 공지 삭제 함수
+  const getFileNameFromUrl = url =>
+    url.substring(url.lastIndexOf("/") + 1);
+
   const handleDelete = async () => {
     if (!window.confirm("정말 이 공지를 삭제하시겠습니까?")) return;
-
     try {
       await myAxios(token).delete("/hq/notice/delete", { params: { id } });
       alert("공지 삭제 완료!");
@@ -51,48 +52,90 @@ export default function HqNoticeDetail() {
     <div className={styles.container}>
       <NoticeSidebar />
       <main className={styles.content}>
-        <div className={styles.title}>공지사항 상세</div>
-        <table className={styles.table}>
-          <tbody>
-            <tr>
-              <th className={styles.label}>제목</th>
-              <td className={styles.value}>{notice.title}</td>
-            </tr>
-            <tr>
-              <th className={styles.label}>내용</th>
-              <td className={styles.value} style={{ whiteSpace: "pre-line" }}>{notice.content}</td>
-            </tr>
-            <tr>
-              <th className={styles.label}>이미지</th>
-              <td className={styles.value}>
-                {notice.imgFileName
-                  ? <>
-                      <img src={notice.imgFileName} alt="공지이미지" className={styles.image} />
-                    </>
-                  : "없음"
-                }
-              </td>
-            </tr>
-            <tr>
-              <th className={styles.label}>첨부파일</th>
-              <td className={styles.value}>
-                {notice.fileName
-                  ? <>
-                      <a href={notice.fileName} download style={{ marginRight: 10 }}>
-                        {notice.fileOriginName || getFileNameFromUrl(notice.fileName)}
-                      </a>
-                    </>
-                  : "없음"
-                }
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div className={styles.buttonGroup}>
-          <button className={styles.backBtn} onClick={() => navigate("/hq/HqNoticeList")}>목록</button>
-          <button className={styles.modifyBtn} onClick={() => navigate(`/hq/HqNoticeModify/${id}`)}>수정</button>
-          <button className={styles.deleteBtn} onClick={handleDelete}>삭제</button>
+        <h2 className={styles.title}>공지 상세</h2>
+        <div className={styles.detail}>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>제목</label>
+            <div className={styles.value}>
+              <input
+                type="text"
+                readOnly
+                value={notice.title}
+                placeholder="제목을 입력하세요"
+                className={`${styles.inputLike} ${styles.inputTitle}`}
+              />
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>내용</label>
+            <div className={styles.value}>
+              <textarea
+                readOnly
+                value={notice.content}
+                placeholder="내용을 입력하세요"
+                className={`${styles.inputLike} ${styles.inputContent}`}
+              />
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>이미지</label>
+            <div className={styles.value}>
+              {imageList.length > 0 ? (
+                <div className={styles.imagesContainer}>
+                  {imageList.map((img, idx) => (
+                    <div className={styles.imageBox} key={idx}>
+                      <img src={img} alt={`notice-${idx}`} className={styles.imagePreview} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className={styles.imageBox} />
+              )}
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>첨부파일</label>
+            <div className={styles.value}>
+              <div className={styles.fileAttachBox}>
+                {notice.fileName ? (
+                  <a
+                    href={notice.fileName}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.fileName}
+                  >
+                    {notice.fileOriginName || getFileNameFromUrl(notice.fileName)}
+                  </a>
+                ) : (
+                  <span className={styles.fileName}>선택된 파일 없음</span>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className={styles.btnBox}>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnSubmit}`}
+              onClick={() => navigate("/hq/HqNoticeList")}
+            >
+              목록
+            </button>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnCancel}`}
+              onClick={() => navigate(`/hq/HqNoticeModify/${id}`)}
+            >
+              수정
+            </button>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnCancel}`}
+              onClick={handleDelete}
+            >
+              삭제
+            </button>
+          </div>
         </div>
       </main>
     </div>

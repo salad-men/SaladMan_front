@@ -1,14 +1,14 @@
 .wrapper {
   display: flex;
-  height: calc(100vh - 64px);
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow: hidden;
   overflow-y: scroll;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
-   flex: 1;
-  padding: 30px 20px 0;
+  flex: 1;
+  padding: 30px 20px;
   max-width: 1500px;
   margin: 0 auto;
   display: flex;
@@ -20,11 +20,17 @@
   display: flex;
   flex-direction: column;
 }
+.pageHeader h2 {
+  margin: 0 0 16px;
+  font-size: 28px;
+  color: #286180; /* 파란 톤 */
+  font-weight: bold;
+}
 
 .mainArea {
   display: flex;
   gap: 20px;
-  flex-direction: row; 
+  flex-direction: row;
   align-items: flex-start;
 }
 
@@ -41,16 +47,17 @@
   height: 600px;
 }
 
-
 .mapArea {
   width: 100%;
   height: 100%;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: 0.3px solid #c7dae3; /* 연한 파란 테두리 */
 }
 
 .title {
   font-size: 20px;
   margin-bottom: 20px;
+  color: #286180; /* 파란 톤 */
 }
 
 .filters {
@@ -61,26 +68,84 @@
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
+  color: rgb(71, 71, 71);
+  font-size: 14px;
 }
 
-.filterRow select,
-.filterRow input {
+.filterRow select{
   padding: 4px 8px;
+  border: 1px solid #a8bcc6; /* 파란 테두리 */
+  border-radius: 4px;
+  color: #286180;
+}
+.filterRow input {
+  padding: 8px 16px;
+  border: 1px solid #a8bcc6; /* 파란 테두리 */
+  border-radius: 4px;
+  color: #286180;
 }
 
+.tableWrapper {
+  max-height: 600px;
+  box-sizing: border-box;
+}
+
+.scrollBody {
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+/* 테이블 헤더 */
+.inventoryTableHeader {
+  width: 97%;
+  max-height: 600px;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 1px solid #a8bcc6; /* 파란 테두리 */
+  border-bottom: none;
+  color: #286180;
+}
+
+.inventoryTableHeader th {
+  padding: 10px;
+  background-color: #e8f0f6; /* 연한 파란 헤더 */
+}
+
+.inventoryTableHeader th:first-child {
+  width: 170px;
+}
+
+.scrollBody {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* 테이블 본문 */
 .inventoryTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.inventoryTable th,
 .inventoryTable td {
-  border: 1px solid #ccc;
+  border: 1px solid #a8bcc6; /* 파란 테두리 */
   padding: 8px;
   text-align: center;
 }
 
+.inventoryTable td:nth-child(2),
+.inventoryTable td:nth-child(3) {
+  width: 130px;
+}
+
 .inventoryTable thead {
-  background-color: #f5f5f5;
+  background-color: #e8f0f6; /* 연한 파란 헤더 */
+}
+
+.noData {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-size: 15px;
 }

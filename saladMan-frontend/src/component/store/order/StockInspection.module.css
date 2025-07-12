@@ -1,15 +1,13 @@
 .stockInspectionContainer {
     display: flex;
-    height: calc(100vh - 64px);
-    background-color: #f9fafb;
     overflow: hidden;
+    padding: 24px 100px 0 280px;
 }
+
 .stockInspectionContent {
     flex: 1;
-    padding: 40px 40px 60px;
+    padding: 30px 20px;
     background-color: white;
-    box-sizing: border-box;
-    border-left: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -17,20 +15,23 @@
 }
 
 .title {
-    font-size: 24px;
+    margin: 0 0 16px;
+    font-size: 28px;
+    color: #286180;
     font-weight: bold;
-    margin-bottom: 30px;
 }
-.infoBox{
+
+.infoBox {
     margin-bottom: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #dce3e9;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: #f7f9fa;
 }
 
 .infoBox p {
     margin: 4px 0;
     font-size: 14px;
+    color: #286180;
 }
 
 .inspectorBox {
@@ -42,13 +43,19 @@
 }
 
 .inspectorBox span {
-    
     display: inline-flex;
 }
 
 .inspectorBox select {
     padding: 6px;
     margin-left: 4px;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
+}
+
+.inspectionTableWrapper {
+    width: 100%;
+    overflow-x: auto;
 }
 
 .inspectionTable {
@@ -59,21 +66,34 @@
 
 .inspectionTable th,
 .inspectionTable td {
-    border: 1px solid #ccc;
-    padding: 10px;
+    border: 1px solid #dce3e9;
+    padding: 12px;
     text-align: center;
+    white-space: nowrap;
+    font-size: 14px;
 }
+
 .inspectionTable th {
-    background-color: #e9f3e9;
+    background-color: #dce3e9;
+    color: #2d4836;
     font-weight: bold;
 }
+
+.inspectionTable tbody tr:hover {
+    background-color: #edf4f7;
+}
+
 .inspectionTable .inputBox {
     width: 80px;
     padding: 6px;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
 }
 
 .inspectionTable .selectBox {
     padding: 6px;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
 }
 
 .inspectionTable .textArea {
@@ -81,30 +101,58 @@
     height: 20px;
     padding: 6px;
     resize: none;
+    border: 1px solid #a8bcc6;
+    border-radius: 4px;
 }
 
 .footerSection {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: center;
     margin-top: 20px;
-    width: 100%;
 }
 
 .completeButton {
-    background-color: #4D774E;
+    background-color: #286180;
     color: white;
     border: none;
-    padding: 10px 16px;
+    padding: 12px 20px;
+    font-size: 16px;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
 }
 
 .completeButton:hover {
-    background-color: #3a5e3b;
+    background-color: #1a445a;
 }
 
 .statusText {
     font-size: 14px;
     font-weight: bold;
+    color: #286180;
+}
+
+/* 모바일: flex-direction column */
+@media (max-width: 768px) {
+    .stockInspectionContainer {
+        flex-direction: column;
+        height: auto;
+    }
+    .stockInspectionContent {
+        padding: 20px 16px;
+        border-left: none;
+    }
+    .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    .inspectorBox {
+        justify-content: flex-start;
+    }
+    .inspectionTable th,
+    .inspectionTable td {
+        padding: 8px;
+        font-size: 15px;
+    }
 }

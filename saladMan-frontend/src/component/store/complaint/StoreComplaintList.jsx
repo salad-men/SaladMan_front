@@ -12,17 +12,14 @@ export default function StoreComplaintList() {
   const navigate = useNavigate();
 
   const [complaints, setComplaints] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
+  const [pageNums, setPageNums] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const size = 10;
 
-  // 상태 매핑
-  const mapStatus = (isRead) => isRead ? "열람" : "미열람";
-
+  // 매장: isRelay=true, storeId
   const fetchComplaintList = (pageParam = 1, keywordParam = searchKeyword) => {
-    if (!token) return;
-    if (!user?.id) return;
+    if (!token || !user?.id) return;
     myAxios(token)
       .post("/store/complaint/list", {
         page: pageParam,
@@ -31,33 +28,34 @@ export default function StoreComplaintList() {
         keyword: keywordParam,
       })
       .then(res => {
-        const list = (res.data.complaintList || []).map(c => ({
+        const pi = res.data.pageInfo || {};
+        setComplaints((res.data.complaintList || []).map(c => ({
           ...c,
-          status: mapStatus(c.isRead),
-        }));
-        setComplaints(list);
-        setPage(res.data.pageInfo?.curPage || pageParam);
-        setTotalPages(res.data.pageInfo?.allPage || 1);
-      })
-      .catch(err => console.error(err));
+          status: c.isStoreRead ? "열람" : "미열람",
+        })));
+        const newPageInfo = {
+          curPage: pi.curPage || pageParam,
+          allPage: pi.allPage || 1,
+          startPage: pi.startPage || 1,
+          endPage: pi.endPage || (pi.allPage || 1),
+        };
+        setPageInfo(newPageInfo);
+
+        const pages = [];
+        for (let i = newPageInfo.startPage; i <= newPageInfo.endPage; i++) {
+          pages.push(i);
+        }
+        setPageNums(pages);
+      });
   };
 
   useEffect(() => { fetchComplaintList(1, ""); }, [token, user]);
 
-  // 검색
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") fetchComplaintList(1, searchKeyword);
-  };
   const handleSearch = () => fetchComplaintList(1, searchKeyword);
 
-  // 페이지 이동 (1부터 시작)
-  const handlePageChange = (newPage) => {
-    fetchComplaintList(newPage, searchKeyword);
-  };
-
-  // 전체 글 수 (페이지별 번호 역순)
-  const getDisplayNumber = (idx) => {
-    return (totalPages - (page - 1)) * size - idx;
+  const gotoPage = (p) => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    fetchComplaintList(p, searchKeyword);
   };
 
   return (
@@ -71,23 +69,16 @@ export default function StoreComplaintList() {
             placeholder="제목 검색"
             value={searchKeyword}
             onChange={e => setSearchKeyword(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={e => e.key === "Enter" && handleSearch()}
           />
           <button onClick={handleSearch}>검색</button>
         </div>
         <table className={styles.detailTable}>
-          <colgroup>
-            <col style={{ width: "6%" }} />    {/* 번호 */}
-            <col style={{ width: "32%" }} />   {/* 제목 */}
-            <col style={{ width: "14%" }} />   {/* 작성자 */}
-            <col style={{ width: "18%" }} />   {/* 작성일 */}
-            <col style={{ width: "18%" }} />   {/* 지점명 */}
-            <col style={{ width: "12%" }} />   {/* 비고 */}
-          </colgroup>
           <thead>
             <tr>
               <th>번호</th>
               <th>제목</th>
+              <th>내용</th>
               <th>작성자</th>
               <th>작성일</th>
               <th>지점명</th>
@@ -97,33 +88,46 @@ export default function StoreComplaintList() {
           <tbody>
             {complaints.length === 0 ? (
               <tr>
-                <td colSpan={6} className={styles.noData}>데이터가 없습니다.</td>
+                <td colSpan={7} className={styles.noData}>데이터가 없습니다.</td>
               </tr>
             ) : (
-              complaints.map(({ id, title, writerNickname, writerDate, storeName, status }, idx) => (
-                <tr key={id} className={status === "미열람" ? styles.unread : ""}>
-                  <td className={styles.numberCell}>{idx + 1}</td>
-                  <td
-                    className={styles.clickable}
-                    onClick={() => navigate(`/store/StoreComplaintDetail/${id}`)}
-                  >
-                    <span className={styles.titleText}>{title}</span>
+              complaints.map((c, idx) => (
+                <tr key={c.id} className={!c.isStoreRead ? styles.unread : ""}>
+                  <td>{(pageInfo.curPage - 1) * size + idx + 1}</td>
+                  <td className={styles.clickable}
+                      onClick={() => navigate(`/store/StoreComplaintDetail/${c.id}`)}>
+                    {c.title}
                   </td>
-                  <td>{writerNickname ?? "고객"}</td>
-                  <td>{writerDate}</td>
-                  <td>{storeName ?? "알 수 없음"}</td>
-                  <td className={`${styles.statusCell} ${status === "미열람" ? styles.miyeollam : styles.yeollam}`}>
-                    {status}
+                  <td className={styles.preview}
+                      onClick={() => navigate(`/store/StoreComplaintDetail/${c.id}`)}>
+                    {c.content?.length > 40 ? c.content.slice(0, 40) + "..." : c.content}
                   </td>
+                  <td>{c.writerNickname ?? "고객"}</td>
+                  <td>{c.writerDate}</td>
+                  <td>{c.storeName ?? "알 수 없음"}</td>
+                  <td className={styles.statusCell}>{c.status}</td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
+
         <div className={styles.paging}>
-          <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)}>이전</button>
-          <span>{page} / {totalPages}</span>
-          <button disabled={page >= totalPages} onClick={() => handlePageChange(page + 1)}>다음</button>
+          <button onClick={() => gotoPage(1)} disabled={pageInfo.curPage === 1}>{"<<"}</button>
+          <button onClick={() => gotoPage(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>{"<"}</button>
+
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              onClick={() => gotoPage(p)}
+              className={p === pageInfo.curPage ? styles.active : ""}
+            >
+              {p}
+            </button>
+          ))}
+
+          <button onClick={() => gotoPage(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>{">"}</button>
+          <button onClick={() => gotoPage(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>{">>"}</button>
         </div>
       </main>
     </div>

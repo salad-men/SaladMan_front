@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f6f8fa;
+}
+.header {
+  background-image: url('/Nutrition.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 70px 20px;
+}
+.card {
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+    color: #2e7d32;
+    margin-bottom: 20px;
+}
+
+.orderInfo,
+.amount {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.homeButton {
+    margin-top: 25px;
+    padding: 12px 24px;
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.homeButton:hover {
+    background-color: #1b5e20;
+}

@@ -1,12 +1,31 @@
 .wrapper { max-width: 100vw; margin: 0 auto; }
-.legend { margin: 20px 0 10px 0; }
-.monthSelector { margin: 10px 0 20px 0; text-align: center; font-size: 1.2rem;}
-.monthSelector button { margin: 0 10px; font-size: 1.1rem;}
 .scheduleTable { border-collapse: collapse; width: max-content; min-width: 900px;}
 .scheduleTable th, .scheduleTable td {
-    border: 1px solid #ddd; text-align: center; padding: 4px 5px; font-size: 15px;
+    border: 1px solid #ddd; 
+    text-align: center; 
+    padding: 4px 5px; 
+    font-size: 15px;
 }
-.scheduleTable th { background: #e8e8e8; font-weight: 600;}
-.saveBar { text-align: right; margin-top: 20px; }
-.saveBtn { background: #39b35e; color: #fff; border: none; padding: 8px 24px; border-radius: 5px; font-size: 1rem; font-weight: bold; }
-.saveBtn:hover { background: #277a3b; }
+.scheduleTable th { 
+    background: #e8e8e8; 
+    font-weight: 600;
+}
+.saveBar { 
+    text-align: right; 
+    margin-top: 20px; 
+}
+.saveBtn { 
+    background: #286180;   /* ✅ 메인 파란색 */
+    color: #fff; 
+    border: none; 
+    padding: 8px 24px; 
+    border-radius: 5px; 
+    font-size: 1rem; 
+    font-weight: bold; 
+}
+.saveBtn:disabled { 
+    background: #a7b9c4; /* 파란 계열 비활성화 */
+}
+.saveBtn:hover { 
+    background: #194760;  /* 진한 파란색 hover */
+}

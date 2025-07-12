@@ -1,25 +1,22 @@
 .container {
   display: flex;
-  min-height: 100vh;
   font-family: 'Pretendard', sans-serif;
-  background-color: #f9fafb;
+  background-color: #ffffff;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
   flex: 1;
-  padding: 40px 30px;
+  padding: 30px 0 0 20px;
   background-color: white;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
   min-width: 900px;
 }
 
 .title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #3d5a40;
-  margin-bottom: 20px;
-  user-select: none;
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #286180;
+  font-weight: bold;
 }
 
 .filters {
@@ -30,33 +27,38 @@
 }
 
 .filters select {
-  width: 100px;
-  padding: 5px 8px;
-  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  width: 130px;
+  padding: 6px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
 }
 
 .filters input {
-  width: 150px;
-  padding: 5px 8px;
-  font-size: 13px;
+  width: 180px;
+  padding: 6px 10px;
+  font-size: 15px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
 }
 
 .filters button {
-  padding: 5px 14px;
-  font-size: 13px;
-  border-radius: 5px;
+  padding: 6px 18px;
+  font-size: 15px;
+  border-radius: 4px;
   cursor: pointer;
-  background-color: #5a8158;
+  background-color: #286180;
   color: white;
   border: none;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  transition: background-color 0.2s;
 }
 
 .filters button:hover {
-  background-color: #4a6848;
+  background-color: #1f4d66;
 }
-
-/* 공지등록 버튼 없음! */
 
 .table {
   width: 100%;
@@ -66,60 +68,48 @@
 }
 
 .table thead th {
-  background-color: #f6f6f6;
-  color: #3d5a40;
+  background-color: #e7eff3;
+  color: #286180;
   font-weight: 600;
   padding: 12px 10px;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #b3cedb;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* 번호 컬럼 */
 .table thead th:nth-child(1) {
   width: 10%;
 }
-
-/* 제목 컬럼 좁게 + 줄임 표시 */
 .table thead th:nth-child(2) {
   width: 60%;
   max-width: 360px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-
 .table thead th:nth-child(3) {
   width: 20%;
 }
 
 .table tbody td {
   padding: 14px 10px;
-  color: #555;
+  color: #444;
   text-align: center;
   vertical-align: middle;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 .table tbody td:nth-child(2) {
   text-align: left;
   max-width: 360px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .row {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e3eff3;
   transition: background-color 0.2s ease;
 }
-
 .row:hover {
-  background-color: #f0f7f0;
+  background-color: #f0f7fa;
   cursor: pointer;
 }
 
@@ -128,40 +118,42 @@
   color: #777;
   font-style: italic;
 }
-
 .cell {
   padding: 10px 10px;
 }
-
 .center {
   text-align: center;
 }
 
+/* Paging -> PaymentList 스타일로 완전히 변경 */
 .paging {
-  margin-top: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 6px;
 }
-
 .paging button {
-  margin: 0 8px;
-  padding: 5px 10px;
-  border: 1px solid #5a8158;
-  background-color: white;
-  color: #5a8158;
+  padding: 6px 12px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
+  color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 13px;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
 }
-
-.paging button:hover {
-  background-color: #5a8158;
-  color: white;
+.paging button:hover:not(:disabled) {
+  background-color: #dce3e9;
 }
-
 .paging button:disabled {
-  border-color: #ddd;
-  color: #ddd;
+  background-color: #f0f1f4;
+  color: #c0c7cf;
   cursor: not-allowed;
+}
+.paging .active {
+  background-color: #286180;
+  color: white;
+  font-weight: bold;
+  border-color: #286180;
 }

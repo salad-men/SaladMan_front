@@ -4,55 +4,94 @@ import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
 import { userAtom } from "/src/atoms";
-
+import { useState } from "react";
 import { myAxios } from "/src/config";
+import OrderConfirmModal from './OrderConfirmModal';
 
 
-const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart, className = "staticCart" }) => {
+const KioskCart = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart, orderType = "매장", className = "staticCart" }) => {
 
   const totalPrice = cartItems.reduce((sum, item) => sum + item.salePrice * item.quantity, 0);
   const navigate = useNavigate();
   const token = useAtomValue(accessTokenAtom);
   const store = useAtomValue(userAtom);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+const now = new Date();
+const formattedDate = now.toLocaleString(); // 예: 2025. 7. 8. 오후 2:21
+  const handleOrder = async () => {
+    if (cartItems.length === 0) {
+      alert("장바구니에 담긴 상품이 없습니다.");
+      return;
+    }
+    if (!store || !store.id) {
+      alert("매장 정보가 없습니다.");
+      return;
+    }
+    try {
+      const res = await myAxios(token).post("/kiosk/prepare", {
+        storeId: store.id,
+        items: cartItems.map((item) => ({
+          menuId: item.menuId,
+          quantity: item.quantity,
+          price: item.salePrice
+        }))
+      });
 
-const handleOrder = async () => {
-  if (cartItems.length === 0) {
-    alert("장바구니에 담긴 상품이 없습니다.");
-    return;
-  }
-  if (!store || !store.id) {
-    alert("매장 정보가 없습니다.");
-    return;
-  }
-  try {
-    const res = await myAxios(token).post("/kiosk/prepare", {
-      storeId: store.id,
-      items: cartItems.map((item) => ({
-        menuId: item.menuId,
-        quantity: item.quantity,
-        price: item.salePrice
-      }))
-    });
+      const { orderId, amount } = res.data;
 
-    const { orderId, amount } = res.data;
 
-    // 결제 페이지로 이동 + 데이터 전달
-    navigate("/kiosk/paymentPage", {
-      state: {
-        orderId,
-        amount
-      }
-    });
+      // 결제 페이지로 이동 + 데이터 전달
+      navigate("/kiosk/paymentPage", {
+        state: {
+          orderId,
+          amount
+        }
+      });
 
-  } catch (err) {
-    console.error("결제 준비 오류", err);
-    alert("결제를 준비할 수 없습니다.");
-  }
-};
+    } catch (err) {
+      console.error("결제 준비 오류", err);
+      alert("결제를 준비할 수 없습니다.");
+    }
+  };
+  const handleOrderClick = () => {
+    if (cartItems.length === 0) {
+      alert("장바구니에 담긴 상품이 없습니다.");
+      return;
+    }
+    setIsModalOpen(true);
+  };
 
+  const confirmOrder = async () => {
+    setIsModalOpen(false);
+    try {
+      const res = await myAxios(token).post("/kiosk/prepare", {
+        storeId: store.id,
+        items: cartItems.map((item) => ({
+          menuId: item.menuId,
+          quantity: item.quantity,
+          price: item.salePrice,
+        })),
+      });
+
+      const { orderId, amount } = res.data;
+      navigate("/kiosk/paymentPage", {
+        state: {
+          orderId,
+          amount,
+        },
+      });
+    } catch (err) {
+      console.error("결제 준비 오류", err);
+      alert("결제를 준비할 수 없습니다.");
+    }
+  };
   return (
     <div className={`${styles.cartBar} ${styles[className] || ''}`}>
+      <h2><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-cart3" viewBox="0 0 16 16">
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+      </svg> &nbsp; 카트</h2>
       <div className={styles.tableWrapper}>
+
         <div className={styles.bodyWrapper}>
           <table className={styles.cartTable}>
             <tbody>
@@ -67,7 +106,7 @@ const handleOrder = async () => {
                       >
                         -
                       </button>
-                      <span>{item.quantity}개</span>
+                      <span>{item.quantity}</span>
                       <button
                         onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                       >
@@ -91,42 +130,55 @@ const handleOrder = async () => {
                 </tr>
               ))}
             </tbody>
+            <tfoot>
+              <tr>
+                {/* <td>총</td> */}
+                <td colSpan={2}></td>
+                <td   >
+                  {cartItems.length > 0 && (
+                    <span>총<br /> {totalPrice.toLocaleString()}원</span>
+                  )}
+                </td>
+                <td>
+                  {cartItems.length > 0 && (
+                    <button
+                      className={styles.removeBtn}
+                      onClick={onClearCart}
+                    >
+                      전체<br />삭제
+                    </button>
+                  )}
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
         <table className={styles.cartTable}>
-          <tfoot>
-            <tr>
-              <td colSpan={2}></td>
-              <td>
-                {cartItems.length > 0 && (
-                  <span>총 {totalPrice.toLocaleString()}원</span>
-                )}
-              </td>
-              <td>
-                {cartItems.length > 0 && (
-                  <button
-                    className={styles.removeBtn}
-                    onClick={onClearCart}
-                  >
-                    전체<br />삭제
-                  </button>
-                )}
-              </td>
-            </tr>
-          </tfoot>
+
         </table>
       </div>
 
       <div className={styles.summary}>
         <button
-          className={styles.orderButton}
+          className={styles.homeButton}
           onClick={() => navigate("/kiosk/main")}
         >
           홈으로
         </button>
 
-        <button className={styles.orderButton} onClick={handleOrder}>주문하기</button>
+        <button className={styles.orderButton} onClick={handleOrderClick}>주문하기</button>
+
+        <OrderConfirmModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={confirmOrder}
+          cartItems={cartItems}
+          totalPrice={totalPrice}
+          orderType={orderType}
+          orderTime={formattedDate}
+        />
       </div>
+
     </div>
   );
 };

@@ -1,122 +1,151 @@
-/* OrderRequestList.css */
 .orderRequestContainer {
-    display: flex;
-    height: calc(100vh - 64px);
-    background-color: #f9fafb;
-    overflow: hidden;
+  display: flex;
+  min-height: 70vh;
+  background: #fff;
 }
 
 .orderRequestContent {
-    flex: 1;
-    padding: 40px 40px 60px;
-    background-color: white;
-    box-sizing: border-box;
-    border-left: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    position: relative;
+  flex: 1;
+  padding: 24px 63px 0 280px;
+  background: #fff;
+  box-sizing: border-box;
+  /* border-left: 1px solid #e4e9e7; */
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+  /* height: 1220px; */
+  overflow-y: auto;
 }
 
 .orderRequestContent h2 {
-    margin-top: 100px;
-    font-size: 20px;
-    margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #2f6042;
+  margin-bottom: 16px;
+  margin-top: 16px;
 }
 
 .orderRequestFilters {
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
 }
-
 .orderRequestFilters .row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
-
 .orderRequestFilters label {
-    font-weight: bold;
-    font-size: 14px;
+  font-weight: 600;
+  min-width: 60px;
+  color: #3d5a40;
+  font-size: 14px;
 }
 
 .orderRequestFilters input[type="date"],
-.orderRequestFilters input[type="text"],
 .orderRequestFilters select {
-    padding: 6px 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200px;
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
+  width: 160px;
 }
 
 .orderRequestFilters button {
-    padding: 6px 10px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 4px 10px;
+  border: 1px solid #4d774e;
+  background: #f7faf8;
+  color: #4d774e;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
 }
-
 .orderRequestFilters button:hover {
-    opacity: 0.9;
+  background: #4d774e;
+  color: white;
 }
 
 .orderRequestFilters .searchButton {
-    background-color: #4D774E;
-    color: white;
+  padding: 6px 14px;
+  background-color: #4d774e;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  margin-left: 12px;
+  font-size: 14px;
+}
+.orderRequestFilters .searchButton:hover {
+  background-color: #3b663b;
+}
+.orderRequestFilters .resetButton {
+  padding: 6px 14px;
+  background-color: #aaa;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  margin-left: 6px;
+  font-size: 14px;
+}
+.orderRequestFilters .resetButton:hover {
+  background-color: #868686;
 }
 
-.resetButton {
-    background-color: #aaa;
-    color: white;
-}
-
+/* 테이블 영역 */
 .orderTable {
-    width: 100%;
-    max-width: 1100px;
-    border-collapse: collapse;
-    font-size: 14px;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fff;
+  margin-bottom: 20px;
+  height: 560px;
 }
-
 .orderTable th,
 .orderTable td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
+  border: 1px solid #e4e9e7;
+  padding: 10px;
+  text-align: center;
 }
-
 .orderTable th {
-    background-color: #f6f6f6;
-    font-weight: bold;
+  background-color: #eaf3eb;
+  color: #2d4836;
+  font-weight: 600;
+}
+.orderTable tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.orderTable tbody tr:hover {
+  background-color: #f0f5f0;
 }
 
-.orderTable th.checkboxColumn,
-.orderTable td.checkboxColumn {
-    width: 40px;
-    /* 원하는 폭 */
-    text-align: center;
-    /* 혹은 left/right 조정 가능 */
-    padding: 4px;
-    /* 좌우 여백 줄임 */
-}
-
+/* 페이징 */
 .pagination {
-  margin-top: 16px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   gap: 8px;
 }
-
 .pagination button {
   padding: 6px 12px;
-  border: 1px solid #ccc;
-  background-color: white;
+  border: 1px solid #a2b7aa;
+  border-radius: 4px;
+  font-size: 14px;
   cursor: pointer;
+  background: #ffffff;
+  color: #387448;
 }
-
+.pagination button:disabled {
+  background: #f0f4f1;
+  color: #c0cfc3;
+  cursor: not-allowed;
+}
 .pagination .activePage {
-  background-color: #4D774E;
-  color: white;
+  background-color: #57a964;
+  color: #ffffff;
   font-weight: bold;
+  border-color: #57a964;
 }

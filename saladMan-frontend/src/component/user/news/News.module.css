@@ -55,3 +55,21 @@
   font-weight: bold;
   border-color: #4D774E;
 }
+.writeButtonContainer {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.writeButton {
+  padding: 8px 16px;
+  background-color: #4D774E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.writeButton:hover {
+  background-color: #3b5e3b;
+}

@@ -10,6 +10,7 @@ export default function OrderItemManage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
 
+    const [categories, setCategories] = useState([]);
 
     const [availableFilter, setAvailableFilter] = useState("all");
     const [selectedCategory, setSelectedCategory] = useState("all");
@@ -20,9 +21,15 @@ export default function OrderItemManage() {
 
     const token = useAtomValue(accessTokenAtom);
 
+    const PAGE_BLOCK = 10;
+    const startPage = Math.floor((currentPage - 1) / PAGE_BLOCK) * PAGE_BLOCK + 1;
+    const endPage = Math.min(startPage + PAGE_BLOCK - 1, totalPages);
+
+
     useEffect(() => {
-        if(!token) return;
+        if (!token) return;
         fetchItems();
+        fetchCategories();
     }, [currentPage, availableFilter, token]);
 
     const fetchItems = async () => {
@@ -43,6 +50,15 @@ export default function OrderItemManage() {
             setTotalPages(res.data.totalPages);
         } catch (err) {
             console.error("품목 불러오기 실패", err);
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const res = await myAxios(token).get("/hq/inventory/categories");
+            setCategories(res.data.categories || []);
+        } catch (err) {
+            console.error("카테고리 불러오기 실패", err);
         }
     };
 
@@ -79,7 +95,7 @@ export default function OrderItemManage() {
             <div className={styles.orderItemContainer}>
                 <OrderSidebar />
                 <div className={styles.orderItemContent}>
-                    <h2>수주 품목</h2>
+                    <h2>수주 품목 설정</h2>
 
                     <div className={styles.searchControls}>
                         <select
@@ -90,7 +106,7 @@ export default function OrderItemManage() {
                             }}
                             className={styles.itemFilterSelect}
                         >
-                            <option value="all">전체</option>
+                            <option value="all">전체 상태</option>
                             <option value="possible">수주 가능</option>
                             <option value="impossible">수주 불가</option>
                         </select>
@@ -104,10 +120,11 @@ export default function OrderItemManage() {
                             className={styles.itemFilterSelect}
                         >
                             <option value="all">전체 카테고리</option>
-                            <option value="야채">채소</option>
-                            <option value="과일">과일</option>
-                            <option value="소스">소스</option>
-                            {/* 필요에 따라 동적으로 불러올 수도 있음 */}
+                            {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.name}>
+                                        {cat.name}
+                                    </option>
+                                ))}
                         </select>
 
                         <input
@@ -154,16 +171,46 @@ export default function OrderItemManage() {
                         </tbody>
                     </table>
                     <div className={styles.ordItemManagePagination}>
-                        
-                        {[...Array(totalPages)].map((_, idx) => (
+                        {/* 이전 10페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(Math.max(1, startPage - PAGE_BLOCK))}
+                            disabled={startPage === 1}
+                        >
+                            &lt;&lt;
+                        </button>
+                        {/* 이전 1페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            &lt;
+                        </button>
+
+                        {/* 현재 블록의 페이지들 */}
+                        {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
                             <button
-                                key={idx}
-                                className={currentPage === idx + 1 ? styles.active : ""}
-                                onClick={() => setCurrentPage(idx + 1)}
+                                key={page}
+                                className={currentPage === page ? styles.active : ""}
+                                onClick={() => setCurrentPage(page)}
                             >
-                                {idx + 1}
+                                {page}
                             </button>
                         ))}
+
+                        {/* 다음 1페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                        >
+                            &gt;
+                        </button>
+                        {/* 다음 10페이지 */}
+                        <button
+                            onClick={() => setCurrentPage(Math.min(totalPages, startPage + PAGE_BLOCK))}
+                            disabled={endPage === totalPages}
+                        >
+                            &gt;&gt;
+                        </button>
                     </div>
                 </div>
             </div>

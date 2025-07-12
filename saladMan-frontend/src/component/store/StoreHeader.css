@@ -1,69 +1,103 @@
 .storeHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+  background-color: #ffffff;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
 }
 
 .storeNav {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 300px;
-    flex: 1;
-    padding: 4px 0;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 300px; /* ✅ 원본 간격 그대로 유지 */
+  flex: 1;
 }
 
-.storeDropdownContainer>a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    position: relative;
-    text-align: center;
-    padding: 5px;
+.storeDropdownContainer {
+  position: relative;
 }
 
-.storeDropdownContainer{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.storeDropdownContainer > a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 6px 4px;
+  position: relative;
+  transition: color 0.3s;
 }
 
-.storeDropdownContainer:hover .storeDropdown {
-    display: block;
+.storeDropdownContainer > a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background-color: #286180;
+  transition: width 0.3s ease;
+}
+
+.storeDropdownContainer:hover > a {
+  color: #286180;
+}
+
+.storeDropdownContainer:hover > a::after {
+  width: 100%;
 }
 
 .storeDropdown {
-    display: none;
-    width: 170px;
-    position: absolute;
-    top: 100%;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    padding: 0 10px;
-    border: 1px solid #ddd;
+  position: absolute;
+  top: 150%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  border-radius: 6px;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 999;
 }
 
-.storeDropdown a {
-    text-decoration: none;
-    color: black;
+.storeDropdownContainer:hover .storeDropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .storeDropdown ul {
-    padding: 0;
-    list-style: none;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
 }
 
-.storeDropdown li {
-    padding: 5px;
-    width: fit-content;
-    list-style: none;
+.storeDropdown li a {
+  display: block;
+  text-decoration: none;
+  color: #444;
+  padding: 10px 16px;
+  font-size: 15px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.storeDropdown li a:hover {
+  background-color: #f7f7f7;
+  color: #286180;
 }
 
 .storeUserInfo {
-    margin: auto 100px;
-    font-size: 0.9rem;
-    color: #666;
+  margin: auto 100px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.logo img {
+  height: 31px;
+  width: auto;
+  margin-left: 30px;
 }

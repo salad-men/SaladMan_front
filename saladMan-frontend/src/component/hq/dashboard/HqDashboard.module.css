@@ -1,101 +1,324 @@
-.layout {
-  width: 80%;
-  height: 70vh;
-  margin-bottom: 50px;
-  margin-left: 200px;
-  background: #f9fafb;
+.dashboardWrap {
+  padding: 10px 36px 0px 36px;
+  /* min-height: 1200px; */
+  background: #f7faf8;
+}
+.header {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  position: relative;
+}
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1d492e;
+  margin-right: 22px;
+  margin-bottom: 2px;
+  letter-spacing: -2px;
+}
+.periodFilter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f5f9f7;
+  border-radius: 8px;
+  padding: 7px 17px 7px 15px;
+}
+.periodFilter input[type="date"] {
+  font-size: 1.05rem;
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1.3px solid #b3b3b3;
+  background: #fff;
+  margin-right: 2px;
+}
+.periodBtn {
+  background: #e8f6ef;
+  color: #157347;
+  border: none;
+  border-radius: 7px;
+  font-size: 1rem;
+  padding: 7px 16px;
+  margin-left: 2px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.16s;
+}
+.periodBtn:hover {
+  background: #b2f0d1;
+}
+.groupTypeBtns {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.groupTypeBtns button {
+  background: #eaf7ed;
+  color: #1d492e;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.18s;
+}
+.groupTypeBtns .active, .groupTypeBtns button:hover {
+  background: #74c69d;
+  color: #fff;
+}
+
+/* ========== 1,2행 간격 넓힘 ========== */
+.grid {
+  display: grid;
+  grid-template-columns: 2.3fr 1.2fr;
+  grid-template-rows: 420px auto;
+  gap: 80px 22px;  
+  margin-top: 0;
+}
+
+/* 1행(매출, 인기메뉴) 카드 높이↑ */
+.gridCol2 {
+  background: #fff;
+  border-radius: 16px;
+  padding: 10px 28px 18px 32px;
+  box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
+  grid-row: 1 / span 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  height: 450px;
+  /* height: 100%; */
 }
-
-.dashboardHeader {
-  font-size: 32px;
-  font-weight: bold;
-  color: #2F5D44;
-  margin-bottom: 24px;
-}
-.dashboardHeader .hq {
-  color: #4D774E;
-  font-weight: bold;
-}
-
-.dashboardGrid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 24px;
-  grid-template-areas:
-    "sales sales sales popularity popularity popularity"
-    "inventory inventory notice notice order order";
-}
-
-.card {
-  background: white;
+.gridCol1 {
+  background: #fff;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  padding: 15px;
-  box-sizing: border-box;
-  transition: box-shadow 0.2s;
-}
-.cardTop {
-  height: 550px;
-}
-.cardBottom {
-  height: 300px;
+  padding: 10px 22px 18px 28px;
+  box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
+  grid-row: 1 / span 1;
+  min-width: 0;
+  height: 450px;
+  
 }
 
-
-/* Hover 효과 예시 (원하는 경우) */
-.card:hover {
-  box-shadow: 0 12px 32px rgba(77, 119, 78, 0.08);
-}
-
-.cardHeader {
-  font-size: 20px;
-  margin-bottom: 20px;
-  color: #3D5A40;
-  border-left: 4px solid #4D774E;
-  padding-left: 10px;
+/* 2행 카드 개별 높이 조정 */
+.rowCards {
+  grid-column: 1 / span 2;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 22px;
+  margin-top: 0; 
+  margin-bottom: 0px;
+  justify-content: stretch;
 }
 
-.infoList {
+.infoCard {
+  flex: 1 1 0;
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px 18px 14px 24px;
+  box-shadow: 0 2px 10px rgba(80,130,104,0.07);
+  min-width: 230px;
+  display: flex;
+  flex-direction: column;
+  border: 1.2px solid #e6e9ec;
+  position: relative;
+  min-height: 190px;
+}
+.infoCard:nth-child(1) { min-height: 210px; }
+.infoCard:nth-child(2) { min-height: 210px; }
+.infoCard:nth-child(3) { min-height: 270px; }
+.infoCard:not(:last-child) {
+  border-right: none;
+}
+
+.infoTitle {
+  font-weight: 600;
+  color: #157c4b;
+  font-size: 1.07rem;
+  margin-bottom: 11px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.infoCard:first-child .infoTitle::before { content: "📦"; font-size: 1.04em; }
+.infoCard:nth-child(2) .infoTitle::before { content: "📢"; font-size: 1.02em; }
+.infoCard:nth-child(3) .infoTitle::before { content: "🚚"; font-size: 1.02em; }
+
+/* infoCard 리스트(기본) */
+.infoCard ul {
+  margin: 0;
+  padding-left: 1px;
   list-style: none;
+}
+
+.infoCard li {
+  font-size: 1.04rem;
+  margin-bottom: 7px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
   padding: 0;
-  margin: 20px 0 0;
+  word-break: keep-all;
+  min-height: 25px;
+  border-bottom: none;
 }
-.infoList li {
-  font-size: 15px;
-  padding: 8px 0;
-  border-bottom: 1px dashed #ccc;
+
+/* 큰 단락의 점선 */
+.blockLine {
+  border-bottom: 1px dashed #e3e7eb;
+}
+.infoCard li:last-child {
+  border-bottom: none;
+}
+/* Top3/공지사항 목록만 밑줄 처리 */
+.underlineList li {
+  border-bottom: 1px dashed #e3e7eb !important;
+}
+.underlineList li:last-child {
+  border-bottom: none !important;
+}
+.infoCard b {
+  color: #13795b;
+  font-weight: 600;
+  margin-left: 4px;
+  margin-right: 2px;
+  display: inline-block;
+}
+.infoCard .small {
+  font-size: 0.95rem;
+  color: #777;
+  margin-bottom: 1px;
+  padding-left: 6px;
+}
+.infoCard .graySmall {
+  color: #aaa;
+  font-size: 0.91em;
+  margin-left: 4px;
+}
+
+/* ========== Top3 목록 (건수 밑에 3줄) ========== */
+.top3List {
+  margin: 3px 0 1px 3px;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+.top3List li {
+  font-size: 0.97rem !important;
+  color: #6c757d !important;
   display: flex;
   align-items: center;
-  gap: 6px;
+  flex-direction: row;
+  margin-bottom: 0;
+  min-height: 20px;
+  line-height: 1.5;
+  border-bottom: none !important;
 }
-.popularItemsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px 32px;
-  padding-top: 10px;
+.bottomLine {
+  border-bottom: 1px dashed #e3e7eb !important; 
 }
-.popularItemsGrid li {
-  border: none;
-  padding: 4px 0;
-  font-size: 15px;
+.top3List .top3name {
+  font-weight: 500;
+  margin-right: 6px;
+  color: #36794c !important;
 }
-.selector {
+.top3List .graySmall {
+  margin-left: 2px;
+}
+.top3List li:last-child,
+.top3List li.bottomLine {
+  border-bottom: 1px dashed #e3e7eb !important;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #147c3a;
+  margin-bottom: 8px;
+  letter-spacing: -1.1px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
-.selector label {
-  font-size: 14px;
-  color: #3D5A40;
+.sectionTitle::before {
+  content: "📊";
+  font-size: 1.08em;
+  margin-right: 2px;
+  vertical-align: -2px;
 }
-.selector select {
-  padding: 4px 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.gridCol1 .sectionTitle::before { content: "🥗"; margin-right: 3px; }
+.rowStats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+.statsLabel {
+  font-size: 1.05rem;
+  color: #2d5c36;
+  margin-bottom: 1px;
+}
+.statsValue {
+  font-size: 1.33rem;
+  font-weight: bold;
+  margin-top: 0;
+  color: #216838;
+}
+.salesCharts {
+  width: 100%;
+  height: 275px;
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+.pieLegendList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 11px 0 0 0;
+  font-size: 0.99rem;
+  padding: 0;
+}
+.pieColor {
+  display: inline-block;
+  width: 17px; height: 12px;
+  margin-right: 7px;
+  border-radius: 5px;
+  vertical-align: middle;
+}
+.pieValue {
+  margin-left: 10px;
+  font-size: 0.96rem;
+  color: #22604b;
+}
+
+.noticeDate {
+  font-size: 0.98rem;
+  margin-left: 9px;
+  color: #a0a9b0;
+}
+.loading, .error {
+  font-size: 1.18rem;
+  color: #d37676;
+  text-align: center;
+  margin-top: 36px;
+  margin-bottom: 30px;
+}
+
+
+.noticeTitle {
+  display: block;       
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 98%;        
+  font-weight: 600;
+  color: #13795b;
 }

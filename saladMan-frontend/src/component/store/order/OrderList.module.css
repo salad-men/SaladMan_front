@@ -1,30 +1,29 @@
-/* OrderList.module.css */
 .orderListContainer {
-   display: flex;
-    height: calc(100vh - 64px);
-    background-color: #f9fafb;
+    display: flex;
     overflow: hidden;
+    padding: 24px 100px 0 280px;
 }
 
 .orderListContent {
     flex: 1;
-    padding: 40px 40px 60px;
+    padding: 30px 20px;
     background-color: white;
-    box-sizing: border-box;
-    border-left: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     min-width: 0;
     position: relative;
+    overflow-y: auto;
 }
 
 .orderListContent h2 {
-    margin-bottom: 20px;
-    font-size: 20px;
+    margin: 0 0 16px;
+    font-size: 28px;
+    color: #286180;
+    font-weight: bold;
 }
 
 .filters {
-    margin-bottom: 40px;
+    margin-bottom: 22px;
     width: 80%;
 }
 
@@ -38,28 +37,21 @@
 .filters label {
     font-weight: bold;
     font-size: 14px;
+    color: #286180;
 }
 
-.filters input[type="date"]{
-    padding: 6px 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px; 
-    width: 200px;
-}
-.filters input[type="text"]{
-     padding: 6px 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 184px;
-    margin-right: 10px;   
-}
+.filters input[type="date"],
+.filters input[type="text"],
 .filters select {
     padding: 6px 10px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid #a8bcc6;
     border-radius: 4px;
+    background: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.filters select {
     width: 175px;
     margin-right: 10px;
 }
@@ -75,70 +67,164 @@
 .filters button:hover {
     opacity: 0.9;
 }
-.searchButton {
-    background-color: #4D774E;
-    color: white;
-}
 
-.resetButton {
-    background-color: #aaa;
-    color: white;
-}
-.activeButton {
-  background-color: #4D774E;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 4px 10px;
-  cursor: pointer;
-}
-
-.disabledButton {
-  background-color: #ddd;
-  color: #aaa;
-  border: none;
-  border-radius: 4px;
-  padding: 4px 10px;
-  cursor: not-allowed;
-}
-.orderTable {
-    width: 100%;
-    max-width: 1100px;
-    border-collapse: collapse;
+.dateButton {
+    padding: 6px 10px;
     font-size: 14px;
-}
-
-.orderTable th,
-.orderTable td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-}
-
-.orderTable th {
-    background-color: #f6f6f6;
-    font-weight: bold;
-}
-
-.pagination {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #ddd;
+    background: #f7f9fa;
+    color: #286180;
+    border: 1px solid #286180;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.pagination .active {
-    background-color: #4D774E;
+.dateButton:hover {
+    background-color: #286180;
+    color: #fff;
+}
+
+.dateButton.selected {
+    background-color: #286180;
+    color: white;
+    border: 1px solid #286180;
+}
+
+.searchButton {
+    padding: 6px 14px;
+    background-color: #286180;
+    color: #ffffff;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-right: 2px;
+}
+
+.resetButton {
+    background-color: #9aa9b0;
     color: white;
 }
 
+.activeButton {
+    background-color: #286180;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.activeButton:hover {
+    background-color: #1a445a;
+}
+
+.disabledButton {
+    background-color: #f0f1f4;
+    color: #c0cfc3;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: not-allowed;
+}
+
+.orderTableWrapper {
+    border-radius: 6px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    border: 1px solid #dce3e9;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+.orderTableWrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.orderTableWrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.orderTableWrapper::-webkit-scrollbar-thumb {
+    background-color: #286180;
+    border-radius: 4px;
+    border: 1px solid #1a445a;
+}
+
+.orderTableWrapper::-webkit-scrollbar-thumb:hover {
+    background: #1a445a;
+}
+
+.orderTableWrapper::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.orderTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+}
+
+.orderTable thead th {
+    position: sticky;
+    top: 0;
+    background-color: #dce3e9;
+    z-index: 1;
+}
+
+.orderTable th,
+.orderTable td {
+    border: 1px solid #dce3e9;
+    padding: 9px;
+    text-align: center;
+}
+
+.orderTable th {
+    background-color: #dce3e9;
+    color: #2d4836;
+    font-weight: bold;
+}
+
+.orderTable td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.orderTable tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.orderTable tbody tr:hover {
+    background-color: #edf4f7;
+}
+
+.pagination {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pagination button {
+    padding: 6px 12px;
+    border: 1px solid #9bb7c6;
+    background-color: white;
+    color: #286180;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.pagination .active {
+    background-color: #286180;
+    color: white;
+    font-weight: bold;
+    border-color: #286180;
+}
+
 .clickableRow {
-  cursor: pointer;
+    cursor: pointer;
 }

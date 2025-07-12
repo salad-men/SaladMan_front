@@ -3,22 +3,24 @@ import styles from "./OrderItemTable.module.css";
 import { myAxios } from "/src/config"; // ← 유틸 함수
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
-import { TestTube } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function OrderItemTable() {
 
-    const [stockList, setStockList] = useState([]);  // ✅ OK
+    const [stockList, setStockList] = useState([]);
+    const [showAlertModal, setShowAlertModal] = useState(false);
+
     const [showModal, setShowModal] = useState(false);
 
     const [modalItems, setModalItems] = useState([]);
 
     const [category, setCategory] = useState("전체");
     const [keyword, setKeyword] = useState("");
-
+    const navigate = useNavigate();
     const token = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
-        if(!token) return;
+        if (!token) return;
 
         if (!showModal) return;
 
@@ -86,6 +88,11 @@ export default function OrderItemTable() {
     );
 
     const handleSubmit = async () => {
+        if (stockList.length === 0) {
+            setShowAlertModal(true);
+            return;
+        }
+
         try {
             const payload = stockList.map((item) => ({
                 ingredientId: item.ingredientId,
@@ -97,6 +104,8 @@ export default function OrderItemTable() {
             const res = await myAxios(token).post("/store/orderApply", payload);
             alert("발주 신청이 완료되었습니다.");
             setStockList([]); // 초기화
+            navigate(`/store/orderDetail?id=${res.data.orderId}`);
+
         } catch (err) {
             console.error("발주 신청 실패", err);
             alert("신청에 실패했습니다.");
@@ -146,29 +155,60 @@ export default function OrderItemTable() {
                 <button className={styles.submitBtn} onClick={handleSubmit}>신청하기</button>
             </div>
 
-            {/* 🔽 모달 내부 포함 */}
             {showModal && (
-                <div className={styles.modalOverlay}>
-                    <div className={styles.modalContent}>
-                        <h4>품목 선택</h4>
+                <div
+                    className={styles.modalOverlay}
+                    onClick={() => setShowModal(false)} // ⬅ 바깥 클릭시 닫힘
+                >
+                    <div
+                        className={styles.modalContent}
+                        onClick={(e) => e.stopPropagation()} // ⬅ 내부 클릭 이벤트 버블링 방지
+                    >
+                        <div className={styles.modalHeaderTop}>
+                            <h4>품목 선택</h4>
+                            <button
+                                className={styles.closeButton}
+                                onClick={() => setShowModal(false)}
+                            >
+                                ✕
+                            </button>
+                        </div>
+
                         <div className={styles.modalHeader}>
-                            <select className={styles.modalSelect} value={category} onChange={(e) => setCategory(e.target.value)}>
+                            <select
+                                className={styles.modalSelect}
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                            >
                                 <option>전체</option>
                                 <option>단백질</option>
                                 <option>채소</option>
                             </select>
-                            <input type="text" placeholder="품명 검색" value={keyword}
-                                onChange={(e) => setKeyword(e.target.value)} className={styles.searchInput} />
+                            <input
+                                type="text"
+                                placeholder="품명 검색"
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                                className={styles.searchInput}
+                            />
                         </div>
+
                         <table className={styles.modalTable}>
                             <thead>
-                                <tr><th>품명</th><th>구분</th><th>단위</th><th>재고</th><th>입고중</th><th>선택</th></tr>
+                                <tr>
+                                    <th>품명</th>
+                                    <th>구분</th>
+                                    <th>단위</th>
+                                    <th>재고</th>
+                                    <th>입고중</th>
+                                    <th>선택</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 {modalItems.map((item) => (
                                     <tr key={item.ingredientId}>
                                         <td>{item.name}</td>
-                                        <td>{item.category}</td>
+                                        <td>{item.categoryName}</td>
                                         <td>{item.unit}</td>
                                         <td>{item.quantity}</td>
                                         <td>{item.incoming}</td>
@@ -191,6 +231,41 @@ export default function OrderItemTable() {
                     </div>
                 </div>
             )}
+
+            {showAlertModal && (
+                <div
+                    className={styles.modalOverlay}
+                    onClick={() => setShowAlertModal(false)}
+                >
+                    <div
+                        className={styles.alertModal}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className={styles.alertModalHeader}>
+                            <span className={styles.alertModalTitle}>알림</span>
+                            <button
+                                className={styles.alertModalClose}
+                                onClick={() => setShowAlertModal(false)}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className={styles.alertModalBody}>
+                            선택된 품목이 없습니다.<br />최소 1개 이상 선택해주세요.
+                        </div>
+                        <div className={styles.alertModalFooter}>
+                            <button
+                                className={styles.alertModalButton}
+                                onClick={() => setShowAlertModal(false)}
+                            >
+                                확인
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
+
+
     );
 }

@@ -1,117 +1,247 @@
-.layout {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  background-color: #f9fafb;
-  font-family: 'Pretendard', sans-serif;
-  overflow: hidden;
+.dashboardWrap {
+  padding: 38px 36px 40px 36px;
+  /* min-height: 1200px; */
+  background: #f7faf8;
 }
 
-/* Dashboard */
-.dashboard {
-  flex-grow: 1;
+.header {
   display: flex;
-  flex-direction: column;
-  padding: 30px 50px;
-  box-sizing: border-box;
-  overflow-y: auto;
+  align-items: flex-end;
+  margin-bottom: 15px;
+  position: relative;
 }
-.dashboardHeader {
-  font-size: 32px;
-  font-weight: bold;
-  color: #2F5D44;
-  text-align: left;
-  margin-bottom: 24px;
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1d492e;
+  margin-right: 22px;
+  margin-bottom: 2px;
+  letter-spacing: -2px;
 }
-.dashboardGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  padding: 5px 15px 5px 15px;
-}
-.card h3 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #3D5A40;
-  border-left: 4px solid #4D774E;
-  padding-left: 10px;
-}
-.noticeList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.noticeList li {
-  padding: 10px 0;
-  border-bottom: 1px dashed #d4d4d4;
-  font-size: 15px;
+
+.periodFilter {
   display: flex;
   align-items: center;
   gap: 6px;
+  background: #f5f9f7;
+  border-radius: 8px;
+  padding: 7px 17px 7px 15px;
 }
-.strong {
-  font-size: 18px;
-  font-weight: bold;
-  color: #2F5D44;
-  margin-bottom: 6px;
+
+.periodFilter input[type="date"] {
+  font-size: 1.05rem;
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1.3px solid #b3b3b3;
+  background: #fff;
+  margin-right: 2px;
 }
-.highlightTitle {
-  font-size: 19px;
-  font-weight: bold;
-  color: #4D774E;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #dcdcdc;
-  margin-bottom: 6px;
+
+.periodBtn {
+  background: #e8f6ef;
+  color: #157347;
+  border: none;
+  border-radius: 7px;
+  font-size: 1rem;
+  padding: 7px 16px;
+  margin-left: 2px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.16s;
 }
+
+.periodBtn:hover {
+  background: #b2f0d1;
+}
+
+.groupTypeBtns {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.groupTypeBtns button {
+  background: #eaf7ed;
+  color: #1d492e;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.18s;
+}
+
+.groupTypeBtns .active,
+.groupTypeBtns button:hover {
+  background: #74c69d;
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2.3fr 1.2fr;
+  grid-template-rows: 400px auto;
+  gap: 75px 22px;
+}
+
+.gridCol2 {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 28px 18px 32px;
+  box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
+  grid-row: 1 / span 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+}
+
+.gridCol1 {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 22px 18px 28px;
+  box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
+  grid-row: 1 / span 1;
+  min-width: 0;
+  height: 400px;
+}
+
+.rowCards {
+  grid-column: 1 / span 2;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 22px;
+}
+
+.infoCard {
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px 18px 14px 24px;
+  box-shadow: 0 2px 10px rgba(80, 130, 104, 0.07);
+  min-width: 230px;
+  display: flex;
+  flex-direction: column;
+  border: 1.2px solid #e6e9ec;
+  position: relative;
+  height: 260px;
+}
+
+.scheduleCard {
+  grid-column: 1 / span 1;
+  min-width: 0;
+}
+
 .scheduleTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 0.97rem;
+  background: #fcfcfc;
+  min-width: 450px;
 }
+
 .scheduleTable th,
 .scheduleTable td {
-  padding: 10px;
-  border: 1px solid #e0e0e0;
+  padding: 7px 6px;
+  border: 1px solid #e2e2e2;
   text-align: center;
 }
-.scheduleTable th {
-  background-color: #e6f2ec;
-  color: #2F5D44;
-}
-canvas {
-  width: 100% !important;
-  height: 280px !important;
-}
-.chartLabel {
+
+.scheduleEmptyMsg {
+  color: #aaa;
   text-align: center;
-  font-size: 13px;
-  color: #666;
-  margin-top: 6px;
+  padding: 32px 0 28px 0;
+  font-size: 1.04rem;
 }
-.scheduleCard {
-  grid-column: span 2;
+
+.error {
+  font-size: 1.18rem;
+  color: #d37676;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 12px;
 }
-.popularItemsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 32px;
-  padding-top: 12px;
+
+.pieLegendList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 11px 0 0 0;
+  font-size: 0.99rem;
+  padding: 0;
 }
-.popularItemsGrid li {
-  border: none;
-  padding: 4px 0;
-  font-size: 15px;
+
+.pieColor {
+  display: inline-block;
+  width: 17px;
+  height: 12px;
+  margin-right: 7px;
+  border-radius: 5px;
+  vertical-align: middle;
 }
-.subInfo {
-  font-size: 15px;
-  font-weight: normal;
-  color: #555;
+
+.pieValue {
   margin-left: 10px;
+  font-size: 0.96rem;
+  color: #22604b;
+}
+
+.noticeDate {
+  font-size: 0.98rem;
+  margin-left: 9px;
+  color: #a0a9b0;
+}
+
+.weekTabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 7px;
+  margin-top: 1px;
+}
+
+.weekTabs button,
+.infoTitle button {
+  background: #eaf7ed;
+  color: #1d492e;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.99rem;
+  padding: 5px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.14s;
+  margin-left: 0 !important;
+}
+
+.weekTabs .activeTab,
+.infoTitle .activeTab,
+.weekTabs button:hover,
+.infoTitle button:hover {
+  background: #74c69d;
+  color: #fff !important;
+}
+
+.scheduleTable th {
+  background-color: #e6eef5;
+  color: #147c3a;
+  font-weight: 600;
+}
+
+.top3List li {
+  font-size: 0.97rem !important;
+  color: #6c757d !important;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 0;
+  min-height: 20px;
+  line-height: 1.5;
+  border-bottom: none !important;
+  overflow: hidden;
+  white-space: nowrap;  /* 텍스트가 한 줄로 보이게 */
+  text-overflow: ellipsis; /* 텍스트가 넘칠 경우 "..."으로 표시 */
 }

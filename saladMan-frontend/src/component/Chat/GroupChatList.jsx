@@ -116,8 +116,8 @@ export default function GroupChatList() {
               onChange={e => setNewRoomTitle(e.target.value)}
             />
             <div className={styles.modalBtns}>
-              <button onClick={() => setShowCreateModal(false)}>취소</button>
               <button onClick={createGroupRoom}>생성</button>
+              <button onClick={() => setShowCreateModal(false)}>취소</button>
             </div>
           </div>
         </div>

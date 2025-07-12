@@ -1,18 +1,24 @@
 .wrapper {
   display: flex;
-  height: calc(100vh - 64px);
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow: hidden;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
   flex: 1;
   align-self: flex-start;
-  padding: 30px 0 0 0;
-  overflow-y: auto;
   max-width: 1500px;
   margin: 0 auto;
   position: relative;
+  padding: 30px 20px;
+}
+
+.pageHeader h2 {
+  margin: 0 0 16px;
+  font-size: 28px;
+  color: #286180;
+  font-weight: bold;
 }
 
 .pageHeader {
@@ -25,25 +31,32 @@
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   right: 0;
-
 }
 
 .controls select {
   width: 150px;
   margin-right: 5px;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  color: #286180;
 }
 
 .controls button {
   padding: 5px 15px;
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   border: none;
   cursor: pointer;
   text-align: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.controls button:hover {
+  background-color: #1a445a;
 }
 
 .menuGrid {
@@ -56,7 +69,7 @@
 .menuCard {
   background-color: white;
   border-radius: 10px;
-  padding: 15px;
+  padding: 15px 0px;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -67,7 +80,8 @@
 }
 
 .menuCard img {
-  width: 100%;
+  border-radius: 8px;
+  width: 80%;
 }
 
 .menuCard h3,
@@ -79,7 +93,7 @@
   position: absolute;
   top: 8px;
   left: 8px;
-  background-color: rgb(230, 0, 0);
+  background-color: #dc3545; /* 강조 빨강은 그대로 유지 */
   color: white;
   font-size: 12px;
   padding: 3px 8px;
@@ -89,31 +103,82 @@
 .pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 6px;
   margin-top: 30px;
-  gap: 4px;
 }
 
 .pagination button {
-  background: none;
-  border: none;
   padding: 6px 12px;
-  color: #333;
-  font-size: 18px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
+  color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #f0f0f0;
+  background-color: #dce3e9;
 }
 
 .pagination button:disabled {
-  opacity: 0.5;
+  background-color: #f0f1f4;
+  color: #c0c7cf;
   cursor: not-allowed;
 }
 
 .pagination .active {
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   font-weight: bold;
+  border-color: #286180;
+}
+
+
+.tabNav {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 32px;
+  margin: 6px 0;
+  position: relative;
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  font-weight: 500;
+  color: #286180;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+  position: relative;
+  padding: 0 14px 5px 14px;
+  transition: color 0.2s;
+}
+
+.tabBtn:not(:last-child)::after {
+  content: "";
+  display: inline-block;
+  width: 1.5px;
+  height: 18px;
+  background: #dce3e9;
+  position: absolute;
+  right: -18px;
+  top: 3px;
+}
+
+.tabBtn:hover,
+.tabBtn:focus {
+  color: #1a445a;
+}
+
+.activeTab {
+  font-weight: 700;
+  color: #1a445a;
+  border-bottom: 3px solid #286180;
+  padding-bottom: 2px;
 }

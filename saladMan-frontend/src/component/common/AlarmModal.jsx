@@ -1,7 +1,11 @@
 import React from 'react';
+import { useAtomValue } from "jotai";
 import styles from './AlarmModal.module.css';
+import { userAtom } from "/src/atoms";
 
 const AlarmModal = ({ alarms, onClose }) => {
+  const user = useAtomValue(userAtom);
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -23,6 +27,7 @@ const AlarmModal = ({ alarms, onClose }) => {
               ))}
             </ul>
           )}
+          <a href={user.id === 1 ? "/hq/alarmList" : "/store/alarmList"}>목록으로</a>
         </div>
       </div>
     </div>

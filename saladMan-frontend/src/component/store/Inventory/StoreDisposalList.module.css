@@ -1,118 +1,153 @@
 .container {
   display: flex;
+  background: #fff;
 }
-
 .content {
-  position: absolute;
-  top: 62px;
-  left: 200px;
-  width: calc(100% - 200px);
-  padding: 40px;
-  background-color: #f9fafb;
-  border-left: 1px solid #ddd;
-  box-sizing: border-box;
-  min-height: calc(100vh - 60px);
-  overflow: auto;
+  flex: 1;
+  padding: 24px 100px 0 280px;
 }
-
+.innerContainer {
+  background: #fff;
+  margin: 30px 20px;
+}
 .title {
-  margin: 0 0 20px;
-  font-size: 20px;
-  color: #3d5a40;
-  font-weight: bold;
+  font-size: 1.8rem;
+  color: #286180;
+  margin-bottom: 16px;
+  font-weight: 600;
 }
-
 .filters {
+  margin-bottom: 16px;
+}
+.row {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
-
-.filters label {
-  font-weight: bold;
-  font-size: 14px;
+.label {
+  font-weight: 600;
+  color: #286180;
 }
-
-.filters select,
-.filters input[type="text"] {
-  padding: 6px 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
+.inputDate {
+  padding: 6px;
+  border: 1px solid #a8bcc6;
+  width: 190px;
   border-radius: 4px;
-  width: 200px;
-  box-sizing: border-box;
+  font-size: 14px;
+  background: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
 }
-
-.search {
-  background-color: #4d774e;
-  color: white;
+.inputDate:focus {
+  border-color: #286180;
+}
+.inputSearch {
+  width: 190px;
+  padding: 6px 8px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
+}
+.inputSearch:focus {
+  border-color: #286180;
+}
+.selectBox {
+  padding: 6px 8px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+}
+.selectBox:focus {
+  border-color: #286180;
+}
+.searchBtn {
+  padding: 6px 14px;
+  background: #286180;
+  color: #fff;
   border: none;
   border-radius: 4px;
-  padding: 6px 14px;
-  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
-.search:hover {
-  background-color: #3b5a3b;
+.searchBtn:hover {
+  background: #1a445a;
 }
-
+.periodButtons {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+}
+.periodBtn {
+  padding: 4px 10px;
+  border: 1px solid #286180;
+  border-radius: 4px;
+  background: #f7f7fa;
+  color: #286180;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.periodBtn:hover {
+  background: #286180;
+  color: white;
+}
+.tableWrap {
+  overflow-x: auto;
+  border-radius:6px;
+  
+    border: 1px solid #dce3e9;
+}
 .table {
+  font-size: 14px;
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
   table-layout: fixed;
-  margin-bottom: 16px;
 }
-
 .table th,
 .table td {
-  border: 1px solid #ccc;
-  padding: 8px 10px;
+  padding: 10px;
+  border: 1px solid #dce3e9;
   text-align: center;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
-.table th {
-  background: #f6f6f6;
-  font-weight: bold;
-  color: #3d5a40;
+.table thead {
+  background: #dce3e9;
+  color: #2d4836;
 }
-
+.table td {
+  height: 32px;
+}
+.noData {
+  text-align: center;
+  padding: 20px 0;
+  color: #999;
+}
 .pagination {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 20px;
+  display: flex; justify-content: center; gap: 6px;
+  margin-top: 21px;
 }
-
 .pagination button {
   padding: 6px 12px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  background-color: white;
-  color: #333;
+  border: 1px solid #9bb7c6;
+  background: #fff;
+  color: #286180;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
-
 .pagination button.active {
-  background-color: #4d774e;
-  color: white;
-  border-color: #4d774e;
+  background: #286180;
+  color: #fff;
+  border-color: #286180;
 }
-
-.pagination button:hover:not(.active):not(:disabled) {
-  background-color: #f0f0f0;
-}
-
 .pagination button:disabled {
-  color: #aaa;
-  background-color: #fafafa;
-  border-color: #eee;
-  cursor: default;
+  background: #f0f1f4;
+  color: #c0c7cf;
+  cursor: not-allowed;
+}
+.active {
+  background: #286180;
+  color: white;
+  border-color: #286180;
 }

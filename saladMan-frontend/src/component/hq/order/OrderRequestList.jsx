@@ -11,6 +11,7 @@ export default function OrderRequestList() {
     const token = useAtomValue(accessTokenAtom);
     const navigate = useNavigate();
 
+    const [storeList, setStoreList] = useState([]);
     const [filters, setFilters] = useState({
         storeName: "",
         status: "",
@@ -22,15 +23,28 @@ export default function OrderRequestList() {
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => {
-        if(!token) return;
 
+    useEffect(() => {
+        if (!token) return;
+        const fetchStores = async () => {
+            try {
+                // const res = await myAxios(token).get("/hq/storeNames");
+                const res = await myAxios(token).get("/hq/inventory/stores");
+                const filtered = (res.data.stores || []).filter(store => store.id !== 1);
+                setStoreList(filtered);
+            } catch (err) {
+                console.error("점포 목록 조회 실패", err);
+
+            }
+        }
+        fetchStores();
         handleSearch(1);
     }, [token]);
 
-    const navigateToDetail=(id) => {
+    const navigateToDetail = (id) => {
         navigate(`/hq/orderRequestDetail?id=${id}`);
     }
+
 
     const handleSearch = async (page = 1) => {
         try {
@@ -100,21 +114,32 @@ export default function OrderRequestList() {
                             <span>~</span>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                             <button onClick={() => setDateRange("today")}>오늘</button>
-                            <button onClick={() => setDateRange("1week")}>1주</button>
-                            <button onClick={() => setDateRange("2weeks")}>2주</button>
-                            <button onClick={() => setDateRange("1month")}>1달</button>
+                            <button onClick={() => setDateRange("1week")}>한 주</button>
+                            {/* <button onClick={() => setDateRange("2weeks")}>두 주</button> */}
+                            <button onClick={() => setDateRange("1month")}>한 달</button>
                         </div>
 
                         <div className={styles.row}>
                             <label>점포</label>
-                            <input type="text" name="storeName" placeholder="점포 검색" value={filters.storeName} onChange={handleChange} />
+                            <select
+                                name="storeName"
+                                value={filters.storeName}
+                                onChange={handleChange}
+                            >
+                                <option value="">전체</option>
+                                {storeList.map((store) => (
+                                    <option key={store.id} value={store.name}>
+                                        {store.name}
+                                    </option>
+                                ))}
+                            </select>
                             <label>상태</label>
                             <select name="status" value={filters.status} onChange={handleChange}>
                                 <option value="">전체</option>
                                 <option value="대기중">대기중</option>
-                                <option value="접수완료">접수완료</option>
-                                <option value="입고완료">입고완료</option>
-                                <option value="반려">반려</option>
+                                <option value="입고완료">수주완료</option>
+                                <option value="검수완료">검수완료</option>
+                                <option value="주문취소">주문취소</option>
                             </select>
 
                             <button className={styles.searchButton} onClick={() => handleSearch(1)}>검색</button>
@@ -133,26 +158,52 @@ export default function OrderRequestList() {
                                 <th>품목개수</th>
                                 <th>합계</th>
                                 <th>승인여부</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {orders.map((order) => (
-                                <tr key={order.id} onClick={()=>navigateToDetail(order.id)}>
+                                <tr key={order.id} onClick={() => navigateToDetail(order.id)}>
                                     <td>{order.id}</td>
                                     <td>{order.storeName}</td>
                                     <td>{order.productNameSummary}</td>
                                     <td>{order.orderDateTime?.split("T")[0]}</td>
-                                    <td>{order.status}</td>
+                                    <td>{order.status === '입고완료' ? '수주 완료' : order.status}</td>
                                     <td>{order.quantitySummary}</td>
-                                    <td>{order.totalPrice?.toLocaleString()}원</td>
                                     <td>{order.orderStatus}</td>
+                                    <td>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                window.open(`/hq/orderRequestPrint?id=${order.id}`, "_blank");
+                                            }}
+                                            disabled={!order.orderStatus}  // 승인 여부 없으면 비활성화
+                                            style={{
+                                                backgroundColor: order.orderStatus ? "#2f6042" : "#ccc",
+                                                color: "white",
+                                                border: "none",
+                                                padding: "4px 8px",
+                                                borderRadius: "4px",
+                                                cursor: order.orderStatus ? "pointer" : "not-allowed"
+                                            }}
+                                        >
+                                            발주서 출력
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
 
                     <div className={styles.pagination}>
-                        <button onClick={() => handleSearch(currentPage - 1)} disabled={currentPage === 1}>{"<"}</button>
+                        <button
+                            onClick={() => handleSearch(1)}
+                            disabled={currentPage === 1}
+                        >{"<<"}</button>
+                        <button
+                            onClick={() => handleSearch(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >{"<"}</button>
                         {Array.from({ length: totalPages }, (_, i) => (
                             <button
                                 key={i}
@@ -162,8 +213,16 @@ export default function OrderRequestList() {
                                 {i + 1}
                             </button>
                         ))}
-                        <button onClick={() => handleSearch(currentPage + 1)} disabled={currentPage === totalPages}>{">"}</button>
+                        <button
+                            onClick={() => handleSearch(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >{">"}</button>
+                        <button
+                            onClick={() => handleSearch(totalPages)}
+                            disabled={currentPage === totalPages}
+                        >{">>"}</button>
                     </div>
+
                 </div>
             </div>
         </>

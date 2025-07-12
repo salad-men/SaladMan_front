@@ -1,102 +1,282 @@
 .storeDetailContainer {
     display: flex;
-    min-height: 100vh;
-    background-color: #f9fafb;
+    background: #f9fafb;
 }
-
-.storeDetailContent {
+.detailMainContent {
     flex: 1;
-    padding: 40px 40px 60px;
-    background-color: white;
-    box-sizing: border-box;
-    border-left: 1px solid #ddd;
+    margin-left: 165px;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    align-items: center;
+    background: #fff;
+    padding: 0;
     position: relative;
 }
-
-.detailLayout {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    justify-content: center;
-    /* 전체를 가운데 정렬 */
-    padding: 20px 40px;
-
+.title {
+    font-size: 2.2rem;
+    color: #2f6042;
+    font-weight: 700;
+    margin-top: 47px;
+    margin-bottom: 30px;
+    letter-spacing: -1px;
+    text-align: center;
 }
-
-.detailGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px 30px;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    max-width: 1000px;
-    margin-right: 50px;
-}
-
-.mapBox {
-    width: 400px;
-    height: 400px;
-    border-radius: 12px;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.item {
+.detailCard {
+    width: 1100px;
     display: flex;
     flex-direction: column;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.09);
+    border-radius: 28px;
+    padding: 40px 20px 0px 20px;
+    height: 670px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    align-items: center;
+    gap: 10px;
 }
-
-.label {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 6px;
+.infoMapRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    align-items: flex-start;
+    justify-content: center;
+}
+.detailInfoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 47px 34px;
+    width: 540px;
+    background: transparent;
+    align-items: start;
+}
+.detailItemWide {
+    grid-column: 1 / span 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    height: 34px;
+}
+.detailItemWide .detailLabel {
+    min-width: 80px;
+    color: #355b3b;
+    font-size: 1.08rem;
     font-weight: 600;
+    margin-right: 7px;
+    white-space: nowrap;
 }
-
-.value {
-    font-size: 16px;
+.detailItemWide .detailValue,
+.accountValue {
+    color: #222;
+    font-size: 1.08rem;
+    font-weight: 500;
+    white-space: nowrap;
+    margin-right: 0;
+    vertical-align: middle;
+    /* 줄어들 수 있게 */
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+.detailItemWide .resetPasswordButton {
+    margin-left: 6px !important;
+    margin-right: 0 !important;
+    vertical-align: middle;
+    white-space: nowrap;
+    height: 30px;
+    padding: 5px 13px;
+}
+.detailItem {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 7px;
+    height: 32px;
+}
+.detailLabel {
+    min-width: 80px;
+    color: #355b3b;
+    font-size: 1.07rem;
+    font-weight: 600;
+    text-align: left;
+    margin-right: 7px;
+    white-space: nowrap;
+}
+.detailValue {
+    font-size: 1.07rem;
     color: #222;
     font-weight: 500;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 1.6;
+    margin-right: 0;
+    display: inline-block;
 }
-
+.mapBox {
+    width: 420px;
+    height: 420px;
+    background: #eef3ed;
+    border: 1.4px solid #b4c7b3;
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 20px rgba(44, 77, 62, 0.13);
+}
+.emptyMap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 1.18rem;
+    background: #f6f8f8;
+    border-radius: 18px;
+}
 .buttonGroup {
     display: flex;
     justify-content: center;
-    gap: 16px;
-    margin-top: 40px;
+    gap: 32px;
+    margin-top: 18px;
+    margin-bottom: 16px;
 }
-
 .modifyButton {
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
+    padding: 14px 48px;
+    border-radius: 9px;
     border: none;
-    border-radius: 6px;
-    font-size: 15px;
+    background: #4d774e;
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(33,90,70,0.10);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background 0.16s;
+    letter-spacing: 2px;
 }
-
 .modifyButton:hover {
-    background-color: #388e3c;
+    background: #3b663b;
 }
-
 .backButton {
-    padding: 10px 20px;
-    background-color: #b3b4b4;
+    padding: 14px 48px;
+    border-radius: 9px;
+    border: none;
+    background: #8a908a;
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.16s;
+    margin-left: 8px;
+}
+.backButton:hover {
+    background: #6b746b;
+}
+.resetPasswordButton,
+.closeStoreButton {
+    padding: 5px 13px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    background: #607d8b;
+    color: #fff;
+    transition: background 0.2s;
+    white-space: nowrap;
+    height: 30px;
+}
+.resetPasswordButton:hover,
+.closeStoreButton:hover {
+    background: #455a64;
+}
+.resetPasswordButton {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.modalOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modalContent {
+    background: #fff;
+    padding: 34px 50px 26px 32px;
+    border-radius: 14px;
+    min-width: 370px;
+    width: 410px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.23);
+    text-align: center;
+}
+.modalContent h3 {
+    margin-bottom: 16px;
+    font-size: 21px;
+    color: #2f6042;
+    font-weight: 700;
+}
+.modalForm {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 18px;
+    text-align: left;
+}
+.modalForm label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+.modalInput {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #b4c7b3;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+    background: #fafcfb;
+    margin-bottom: 4px;
+}
+.modalInput:focus {
+    outline: none;
+    border-color: #4d774e;
+}
+.modalButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+.confirmButton {
+    background-color: #4d774e;
     color: white;
+    padding: 9px 22px;
     border: none;
     border-radius: 6px;
     font-size: 15px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    font-weight: 600;
 }
-
-.backButton:hover {
-    background-color: #a8a8a8;
+.cancelButton {
+    background-color: #8a908a;
+    color: white;
+    padding: 9px 22px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.confirmButton:hover {
+    background-color: #3b663b;
+}
+.cancelButton:hover {
+    background-color: #6b746b;
 }

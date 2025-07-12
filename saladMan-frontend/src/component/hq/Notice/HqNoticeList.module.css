@@ -1,183 +1,225 @@
 .container {
   display: flex;
-  min-height: 100vh;
+  background: #fff;
   font-family: 'Pretendard', sans-serif;
-  background-color: #f9fafb;
 }
 
 .content {
   flex: 1;
-  padding: 40px 30px;
-  background-color: white;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
-  min-width: 900px;
+  padding: 0;
+  background: #fff;
+  border-left: 1px solid #e4e9e7;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.innerContainer {
+  background: #fff;
+  padding: 0px 100px 0 130px;
+  overflow: auto;
+  margin-left: 150px;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 1.8rem;
+  color: #2f6042;
+  margin-bottom: 16px;
+  margin-top: 40px;
   font-weight: 700;
-  color: #3d5a40;
-  margin-bottom: 20px;
-  user-select: none;
+  letter-spacing: -1px;
+  text-align: left;
 }
 
 .filters {
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
   gap: 12px;
 }
 
-.filters select {
-  width: 100px;
-  padding: 5px 8px;
-  font-size: 13px;
+.filters select,
+.filters input[type="text"] {
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-.filters input {
-  width: 150px;
-  padding: 5px 8px;
-  font-size: 13px;
+.inputSearch {
+  width: 160px;
+  height: 20px;
 }
 
-.filters button {
-  padding: 5px 14px;
-  font-size: 13px;
-  border-radius: 5px;
+.searchBtn {
+  padding: 6px 14px;
+  background: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  background-color: #5a8158;
-  color: white;
-  border: none;
-  transition: background-color 0.3s ease;
-}
-
-.filters button:hover {
-  background-color: #4a6848;
-}
-
-/* 공지등록 버튼 오른쪽 정렬 */
-.filters .addNotice {
-  margin-left: auto;
-  background-color: #5a8158;
-  color: white;
-  border: none;
-  padding: 5px 18px;
-  border-radius: 6px;
+  transition: background 0.2s;
+  font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
-  font-size: 13px;
 }
 
-.filters .addNotice:hover {
-  background-color: #4a6848;
+.searchBtn:hover {
+  background: #3b663b;
+}
+
+.addNoticeBtn {
+  margin-left: auto;
+  padding: 6px 18px;
+  background: #57a964;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.addNoticeBtn:hover {
+  background: #398346;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin-top: 0;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
-  min-width: 900px;
+  table-layout: fixed;
+  margin-top: 0;
+  /* min-width: 900px; */
+  /* height: 610px; */
 }
 
-.table thead th {
-  background-color: #f6f6f6;
-  color: #3d5a40;
-  font-weight: 600;
-  padding: 12px 10px;
-  border-bottom: 2px solid #ccc;
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #e4e9e7;
   text-align: center;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* 번호 컬럼 */
-.table thead th:nth-child(1) {
-  width: 5%;
-}
-
-/* 제목 컬럼 좁게 + 줄임 표시 */
-.table thead th:nth-child(2) {
-  width: 40%;
-  max-width: 280px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 15px;
 }
 
-.table thead th:nth-child(3),
-.table thead th:nth-child(4) {
-  width: 12.5%;
+.table td {
+  height: 33px;
 }
 
-.table tbody td {
-  padding: 14px 10px;
-  color: #555;
+.table thead {
+  background: #eaf3eb;
+  color: #2d4836;
+}
+
+.table th:nth-child(1), /* 번호 */
+.table td:nth-child(1) {
+  width: 50px;
+}
+
+.table th:nth-child(2), /* 제목 */
+.table td:nth-child(2) {
+  width: 400px;
   text-align: center;
-  vertical-align: middle;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
-.table tbody td:nth-child(2) {
-  text-align: left;
-  max-width: 280px;
-  white-space: nowrap;
+/* 내용 */
+.preview { 
+  width: 400px;  
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #444;
+  font-size: 0.98rem;
 }
-
+.table th, .table td {
+  text-align: center;
+  padding: 10px 8px;
+}
 .row {
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
+  cursor: pointer;
+  transition: background 0.13s;
+}
+.row:hover {
+  background: #f7fafc;
 }
 
-.row:hover {
-  background-color: #f0f7f0;
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 100px;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  width: 100px;
+}
+
+/* 행 호버 */
+.table tbody tr:hover {
+  background: #f3f9f5;
   cursor: pointer;
 }
 
 .noData {
-  padding: 30px 0;
-  color: #777;
-  font-style: italic;
-}
-
-.cell {
-  padding: 10px 10px;
-}
-
-.center {
   text-align: center;
+  padding: 40px 0;
+  color: #999;
+  font-size: 15px;
 }
 
-.paging {
-  margin-top: 20px;
-  text-align: center;
+/* 페이징 */
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
 }
 
-.paging button {
-  margin: 0 8px;
-  padding: 5px 10px;
-  border: 1px solid #5a8158;
-  background-color: white;
-  color: #5a8158;
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #a2b7aa;
+  border-radius: 4px;
+  background: white;
+  color: #387448;
   cursor: pointer;
-  border-radius: 5px;
+  transition: background 0.2s;
+  font-size: 14px;
   font-weight: 600;
-  font-size: 13px;
-  transition: background-color 0.3s ease;
 }
 
-.paging button:hover {
-  background-color: #5a8158;
-  color: white;
+.pagination button:hover:not(:disabled) {
+  background: #eaf3eb;
 }
 
-.paging button:disabled {
-  border-color: #ddd;
-  color: #ddd;
+.pagination button:disabled {
+  background: #f0f4f1;
+  color: #c0cfc3;
   cursor: not-allowed;
 }
+
+.active {
+  background: #57a964;
+  color: white;
+  border-color: #57a964;
+}
+
+.pagination button.active {
+  background: #53a363;
+  color: #fff;
+  border-color: #53a363;
+  transition: background 0.15s;
+  outline: none;
+  z-index: 1;
+}
+
+

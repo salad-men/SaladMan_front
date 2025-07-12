@@ -1,198 +1,204 @@
-.storeRegisterContainer {
+.storeDetailContainer {
     display: flex;
-    min-height: 100vh;
-    background-color: #f9fafb;
+    background: #f9fafb;
 }
-
-.mainContent {
+.detailMainContent {
     flex: 1;
-    padding: 40px 40px 60px;
-    background-color: white;
-    box-sizing: border-box;
-    border-left: 1px solid #ddd;
+    margin-left: 165px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    background: #fff;
     min-width: 0;
+    padding: 0;
     position: relative;
 }
-
-.mainContent h2 {
-    text-align: center;
+.title {
+    font-size: 2.2rem;
+    color: #2f6042;
+    font-weight: 700;
+    margin-top: 47px;
     margin-bottom: 30px;
-    font-size: 24px;
-}
-
-.formSection {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-}
-
-.registerTable {
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 500px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-.registerTable td {
-    padding: 12px 10px;
-    vertical-align: middle;
-}
-
-.registerTable td:first-child {
-    width: 80px;
-    font-weight: bold;
+    letter-spacing: -1px;
     text-align: center;
-    white-space: nowrap;
-    color: #333;
 }
-
-.registerTable input[type="text"],
-.registerTable input[type="text"]:focus {
-    background: none !important;
-    /* ← 여기 추가 */
-    width: 200px;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    box-sizing: border-box;
-    margin-right: 5px;
-    margin-bottom: 10px;
-}
-
-.registerTable input[type="password"] {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-.registerTable input[type="button"] {
-    padding: 8px 16px;
-    background-color: #4D774E;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    margin-left: 6px;
-}
-
-.registerTable input[type="button"]:hover {
-    background-color: #226236;
-}
-
-.mapBox {
-    width: 500px;
-    height: 400px;
-    background-color: #ccc;
+.detailCard {
+    width: 1100px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.09);
+    border-radius: 28px;
+    padding: 40px 20px 10px 20px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
     align-items: center;
-    font-size: 14px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-
+    gap: 38px;
 }
-.disabledInput {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  color: #777;
-  padding: 8px;
+.infoMapRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    align-items: flex-start;
+    justify-content: center;
 }
-
-.buttonGroup {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 40px;
+.detailInfoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 34px;
+    width: 540px;
+    background: transparent;
+    align-items: start;
 }
-.backButton {
-  padding: 10px 20px;
-  background-color:#b3b4b4;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.detailItemWide {
+    grid-column: 1 / span 2;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    height: 34px;
 }
-
-.backButton:hover {
-  background-color:#a8a8a8 ;
+.detailItemWide .detailLabel {
+    min-width: 80px;
+    color: #355b3b;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-right: 7px;
+    white-space: nowrap;
 }
-.submitButton {
-  padding: 10px 20px;
-  background-color: #4caf50 ;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.detailItemWide .detailValue {
+    flex: 0 0 auto;
+    color: #222;
+    font-size: 1.08rem;
+    font-weight: 500;
+    margin-right: 5px;
+    white-space: nowrap;
 }
-
-.submitButton:hover {
-  background-color:#388e3c ;}
-
+.detailItem {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 7px;
+    height: 32px;
+}
+.detailLabel {
+    min-width: 80px;
+    color: #355b3b;
+    font-size: 1.07rem;
+    font-weight: 600;
+    text-align: left;
+    margin-right: 7px;
+    white-space: nowrap;
+}
+.detailValue {
+    font-size: 1.07rem;
+    color: #222;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    min-width: 0;
+    margin-right: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.inputBase {
+    width: 100%;
+    height: 40px;
+    padding: 0 13px;
+    font-size: 1.05rem;
+    border: 1.2px solid #b4c7b3;
+    border-radius: 6px;
+    background: #fff;
+    color: #222;
+    outline: none;
+    transition: border-color 0.16s;
+}
+.inputBase:focus {
+    border-color: #4d774e;
+}
 .checkButton {
-    margin-top: 6px;
-    margin-left: 6px;
-    padding: 8px 14px;
-    background-color: #4D774E;
-    color: white;
+    padding: 8px 18px;
+    background-color: #4d774e;
+    color: #fff;
     border: none;
     border-radius: 6px;
-    font-size: 13px;
+    font-size: 15px;
+    margin-left: 10px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background 0.2s;
 }
-
 .checkButton:hover {
     background-color: #226236;
 }
-
-input.inputFalse:focus {
-    background-color: #ffe5e5 !important;
-    border: 1px solid #ff4d4f !important;
-    outline: none;
-    box-shadow: none;
+.mapBox {
+    width: 420px;
+    height: 420px;
+    background: #eef3ed;
+    border: 1.4px solid #b4c7b3;
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 20px rgba(44, 77, 62, 0.13);
+}
+.emptyMap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 1.18rem;
+    background: #f6f8f8;
+    border-radius: 18px;
+}
+.buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 18px;
+    margin-bottom: 16px;
+}
+.modifyButton {
+    padding: 14px 48px;
+    border-radius: 9px;
+    border: none;
+    background: #4d774e;
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(33,90,70,0.10);
+    cursor: pointer;
+    transition: background 0.16s;
+    letter-spacing: 2px;
+}
+.modifyButton:hover {
+    background: #3b663b;
+}
+.backButton {
+    padding: 14px 48px;
+    border-radius: 9px;
+    border: none;
+    background: #8a908a;
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.16s;
+    margin-left: 8px;
+}
+.backButton:hover {
+    background: #6b746b;
 }
 
-input.inputSuccess:focus {
-    background-color: #e5ffe6 !important;
-    border: 1px solid #51f759 !important;
-    outline: none;
-    box-shadow: none;
+.ant-modal-content {
+    border-radius: 14px !important;
 }
 
-input[type="text"].inputFalse {
-    background-color: #ffe5e5 !important;
-    border: 1px solid #ff4d4f !important;
-}
-
-input[type="text"].inputSuccess {
-    background-color: #e5ffe6 !important;
-    border: 1px solid #51f759 !important;
-}
-
-input.inputFalse:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
-    box-shadow: 0 0 0px 1000px #ffe5e5 inset !important;
-    border: 1px solid #ff4d4f !important;
-}
-
-input.inputSuccess:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
-    box-shadow: 0 0 0px 1000px #e5ffe6 inset !important;
-    border: 1px solid #51f759 !important;
+.addressInput {
+    width: 340px !important;   
+    min-width: 240px;
+    max-width: 100%;
 }

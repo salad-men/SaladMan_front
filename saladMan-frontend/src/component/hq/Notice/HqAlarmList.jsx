@@ -21,7 +21,7 @@ function HqAlarmList() {
   const toggleSelectAll = (checked) => {
     setSelected(checked ? alarmList.map(n => n.id) : []);
   };
-
+  
   const toggleSelect = (id) => {
     setSelected(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
@@ -84,68 +84,72 @@ function HqAlarmList() {
         <div className={styles.pageHeader}>
           <h2>알림 목록</h2>
         </div>
-        <div className={styles.inboxControls}>
-          <div>
-            <button onClick={markAsReadSelected}>읽음 처리</button>
-            <button onClick={deleteSelected}>삭제</button>
+        <div className={styles.alarmList}>
+          <div className={styles.inboxControls}>
+            <div>
+              <button onClick={markAsReadSelected}>읽음 처리</button>
+              <button onClick={deleteSelected}>삭제</button>
+            </div>
+            <div>
+              읽지 않음 {alarmList.filter(n => !n.isRead).length}개 / 총 {alarmList.length}개
+            </div>
           </div>
-          <div>
-            읽지 않음 {alarmList.filter(n => !n.isRead).length}개 / 총 {alarmList.length}개
-          </div>
-        </div>
 
-        <table className={styles.inboxTable}>
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={selected.length === alarmList.length}
-                  onChange={e => toggleSelectAll(e.target.checked)}
-                />
-              </th>
-              <th>제목</th>
-              <th>내용</th>
-              <th>수신일시</th>
-            </tr>
-          </thead>
-          <tbody>
-            {alarmList.length === 0 ? (
+          <table className={styles.inboxTable}>
+            <thead>
               <tr>
-                <td colSpan="4" className={styles.noData}>알림이 없습니다.</td>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selected.length === alarmList.length}
+                    onChange={e => toggleSelectAll(e.target.checked)}
+                  />
+                </th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>읽음여부</th>
+                <th>수신일시</th>
               </tr>
-            ) : (
-              alarmList.map(noti => (
-                <tr key={noti.id} className={noti.isRead ? '' : styles.unread}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selected.includes(noti.id)}
-                      onChange={() => toggleSelect(noti.id)}
-                    />
-                  </td>
-                  <td>{noti.title}</td>
-                  <td>{noti.content}</td>
-                  <td>{noti.sentAt}</td>
+            </thead>
+            <tbody>
+              {alarmList.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className={styles.noData}>알림이 없습니다.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                alarmList.map(noti => (
+                  <tr key={noti.id} className={noti.isRead ? '' : styles.unread}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(noti.id)}
+                        onChange={() => toggleSelect(noti.id)}
+                      />
+                    </td>
+                    <td>{noti.title}</td>
+                    <td>{noti.content}</td>
+                    <td>{noti.isRead ? '읽음' : '안읽음'}</td>
+                    <td>{noti.sendAt}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+          </div>
 
-        <div className={styles.pagination}>
-          <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
-            &lt;
-          </button>
-          {pageNums.map(p => (
-            <button key={p} onClick={() => submit(p)} className={p === pageInfo.curPage ? styles.active : ''}>
-              {p}
+          <div className={styles.pagination}>
+            <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
+              &lt;
             </button>
-          ))}
-          <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage >= pageInfo.allPage}>
-            &gt;
-          </button>
-        </div>
+            {pageNums.map(p => (
+              <button key={p} onClick={() => submit(p)} className={p === pageInfo.curPage ? styles.active : ''}>
+                {p}
+              </button>
+            ))}
+            <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage >= pageInfo.allPage}>
+              &gt;
+            </button>
+          </div>
       </div>
     </div>
   );

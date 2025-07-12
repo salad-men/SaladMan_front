@@ -1,77 +1,176 @@
-.employeeRegisterContainer {
+.pageWrapper {
   display: flex;
-  min-height: 100vh;
-  background-color: #f9fafb;
+  background: #fff;
 }
-.empRegContent {
+.pageContent {
   flex: 1;
-  padding: 40px 40px 60px;
-  background-color: white;
-  border-left: 1px solid #ddd;
-  min-width: 0;
+  margin-top: 28px;
+  margin-left: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-h2 {
-  font-size: 20px;
-  margin: 40px 0 32px 0;
-  font-weight: bold;
+.pageTitle {
+  margin-top: 20px;
+  margin-bottom: 22px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #245434;
+  letter-spacing: -1.5px;
+  text-align: center;
+}
+.formCard {
+  width: 993px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 4px 20px rgba(44,77,62,0.11);
+  padding: 48px 52px 80px 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+  height: 520px;
 }
 .formSection {
   display: flex;
-  gap: 36px;
-  margin-top: 12px;
+  flex-direction: row;
   align-items: flex-start;
+  width: 100%;
+  gap: 62px;
 }
-.profileBox {
-  flex-shrink: 0;
-  text-align: center;
+.formLeft {
+  min-width: 280px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.profileImage {
-  width: 90px;
-  height: 90px;
+.avatarWrap {
+  margin-top: 65px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.avatarImageWrap {
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
+  overflow: hidden;
+  background: #f4faf7;
+  border: 2.5px solid #a7cbbf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.avatarImage {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: 1px solid #ddd;
-  margin-bottom: 8px;
 }
-.fileInput {
-  margin-top: 8px;
+.uploadBtn {
+  margin-top: 12px;
+  padding: 10px 32px;
+  font-size: 17px;
+  background: #fff;
+  border: 1.3px solid #4D774E;
+  color: #4D774E;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
 }
-.formBox {
-  min-width: 320px;
+.uploadBtn:hover {
+  background: #4D774E;
+  color: #fff;
+}
+.formRight {
+  flex: 1;
+  min-width: 340px;
+  max-width: 535px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 .formRow {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.formRow label {
-  min-width: 54px;
-}
-.fullRow input {
+  margin-bottom: 10px;
   width: 100%;
 }
-.errorMsg {
-  color: crimson;
-  font-size: 13px;
-  margin: 8px 0 0 4px;
-}
-.submitRow {
+.formRow label {
+  width: 94px;
+  font-size: 1.09rem;
+  color: #42734f;
+  font-weight: 700;
   text-align: right;
-  margin-top: 22px;
+  margin-right: 18px;
+  flex-shrink: 0;
+}
+.formRow input[type="text"],
+.formRow input[type="password"],
+.formRow input[type="email"],
+.formRow input[type="date"],
+.formRow select {
+  padding: 13px 16px;
+  border: 1.5px solid #b4c7b3;
+  border-radius: 7px;
+  font-size: 16px;
+  background: #fff;
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 150px;
+  margin-right: 10px;
+}
+.formRow input[type="password"] {
+  min-width: 110px;
+}
+.formRow .longInput {
+  flex: 2;
+  min-width: 150px;
+  width: 100%;
+  margin-left: 0;
+}
+.formRow input:last-child, .formRow select:last-child {
+  margin-right: 0;
+}
+.formRow input:focus, .formRow select:focus {
+  border: 1.5px solid #4D774E;
+  outline: none;
+}
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 44px;
+  margin-top: 75px;
+}
+.backButton {
+  padding: 15px 64px;
+  background-color: #939f98;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.17s;
+}
+.backButton:hover {
+  background-color: #6e7a72;
 }
 .submitButton {
-  padding: 8px 26px;
-  border-radius: 6px;
-  border: none;
-  background: #4D774E;
+  padding: 15px 64px;
+  background-color: #4D774E;
   color: #fff;
-  font-size: 15px;
+  border: none;
+  border-radius: 9px;
+  font-size: 20px;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.17s;
 }
 .submitButton:hover {
-  background: #3a5e3b;
+  background-color: #2f6042;
 }

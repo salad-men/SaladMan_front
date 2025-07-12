@@ -22,23 +22,19 @@ export default function StoreComplaintDetail() {
   });
 
   useEffect(() => {
-    
-    if (!token) return;
-    if (id) {
-      myAxios(token)
-        .get("/store/complaint/detail", { params: { id } })
-        .then(res => {
-          if (res.data.complaint) setComplaint(res.data.complaint);
-        })
-        .catch(err => console.error("불편사항 불러오기 실패:", err));
-    }
+    if (!token || !id) return;
+    myAxios(token)
+      .get("/store/complaint/detail", { params: { id } })
+      .then(res => {
+        if (res.data.complaint) setComplaint(res.data.complaint);
+      });
   }, [id, token]);
 
   return (
     <div className={styles.container}>
       <NoticeSidebar />
       <main className={styles.mainContent}>
-        <h2 className={styles.pageTitle}>불편사항</h2>
+        <h2 className={styles.pageTitle}>불편사항 상세</h2>
         <div className={styles.writeDate}>작성일 {complaint.writerDate}</div>
         <table className={styles.detailTable}>
           <tbody>

@@ -37,7 +37,7 @@ export default function OrderDetail() {
                 console.log(res.data);
 
                 const inspectedCount = res.data.filter(item => item.inspection === "검수완료").length;
-                                console.log(inspectedCount)
+                console.log(inspectedCount)
 
                 const progress = Math.round((inspectedCount / res.data.length) * 100);
                 console.log(progress)
@@ -77,9 +77,9 @@ export default function OrderDetail() {
 
                     <div className={styles.tableSection}>
                         <div className={styles.tableButtonSection}>
-                        {info.oStatus === "대기중" && (
+                            {/* {info.oStatus === "대기중" && (
                             <button className={styles.editButton}>수정</button>
-                        )}
+                        )} */}
                         </div>
                         <table className={styles.detailTable}>
                             <thead>
@@ -99,9 +99,13 @@ export default function OrderDetail() {
                                         <td>{item.ingredientName}</td>
                                         <td>{item.categoryName}</td>
                                         <td>{item.orderedQuantity} {item.unit}</td>
-<td>{(item.unitCost ?? 0).toLocaleString()} 원</td>
-<td>{(item.totalPrice ?? 0).toLocaleString()} 원</td>
-                                        <td>{item.approvalStatus}</td>
+                                        <td>{(item.unitCost ?? 0).toLocaleString()} 원</td>
+                                        <td>{(item.totalPrice ?? 0).toLocaleString()} 원</td>
+                                        <td>
+                                            {item.approvalStatus === "반려"
+                                                ? `반려 (${item.rejectionReason || "-"})`
+                                                : item.approvalStatus}
+                                        </td>
                                         <td>{item.inspection}</td>
                                     </tr>
                                 ))}

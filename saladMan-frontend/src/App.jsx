@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {Routes, Route, useLocation } from "react-router-dom";
 import MainPage from "@user/page/MainPage";
 import BrandIntro from "@user/page/BrandIntro";
 import SloganIntro from "@user/page/SloganIntro";
@@ -14,8 +14,11 @@ import PraiseDetailPage from "@user/page/PraiseDetailPage";
 import HqInventoryList from "@hq/Inventory/HqInventoryList";
 import HqInventoryExpiration from "@hq/Inventory/HqInventoryExpiration";
 import HqDisposalList from "@hq/Inventory/HqDisposalList";
+import HqDisposalRequestList from "@hq/Inventory/HqDisposalRequestList";
 import HqIngredientSetting from "@hq/Inventory/HqIngredientSetting";
 import HqInventoryRecord from "@hq/Inventory/HqInventoryRecord";
+import HqCategoryIngredientManagePage from "@hq/Inventory/HqCategoryIngredientManagePage"; 
+
 
 // 지현
 import HqLayout from '@hq/HqLayout';
@@ -76,15 +79,14 @@ import HqDashboard from "@hq/dashboard/HqDashboard";
 import StoreDashboard from "@store/dashboard/StoreDashboard";
 
 import Login from "./component/common/Login";
+import AlarmModal from "./component/common/AlarmModal";
 import StoreAccountDetail from "@hq/storeManagement/StoreAccountDetail";
 import StoreAccountModify from "@hq/storeManagement/StoreAccountModify";
 import { useEffect, useState, useRef } from "react";
 import { useAtom, useSetAtom } from "jotai";
 import { fcmTokenAtom, alarmsAtom } from "./atoms";
 import { firebaseReqPermission, registerServiceWorker } from "./firebaseconfig";
-import ChatModal from "./component/Chat/ChatModal";
-import useChatSSE from "./component/Chat/useChatSSE";
-import ChatSidebar from "./component/Chat/ChatSidebar";
+import { myAxios } from "/src/config";
 
 import KioskLogin from "@user/kiosk/KioskLogin";
 import KioskLayout from "@user/kiosk/KioskLayout";
@@ -95,11 +97,16 @@ import { accessTokenAtom } from "/src/atoms";
 import PaymentSuccess from '@user/kiosk/PaymentSuccess';
 import PaymentFail from '@user/kiosk/PaymentFail';
 import PaymentPage from '@user/kiosk/PaymentPage';
+import NewsWritePage from "@user/page/NewsWritePage";
+import OrderRequestPrint from "@hq/order/OrderRequestPrint";
+
 
 function App() {
   const [alarm, setAlarm] = useState({});
   const setFcmToken = useSetAtom(fcmTokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
+  const [token, setAccessToken] = useAtom(accessTokenAtom);
+  const [user, setUser] = useAtom(userAtom);
 
   useEffect(() => {
     const init = async () => {
@@ -114,197 +121,76 @@ function App() {
     JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
   }, [alarm]);
 
-  // ====== 채팅 알림 전역 ======
-  const user = useAtomValue(userAtom);
-  const token = useAtomValue(accessTokenAtom);
-  const jwt = token?.replace(/^Bearer\s+/i, ""); 
-  const isLoggedIn = !!token; 
-
-  const [chatAlarmOn, setChatAlarmOn] = useState(
-  () => sessionStorage.getItem("chatAlarmOn") !== "false"
-  ); 
-  const [chatModalQueue, setChatModalQueue] = useState([]); 
-  const [chatRooms, setChatRooms] = useState([]);           
-  const [chatUnreadTotal, setChatUnreadTotal] = useState(0);
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [activeRoomId, setActiveRoomId] = useState(null);
-
   const location = useLocation();
-  const isStoreOrHqPage =
-    location.pathname.startsWith("/store/") ||
-    location.pathname.startsWith("/hq/");
+  location.pathname.startsWith("/store/") ||
+  location.pathname.startsWith("/hq/");
 
+  // fcm알람
+  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
 
-  //사이드바 열릴때마다 방목록 패치
-  useEffect(() => {
-    if (!token || !showSidebar) return;
-    (async () => {
-      try {
-        const res = await myAxios(token).get("/chat/my/rooms");
-        const rooms = res.data || [];
-        setChatRooms(rooms);
-        setChatUnreadTotal(rooms.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
-      } catch {
-        setChatRooms([]); setChatUnreadTotal(0);
-      }
-    })();
-  }, [token, showSidebar]);
-
-
-  // 채팅 알림 모달
-  const showChatModal = (msg) => {
-    setChatModalQueue((q) => [...q, msg].slice(-5));
+  const fetchAlarms = async (open = false) => {
+  if (!token) return;
+    try {
+      const res = await myAxios(token).post("/alarms");
+      setAlarms(res.data);
+      if (open) setIsAlarmOpen(true);
+    } catch (err) {
+      console.error("알림 데이터를 가져오는데 실패했습니다.", err);
+    }
   };
 
+  // 초기 알림 로딩
   useEffect(() => {
-  if (chatModalQueue.length === 0) return;
-  const timer = setTimeout(() => {setChatModalQueue(q => q.slice(1));}, 3200);
-  return () => clearTimeout(timer);
-  }, [chatModalQueue]);
+    fetchAlarms(false);
+  }, [token]);
 
-  useEffect(() => {
-    sessionStorage.setItem("chatAlarmOn", chatAlarmOn);
-  }, [chatAlarmOn]);
+  // 모달 열기
+  const openModal = () => {
+    fetchAlarms(true);
+  };
 
-  // ===== SSE 연결 =====
-  useChatSSE({
-    enabled: !!jwt,
-    user,
-    token: jwt,
-    rooms: chatRooms,
-    setRooms: (nextRooms) => {
-      const safeRooms = Array.isArray(nextRooms) ? nextRooms : [];
-      setChatRooms(safeRooms);
-      setChatUnreadTotal(safeRooms.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
-    },
-    onUnreadTotal: setChatUnreadTotal,
-    onModal: chatAlarmOn ? showChatModal : undefined,
-  });
+  // 모달 닫기
+  const closeModal = () => setIsAlarmOpen(false);
 
   return (
     <>
-      {/* 채팅 */}
-      {isStoreOrHqPage && (
+      {/* fcm알람 */}
+      {user?.id && (
         <>
-      
-      {chatAlarmOn && chatModalQueue.length > 0 &&
-      <div
-        style={{
-          position: "fixed",
-          top: 22,
-          right: 28,
-          zIndex: 10001,
-          display: "flex",
-          flexDirection: "column-reverse",
-          gap: 8,
-        }}
-      >
-        {chatModalQueue.map((msg, idx) => (
-          <ChatModal
-            key={idx}
-            message={msg}
-            onClose={() => setChatModalQueue(q => q.filter((_, i) => i !== idx))}
-            onGoRoom={roomId => {
-            setShowSidebar(true);       
-            setActiveRoomId(roomId);    
-            setChatModalQueue(q => q.filter((_, i) => i !== idx));
-          }}
-          />
-        ))}
-      </div>
-    }
-      {/* 채팅 버튼 */}
-      {isLoggedIn &&
-      <button
-        className="global-chat-badge"
-        style={{
-          position: "fixed",
-          top: -18,
-          right: 70,
-          background: "none",
-          border: "none",
-          borderRadius: "50%",
-          width: 45,
-          height: 80,
-          fontSize: 28,
-          boxShadow: "none",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 10000,
-          padding: 0,
-          cursor:"pointer",
-        }}
-        onClick={() => setShowSidebar(true)}
-        title="채팅"
-      >
-        <img
-          src="/chatIcon.png"
-          alt="채팅"
-          style={{
-            width: 32,   
-            height: 32,  
-            display: "block",
-            objectFit: "contain"
-          }}
-        />
-        {chatUnreadTotal > 0 && (
-          <span style={{
-            position: "absolute", top: -2, left: 30, background: "red", color: "white",
-            borderRadius: "50%", fontSize: "12px", minWidth: "18px", textAlign: "center",
-            fontWeight: 700, padding: "1px 6px"
-          }}>
-            {chatUnreadTotal}
-          </span>
-        )}
-      </button>
-      }
-
-      <ChatSidebar
-        isOpen={showSidebar}
-        onClose={() => setShowSidebar(false)}
-        chatAlarmOn={chatAlarmOn}
-        setChatAlarmOn={setChatAlarmOn}
-        rooms={chatRooms}
-        setRooms={setChatRooms}
-        activeRoomId={activeRoomId}          
-        setActiveRoomId={setActiveRoomId} 
-      />
-      </>
+          <div onClick={openModal}
+          style={{position: "absolute", top: 15, right: 45, fontSize: 23, cursor:"pointer"}}>🔔</div>
+          {alarms.length > 0 && (
+            <div style={{
+              width: '5px', height: '5px', backgroundColor: 'red',
+              position: 'absolute', top: 21, right: 47, borderRadius: '50%'
+            }}></div>
+          )}
+        </>
       )}
 
+      {isAlarmOpen && (
+        <AlarmModal
+          alarms={alarms}
+          onClose={closeModal}
+        />
+      )}
+    
       <Routes>
-        <Route
-          element={
-            <HqLayout
-              chatAlarmOn={chatAlarmOn}
-              setChatAlarmOn={setChatAlarmOn}
-              chatUnreadTotal={chatUnreadTotal}
-              showChatModal={showChatModal}
-              setChatUnreadTotal={setChatUnreadTotal}
-            />
-          }
-        >
+      <Route element={<HqLayout />}>
           {/* 재고 */}
           <Route path="/hq/HqInventoryList" element={<HqInventoryList />} />
-          <Route
-            path="/hq/HqInventoryExpiration"
-            element={<HqInventoryExpiration />}
-          />
+          <Route path="/hq/HqInventoryExpiration"element={<HqInventoryExpiration />}/>
           <Route path="/hq/HqDisposalList" element={<HqDisposalList />} />
-          <Route
-            path="/hq/HqIngredientSetting"
-            element={<HqIngredientSetting />}
-          />
+          <Route path="/hq/HqDisposalRequestList" element={<HqDisposalRequestList />} />
+          <Route path="/hq/HqIngredientSetting"element={<HqIngredientSetting />}/>
           <Route path="/hq/HqInventoryRecord" element={<HqInventoryRecord />} />
+          <Route path="/hq/HqCategoryIngredientManagePage" element={<HqCategoryIngredientManagePage />} />
 
           {/*발주*/}
           <Route path="/hq/orderRequest" element={<OrderRequestList />} />
-          <Route
-            path="/hq/orderRequestDetail"
-            element={<OrderRequestDetail />}
-          />
+          <Route path="/hq/orderRequestDetail"element={<OrderRequestDetail />}/>
           <Route path="/hq/orderItemManage" element={<OrderItemManage />} />
+          <Route path="/hq/orderRequestPrint" element={<OrderRequestPrint/>}/>
 
           {/* 메뉴 */}
           <Route path="/hq/totalMenu" element={<HqTotalMenu />} />
@@ -432,6 +318,7 @@ function App() {
         <Route path="/eventDetail/:id" element={<EventDetailPage />} />
 
         <Route path="/praiseDetail/:id" element={<PraiseDetailPage />} />
+        <Route path="/newsWrite" element={<NewsWritePage />} />
 
         {/* 키오스크 페이지 */}
 
@@ -449,5 +336,5 @@ function App() {
     </>
   );
 }
-
+//test 
 export default App;

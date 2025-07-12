@@ -61,9 +61,8 @@ function AlarmList() {
       .catch(err => console.error('삭제 실패:', err));
   };
 
-
-
   const submit = (page) => {
+    if (page < 1 || page > pageInfo.allPage) return;
     myAxios(token).get(`/alarmList?page=${page}`)
       .then(res => {
         setAlarmList(res.data.data);
@@ -89,7 +88,7 @@ function AlarmList() {
             <button onClick={markAsReadSelected}>읽음 처리</button>
             <button onClick={deleteSelected}>삭제</button>
           </div>
-          <div>
+          <div className={styles.inboxSummary}>
             읽지 않음 {alarmList.filter(n => !n.isRead).length}개 / 총 {alarmList.length}개
           </div>
         </div>
@@ -106,6 +105,7 @@ function AlarmList() {
               </th>
               <th>제목</th>
               <th>내용</th>
+              <th>읽음여부</th>
               <th>수신일시</th>
             </tr>
           </thead>
@@ -126,7 +126,8 @@ function AlarmList() {
                   </td>
                   <td>{noti.title}</td>
                   <td>{noti.content}</td>
-                  <td>{noti.sentAt}</td>
+                  <td>{noti.isRead ? '읽음' : '안읽음'}</td>
+                  <td>{noti.sendAt}</td>
                 </tr>
               ))
             )}
@@ -134,17 +135,21 @@ function AlarmList() {
         </table>
 
         <div className={styles.pagination}>
-          <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>
-            &lt;
-          </button>
-          {pageNums.map(p => (
-            <button key={p} onClick={() => submit(p)} className={p === pageInfo.curPage ? styles.active : ''}>
+          <button onClick={() => submit(1)} disabled={pageInfo.curPage === 1}>{"<<"}</button>
+          <button onClick={() => submit(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>{"<"}</button>
+
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              onClick={() => submit(p)}
+              className={p === pageInfo.curPage ? styles.active : ""}
+            >
               {p}
             </button>
           ))}
-          <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage >= pageInfo.allPage}>
-            &gt;
-          </button>
+
+          <button onClick={() => submit(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>{">"}</button>
+          <button onClick={() => submit(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>{">>"}</button>
         </div>
       </div>
     </div>

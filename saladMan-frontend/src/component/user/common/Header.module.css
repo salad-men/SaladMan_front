@@ -42,7 +42,11 @@
   margin-left: 0px;
   text-decoration: none;
 }
-
+.logoImage {
+  height: 35px; /* 필요에 따라 조절 */
+  width: auto;
+  display: block;
+}
 .nav {
   display: flex;
   align-items: center;
@@ -58,9 +62,9 @@
 .atag {
   color: white;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 19px;
   padding: 10px 12px;
-  font-weight: 500;
+  font-weight: 600;
   display: inline-block;
   transition: color 0.3s ease;
 }
@@ -116,4 +120,20 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+.hqBtn a {
+  background: #ffffff;
+  color: #4D774E;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s, color 0.3s;
+
+}
+
+.hqBtn a:hover {
+  background: #4D774E;
+  color: white;
 }

@@ -1,23 +1,22 @@
 .employeeListContainer {
   display: flex;
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: #ffffff;
+  padding: 24px 100px 0 280px;
 }
 .employeeListContent {
   flex: 1;
-  padding: 40px 40px 60px;
-  background-color: white;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
+  padding: 30px 0 0 20px;
   display: flex;
   flex-direction: column;
   min-width: 0;
   position: relative;
 }
 .employeeListContent h2 {
-  margin-top: 100px;
-  font-size: 20px;
-  margin-bottom: 20px;
+  margin: 0 0 16px;
+  font-size: 28px;
+  color: #286180;
+  font-weight: bold;
 }
 .topBar {
   display: flex;
@@ -28,14 +27,14 @@
 .registerButton {
   padding: 6px 16px;
   font-size: 14px;
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 .registerButton:hover {
-  background-color: #3a5e3b;
+  background-color: #194760;
 }
 .searchGroup {
   display: flex;
@@ -52,14 +51,23 @@
 .searchButton {
   padding: 6px 16px;
   font-size: 14px;
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 .searchButton:hover {
-  background-color: #3a5e3b;
+  background-color: #194760;
+}
+.selectName {
+  font-family: 'Noto Sans KR', sans-serif;
+  width: 120px;
+  padding: 6px;
+  border: 1px solid #a8bcc6;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
 }
 .employeeTable {
   width: 100%;
@@ -84,22 +92,37 @@
   object-fit: cover;
 }
 
+/* PaymentList 스타일로 완전히 동일화된 pagination */
 .pagination {
-  margin: 32px 0 0 0;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 6px;
 }
 .pagination button {
-  margin: 0 3px;
-  padding: 5px 14px;
-  border: none;
-  border-radius: 5px;
-  background: #f0f0f0;
-  font-size: 15px;
+  padding: 6px 12px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
+  color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
-.pagination .active, .pagination button:active {
-  background: #4D774E;
-  color: #fff;
+.pagination button:hover:not(:disabled) {
+  background-color: #dce3e9;
+}
+.pagination button:disabled {
+  background-color: #f0f1f4;
+  color: #c0c7cf;
+  cursor: not-allowed;
+}
+.pagination .active {
+  background-color: #286180;
+  color: white;
+  font-weight: bold;
+  border-color: #286180;
 }
 
 /* 상세/수정 모달 스타일 */
@@ -139,6 +162,7 @@
   width: 120px;
   padding: 4px 6px;
   font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 .detailGrid span {
   font-size: 14px;
@@ -155,7 +179,7 @@
   padding: 7px 18px;
   border-radius: 6px;
   border: none;
-  background: #4D774E;
+  background: #286180;
   color: #fff;
   font-size: 15px;
   cursor: pointer;
@@ -169,20 +193,6 @@
   font-size: 15px;
   cursor: pointer;
 }
-.editButton:hover, .saveButton:hover { background: #3a5e3b; }
-.cancelButton:hover { background: #333; }
-.detailGrid label { min-width: 56px; }
-.detailGrid input, .detailGrid select { width: 120px; padding: 4px 6px; font-size: 14px; }
-.detailGrid img { vertical-align: middle; }
-.detailModalBtnRow { display: flex; justify-content: flex-end; gap: 10px; margin-top: 28px; }
-.editButton, .saveButton {
-  padding: 7px 18px; border-radius: 6px; border: none;
-  background: #4D774E; color: #fff; font-size: 15px; cursor: pointer;
-}
-.cancelButton {
-  padding: 7px 18px; border-radius: 6px; border: none;
-  background: #888; color: #fff; font-size: 15px; cursor: pointer;
-}
-.editButton:hover, .saveButton:hover { background: #3a5e3b; }
+.editButton:hover, .saveButton:hover { background: #194760; }
 .cancelButton:hover { background: #333; }
 .errorMsg { color: crimson; font-size: 13px; margin: 8px 0 0 4px; }

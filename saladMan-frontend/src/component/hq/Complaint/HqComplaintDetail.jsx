@@ -1,43 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
-import { useNavigate, useParams } from "react-router-dom";
+import { useAtomValue  } from "jotai";
+import { useNavigate,useParams } from "react-router-dom";
 import NoticeSidebar from "../Notice/NoticeSidebar";
 import styles from "./HqComplaintDetail.module.css";
 import { myAxios } from "../../../config";
 import { accessTokenAtom } from "/src/atoms";
 
 export default function HqComplaintDetail() {
-  const { id } = useParams();
+    const { id } = useParams();
+
   const navigate = useNavigate();
   const token = useAtomValue(accessTokenAtom);
 
   const [complaint, setComplaint] = useState({
     title: "",
-    storeName: "",      // branch → storeName 으로 변경
-    writerNickname: "", // nickname → writerNickname
-    writerEmail: "",    // email → writerEmail
+    storeName: "",
+    writerNickname: "",
+    writerEmail: "",
     phone: "",
-    writerDate: "",     // createdAt → writerDate
+    writerDate: "",
     content: "",
   });
 
   useEffect(() => {
-    if (!token) return;
-    if (id) {
-      myAxios(token)
-        .get("/hq/complaint/detail", { params: { id } })
-        .then(res => {
-          if (res.data.complaint) {
-            setComplaint(res.data.complaint);
-          }
-        })
-        .catch(err => console.error("불편사항 불러오기 실패:", err));
-    }
+    if (!token || !id) return;
+    myAxios(token)
+      .get("/hq/complaint/detail", { params: { id } })
+      .then(res => {
+        if (res.data.complaint) setComplaint(res.data.complaint);
+      });
   }, [id, token]);
 
-  const handleListClick = () => {
-    navigate(-1);
-  };
+  const handleListClick = () => navigate(-1);
 
   const handleSendClick = () => {
     if (!complaint.storeName) {
@@ -53,51 +47,99 @@ export default function HqComplaintDetail() {
   return (
     <div className={styles.container}>
       <NoticeSidebar />
-      <main className={styles.mainContent}>
-        <h2 className={styles.pageTitle}>불편사항</h2>
-        <div className={styles.writeDate}>작성일 {complaint.writerDate}</div>
-
-        <table className={styles.detailTable}>
-          <tbody>
-            <tr>
-              <th className={styles.tableHeader}>제목</th>
-              <td className={styles.tableData}>{complaint.title}</td>
-            </tr>
-            <tr>
-              <th className={styles.tableHeader}>지점명</th>
-              <td className={styles.tableData}>{complaint.storeName}</td>
-            </tr>
-            <tr>
-              <th className={styles.tableHeader}>고객 닉네임</th>
-              <td className={`${styles.tableData} ${styles.writer}`}>
-                {complaint.writerNickname}
-              </td>
-            </tr>
-            <tr>
-              <th className={styles.tableHeader}>내용</th>
-              <td className={styles.tableData}>
-                이메일: {complaint.writerEmail}
-                <br />
-                {complaint.phone && (
-                  <>
-                    고객번호: {complaint.phone}
-                    <br />
-                  </>
-                )}
-                <br />
-                {complaint.content}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div className={styles.buttonGroup}>
-          <button className={styles.listButton} onClick={handleListClick}>
-            목록
-          </button>
-          <button className={styles.sendButton} onClick={handleSendClick}>
-            전달
-          </button>
+      <main className={styles.content}>
+        <h2 className={styles.title}>불편사항 상세</h2>
+        <div className={styles.detail}>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>제목</label>
+            <div className={styles.value}>
+              <input
+                type="text"
+                readOnly
+                value={complaint.title}
+                placeholder="제목"
+                className={styles.inputLike}
+              />
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>지점명</label>
+            <div className={styles.value}>
+              <input
+                type="text"
+                readOnly
+                value={complaint.storeName}
+                placeholder="지점명"
+                className={styles.inputLike}
+              />
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>고객 닉네임</label>
+            <div className={styles.value}>
+              <input
+                type="text"
+                readOnly
+                value={complaint.writerNickname}
+                placeholder="닉네임"
+                className={styles.inputLike}
+              />
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>이메일/전화</label>
+            <div className={styles.value}>
+              <input
+                type="text"
+                readOnly
+                value={
+                  (complaint.writerEmail || "-") +
+                  (complaint.phone ? ` / ${complaint.phone}` : "")
+                }
+                placeholder="이메일/전화"
+                className={styles.inputLike}
+              />
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>내용</label>
+            <div className={styles.value}>
+              <textarea
+                readOnly
+                value={complaint.content}
+                placeholder="내용"
+                className={styles.inputLike}
+              />
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <label className={styles.label}>작성일</label>
+            <div className={styles.value}>
+              <input
+                type="text"
+                readOnly
+                value={complaint.writerDate}
+                placeholder="작성일"
+                className={styles.inputLike}
+              />
+            </div>
+          </div>
+          <div className={styles.btnBox}>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnSubmit}`}
+              onClick={handleListClick}
+            >
+              목록
+            </button>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnCancel}`}
+              onClick={handleSendClick}
+            >
+              전달
+            </button>
+          </div>
         </div>
       </main>
     </div>

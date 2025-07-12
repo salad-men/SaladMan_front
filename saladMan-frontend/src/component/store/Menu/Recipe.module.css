@@ -1,16 +1,16 @@
 .wrapper {
   display: flex;
-  height: calc(100vh - 64px);
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow: hidden;
-  overflow-y: scroll;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
   flex: 1;
   align-self: flex-start;
-  padding: 30px 0 0 0;
+  padding: 30px 0 0 20px;
   overflow-y: auto;
+  max-height: 100%;
   max-width: 1500px;
   margin: 0 auto;
   position: relative;
@@ -19,6 +19,13 @@
 .pageHeader {
   display: flex;
   flex-direction: column;
+}
+
+.pageHeader h2 {
+  margin: 0 0 5px;
+  font-size: 28px;
+  color: #286180;
+  font-weight: bold;
 }
 
 .cardWrapper {
@@ -31,69 +38,144 @@
 
 .recipeCard {
   display: flex;
+  flex-direction: row;
   background: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #dce3e9;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   padding: 10px;
+  width: 350px;
+  min-height: 180px;
+  box-sizing: border-box;
 }
 
-.recipeCard img {
-  width: 140px;
+.recipeCard:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  transition: all 0.2s ease-in-out;
+  background-color: #f9f9f9;
+}
+
+.imageBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.imageBlock img {
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 8px;
-  margin: auto 10px;
+  margin-bottom: 8px;
+}
+
+.imageBlock h3 {
+  font-size: 1rem;
+  margin: 4px 0 0;
+  color: #286180;
+  text-align: center;
 }
 
 .cardText {
-  width: 170px;
+  flex: 1;
+  display: flex;
+  padding-left: 10px;
+  align-items: center;
 }
 
-.recipeCard h3 {
-  font-size: 1.1rem;
-  margin: 12px 0 4px;
-  color: #333;
-}
-
-.recipeCard ul {
+.cardText ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.recipeCard li {
-  font-size: 0.95rem;
-  padding: 2px 0;
+.cardText li {
+  font-size: 0.9rem;
+  padding: 4px 0;
 }
 
+/* ✅ 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
-  gap: 4px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  gap: 6px;
 }
 
 .pagination button {
-  background: none;
-  border: none;
   padding: 6px 12px;
-  color: #333;
-  font-size: 18px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
+  color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #f0f0f0;
+  background-color: #dce3e9;
 }
 
 .pagination button:disabled {
-  opacity: 0.5;
+  background-color: #f0f1f4;
+  color: #c0c7cf;
   cursor: not-allowed;
 }
 
 .pagination .active {
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   font-weight: bold;
+  border-color: #286180;
+}
+
+/* ✅ 카테고리 탭 */
+.tabNav {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 32px;
+  margin: 6px 0 25px 0;
+  position: relative;
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  font-weight: 500;
+  color: #286180;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+  position: relative;
+  padding: 0 14px 5px 14px;
+  transition: color 0.2s;
+}
+
+.tabBtn:not(:last-child)::after {
+  content: "";
+  display: inline-block;
+  width: 1.5px;
+  height: 18px;
+  background: #dce3e9;
+  position: absolute;
+  right: -18px;
+  top: 3px;
+}
+
+.tabBtn:hover,
+.tabBtn:focus {
+  color: #1a445a;
+}
+
+.activeTab {
+  font-weight: 700;
+  color: #1a445a;
+  border-bottom: 3px solid #286180;
+  padding-bottom: 2px;
 }

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./OrderSettings.module.css";
 import OrderSidebar from "./OrderSidebar";
 import { Info, X } from "lucide-react";
@@ -40,7 +40,17 @@ export default function OrderSettings() {
         fetchAutoOrder();
         fetchSettings();
     }, [token]);
+    const checkedCount = useMemo(() => {
+        return items.filter((item) => item.autoOrderEnabled).length;
+    }, [items]);
 
+    const sortedItems = useMemo(() => {
+        return [...items].sort((a, b) => {
+            const aChecked = a.autoOrderEnabled ? 1 : 0;
+            const bChecked = b.autoOrderEnabled ? 1 : 0;
+            return bChecked - aChecked; // true 먼저 오게
+        });
+    }, [items]);
     const handleToggle = async () => {
         const newValue = !isAutoOrderOn;
         setIsAutoOrderOn(newValue);
@@ -74,7 +84,12 @@ export default function OrderSettings() {
             alert("저장 중 오류가 발생했습니다.");
         }
     };
-
+    const handleItemChangeById = (ingredientId, field, value) => {
+        const updated = items.map((item) =>
+            item.ingredientId === ingredientId ? { ...item, [field]: value } : item
+        );
+        setItems(updated);
+    };
     return (
         <>
             <div className={styles.orderSettingContainer}>
@@ -83,6 +98,7 @@ export default function OrderSettings() {
                 <div className={styles.orderSettingContent}>
                     <h2 className={styles.title}>발주 설정</h2>
 
+                    {/* ✅ 체크된 항목 수 표시 */}
                     <div className={styles.autoOrderHeader}>
                         <div className={styles.toggleSection}>
                             <span>자동 발주 사용여부</span>
@@ -95,11 +111,14 @@ export default function OrderSettings() {
                                 <span className={styles.slider}></span>
                             </label>
                             <div className={styles.tooltipWrap}>
-                                자동발주란&nbsp;
+                                자동발주시간&nbsp;
                                 <span className={styles.tooltipText}>
                                     자동 발주 시간은 오후 5시입니다.
                                 </span>
                             </div>
+                        </div>
+                        <div className={styles.checkedCount}>
+                            자동발주 체크된 품목 수: <strong>{checkedCount}</strong>개
                         </div>
                     </div>
 
@@ -108,68 +127,71 @@ export default function OrderSettings() {
                             <tr>
                                 <th>품명</th>
                                 <th>구분</th>
-                                <th>최소량</th>
-                                <th>자동주문량</th>
+                                <th>매장 최소 수량</th>
+                                <th>묶음단위</th>
+                                <th>묶음수</th>
+                                <th>총 자동발주량</th>
                                 <th>자동발주</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {items.map((item, index) => (
+                            {sortedItems.map((item) => (
                                 <tr key={item.ingredientId}>
                                     <td>{item.ingredientName}</td>
                                     <td>{item.categoryName}</td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            value={item.minQuantity || ""}
-                                            readOnly
-                                            onChange={(e) =>
-                                                handleItemChange(index, "minQuantity", e.target.value)
-                                            }
-                                        />
-                                    </td>
+                                    <td>{item.minQuantity ?? 0}</td>
+                                    <td>{item.minimumOrderUnit}</td>
                                     <td>
                                         <div className={styles.qtyControl}>
                                             <button
                                                 type="button"
                                                 onClick={() => {
                                                     const minUnit = Number(item.minimumOrderUnit) || 1;
-                                                    const current = Number(item.autoOrderQty) || 0;
-                                                    const newValue = Math.max(current - minUnit, 0);
-                                                    handleItemChange(index, "autoOrderQty", newValue);
+                                                    const current = Number(item.bundleCount) || 0;
+                                                    const newBundle = Math.max(current - 1, 0);
+                                                    const newQty = newBundle * minUnit;
+                                                    handleItemChangeById(item.ingredientId, "bundleCount", newBundle);
+                                                    handleItemChangeById(item.ingredientId, "autoOrderQty", newQty);
                                                 }}
                                             >
                                                 -
                                             </button>
                                             <input
                                                 type="number"
-                                                value={item.autoOrderQty || 0}
-                                                readOnly
+                                                min="0"
+                                                value={item.bundleCount || 0}
+                                                onChange={(e) => {
+                                                    const minUnit = Number(item.minimumOrderUnit) || 1;
+                                                    const newBundle = Number(e.target.value) || 0;
+                                                    const newQty = newBundle * minUnit;
+                                                    handleItemChangeById(item.ingredientId, "bundleCount", newBundle);
+                                                    handleItemChangeById(item.ingredientId, "autoOrderQty", newQty);
+                                                }}
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => {
                                                     const minUnit = Number(item.minimumOrderUnit) || 1;
-                                                    const current = Number(item.autoOrderQty) || 0;
-                                                    const newValue = current + minUnit;
-                                                    handleItemChange(index, "autoOrderQty", newValue);
+                                                    const current = Number(item.bundleCount) || 0;
+                                                    const newBundle = current + 1;
+                                                    const newQty = newBundle * minUnit;
+                                                    handleItemChangeById(item.ingredientId, "bundleCount", newBundle);
+                                                    handleItemChangeById(item.ingredientId, "autoOrderQty", newQty);
                                                 }}
                                             >
                                                 +
                                             </button>
                                         </div>
                                     </td>
-
+                                    <td>
+                                        <span className={styles.totalQty}>{item.autoOrderQty ?? 0}</span>
+                                    </td>
                                     <td>
                                         <input
                                             type="checkbox"
-                                            checked={item.autoOrderEnabled || false}
+                                            checked={item.autoOrderEnabled ?? false}
                                             onChange={(e) =>
-                                                handleItemChange(
-                                                    index,
-                                                    "autoOrderEnabled",
-                                                    e.target.checked
-                                                )
+                                                handleItemChangeById(item.ingredientId, "autoOrderEnabled", e.target.checked)
                                             }
                                         />
                                     </td>
@@ -178,7 +200,7 @@ export default function OrderSettings() {
                         </tbody>
                     </table>
 
-                    <div className={styles.footerSection}>
+                    <div className={styles.footerSticky}>
                         <button className={styles.saveButton} onClick={handleSave}>
                             저장
                         </button>

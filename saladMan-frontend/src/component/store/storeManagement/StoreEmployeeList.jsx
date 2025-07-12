@@ -4,12 +4,10 @@ import EmpSidebar from "./StoreEmpSidebar";
 import { myAxios } from "/src/config";
 import { accessTokenAtom, userAtom } from "/src/atoms";
 import { useAtomValue } from "jotai";
-import { useNavigate } from "react-router-dom";
 
 export default function StoreEmployeeList() {
   const token = useAtomValue(accessTokenAtom);
-  const user = useAtomValue(userAtom); 
-  const navigate = useNavigate();
+  const user = useAtomValue(userAtom);
 
   const [searchKeyword, setSearchKeyword] = useState("");
   const [grade, setGrade] = useState("all");
@@ -24,24 +22,32 @@ export default function StoreEmployeeList() {
   const [editImgPreview, setEditImgPreview] = useState("");
   const [editError, setEditError] = useState("");
 
+  useEffect(() => { fetchEmployees(1); }, [token, user]);
+
   const fetchEmployees = (page = 1) => {
     if (!token || !user?.id) return;
     myAxios(token).post("/store/emp/list", {
-      storeId: user.id, 
+      storeId: user.id,
       keyword: searchKeyword,
       grade: grade === "all" ? null : grade,
       page,
     }).then(res => {
       setEmployees(res.data.employees || []);
-      const pi = res.data.pageInfo || {curPage:1,allPage:1,startPage:1,endPage:1};
+      const pi = res.data.pageInfo || { curPage:1, allPage:1, startPage:1, endPage:1 };
       setPageInfo(pi);
-      setPageNums(Array.from({length: pi.endPage - pi.startPage + 1}, (_,i) => pi.startPage + i));
+      const pages = [];
+      for (let i = pi.startPage; i <= pi.endPage; i++) {
+        pages.push(i);
+      }
+      setPageNums(pages);
     });
   };
-  useEffect(() => { fetchEmployees(1); }, [token, user]);
 
   const handleSearch = (e) => { e.preventDefault(); fetchEmployees(1); };
-  const gotoPage = (p) => fetchEmployees(p);
+  const gotoPage = (p) => {
+    if (p < 1 || p > pageInfo.allPage) return;
+    fetchEmployees(p);
+  };
 
   const handleRowClick = (emp) => {
     setSelected(emp);
@@ -79,8 +85,7 @@ export default function StoreEmployeeList() {
 
   const handleEditSave = async () => {
     setEditError("");
-    if (!editForm.id) return;
-    if (!editForm.name || !editForm.grade || !editForm.phone || !editForm.hireDate) {
+    if (!editForm.id || !editForm.name || !editForm.grade || !editForm.phone || !editForm.hireDate) {
       setEditError("필수값을 모두 입력하세요.");
       return;
     }
@@ -111,7 +116,7 @@ export default function StoreEmployeeList() {
         <h2>직원 목록</h2>
         <div className={styles.topBar}>
           <form className={styles.searchGroup} onSubmit={handleSearch}>
-            <select value={grade} onChange={e => setGrade(e.target.value)}>
+            <select value={grade} onChange={e => setGrade(e.target.value)} className={styles.selectName}>
               <option value="all">전체 직급</option>
               <option value="점장">점장</option>
               <option value="매니저">매니저</option>
@@ -127,31 +132,20 @@ export default function StoreEmployeeList() {
             <button type="submit" className={styles.searchButton}>검색</button>
           </form>
         </div>
+
         <table className={styles.employeeTable}>
           <thead>
             <tr>
-              <th>사원번호</th>
-              <th>프로필</th>
-              <th>이름</th>
-              <th>직급</th>
-              <th>연락처</th>
-              <th>이메일</th>
-              <th>입사일</th>
+              <th>사원번호</th><th>프로필</th><th>이름</th><th>직급</th><th>연락처</th><th>이메일</th><th>입사일</th>
             </tr>
           </thead>
           <tbody>
             {employees.length === 0 ? (
               <tr><td colSpan={7} style={{textAlign:"center"}}>데이터가 없습니다.</td></tr>
             ) : employees.map(emp => (
-              <tr key={emp.id} onClick={()=>handleRowClick(emp)} style={{cursor:'pointer'}}>
+              <tr key={emp.id} onClick={() => handleRowClick(emp)} style={{ cursor: 'pointer' }}>
                 <td>{emp.id}</td>
-                <td>
-                  <img
-                    src={emp.imgUrl || "/images/profile-placeholder.png"}
-                    alt="profile"
-                    className={styles.tableProfile}
-                  />
-                </td>
+                <td><img src={emp.imgUrl || "/images/profile-placeholder.png"} alt="profile" className={styles.tableProfile} /></td>
                 <td>{emp.name}</td>
                 <td>{emp.grade}</td>
                 <td>{emp.phone}</td>
@@ -161,14 +155,21 @@ export default function StoreEmployeeList() {
             ))}
           </tbody>
         </table>
+
         <div className={styles.pagination}>
-          <button onClick={()=>gotoPage(pageInfo.curPage-1)} disabled={pageInfo.curPage<=1}>&lt;</button>
-          {pageNums.map(p=>(
-            <button key={p} onClick={()=>gotoPage(p)} className={p===pageInfo.curPage?styles.active:""}>
+          <button onClick={() => gotoPage(1)} disabled={pageInfo.curPage === 1}>{"<<"}</button>
+          <button onClick={() => gotoPage(pageInfo.curPage - 1)} disabled={pageInfo.curPage === 1}>{"<"}</button>
+          {pageNums.map((p) => (
+            <button
+              key={p}
+              onClick={() => gotoPage(p)}
+              className={p === pageInfo.curPage ? styles.active : ""}
+            >
               {p}
             </button>
           ))}
-          <button onClick={()=>gotoPage(pageInfo.curPage+1)} disabled={pageInfo.curPage>=pageInfo.allPage}>&gt;</button>
+          <button onClick={() => gotoPage(pageInfo.curPage + 1)} disabled={pageInfo.curPage === pageInfo.allPage}>{">"}</button>
+          <button onClick={() => gotoPage(pageInfo.allPage)} disabled={pageInfo.curPage === pageInfo.allPage}>{">>"}</button>
         </div>
 
         {selected && (
@@ -179,29 +180,21 @@ export default function StoreEmployeeList() {
                 <div><label>사원번호</label><span>{selected.id}</span></div>
                 <div><label>이름</label>{editMode ? <input name="name" value={editForm.name||""} onChange={handleEditChange}/> : <span>{selected.name}</span>}</div>
                 <div><label>직급</label>{editMode ? <select name="grade" value={editForm.grade||""} onChange={handleEditChange}>
-                  <option value="">선택</option>
-                  <option value="점장">점장</option>
-                  <option value="매니저">매니저</option>
-                  <option value="직원">직원</option>
-                  <option value="파트타이머">파트타이머</option>
+                  <option value="">선택</option><option value="점장">점장</option><option value="매니저">매니저</option><option value="직원">직원</option><option value="파트타이머">파트타이머</option>
                 </select> : <span>{selected.grade}</span>}</div>
                 <div><label>연락처</label>{editMode ? <input name="phone" value={editForm.phone||""} onChange={handleEditChange}/> : <span>{selected.phone}</span>}</div>
                 <div><label>이메일</label><span>{selected.email}</span></div>
                 <div><label>입사일</label>{editMode ? <input name="hireDate" type="date" value={editForm.hireDate||""} onChange={handleEditChange}/> : <span>{selected.hireDate}</span>}</div>
                 <div><label>주소</label>{editMode ? <input name="address" value={editForm.address||""} onChange={handleEditChange}/> : <span>{selected.address}</span>}</div>
                 <div><label>성별</label>{editMode ? <select name="gender" value={editForm.gender||""} onChange={handleEditChange}>
-                  <option value="">선택</option>
-                  <option value="남">남</option>
-                  <option value="여">여</option>
+                  <option value="">선택</option><option value="남">남</option><option value="여">여</option>
                 </select> : <span>{selected.gender}</span>}</div>
                 <div><label>생년월일</label>{editMode ? <input name="birthday" type="date" value={editForm.birthday||""} onChange={handleEditChange}/> : <span>{selected.birthday}</span>}</div>
                 <div><label>프로필</label>{editMode ? (
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <img src={editImgPreview || "/images/profile-placeholder.png"} alt="profile" className={styles.tableProfile} />
                     <input type="file" accept="image/*" onChange={handleEditImgChange} />
-                    {(editImgFile || editForm.imgUrl) && (
-                      <button type="button" className={styles.cancelButton} style={{ marginLeft: 2 }} onClick={handleEditImgDelete}>이미지 삭제</button>
-                    )}
+                    {(editImgFile || editForm.imgUrl) && <button type="button" className={styles.cancelButton} onClick={handleEditImgDelete}>이미지 삭제</button>}
                   </div>
                 ) : (
                   <img src={selected.imgUrl || "/images/profile-placeholder.png"} alt="profile" className={styles.tableProfile} />

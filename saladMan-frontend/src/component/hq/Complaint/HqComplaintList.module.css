@@ -1,164 +1,235 @@
 .container {
   display: flex;
-  min-height: 100vh;
   font-family: 'Pretendard', sans-serif;
-  background-color: #f9fafb;
+  background: #fff;
 }
 
 .content {
   flex: 1;
-  padding: 40px 30px;
-  background-color: white;
-  box-sizing: border-box;
-  border-left: 1px solid #ddd;
-  min-width: 900px;
+  background: #fff;
+  width: 200px;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 18px;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 1.8rem;
+  color: #2f6042;
   font-weight: 700;
-  color: #3d5a40;
-  margin-bottom: 20px;
-  user-select: none;
+  letter-spacing: -1px;
+  text-align: left;
+  width: 500px;
 }
 
-.actions {
+.filters {
+  margin-bottom: 10px;
   display: flex;
-  justify-content: flex-start;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 12px;
 }
 
 .forwardSelectedBtn {
   padding: 6px 18px;
-  font-size: 14px;
-  background-color: #5a8158;
+  background: #57a964;
   color: white;
   border: none;
   border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+  transition: background 0.2s;
+  margin-left: 950px;
 }
-
 .forwardSelectedBtn:disabled {
-  background-color: #ccc;
+  background: #ccc;
+  color: #fff;
   cursor: not-allowed;
 }
-
 .forwardSelectedBtn:not(:disabled):hover {
-  background-color: #4a6848;
+  background: #398346;
 }
 
-.detailTable {
-  width: 100%;
-  border-collapse: collapse;
+.filters select,
+.filters input[type="text"] {
+  padding: 6px 10px;
+  border: 1px solid #b4c7b3;
+  border-radius: 4px;
   font-size: 14px;
-  min-width: 900px;
+  height: 32px;
 }
 
-.detailTable thead th {
-  background-color: #f6f6f6;
-  color: #3d5a40;
+.filters input[type="text"] {
+  width: 160px;
+  height: 19px;
+}
+
+.filters button {
+  padding: 6px 14px;
+  background: #4d774e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 14px;
   font-weight: 600;
-  padding: 12px 10px;
-  border-bottom: 2px solid #ccc;
+}
+
+.filters button:hover {
+  background: #3b663b;
+}
+
+/* 선택 전달 버튼 */
+.actions {
+  display: flex;
+  width: 100%;
+  max-width: 1120px;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+/* 테이블 */
+.detailTable {
+  border-collapse: collapse;
+  margin-top: 0;
+  width: 1560px;
+  /* height: 600px; */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  background: #fff;
+}
+
+.detailTable thead {
+  background: #eaf3eb;
+  color: #2d4836;
+}
+
+.detailTable th,
+.detailTable td {
+  padding: 10px;
+  border: 1px solid #e4e9e7;
   text-align: center;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.detailTable thead th:nth-child(1) {
-  width: 5%;
-}
-
-.detailTable thead th:nth-child(2) {
-  width: 40%;
-  max-width: 280px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 15px;
 }
 
-.detailTable thead th:nth-child(3),
-.detailTable thead th:nth-child(4),
-.detailTable thead th:nth-child(5),
-.detailTable thead th:nth-child(6) {
-  width: 13.75%;
+.detailTable td {
+  height: 35px;
 }
 
-.detailTable tbody td {
-  padding: 14px 10px;
-  color: #555;
-  text-align: center;
-  vertical-align: middle;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.detailTable th:nth-child(1),
+.detailTable td:nth-child(1) { width: 5%; }
+.detailTable th:nth-child(2),
+.detailTable td:nth-child(2) { width: 23%; max-width: 190px; text-align: center; }
+.detailTable th:nth-child(3),
+.detailTable td:nth-child(3) { width: 30%; max-width: 260px; }   
+.detailTable th:nth-child(4),
+.detailTable td:nth-child(4) { width: 10%; }
+.detailTable th:nth-child(5),
+.detailTable td:nth-child(5) { width: 12%; }
+.detailTable th:nth-child(6),
+.detailTable td:nth-child(6) { width: 12%; }
+.detailTable th:nth-child(7),
+.detailTable td:nth-child(7) { width: 8%; }
+
+
+/* 행 호버 */
+.detailTable tbody tr:hover {
+  background: #f3f9f5;
+  cursor: pointer;
 }
 
-.detailTable tbody td:nth-child(2) {
-  text-align: left;
-  max-width: 280px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* 미열람 강조 (필요시) */
+.unread {
+  background: #fdf7ec !important;
 }
 
+/* 체크박스 클릭영역 */
 .clickable {
   cursor: pointer;
   user-select: none;
+  text-align: left;
 }
-
-
 
 .statusCell {
   font-weight: 600;
   user-select: none;
 }
 
-
+/* 상태별 색상 */
+.statuscell {
+  font-weight: 600;
+}
+.statuscell.미열람, .statuscell.miyulram {
+  color: #d17a27;
+}
+.statuscell.열람, .statuscell.yulram {
+  color: #4979c2;
+}
+.statuscell.전달완료, .statuscell.jeondalwanlyo {
+  color: #52b94c;
+}
 
 .noData {
-  padding: 30px 0;
-  color: #777;
-  font-style: italic;
   text-align: center;
+  padding: 40px 0;
+  color: #999;
+  font-size: 15px;
 }
 
-/* 페이징 스타일 */
-.paging {
-  margin-top: 20px;
-  text-align: center;
+/* 페이징 */
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
 }
-
-.paging button {
-  margin: 0 4px;
-  padding: 5px 10px;
-  border: 1px solid #5a8158;
-  background-color: white;
-  color: #5a8158;
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #a2b7aa;
+  border-radius: 4px;
+  background: white;
+  color: #387448;
   cursor: pointer;
-  border-radius: 5px;
+  transition: background 0.2s;
+  font-size: 14px;
   font-weight: 600;
-  font-size: 13px;
-  transition: background-color 0.3s ease;
 }
-
-.paging button:hover:not(:disabled) {
-  background-color: #5a8158;
-  color: white;
+.pagination button:hover:not(:disabled) {
+  background: #eaf3eb;
 }
-
-.paging button:disabled {
-  border-color: #ddd;
-  color: #ddd;
+.pagination button:disabled {
+  background: #f0f4f1;
+  color: #c0cfc3;
   cursor: not-allowed;
 }
-
-/* 현재 페이지 버튼 강조 */
+.pagination .active,
+.pagination button.active,
 .activePageButton {
-  background-color: #5a8158;
-  color: white;
+  background: #57a964 !important;
+  color: white !important;
+  border-color: #57a964 !important;
   cursor: default;
+}
+
+
+.checkboxDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.preview {
+  max-width: 260px;   /* 원하는 너비 조정 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #444;
+  font-size: 0.97rem;
+  cursor: pointer;
 }

@@ -64,6 +64,14 @@ export default function OrderRequestDetail() {
 
     const handleStatusChange = (index, value) => {
         const updated = [...items];
+        if (value === "승인") {
+            if (!updated[index].stockList || updated[index].stockList.length === 0) {
+                alert("선택 가능한 재고가 없습니다. 반려로 자동 변경됩니다.");
+                updated[index].approvalStatus = "반려";
+                return setItems(updated);
+            }
+        }
+
         updated[index].approvalStatus = value;
         if (value !== "반려") updated[index].rejectionReason = "";
         setItems(updated);
@@ -72,6 +80,41 @@ export default function OrderRequestDetail() {
     const handleReasonChange = (index, value) => {
         const updated = [...items];
         updated[index].rejectionReason = value;
+        setItems(updated);
+    };
+
+    const handleRejectAll = () => {
+        const updated = items.map(item => ({
+            ...item,
+            approvalStatus: "반려",
+            rejectionReason: ""
+        }));
+        setItems(updated);
+    };
+
+    const handleApproveAll = () => {
+        const updated = items.map(item => {
+            if (!item.stockList || item.stockList.length === 0) {
+                // 재고 없으면 반려
+                return {
+                    ...item,
+                    approvalStatus: "반려",
+                    rejectionReason: "본사 재고 부족"
+                };
+            } else {
+                // 재고 있으면 승인
+                return {
+                    ...item,
+                    approvalStatus: "승인"
+                };
+            }
+        });
+
+        // 안내 알림
+        if (updated.some(i => i.approvalStatus === "반려")) {
+            alert("선택 가능한 재고가 없는 품목은 반려로 처리되었습니다.");
+        }
+
         setItems(updated);
     };
 
@@ -90,14 +133,15 @@ export default function OrderRequestDetail() {
                 purchaseOrderId: id,
                 selectedStockIds: item.selectedStockIds
             })));
-            alert("저장 완료");
-            navigate("/hq/orderRequest");
+            alert("승인 완료");
+            navigate(0);
         } catch (e) {
-            console.error("저장 실패", e);
+            console.error("승인 실패", e);
             alert("저장 중 오류 발생");
         }
     };
-
+    const approvedCount = items.filter(
+        item => item.approvalStatus === "승인" || item.approvalStatus === "반려").length;
     return (
         <div className={styles.orderDetailContainer}>
             <OrderSidebar />
@@ -106,95 +150,133 @@ export default function OrderRequestDetail() {
                 <h2>수주 상세</h2>
 
                 <div className={styles.orderInfo}>
-                    <p><strong>점포명:</strong> {storeName}</p>
-                    <p><strong>No:</strong> {id} </p>
-                    <p><strong>수주일:</strong> </p>
-                    <p><strong>주문자:</strong> </p>
+                    <p><strong>점포명:&nbsp;</strong> {storeName}</p>
+                    <p><strong>No:&nbsp;</strong> {id} </p>
+                    <p><strong>수주일:&nbsp;</strong> </p>
+                    <p><strong>주문 품목 수: &nbsp;</strong> {items.length} 개</p>
                 </div>
+                {/* 일괄 반려 버튼 */}
+                {!isCompleted && (
+                    <div style={{ marginBottom: 10 }}>
+                            <button onClick={handleApproveAll}
+                                style={{
+                                backgroundColor: "#226236",
+                                color: "white",
+                                border: "none",
+                                padding: "8px 14px",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontWeight: 500
+                            }}>
+                            일괄 승인
+                        </button>
+                        <button
+                            onClick={handleRejectAll}
+                            style={{
+                                backgroundColor: "#ccc",
+                                color: "white",
+                                border: "none",
+                                padding: "8px 14px",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontWeight: 500,
+                                                                marginLeft:15
 
-                <table className={styles.orderDetailTable}>
-                    <thead>
-                        <tr>
-                            <th>품명</th>
-                            <th>구분</th>
-                            <th>발주량</th>
-                            <th>단가(원)</th>
-                            <th>합계(원)</th>
-                            <th>승인여부</th>
-                            <th>반려사유</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map((item, index) => (
-                            <React.Fragment key={item.id}>
-                                <tr key={item.id}>
-                                    <td>{item.ingredientName}</td>
-                                    <td>{item.categoryName}</td>
-                                    <td>{item.orderedQuantity} {item.unit}</td>
-                                    <td>{Math.round(item.totalPrice / item.orderedQuantity).toLocaleString()}원</td>
-                                    <td>{item.totalPrice.toLocaleString()}원</td>
-                                    <td>
-                                        <select
-                                            value={item.approvalStatus}
-                                            onChange={(e) => handleStatusChange(index, e.target.value)}
-                                            disabled={isCompleted}
-                                        >
-                                            <option value="">선택</option>
-                                            <option value="승인">승인</option>
-                                            <option value="반려">반려</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        {item.approvalStatus === "반려" && (
-                                            <input
-                                                type="text"
-                                                value={item.rejectionReason}
-                                                onChange={(e) => handleReasonChange(index, e.target.value)}
-                                                placeholder="반려 사유 입력"
+                            }}
+                        >
+                            일괄 반려
+                        </button>
 
-                                            />
-                                        )}
-                                    </td>
-                                </tr>
-                                {item.approvalStatus === "승인" && item.stockList?.length > 0 && (
-                                    <tr className={styles.stockRow}>
-                                        <td colSpan="7">
-                                            <div className={styles.stockListWrapper}>
-                                                {item.stockList.map(stock => (
-                                                    <label key={stock.id} className={styles.stockItem}>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={item.selectedStockIds.includes(stock.id)}
-                                                            onChange={(e) =>
-                                                                handleStockSelect(index, stock.id, e.target.checked)
-                                                            }
-                                                            disabled={isCompleted}
+                    </div>
+                )}
 
-                                                        />
-                                                        [유통기한: {stock.expiredDate}] {stock.ingredientName} - {stock.quantity} {item.unit} /  수량:{stock.quantity}{stock.unit}
-                                                    </label>
-                                                ))}
-                                            </div>
+                <div className={styles.tableWrapper}>
+                    <table className={styles.orderDetailTable}>
+                        <thead>
+                            <tr>
+                                <th>품명</th>
+                                <th>구분</th>
+                                <th>발주량</th>
+                                <th>단가(원)</th>
+                                <th>합계(원)</th>
+                                <th>승인여부</th>
+                                <th>반려사유</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {items.map((item, index) => (
+                                <React.Fragment key={item.id}>
+                                    <tr key={item.id}>
+                                        <td>{item.ingredientName}</td>
+                                        <td>{item.categoryName}</td>
+                                        <td>{item.orderedQuantity} {item.unit}</td>
+                                        <td>{Math.round(item.totalPrice / item.orderedQuantity).toLocaleString()}원</td>
+                                        <td>{item.totalPrice.toLocaleString()}원</td>
+                                        <td>
+                                            <select
+                                                value={item.approvalStatus}
+                                                onChange={(e) => handleStatusChange(index, e.target.value)}
+                                                disabled={isCompleted}
+                                            >
+                                                <option value="">선택</option>
+                                                <option value="승인">승인</option>
+                                                <option value="반려">반려</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            {item.approvalStatus === "반려" && (
+                                                <input
+                                                    type="text"
+                                                    value={item.rejectionReason}
+                                                    onChange={(e) => handleReasonChange(index, e.target.value)}
+                                                    placeholder="반려 사유 입력"
+
+                                                />
+                                            )}
                                         </td>
                                     </tr>
-                                )}
-                            </React.Fragment>
-                        ))}
-                        <tr className={styles.summaryRow}>
-                            <td colSpan="4"></td>
-                            <td><strong>총 {items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}원</strong></td>
-                            <td colSpan="2"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    {item.approvalStatus === "승인" && item.stockList?.length > 0 && (
+                                        <tr className={styles.stockRow}>
+                                            <td colSpan="7">
+                                                <div className={styles.stockListWrapper}>
+                                                    {item.stockList.map(stock => (
+                                                        <label key={stock.id} className={styles.stockItem}>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={item.selectedStockIds.includes(stock.id)}
+                                                                onChange={(e) =>
+                                                                    handleStockSelect(index, stock.id, e.target.checked)
+                                                                }
+                                                                disabled={isCompleted}
 
+                                                            />
+                                                            [유통기한: {stock.expiredDate}] {stock.ingredientName} - {stock.quantity} {item.unit} /  수량:{stock.quantity}{stock.unit}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                            <tr className={styles.summaryRow}>
+                                <td colSpan="4"></td>
+                                <td><strong>총 {items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}원</strong></td>
+                                <td><strong>{approvedCount}/{items.length}</strong></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div className={styles.submitArea}>
-                    <button onClick={() => navigate(-1)}>뒤로가기</button>
+                    <button className={styles.backButton} onClick={() => navigate(-1)} style={{ marginRight: 10 }}>목록</button>
 
                     {!isCompleted && (
-                        <button onClick={handleSubmit}>저장</button>
+                        <button className={styles.submitButton} onClick={handleSubmit}>승인</button>
                     )}
+
+
 
                 </div>
 

@@ -4,6 +4,7 @@ import styles from './KioskMenu.module.css';
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
 import { userAtom } from "/src/atoms";
+import { useLocation } from 'react-router-dom';
 
 import { myAxios } from "/src/config";
 
@@ -11,7 +12,10 @@ export default function KioskMenu() {
 
   const [selectedTab, setSelectedTab] = useState('전체');
   const [cartItems, setCartItems] = useState([]);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 820);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 950);
+
+  const location = useLocation();
+  const orderType = location.state?.orderType || '매장'; // 기본값 매장
 
   const [menuData, setMenuData] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -21,11 +25,11 @@ export default function KioskMenu() {
 
   const token = useAtomValue(accessTokenAtom);
   const store = useAtomValue(userAtom);
-
   const pageSize = 9;
+
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 820);
+      setIsMobile(window.innerWidth <= 950);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -58,8 +62,16 @@ export default function KioskMenu() {
 
 
     const fetchMenus = async () => {
+      const params = {
+        page: currentPage,
+        size: pageSize
+      };
+      if (selectedTab !== "전체") {
+        params.categoryName = selectedTab;
+      }
+
       try {
-        const res = await myAxios(token).get(`/kiosk/menus?page=${currentPage}&size=${pageSize}`);
+        const res = await myAxios(token).get("/kiosk/menus", { params });
         setMenuData(res.data.content);
         setTotalPages(res.data.totalPages);
         console.log("메뉴 불러옴:", res.data);
@@ -69,7 +81,7 @@ export default function KioskMenu() {
     };
 
     fetchMenus();
-  }, [token, currentPage]);
+  }, [token, currentPage, selectedTab]);
 
 
   const handleAddToCart = (item) => {
@@ -117,7 +129,7 @@ export default function KioskMenu() {
 
       <div className={styles.content}>
         <div className={styles.menuWrapper}>
-          
+
           <h2 className={styles.title}>메뉴를 선택하세요</h2>
 
           <div className={styles.tabs}>
@@ -125,14 +137,14 @@ export default function KioskMenu() {
               key="전체"
               className={`${styles.tab} ${selectedTab === "전체" ? styles.activeTab : ""}`}
               onClick={() => setSelectedTab("전체")}>
-                전체
+              전체
             </button>
 
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 className={`${styles.tab} ${selectedTab === cat.name ? styles.activeTab : ""}`}
-                onClick={() => setSelectedTab(cat.name)}
+                onClick={() => { setSelectedTab(cat.name); setCurrentPage(0); }}
               >
                 {cat.name}
               </button>
@@ -144,7 +156,11 @@ export default function KioskMenu() {
               <div
                 key={item.id}
                 className={styles.card}
-                onClick={() => handleAddToCart(item)}
+                onClick={() => {
+                  if (!item.isSoldOut) {
+                    handleAddToCart(item);
+                  }
+                }}
               >
                 <div className={styles.imgPlaceholder}>
                   <img
@@ -152,6 +168,9 @@ export default function KioskMenu() {
                     alt={item.name}
                     className={styles.menuImg}
                   />
+                  {item.isSoldOut && (
+                    <div className={styles.soldOutBadge}>품절</div>
+                  )}
                 </div>
                 <p className={styles.itemName}>{item.name}</p>
                 <p className={styles.itemPrice}>
@@ -184,24 +203,30 @@ export default function KioskMenu() {
             </button>
           </div>
         </div>
-        {isMobile ? (
-          <CartBar
-            cartItems={cartItems}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemoveItem}
-            onClearCart={handleClearCart}
-            className="fixedBar"
-          />) : (
-          <div className={styles.cartContainer}>
+
+        <div className={styles.cartContainer}>
+          {isMobile ? (
             <CartBar
               cartItems={cartItems}
               onUpdateQuantity={handleUpdateQuantity}
               onRemoveItem={handleRemoveItem}
               onClearCart={handleClearCart}
-              className="staticCart"
+              orderType={orderType}
+              className="fixedBar"
             />
-          </div>
-        )};
+          ) : (
+            <div className={styles.cartContainer}>
+              <CartBar
+                cartItems={cartItems}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemoveItem={handleRemoveItem}
+                onClearCart={handleClearCart}
+                orderType={orderType}
+                className={isMobile ? "fixedBar" : "staticCart"}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
     </div>

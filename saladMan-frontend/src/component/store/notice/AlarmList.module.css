@@ -1,15 +1,16 @@
 .wrapper {
   display: flex;
   height: calc(100vh - 64px);
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow: hidden;
   overflow-y: scroll;
+  padding: 24px 100px 0 280px;
 }
 
 .content {
   flex: 1;
   align-self: flex-start;
-  padding: 30px 0 0 0;
+  padding: 30px 0 0 20px;
   overflow-y: auto;
   max-width: 1500px;
   margin: 0 auto;
@@ -20,6 +21,12 @@
   display: flex;
   flex-direction: column;
 }
+.pageHeader h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #286180; /* 파란 계열 */
+  font-weight: bold;
+}
 
 .inboxContainer h2 {
   margin-bottom: 20px;
@@ -29,20 +36,30 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  color: #6a7f8a; /* 파란 계열로 조금 더 어두운 회색 */
+  font-size: 14px;
 }
 
 .inboxControls button {
   margin-right: 8px;
   padding: 8px 12px;
   border: none;
-  background-color: #4D774E;
+  background-color: #286180; /* 파란 계열 */
   color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
+.inboxSummary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  color: #5a6e7a; /* 파란 느낌 나는 어두운 회색 */
+}
+
 .inboxControls button:hover {
-  background-color: #3F6940;
+  background-color: #1a445a; /* 더 진한 파란색 */
 }
 
 .inboxTable {
@@ -53,7 +70,7 @@
 .inboxTable th,
 .inboxTable td {
   padding: 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e0ebf0; /* 밝은 파란 회색 테두리 */
   text-align: left;
 }
 
@@ -63,7 +80,7 @@
 
 .noData {
   text-align: center;
-  color: #aaa;
+  color: #99aabb; /* 파란 계열 흐린색 */
   padding: 30px;
 }
 
@@ -71,30 +88,34 @@
   display: flex;
   justify-content: center;
   margin-top: 30px;
-  gap: 4px;
+  gap: 6px;
 }
 
 .pagination button {
-  background: none;
-  border: none;
   padding: 6px 12px;
-  color: #333;
-  font-size: 18px;
+  border: 1px solid #9bb7c6;
+  background-color: #ffffff;
+  color: #286180;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 34px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #f0f0f0;
+  background-color: #dce3e9;
 }
 
 .pagination button:disabled {
-  opacity: 0.5;
+  background-color: #f0f1f4;
+  color: #c0c7cf;
   cursor: not-allowed;
 }
 
 .pagination .active {
-  background-color: #4D774E;
+  background-color: #286180;
   color: white;
   font-weight: bold;
+  border-color: #286180;
 }

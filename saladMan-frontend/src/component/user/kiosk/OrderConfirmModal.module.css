@@ -1,0 +1,102 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background: #fff;
+    color: #000;
+    /* ✅ 꼭 추가! */
+    width: 360px;
+    padding: 24px;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    border: 1px dashed #555;
+    border-radius: 4px;
+
+    
+}
+
+.header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.orderType {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 16px;
+    border-top: 1px dashed #aaa;
+    border-bottom: 1px dashed #aaa;
+    padding: 8px 0;
+}
+
+.itemList {
+    font-size: 14px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.summary {
+    border-top: 1px dashed #aaa;
+    margin-top: 12px;
+    padding-top: 12px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.receiptTime {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+    text-align: right;
+    font-family: 'Courier New', Courier, monospace;
+    /* 영수증 느낌 */
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cancelBtn,
+.confirmBtn {
+    flex: 1;
+    margin: 0 4px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    border: none;
+    background: #eee;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.confirmBtn {
+    background: #333;
+    color: white;
+}
+
+.cancelBtn:hover {
+    background: #ddd;
+}
+
+.confirmBtn:hover {
+    background: #111;
+}

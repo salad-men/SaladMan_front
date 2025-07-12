@@ -1,91 +1,107 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { myAxios } from "/src/config";
 import { accessTokenAtom } from "/src/atoms";
 import { useAtomValue } from "jotai";
 import styles from "./EmpScheduleTable.module.css";
 
 const shiftOptions = [
-    { type: "오픈", time: "06:00~12:00", color: "#1c9cff" },
-    { type: "미들", time: "10:00~16:00", color: "#81d31e" },
-    { type: "마감", time: "16:00~22:00", color: "#f58f3a" },
-    { type: "휴무", time: "-", color: "#bbb" }
+    { type: "오픈", color: "#1c9cff" },
+    { type: "미들", color: "#81d31e" },
+    { type: "마감", color: "#f58f3a" },
+    { type: "휴무", color: "#bbb" }
 ];
 
-export default function EmpScheduleTable({ year, month, employees }) {
+export default function EmpScheduleTable({
+    year, month, employees, schedules, onRefresh
+}) {
     const token = useAtomValue(accessTokenAtom);
-    const [days, setDays] = useState([]);
-    const [schedules, setSchedules] = useState({});
-    const [totalByEmployee, setTotalByEmployee] = useState({});
-    const [totalByDay, setTotalByDay] = useState({});
+    const [edited, setEdited] = useState({});
+    const lastDay = new Date(year, month, 0).getDate();
+    const days = Array.from({ length: lastDay }, (_, i) => i + 1);
 
-    useEffect(() => {
-        const last = new Date(year, month, 0).getDate();
-        setDays(Array.from({ length: last }, (_, i) => i + 1));
-    }, [year, month]);
-
-    useEffect(() => {
-        if (!token || !employees.length) return;
-        const storeId = employees[0]?.storeId;
-        myAxios(token).get("/store/schedule/month", {
-            params: { storeId, year, month }
-        }).then(res => {
-            const map = {};
-            for (const sch of res.data || []) {
-                if (!map[sch.employeeId]) map[sch.employeeId] = {};
-                const d = new Date(sch.workDate).getDate();
-                map[sch.employeeId][d] = sch.shiftType;
-            }
-            setSchedules(map);
-        });
-    }, [token, year, month, employees]);
-
-    useEffect(() => {
-        const empTotal = {};
-        for (const emp of employees) {
-            empTotal[emp.id] = days.reduce(
-                (sum, day) =>
-                    (schedules[emp.id]?.[day] && schedules[emp.id][day] !== "휴무" ? sum + 1 : sum),
-                0
-            );
+    // 기존+수정 merge
+    const cellMap = useMemo(() => {
+        const map = {};
+        for (const sch of schedules) {
+            const d = new Date(sch.workDate).getDate();
+            if (!map[sch.employeeId]) map[sch.employeeId] = {};
+            map[sch.employeeId][d] = sch.shiftType;
         }
-        setTotalByEmployee(empTotal);
+        return map;
+    }, [schedules]);
 
-        const dayTotal = {};
-        for (const day of days) {
-            let cnt = 0;
-            for (const emp of employees) {
-                if (schedules[emp.id]?.[day] && schedules[emp.id][day] !== "휴무") cnt++;
-            }
-            dayTotal[day] = cnt;
-        }
-        setTotalByDay(dayTotal);
-    }, [schedules, employees, days]);
-
-    const handleChange = (empId, day, value) => {
-        setSchedules(prev => ({
+    // select 값 변경 (임시저장)
+    const handleChange = (empId, day, val) => {
+        setEdited(prev => ({
             ...prev,
-            [empId]: { ...(prev[empId] || {}), [day]: value }
+            [`${empId}_${day}`]: val
         }));
     };
 
+    // 삭제는 select가 빈 값(-)일 때만 실행
+    const handleDelete = async (empId, day) => {
+        if (!token) return;
+        await myAxios(token).delete("/store/schedule", {
+            params: {
+                employeeId: empId,
+                workDate: `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`
+            }
+        });
+        setEdited(prev => {
+            const c = { ...prev };
+            delete c[`${empId}_${day}`];
+            return c;
+        });
+        onRefresh();
+    };
+
+
+    // 저장 
     const handleSave = async () => {
-        if (!token || !employees.length) return;
-        const dtos = [];
+    if (!token) return;
+    const dtos = [];
+
+        // 1. (기존 데이터) 현재 cellMap을 기반으로 모든 직원-일자 조합 저장
         for (const emp of employees) {
             for (const day of days) {
-                const value = schedules[emp.id]?.[day] || "";
-                if (!value) continue;
+                const key = `${emp.id}_${day}`;
+                // 임시 편집값이 있으면 그 값을, 아니면 기존값(cellMap), 없으면 빈값
+                const shiftType = edited[key] !== undefined
+                    ? edited[key]
+                    : (cellMap[emp.id]?.[day] ?? "");
+
+                // 빈 값은 저장하지 않음
+                if (!shiftType) continue;
                 dtos.push({
                     employeeId: emp.id,
                     workDate: `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`,
-                    shiftType: value
+                    shiftType
                 });
             }
         }
-        await myAxios(token).post("/store/schedule/register", dtos);
-        alert("저장 완료!");
-    };
+        if (dtos.length > 0) {
+            await myAxios(token).post("/store/schedule/register", dtos);
+            setEdited({});
+            onRefresh();
+        }
+    };  
 
+    // 합계 (row, col)
+    const totalByEmp = employees.reduce((acc, emp) => {
+        acc[emp.id] = days.reduce((s, d) => {
+            const v = (edited[`${emp.id}_${d}`] ?? cellMap[emp.id]?.[d]);
+            return (v && v !== "휴무") ? s + 1 : s;
+        }, 0);
+        return acc;
+    }, {});
+    const totalByDay = days.reduce((acc, d) => {
+        acc[d] = employees.reduce((s, emp) => {
+            const v = (edited[`${emp.id}_${d}`] ?? cellMap[emp.id]?.[d]);
+            return (v && v !== "휴무") ? s + 1 : s;
+        }, 0);
+        return acc;
+    }, {});
+    
     return (
         <div className={styles.wrapper}>
             <div style={{ overflowX: "auto" }}>
@@ -103,25 +119,36 @@ export default function EmpScheduleTable({ year, month, employees }) {
                         {employees.map(emp => (
                             <tr key={emp.id}>
                                 <td style={{ background: "#f5f5f5", fontWeight: 600 }}>{emp.name}</td>
-                                {/* 왼쪽 합계 */}
-                                <td style={{ background: "#fcf1bc", fontWeight: 600, color: "#795a00" }}>{totalByEmployee[emp.id]}</td>
+                                <td style={{ background: "#fcf1bc", fontWeight: 600, color: "#795a00" }}>{totalByEmp[emp.id]}</td>
                                 {days.map(day => (
                                     <td key={day}>
-                                        <select
-                                            value={schedules[emp.id]?.[day] || ""}
-                                            onChange={e => handleChange(emp.id, day, e.target.value)}
-                                            style={{ minWidth: 70, background: shiftOptions.find(opt => opt.type === (schedules[emp.id]?.[day] || ""))?.color || "#fff" }}
-                                        >
-                                            <option value="">-</option>
-                                            {shiftOptions.map(opt =>
-                                                <option key={opt.type} value={opt.type}>{opt.type}</option>
-                                            )}
-                                        </select>
+                                    <select
+                                        value={edited[`${emp.id}_${day}`] ?? cellMap[emp.id]?.[day] ?? ""}
+                                        onChange={e => {
+                                            const v = e.target.value;
+                                            if (!v) {
+                                                // 빈값(-)만 삭제
+                                                handleDelete(emp.id, day);
+                                            } else {
+                                                // 휴무도 포함해서 모두 저장
+                                                handleChange(emp.id, day, v);
+                                            }
+                                        }}
+                                        style={{
+                                            minWidth: 70,
+                                            background: shiftOptions.find(opt => opt.type === (edited[`${emp.id}_${day}`] ?? cellMap[emp.id]?.[day]))?.color || "#fff"
+                                        }}
+                                    >
+                                        <option value="">-</option>
+                                        {shiftOptions.map(opt =>
+                                            <option key={opt.type} value={opt.type}>{opt.type}</option>
+                                        )}
+                                    </select>
+
                                     </td>
                                 ))}
                             </tr>
                         ))}
-                        {/* 하단 합계 (각 날짜별 근무자수) */}
                         <tr>
                             <td style={{ background: "#edf2fa", fontWeight: 700 }}>일근무자</td>
                             <td style={{ background: "#edf2fa" }}>총계</td>
@@ -130,13 +157,12 @@ export default function EmpScheduleTable({ year, month, employees }) {
                                     {totalByDay[day]}
                                 </td>
                             )}
-                            {/* <td style={{ background: "#edf2fa" }}></td> */}
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div className={styles.saveBar}>
-                <button className={styles.saveBtn} onClick={handleSave}>저장</button>
+                <button className={styles.saveBtn} onClick={handleSave} disabled={Object.keys(edited).length===0}>저장</button>
             </div>
         </div>
     );

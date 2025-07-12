@@ -1,0 +1,300 @@
+.container {
+  display: flex;
+  background: #fff;
+}
+
+.content {
+  flex: 1;
+  padding: 0px;
+}
+
+.innerContainer {
+  margin-left: 235px;
+  background: #fff;
+  padding: 10px 60px 0 40px;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2f6042;
+  margin-bottom: 13px;
+  margin-top: 38px;
+}
+
+/* ======================= 필터 행 ======================= */
+.filters {
+  margin-bottom: 12px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.label {
+  font-weight: 600;
+  color: #3d5a40;
+  font-size: 16px;
+  min-width: 56px;
+}
+
+/* ======================= 입력/셀렉트/버튼 ======================= */
+.inputDate,
+.selectBox,
+.inputSearch,
+.searchBtn,
+.periodBtn,
+.sortSelect {
+  height: 32px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #b4c7b3;
+  background: #fff;
+  padding: 0 10px;
+  box-sizing: border-box;
+  margin: 0;
+  outline: none;
+  appearance: none;
+}
+
+.inputDate:focus,
+.selectBox:focus,
+.inputSearch:focus,
+.sortSelect:focus {
+  border-color: #4d774e;
+}
+
+.inputDate {
+  min-width: 120px;
+  max-width: 140px;
+}
+
+.selectBox {
+  min-width: 110px;
+  max-width: 160px;
+}
+
+.inputSearch {
+  width: 180px;
+}
+
+.searchBtn {
+  background: #4d774e;
+  color: #fff;
+  border: 1px solid #4d774e;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 16px;
+  transition: background 0.13s, color 0.13s;
+}
+.searchBtn:hover, .searchBtn:active {
+  background: #35553c;
+  color: #fff;
+  border-color: #35553c;
+}
+
+/* ======================= 기간 버튼 ======================= */
+.periodButtons {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+.periodBtn {
+    background: #f7faf8;
+  color: #4d774e;
+  border: 1px solid #57a964;
+  font-weight: 400;
+  border-radius: 4px;
+  height: 28px;
+  width: 49px;
+  padding: 0 6px;
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
+}
+.periodBtn:hover, .periodBtn:active {
+  background: #4d774e;
+  color: #fff;
+  border-color: #4d774e;
+}
+
+/* ======================= Bulk Actions 버튼 ======================= */
+.bulkActions {
+  display: flex;
+  gap: 6px;
+}
+.btnRow {
+  background: #bfcac2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0 18px;
+  height: 32px;
+  cursor: pointer;
+  transition: background 0.13s;
+}
+.btnRow:enabled {
+  background: #4d774e;
+}
+.btnRow:disabled {
+  background: #bfcac2;
+  color: #fff;
+  cursor: not-allowed;
+}
+.btnReject {
+  background: #f1a9a0;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0 18px;
+  height: 32px;
+  cursor: pointer;
+  transition: background 0.13s;
+}
+.btnReject:enabled {
+  background: #de4a3f;
+}
+.btnReject:disabled {
+  background: #f1a9a0;
+  color: #fff;
+  cursor: not-allowed;
+}
+.btnRow {
+  margin-right: 8px;
+}
+.btnReject {
+  margin-right: 0;
+}
+
+/* ======================= 정렬 셀렉트 ======================= */
+.sortSelect {
+  border: 1px solid #b4c7b3;
+  background: #fff;
+  height: 32px;
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 0 10px;
+  min-width: 110px;
+  max-width: 140px;
+  color: #4d774e;
+}
+
+/* 나머지 테이블, 페이징, 모달 등은 동일하게 사용 */
+
+
+/* 체크박스 */
+.inputCheckbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #4d774e;
+}
+
+/* ====================== [ 테이블 ] ======================= */
+.tableWrap {
+  overflow-x: auto;
+}
+.table {
+  font-size:14px;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #e4e9e7;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.table td { height: 31px; }
+.table thead {
+  background: #eaf3eb;
+  color: #2d4836;
+}
+
+/* 열 너비 설정 (예시, 필요시 조정) */
+.table th, .table td {
+  min-width: 60px;
+}
+.table th:nth-child(1), .table td:nth-child(1) { width: 48px; }
+.table th:nth-child(2), .table td:nth-child(2) { width: 90px; }
+.table th:nth-child(3), .table td:nth-child(3) { width: 110px; }
+.table th:nth-child(4), .table td:nth-child(4) { width: 120px; }
+.table th:nth-child(5), .table td:nth-child(5) { width: 60px; }
+.table th:nth-child(6), .table td:nth-child(6) { width: 80px; }
+.table th:nth-child(7), .table td:nth-child(7) { width: 100px; }
+.table th:nth-child(8), .table td:nth-child(8) { width: 80px; }
+.table th:nth-child(9), .table td:nth-child(9) { width: 240px; }
+
+/* 데이터 없을 때 */
+.noData {
+  text-align: center;
+  padding: 20px 0;
+  color: #999;
+}
+
+/* ====================== [ 페이징 ] ======================= */
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.pageBtn {
+  height: 36px;
+  font-size: 15px;
+  border-radius: 6px;
+  padding: 0 16px;
+  border: 1px solid #a2b7aa;
+  background: white;
+  color: #387448;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.pageBtn:hover { background: #eaf3eb; }
+.pageBtn:disabled { background: #f0f4f1; color: #c0cfc3; cursor: not-allowed; }
+.active {
+  background: #57a964;
+  color: white;
+  border-color: #57a964;
+}
+
+/* ====================== [ 모달 ] ======================= */
+.modalOverlay {
+  position: fixed;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modalBox {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 32px 24px;
+  min-width: 320px;
+}
+.textarea {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  resize: vertical;
+}
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

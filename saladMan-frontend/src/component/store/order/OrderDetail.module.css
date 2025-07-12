@@ -7,19 +7,21 @@
 
 .orderDetailContent {
     flex: 1;
-    padding: 40px 40px 60px;
+    padding: 24px 100px 0 280px;
     background-color: white;
     box-sizing: border-box;
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #dce3e9;
     display: flex;
     flex-direction: column;
     min-width: 0;
     position: relative;
 }
+
 .title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 30px;
+    font-size: 1.8rem;
+    color: #286180;
+    margin-bottom: 16px;
+    margin-top: 16px;
 }
 
 .infoSection {
@@ -30,12 +32,14 @@
 .status {
     font-size: 18px;
     font-weight: bold;
+    color: #286180;
 }
 
 .orderNumber {
     font-size: 24px;
     font-weight: bold;
     margin: 10px 0;
+    color: #286180;
 }
 
 .progressBar {
@@ -54,67 +58,73 @@
 }
 
 .progressBar::-webkit-progress-value {
-  background-color: #4caf50; /* 채워지는 색상 */
+  background-color: #4caf50;
   border-radius: 4px;
 }
 
 /* 파이어폭스 */
 .progressBar::-moz-progress-bar {
-  background-color: #4caf50; /* 채워지는 색상 */
+  background-color: #4caf50;
 }
 
 .orderDate,
 .requester {
     font-size: 14px;
+    color: #286180;
 }
 
 .tableSection {
     position: relative;
 }
 
-.tableButtonSection{
+.tableButtonSection {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     margin-top: 20px;
     width: 100%;
 }
+
 .editButton {
     position: absolute;
     font-size: 14px;
     padding: 4px 10px;
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
+    background-color: #f7f9fa;
+    border: 1px solid #a8bcc6;
+    color: #286180;
     border-radius: 4px;
     cursor: pointer;
-    border-radius: 4px;
 }
 
 .detailTable {
-    margin-top: 10px;
+    margin-top: 20px;
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
     font-size: 14px;
 }
 
 .detailTable th,
 .detailTable td {
-    border: 1px solid #ccc;
+    border: 1px solid #dce3e9;
     padding: 10px;
     text-align: center;
 }
-.detailTable th{
-        background-color: #e9f3e9;
+
+.detailTable th {
+    background-color: #dce3e9;
+    color: #2d4836;
     font-weight: bold;
 }
+
 .totalRow {
     text-align: right;
     font-weight: bold;
     padding: 10px;
-    background-color: #f9f9f9;
-    border-top: 2px solid #ccc;
+    background-color: #f7f9fa;
+    border-top: 2px solid #dce3e9;
+    color: #286180;
 }
+
 .footerSection {
     display: flex;
     justify-content: flex-end;
@@ -124,16 +134,16 @@
 }
 
 .completeButton {
-    background-color: #4D774E;
+    background-color: #286180;
     color: white;
     border: none;
     padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
-        font-size: 15px;
-
+    font-size: 15px;
+    transition: background-color 0.2s;
 }
 
 .completeButton:hover {
-    background-color: #3a5e3b;
+    background-color: #1a445a;
 }
