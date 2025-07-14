@@ -25,6 +25,15 @@ export default function OrderRequestPrint() {
         if (id && token) fetchDetail();
     }, [id, token]);
 
+    useEffect(() => {
+    const headerEl = document.querySelector(".header");
+    if (headerEl) headerEl.style.display = "none";
+
+    return () => {
+        if (headerEl) headerEl.style.display = ""; // 되돌리기
+    };
+}, []);
+
     const handlePrint = () => {
         window.print();
     };

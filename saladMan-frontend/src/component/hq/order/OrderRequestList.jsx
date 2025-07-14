@@ -156,7 +156,6 @@ export default function OrderRequestList() {
                                 <th>발주일</th>
                                 <th>상태</th>
                                 <th>품목개수</th>
-                                <th>합계</th>
                                 <th>승인여부</th>
                                 <th></th>
                             </tr>
@@ -177,14 +176,14 @@ export default function OrderRequestList() {
                                                 e.stopPropagation();
                                                 window.open(`/hq/orderRequestPrint?id=${order.id}`, "_blank");
                                             }}
-                                            disabled={!order.orderStatus}  // 승인 여부 없으면 비활성화
+                                            disabled={!order.orderStatus || order.orderStatus==="반려"}  // 승인 여부 없으면 비활성화
                                             style={{
-                                                backgroundColor: order.orderStatus ? "#2f6042" : "#ccc",
+                                                backgroundColor: !order.orderStatus || order.orderStatus==="반려"  ? "#ccc" :"#2f6042" ,
                                                 color: "white",
                                                 border: "none",
                                                 padding: "4px 8px",
                                                 borderRadius: "4px",
-                                                cursor: order.orderStatus ? "pointer" : "not-allowed"
+                                                cursor: !order.orderStatus || order.orderStatus==="반려" ? "not-allowed":"pointer"
                                             }}
                                         >
                                             발주서 출력

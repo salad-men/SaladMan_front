@@ -86,19 +86,6 @@ export default function HqComplaintList() {
       <main className={styles.content}>
         <h2 className={styles.title}>불편사항 목록</h2>
         <div className={styles.filters}>
-          <input
-            type="text"
-            placeholder="제목+내용 검색"
-            value={searchKeyword}
-            onChange={e => setSearchKeyword(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleSearch()}
-          />
-          <select value={readStatus} onChange={e => setReadStatus(e.target.value)}>
-            <option value="">전체</option>
-            <option value="false">미열람</option>
-            <option value="true">열람</option>
-          </select>
-
           <select value={location} onChange={e => setLocation(e.target.value)}>
             <option>전체 지역</option>
             <option>서울</option>
@@ -124,8 +111,23 @@ export default function HqComplaintList() {
             <option value="">전체 매장</option>
             {storeList.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
+
+          <select value={readStatus} onChange={e => setReadStatus(e.target.value)}>
+            <option value="">전체</option>
+            <option value="false">미열람</option>
+            <option value="true">열람</option>
+          </select>
+
+          <input
+            type="text"
+            placeholder="제목+내용 검색"
+            value={searchKeyword}
+            onChange={e => setSearchKeyword(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleSearch()}
+          />
           <button onClick={handleSearch}>검색</button>
         </div>
+
         <table className={styles.detailTable}>
           <thead>
             <tr>
@@ -164,6 +166,7 @@ export default function HqComplaintList() {
             )}
           </tbody>
         </table>
+        
         <div className={styles.pagination}>
           <button
             onClick={() => handlePageChange(1)}

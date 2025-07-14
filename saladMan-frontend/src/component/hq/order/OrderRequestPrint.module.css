@@ -20,6 +20,33 @@
     margin-bottom: 20px;
 }
 
+@media print {
+
+    /* 인쇄 시 숨길 요소들 */
+    .buttons {
+        display: none !important;
+    }
+
+    
+
+    /* 인쇄 시 레이아웃 최적화 (선택 사항) */
+    body {
+        margin: 0;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .orderPrintContainer {
+        padding: 0;
+        box-shadow: none;
+    }
+
+    /* 필요하면 header, sidebar 등도 숨김 처리 */
+    header,
+    nav {
+        display: none !important;
+    }
+}
+
 .orderInfo {
     display: grid;
     grid-template-columns: 1fr 1fr;
