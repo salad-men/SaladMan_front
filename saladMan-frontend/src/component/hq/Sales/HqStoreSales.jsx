@@ -6,6 +6,7 @@ import Chart from 'chart.js/auto';
 import HqSidebarSales from './HqSidebarSales';
 import styles from './HqSales.module.css';
 
+// 주차 → 날짜범위 변환
 function getWeekDateRange(weekStr) {
   const [year, week] = weekStr.split('-').map(Number);
   const simple = new Date(year, 0, 4 + (week - 1) * 7);
@@ -55,6 +56,7 @@ export default function HqStoreSales() {
       });
   }, [token]);
 
+  //지점 지역 검생
   useEffect(() => {
     if (selectedLocation)
       setStoreOptions(stores.filter(s => s.location === selectedLocation));
@@ -62,16 +64,7 @@ export default function HqStoreSales() {
     setSelectedStoreId("");
   }, [selectedLocation, stores]);
 
-  // 단위 변경시 바로 조회
-  useEffect(() => {
-    if (!token) return;
-    if (!startDate || !endDate || !selectedStoreId) return;
-    myAxios(token).get('/hq/storeSales', {
-      params: { storeId: selectedStoreId, startDate, endDate, groupType }
-    }).then(res => setSalesData(res.data))
-      .catch(() => alert("매출 데이터 불러오기 실패"));
-  }, [token, startDate, endDate, groupType, selectedStoreId]);
-
+  //검색 주기 설정
   const setPeriod = type => {
     const today = getToday();
     if (type === 'today') {
@@ -83,6 +76,7 @@ export default function HqStoreSales() {
     }
   };
 
+  //검색 요청
   const handleSearch = () => {
     if (!token || !startDate || !endDate || !selectedStoreId)
       return alert('검색할 매장과 날짜를 선택해주세요');
@@ -92,6 +86,7 @@ export default function HqStoreSales() {
       .catch(() => alert("매출 데이터 불러오기 실패"));
   };
 
+  //차트 그리기
   useEffect(() => {
     if (!salesData) return;
     const raw = [...salesData.popularMenus].sort((a, b) => b.quantity - a.quantity);
@@ -107,15 +102,6 @@ export default function HqStoreSales() {
       data: {
         labels: salesData.daily.map(d => d.date),
         datasets: [
-          {
-            label: '판매량',
-            data: salesData.daily.map(d => d.quantity),
-            borderColor: '#4D774E',
-            backgroundColor: '#eaf3eb',
-            yAxisID: 'y',
-            tension: 0.3,
-            fill: true
-          },
           {
             label: '매출',
             data: salesData.daily.map(d => d.revenue),
@@ -234,6 +220,30 @@ export default function HqStoreSales() {
                   <h4>인기 판매 항목</h4>
                   <canvas ref={donutChartRef} width={400} height={310}/>
                 </div>
+                 <div className={styles.salesTableWrap} style={{ marginTop: '2rem' }}>
+                <h3 className={styles.subTitle}>메뉴별 판매 수량</h3>
+                <div className={styles.tableScroll}>
+                  <table className={styles.salesTable}>
+                    <thead>
+                      <tr>
+                        <th className={styles.menuCell}>메뉴명</th>
+                        <th className={styles.qtyCell}>판매 수량</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     {salesData?.popularMenus &&[...salesData.popularMenus]
+                        .sort((a, b) => b.quantity - a.quantity)
+                        .slice(0, 5)
+                        .map((m) => (
+                        <tr key={m.menuName}>
+                          <td className={styles.left}>{m.menuName}</td>
+                          <td className={styles.right}>{m.quantity.toLocaleString()}건</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
                 <div className={`${styles.box} ${styles.chartBoxWide}`}>
                   <h4>판매 추이</h4>
                   <canvas ref={barChartRef} width={510} height={310}/>
@@ -245,9 +255,11 @@ export default function HqStoreSales() {
                 <table className={styles.salesTable}>
                 <thead>
                     <tr>
-                    <th className={styles.dateCell}>날짜</th>
-                    <th className={styles.qtyCell}>판매량</th>
-                    <th className={styles.priceCell}>매출</th>
+                      <th className={styles.dateCell}>날짜</th>
+                      <th className={styles.qtyCell}>판매량</th>
+                      <th className={styles.priceCell}>매출</th>
+                      <th className={styles.qtyCell}>원가</th>
+                      <th className={styles.qtyCell}>순이익</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -255,11 +267,13 @@ export default function HqStoreSales() {
                     <tr key={d.date}>
                         <td className={styles.dateCell}>
                         {groupType === 'WEEK'
-                            ? getWeekDateRange(d.date)
-                            : d.date}
+                                ? getWeekDateRange(d.date)
+                                : d.date}
                         </td>
                         <td className={styles.qtyCell}>{d.quantity}</td>
                         <td className={styles.priceCell}>₩{d.revenue.toLocaleString()}</td>
+                        <td className={styles.priceCell}>₩{d.cost.toLocaleString()}</td>
+                        <td className={styles.priceCell}>₩{d.profit.toLocaleString()}</td>
                     </tr>
                     ))}
                 </tbody>

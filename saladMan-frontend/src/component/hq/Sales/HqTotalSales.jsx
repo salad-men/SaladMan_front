@@ -179,7 +179,7 @@ export default function HqTotalSales() {
                       </tr>
                     </thead>
                     <tbody>
-                     {[...salesData.popularMenus]
+                     {salesData?.popularMenus &&[...salesData.popularMenus]
                         .sort((a, b) => b.quantity - a.quantity)
                         .slice(0, 5)
                         .map((m) => (
