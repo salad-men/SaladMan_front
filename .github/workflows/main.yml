@@ -27,10 +27,15 @@ jobs:
         run: npm install
 
      # 4) 환경변수 파일(.env) 생성 / 추가
+# 4) 환경변수 파일(.env) 생성 / 추가
       - name: Generate .env file
         working-directory: saladMan-frontend
         run: |
           cat <<EOF > .env
+          VITE_API_ENV=production
+          VITE_API_URL=${{ secrets.VITE_API_URL }}
+          VITE_CLOUDFRONT_URL=${{ secrets.VITE_CLOUDFRONT_URL }}
+          VITE_UPLOAD_CLOUDFRONT_URL=${{ secrets.VITE_UPLOAD_CLOUDFRONT_URL }}
           VITE_FIREBASE_APIKEY=${{ secrets.VITE_FIREBASE_APIKEY }}
           VITE_FIREBASE_AUTHDOMAIN=${{ secrets.VITE_FIREBASE_AUTHDOMAIN }}
           VITE_FIREBASE_PROJECTID=${{ secrets.VITE_FIREBASE_PROJECTID }}
@@ -41,6 +46,7 @@ jobs:
           VITE_FIREBASE_VAPIKEY=${{ secrets.VITE_FIREBASE_VAPIKEY }}
           VITE_TOSS_CLIENT_KEY=${{ secrets.VITE_TOSS_CLIENT_KEY }}
           EOF
+
 
 
       # 5) 빌드 실행
