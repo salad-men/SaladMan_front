@@ -15,6 +15,7 @@ export default function OrderRequestList() {
     const [filters, setFilters] = useState({
         storeName: "",
         status: "",
+        purType:"",
     });
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -56,6 +57,7 @@ export default function OrderRequestList() {
                     endDate: endDate || null,
                     storeName: filters.storeName,
                     status: filters.status,
+                    purType: filters.purType,
                 },
             });
 
@@ -69,7 +71,7 @@ export default function OrderRequestList() {
     };
 
     const handleReset = () => {
-        setFilters({ storeName: "", status: "", approval: "" });
+        setFilters({ storeName: "", status: "", approval: "", purType:""});
         setStartDate("");
         setEndDate("");
     };
@@ -120,6 +122,14 @@ export default function OrderRequestList() {
                         </div>
 
                         <div className={styles.row}>
+
+                            <label>발주유형</label>
+                            <select name="purType" value={filters.purType} onChange={handleChange}>
+                                <option value="">전체</option>
+                                <option value="자동발주">자동발주</option>
+                                <option value="수기발주">수기발주</option>
+                            </select>
+
                             <label>점포</label>
                             <select
                                 name="storeName"
@@ -133,6 +143,7 @@ export default function OrderRequestList() {
                                     </option>
                                 ))}
                             </select>
+                            
                             <label>상태</label>
                             <select name="status" value={filters.status} onChange={handleChange}>
                                 <option value="">전체</option>
@@ -151,12 +162,12 @@ export default function OrderRequestList() {
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>발주유형</th>
                                 <th>지점명</th>
                                 <th>품명</th>
                                 <th>발주일</th>
                                 <th>상태</th>
                                 <th>품목개수</th>
-                                <th>합계</th>
                                 <th>승인여부</th>
                                 <th></th>
                             </tr>
@@ -165,6 +176,7 @@ export default function OrderRequestList() {
                             {orders.map((order) => (
                                 <tr key={order.id} onClick={() => navigateToDetail(order.id)}>
                                     <td>{order.id}</td>
+                                    <td>{order.purType}</td>
                                     <td>{order.storeName}</td>
                                     <td>{order.productNameSummary}</td>
                                     <td>{order.orderDateTime?.split("T")[0]}</td>
@@ -177,14 +189,14 @@ export default function OrderRequestList() {
                                                 e.stopPropagation();
                                                 window.open(`/hq/orderRequestPrint?id=${order.id}`, "_blank");
                                             }}
-                                            disabled={!order.orderStatus}  // 승인 여부 없으면 비활성화
+                                            disabled={!order.orderStatus || order.orderStatus==="반려"}  // 승인 여부 없으면 비활성화
                                             style={{
-                                                backgroundColor: order.orderStatus ? "#2f6042" : "#ccc",
+                                                backgroundColor: !order.orderStatus || order.orderStatus==="반려"  ? "#ccc" :"#2f6042" ,
                                                 color: "white",
                                                 border: "none",
                                                 padding: "4px 8px",
                                                 borderRadius: "4px",
-                                                cursor: order.orderStatus ? "pointer" : "not-allowed"
+                                                cursor: !order.orderStatus || order.orderStatus==="반려" ? "not-allowed":"pointer"
                                             }}
                                         >
                                             발주서 출력

@@ -25,6 +25,15 @@ export default function OrderRequestPrint() {
         if (id && token) fetchDetail();
     }, [id, token]);
 
+    useEffect(() => {
+    const headerEl = document.querySelector(".header");
+    if (headerEl) headerEl.style.display = "none";
+
+    return () => {
+        if (headerEl) headerEl.style.display = ""; // 되돌리기
+    };
+}, []);
+
     const handlePrint = () => {
         window.print();
     };
@@ -56,7 +65,6 @@ export default function OrderRequestPrint() {
                         <th>품명</th>
                         <th>유통기한</th>
                         <th>수량</th>
-                        <th>단가</th>
                         <th>승인여부</th>
                         <th>반려사유</th>
                     </tr>
@@ -75,7 +83,6 @@ export default function OrderRequestPrint() {
                                         <td></td>
                                         <td>{stock.expiredDate}</td>
                                         <td>{stock.quantity}</td>
-                                        <td>{stock.unitCost?.toLocaleString()}원</td>
                                         {idx === 0 ? (
                                             <>
                                                 <td rowSpan={item.receivedStockList.length}>
@@ -105,16 +112,6 @@ export default function OrderRequestPrint() {
                         </React.Fragment>
                     ))}
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colSpan={5} className={styles.tfootCell}>
-                            총 합계
-                        </td>
-                        <td className={styles.tfootCell}>
-                            {orderDetail.totalPrice?.toLocaleString()}원
-                        </td>
-                    </tr>
-                </tfoot>
             </table>
 
             <div className={styles.buttons}>

@@ -197,8 +197,6 @@ export default function OrderRequestDetail() {
                                 <th>품명</th>
                                 <th>구분</th>
                                 <th>발주량</th>
-                                <th>단가(원)</th>
-                                <th>합계(원)</th>
                                 <th>승인여부</th>
                                 <th>반려사유</th>
                             </tr>
@@ -210,8 +208,6 @@ export default function OrderRequestDetail() {
                                         <td>{item.ingredientName}</td>
                                         <td>{item.categoryName}</td>
                                         <td>{item.orderedQuantity} {item.unit}</td>
-                                        <td>{Math.round(item.totalPrice / item.orderedQuantity).toLocaleString()}원</td>
-                                        <td>{item.totalPrice.toLocaleString()}원</td>
                                         <td>
                                             <select
                                                 value={item.approvalStatus}
@@ -260,8 +256,7 @@ export default function OrderRequestDetail() {
                                 </React.Fragment>
                             ))}
                             <tr className={styles.summaryRow}>
-                                <td colSpan="4"></td>
-                                <td><strong>총 {items.reduce((acc, cur) => acc + cur.totalPrice, 0).toLocaleString()}원</strong></td>
+                                <td colSpan="3"></td>
                                 <td><strong>{approvedCount}/{items.length}</strong></td>
                                 <td></td>
                             </tr>
