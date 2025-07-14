@@ -1,10 +1,35 @@
-import style from './StoreSales.module.css';
+import styles from './StoreSales.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { accessTokenAtom } from '/src/atoms';
 import { myAxios } from '/src/config.jsx';
 import Chart from 'chart.js/auto';
 import { useAtom } from 'jotai';
 import StoreEmpSidebar from './StoreEmpSidebar';
+
+// 주차 → 날짜범위 변환
+function getWeekDateRange(weekStr) {
+  const [year, week] = weekStr.split('-').map(Number);
+  const simple = new Date(year, 0, 4 + (week - 1) * 7);
+  const dayOfWeek = simple.getDay() || 7;
+  simple.setDate(simple.getDate() - dayOfWeek + 1);
+  const monday = new Date(simple);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  const fmt = d => d.toISOString().slice(0, 10);
+  return `${fmt(monday)} ~ ${fmt(sunday)}`;
+}
+
+const getToday = () => new Date().toISOString().slice(0, 10);
+const getWeekAgo = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - 6);
+  return d.toISOString().slice(0, 10);
+};
+const getMonthAgo = () => {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 1);
+  return d.toISOString().slice(0, 10);
+};
 
 const StoreSales = () => {
     const [salesData, setSalesData] = useState(null);
@@ -75,15 +100,6 @@ const StoreSales = () => {
                 labels: salesData.daily.map(d => d.date),
                 datasets: [
                     {
-                        label: '판매량',
-                        data: salesData.daily.map(d => d.quantity),
-                        borderColor: 'rgba(75,192,192,1)',
-                        backgroundColor: 'rgba(75,192,192,0.6)',
-                        yAxisID: 'y',
-                        tension: 0.3,
-                        fill: true
-                    },
-                    {
                         label: '매출',
                         data: salesData.daily.map(d => d.revenue),
                         borderColor: 'rgba(153,102,255,1)',
@@ -145,49 +161,73 @@ const StoreSales = () => {
     }, [salesData]);
 
     return (
-        <div className={style.wrapper}>
+        <div className={styles.wrapper}>
             <StoreEmpSidebar/>
-            <div className={style.content}>
-                <header className={style.pageHeader}>
+            <div className={styles.content}>
+                <header className={styles.pageHeader}>
                     <h2>매출 조회</h2>
                 </header>
 
-                <div className={style.filterBox}>
-                    <div className={style.filterRow}>
+                <div className={styles.filterBox}>
+                    <div className={styles.filterRow}>
                         <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
                             ~ 
                         <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
-                        <button className={groupType === 'DAY' ? style.active : ''}
+                        <button className={groupType === 'DAY' ? styles.active : ''}
                             onClick={() => setGroupType('DAY')}>일별</button>
-                        <button className={groupType === 'WEEK' ? style.active : ''}
+                        <button className={groupType === 'WEEK' ? styles.active : ''}
                             onClick={() => setGroupType('WEEK')}>주별</button>
-                        <button className={groupType === 'MONTH' ? style.active : ''}
+                        <button className={groupType === 'MONTH' ? styles.active : ''}
                             onClick={() => setGroupType('MONTH')}>월별</button>
                     </div>
-                    <div className={style.filterActions}>
+                    <div className={styles.filterActions}>
                         <button onClick={handleSearch}>검색</button>
                     </div>
                 </div>
 
-                <div className={style.dashboard}>
-                    <div className={style.chartBox}>
-                        <div className={style.summaryBox}>
-                            <div className={style.boxbox}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
-                            <div className={style.boxbox}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue.toLocaleString()}</strong></div>
+                <div className={styles.dashboard}>
+                    <div className={styles.chartBox}>
+                        <div className={styles.summaryBox}>
+                            <div className={styles.boxbox}>판매 수량<br /><strong>{salesData?.summary?.totalQuantity}건</strong></div>
+                            <div className={styles.boxbox}>총 매출<br /><strong>₩{salesData?.summary?.totalRevenue.toLocaleString()}</strong></div>
                         </div>
-                        <div className={style.chart}>
-                            <div className={style.box}>
+                        <div className={styles.chart}>
+                            <div className={styles.box}>
                                 <h4>🥗 판매 인기 항목</h4>
                                 <canvas ref={donutChartRef} />
                             </div>
-                            <div className={style.box}>
+                            <div className={styles.salesTableWrap} style={{ marginTop: '2rem' }}>
+                <h3 className={styles.subTitle}>메뉴별 판매 수량</h3>
+                <div className={styles.tableScroll}>
+                  <table className={styles.salesTable}>
+                    <thead>
+                      <tr>
+                        <th className={styles.menuCell}>메뉴명</th>
+                        <th className={styles.qtyCell}>판매 수량</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     {salesData?.popularMenus &&[...salesData.popularMenus]
+                        .sort((a, b) => b.quantity - a.quantity)
+                        .slice(0, 5)
+                        .map((m) => (
+                        <tr key={m.menuName}>
+                          <td className={styles.left}>{m.menuName}</td>
+                          <td className={styles.right}>{m.quantity.toLocaleString()}건</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+                            <div className={styles.box}>
                                 <h4>🥗 판매율</h4>
                                 <canvas ref={barChartRef} />
                             </div>
                         </div>                        
                     </div>
 
-                    <div className={style.salesTable}>
+                    <div className={styles.salesTable}>
                         <table>
                             <thead>
                                 <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>
