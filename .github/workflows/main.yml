@@ -30,9 +30,18 @@ jobs:
       - name: Generate .env file
         working-directory: saladMan-frontend
         run: |
-          echo "VITE_FIREBASE_APIKEY=${{ secrets.VITE_FIREBASE_APIKEY }}" >> .env
-          echo "VITE_FIREBASE_VAPIKEY=${{ secrets.VITE_FIREBASE_VAPIKEY }}" >> .env
-          echo "VITE_TOSS_CLIENT_KEY=${{ secrets.VITE_TOSS_CLIENT_KEY }}" >> .env 
+          cat <<EOF > .env
+          VITE_FIREBASE_APIKEY=${{ secrets.VITE_FIREBASE_APIKEY }}
+          VITE_FIREBASE_AUTHDOMAIN=${{ secrets.VITE_FIREBASE_AUTHDOMAIN }}
+          VITE_FIREBASE_PROJECTID=${{ secrets.VITE_FIREBASE_PROJECTID }}
+          VITE_FIREBASE_STORAGEBUCKET=${{ secrets.VITE_FIREBASE_STORAGEBUCKET }}
+          VITE_FIREBASE_MESSAGINGSENDERID=${{ secrets.VITE_FIREBASE_MESSAGINGSENDERID }}
+          VITE_FIREBASE_APPID=${{ secrets.VITE_FIREBASE_APPID }}
+          VITE_FIREBASE_MEASUREMENTID=${{ secrets.VITE_FIREBASE_MEASUREMENTID }}
+          VITE_FIREBASE_VAPIKEY=${{ secrets.VITE_FIREBASE_VAPIKEY }}
+          VITE_TOSS_CLIENT_KEY=${{ secrets.VITE_TOSS_CLIENT_KEY }}
+          EOF
+
 
       # 5) 빌드 실행
       - name: Build project
