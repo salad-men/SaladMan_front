@@ -54,9 +54,9 @@ export default function OrderList() {
       const pi = {
         curPage: validPage,
         allPage: res.data.totalPages || 1,
-        startPage: Math.floor((validPage - 1) / 10) * 10 + 1,
+        startPage: Math.floor((validPage - 1) / 5) * 5 + 1,
         endPage: Math.min(
-          Math.floor((validPage - 1) / 10) * 10 + 10,
+          Math.floor((validPage - 1) / 5) * 5 + 5,
           res.data.totalPages || 1
         ),
       };
