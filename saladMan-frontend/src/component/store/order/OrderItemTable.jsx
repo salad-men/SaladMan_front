@@ -118,7 +118,7 @@ export default function OrderItemTable() {
             <table className={styles.stockTable}>
                 <thead>
                     <tr>
-                        <th>품명</th><th>재고</th><th>입고중</th><th>발주량</th><th>구매단가</th><th>합계</th><th></th>
+                        <th>품명</th><th>재고</th><th>입고중</th><th>발주량</th><th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,8 +132,6 @@ export default function OrderItemTable() {
                                 {item.orderQty}{item.unit}
                                 <button onClick={() => handlePlus(i)} className={styles.qtyBtn}>+</button>
                             </td>
-                            <td>{item.unitCost.toLocaleString()}원</td>
-                            <td>{((item.orderQty / item.minimumOrderUnit) * item.unitCost).toLocaleString()}원</td>
                             <td><button onClick={() => handleRemove(i)}>X</button></td>
 
                         </tr>
@@ -148,9 +146,6 @@ export default function OrderItemTable() {
                 </tbody>
             </table>
 
-            <div className={styles.summary}>
-                <div className={styles.total}>총계 : {totalAmount.toLocaleString()}원</div><br />
-            </div>
             <div className={styles.summary}>
                 <button className={styles.submitBtn} onClick={handleSubmit}>신청하기</button>
             </div>

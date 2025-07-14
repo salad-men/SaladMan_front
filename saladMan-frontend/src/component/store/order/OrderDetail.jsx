@@ -87,8 +87,6 @@ export default function OrderDetail() {
                                     <th>품명</th>
                                     <th>구분</th>
                                     <th>발주량</th>
-                                    <th>구매단가</th>
-                                    <th>합계</th>
                                     <th>발주승인여부</th>
                                     <th>입고 여부</th>
                                 </tr>
@@ -99,8 +97,6 @@ export default function OrderDetail() {
                                         <td>{item.ingredientName}</td>
                                         <td>{item.categoryName}</td>
                                         <td>{item.orderedQuantity} {item.unit}</td>
-                                        <td>{(item.unitCost ?? 0).toLocaleString()} 원</td>
-                                        <td>{(item.totalPrice ?? 0).toLocaleString()} 원</td>
                                         <td>
                                             {item.approvalStatus === "반려"
                                                 ? `반려 (${item.rejectionReason || "-"})`
@@ -108,12 +104,7 @@ export default function OrderDetail() {
                                         </td>
                                         <td>{item.inspection}</td>
                                     </tr>
-                                ))}
-                                <tr>
-                                    <td colSpan="7" className={styles.totalRow}>
-                                        총계 : {totalAmount.toLocaleString()}원
-                                    </td>
-                                </tr>
+                                ))}                                
                             </tbody>
                         </table>
                     </div>
