@@ -83,6 +83,7 @@ export default function ChatRoomPage({ roomId, onClose, setRooms }) {
     }
     if (!input.trim()) return;
     console.log("[ChatRoomPage] 메시지 전송:", input);
+    console.log(msg); 
     stompClientRef.current.publish({
       destination: `/publish/${roomId}`,
       body: JSON.stringify({ message: input, senderUsername: user.username })
