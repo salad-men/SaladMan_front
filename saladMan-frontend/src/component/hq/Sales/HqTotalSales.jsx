@@ -67,8 +67,8 @@ export default function HqTotalSales() {
   };
 
   useEffect(() => {
-    if (!salesData) return;
-    const raw = [...salesData.popularMenus].sort((a, b) => b.quantity - a.quantity);
+     if (!salesData || !salesData.popularMenus) return; 
+  const raw = [...salesData.popularMenus].sort((a, b) => b.quantity - a.quantity);
     const topN = 5;
     const topItems = raw.slice(0, topN);
     const othersTotal = raw.slice(topN).reduce((sum, item) => sum + item.quantity, 0);
