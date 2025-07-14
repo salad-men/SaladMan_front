@@ -58,8 +58,8 @@ export default function StoreDashboard() {
   const notices = summary?.notices || [];
   const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
   const lowStockCount = summary?.lowStockCount ?? 0;
-  const disposalSummary = summary?.disposalSummary || { 신청: 0, 완료: 0, 반려: 0 }; //폐기
-  const orderSummary = summary?.orderSummary || { 요청: 0, 승인: 0, 반려: 0, 입고완료: 0 }; // 발주
+  const disposalSummary = summary?.disposalSummary || { 대기: 0, 완료: 0, 반려: 0 }; //폐기
+  const orderSummary = summary?.orderSummary || { 대기중: 0, 반려: 0, 입고완료: 0 }; // 발주
 
 
   // 차트 데이터
@@ -302,13 +302,13 @@ export default function StoreDashboard() {
               <b>유통기한 D-day 임박</b>: {expireSummary.todayCount ?? 0}종
             </li>
             <li>
-              <b>폐기 요청</b>: {disposalSummary.신청 ?? 0}건 / 
-              <b> 승인</b>: {disposalSummary.승인 ?? 0}건 /
+              <b>폐기 요청</b>: {disposalSummary.대기 ?? 0}건 / 
+              <b> 완료  </b>: {disposalSummary.완료 ?? 0}건 /
               <b> 반려</b>: {disposalSummary.반려 ?? 0}건
             </li>
             <li>
-              <b>발주 요청</b>: {orderSummary.요청 ?? 0}건 /
-              <b> 승인</b>: {orderSummary.승인 ?? 0}건 /
+              <b>발주 요청</b>: {orderSummary.대기중 ?? 0}건 /
+              <b> 완료</b>: {orderSummary.승인 ?? 0}건 /
               <b> 반려</b>: {orderSummary.반려 ?? 0}건 /
             </li>
             <li>
