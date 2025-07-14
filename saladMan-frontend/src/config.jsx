@@ -7,12 +7,12 @@ console.log("현재 Vite 모드:", import.meta.env.MODE);
 const store = getDefaultStore();
 
 export const API_BASE = import.meta.env.VITE_API_URL;
-export const CF_BASE = import.meta.env.VITE_CLOUDFRONT_URL || '';
+export const CF_BASE = import.meta.env.VITE_CLOUDFRONT_URL || ''; //
 
 export const myAxios = (token) => {
    var instance = axios.create({
       baseURL: API_BASE,
-      timeout: 5000,
+      timeout: 7000,
    })
 
    token && instance.interceptors.request.use((config) => {

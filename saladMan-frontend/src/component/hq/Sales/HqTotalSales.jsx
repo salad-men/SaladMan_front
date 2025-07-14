@@ -178,6 +178,20 @@ export default function HqTotalSales() {
                         <th className={styles.qtyCell}>판매 수량</th>
                       </tr>
                     </thead>
+{/* <tbody>
+  {salesData?.popularMenus
+    ? [...salesData.popularMenus]
+        .sort((a, b) => b.quantity - a.quantity)
+        .slice(0, 5)
+        .map((m) => (
+          <tr key={m.menuName}>
+            <td className={styles.left}>{m.menuName}</td>
+            <td className={styles.right}>{m.quantity.toLocaleString()}건</td>
+          </tr>
+        ))
+    : <tr><td colSpan={2}>데이터를 가져오는 중입니다...</td></tr>
+  }
+</tbody> */}
                     <tbody>
                      {salesData?.popularMenus &&[...salesData.popularMenus]
                         .sort((a, b) => b.quantity - a.quantity)
