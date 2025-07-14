@@ -310,7 +310,6 @@ export default function StoreDashboard() {
               <b>발주 요청</b>: {orderSummary.요청 ?? 0}건 /
               <b> 승인</b>: {orderSummary.승인 ?? 0}건 /
               <b> 반려</b>: {orderSummary.반려 ?? 0}건 /
-              <b> 입고완료</b>: {orderSummary.입고완료 ?? 0}건
             </li>
             <li>
               <b>자동발주 예정 품목</b>: {autoOrderExpectedCount}종

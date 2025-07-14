@@ -144,18 +144,36 @@ export default function StoreInventoryExpiration() {
       .then(res => {
         const storeList = res.data.storeInventory || [];
         const transformed = storeList.map(item => {
-          const diff = calcDiffDays(item.expiredDate?.slice(0, 10));
-          return {
-            id: item.id,
-            name: item.ingredientName || "",
-            category: item.categoryName || "",
-            unit: item.unit || "",
-            quantity: item.quantity || 0,
-            price: item.unitCost || 0,
-            expiry: item.expiredDate ? item.expiredDate.slice(0, 10) : "",
-            dday: formatDday(diff)
-          };
-        });
+        
+          // 오늘 날짜(시분초 0)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        // 만료일(시분초 0)
+        const expiryStr = item.expiredDate ? item.expiredDate.slice(0, 10) : "";
+        const exp = expiryStr ? new Date(expiryStr) : null;
+        if (exp) exp.setHours(0, 0, 0, 0);
+
+        let dday = "";
+        if (exp) {
+          const diff = Math.floor((exp - today) / (1000 * 60 * 60 * 24));
+          if (diff === 0) dday = "D-day";
+          else if (diff === 1) dday = "D-1";
+          else if (diff > 1) dday = `D-${diff}`;
+          else dday = `D+${-diff}`;
+        }
+
+        return {
+          id: item.id,
+          name: item.ingredientName || "",
+          category: item.categoryName || "",
+          unit: item.unit || "",
+          quantity: item.quantity || 0,
+          price: item.unitCost || 0,
+          expiry: expiryStr,
+          dday
+        };
+      });
+
         setInventory(transformed);
         setSelectedIds([]);
         setDisposalAmounts({});
