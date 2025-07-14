@@ -61,7 +61,7 @@ export default function HqInventoryExpiration() {
   const [keyword, setKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [sortOption, setSortOption] = useState("default");
+  const [sortOption, setSortOption] = useState("expiryAsc");
 const [disposalReasons, setDisposalReasons] = useState({});
 
   // 옵션 리스트
@@ -256,9 +256,10 @@ const onFilterChange = setter => e => {
                     setPageInfo(pi => ({ ...pi, curPage: 1 }));
                   }}
                 >
-                  <option value="default">기본(분류-재료-유통기한)</option>
                   <option value="expiryAsc">유통기한↑-분류-재료</option>
                   <option value="expiryDesc">유통기한↓-분류-재료</option>
+                  <option value="default">기본(분류-재료-유통기한)</option>
+
                 </select>
               </div>
             </div>
