@@ -337,7 +337,7 @@ export default function StoreInventoryList() {
                 ) : (
                   inventory.map((r, idx) => {
                     const isEdit = editRow === r.id;
-                    const isLowStock = r.quantity < r.minimumOrderUnit;
+                    const isLowStock = r.quantity < r.minQuantity;
                     // 카테고리/재료명 dropdown 옵션 구성
                     const catValue =
                       isEdit && editForm.categoryId !== undefined

@@ -8,9 +8,10 @@ import {
   PieChart, Pie, Cell
 } from "recharts";
 
-const PIE_COLORS = ["#74c69d", "#82ca9d", "#9ad0ec", "#f6c85f", "#e7717d"];
+const COLORS = [
+  "#70d6ff", "#ff70a6", "#ffd670", "#ff9770", "#6eeb83",
+];
 
-// ISO week 계산
 function getISOWeek(date) {
   const target = new Date(date.valueOf());
   const dayNr = (date.getDay() + 6) % 7;
@@ -19,17 +20,14 @@ function getISOWeek(date) {
   const dayDiff = (target - jan4) / 86400000;
   return 1 + Math.floor(dayDiff / 7);
 }
-
 function getToday() {
   return new Date().toISOString().slice(0, 10);
 }
-
 function getWeekAgo() {
   const d = new Date();
   d.setDate(d.getDate() - 6);
   return d.toISOString().slice(0, 10);
 }
-
 function getMonthAgo() {
   const d = new Date();
   d.setMonth(d.getMonth() - 1);
@@ -42,8 +40,8 @@ export default function StoreDashboard() {
 
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState("");
-  const [groupType, setGroupType] = useState("day"); // 그래프의 그룹 타입
-  const [dateRange, setDateRange] = useState({ start: getWeekAgo(), end: getToday() }); // 기간 필터
+  const [groupType, setGroupType] = useState("day");
+  const [dateRange, setDateRange] = useState({ start: getWeekAgo(), end: getToday() });
 
   const today = new Date();
   const [curYear, setCurYear] = useState(today.getFullYear());
@@ -51,9 +49,43 @@ export default function StoreDashboard() {
   const [weekSchedule, setWeekSchedule] = useState([]);
   const [weekEmpNames, setWeekEmpNames] = useState([]);
   const [weekError, setWeekError] = useState("");
-const topMenus = summary?.topMenus || [];  
 
-  // 대시보드 fetch
+  // 하단 카드 데이터들
+  const topMenus = summary?.topMenus || [];
+  const expireSummary = summary?.expireSummary || {};
+  const autoOrderExpectedCount = summary?.autoOrderExpectedCount ?? 0;
+  const mainStocks = summary?.mainStocks || [];
+  const notices = summary?.notices || [];
+  const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
+  const lowStockCount = summary?.lowStockCount ?? 0;
+  const disposalSummary = summary?.disposalSummary || { 신청: 0, 완료: 0, 반려: 0 };
+
+  // 차트 데이터
+  const sales = summary?.sales || {};
+  let salesData = [];
+  if (groupType === "week") {
+    salesData = (sales.weekly || []).map((d, idx, arr) => ({
+      date: `${curYear}년 ${arr.length - idx}주`,
+      판매량: d.quantity,
+      매출: d.revenue,
+    })).reverse();
+  } else if (groupType === "month") {
+    salesData = (sales.monthly || []).map((d, idx, arr) => ({
+      date: `${arr.length - idx}월`,
+      판매량: d.quantity,
+      매출: d.revenue,
+    })).reverse();
+  } else {
+    salesData = (sales.daily || []).map(d => ({
+      date: d.date,
+      판매량: d.quantity,
+      매출: d.revenue,
+    }));
+  }
+
+  const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) || [];
+
+  // fetch summary
   useEffect(() => {
     if (!token) return;
     setError("");
@@ -68,16 +100,14 @@ const topMenus = summary?.topMenus || [];
       })
       .then(res => {
         setSummary(res.data);
-        console.log("[대시보드 응답 데이터]", res.data);
       })
-      .catch(err => {
+      .catch(() => {
         setError("대시보드 정보를 불러올 수 없습니다.");
         setSummary(null);
-        console.error("[대시보드 fetch error]", err);
       });
   }, [token, user, groupType, dateRange.start, dateRange.end]);
 
-  // 주간 근무표 fetch
+  // fetch week schedule
   useEffect(() => {
     if (!token) return;
     setWeekError("");
@@ -89,46 +119,13 @@ const topMenus = summary?.topMenus || [];
         const { table, empNames } = res.data || {};
         setWeekSchedule(table || []);
         setWeekEmpNames(empNames || []);
-        console.log("[주간 근무표 응답]", res.data);
       })
-      .catch(err => {
+      .catch(() => {
         setWeekSchedule([]);
         setWeekEmpNames([]);
         setWeekError("주간 근무표 정보를 불러올 수 없습니다.");
-        console.error("[주간근무표 fetch error]", err);
       });
   }, [token, user, curYear, curWeek]);
-
-  // 매출/주문 차트 데이터
-  const sales = summary?.sales || {};
-  const salesData =
-  (groupType === "week"
-    ? sales.weekly?.map((d, idx) => ({
-        date: `${curYear}년 ${idx + 1}주`,
-        판매량: d.quantity,
-        매출: d.revenue,
-      }))
-    : groupType === "month"
-    ? sales.monthly?.map((d, idx) => ({
-        date: `${idx + 1}월`,
-        판매량: d.quantity,
-        매출: d.revenue,
-      }))
-    : sales.daily?.map((d) => ({
-        date: d.date,
-        판매량: d.quantity,
-        매출: d.revenue,
-      }))) || [];
-
-const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) || [];
-
-
-  // 하단 카드 데이터
-  const expireSummary = summary?.expireSummary || {};
-  const autoOrderExpectedCount = summary?.autoOrderExpectedCount ?? 0;
-  const mainStocks = summary?.mainStocks || [];
-  const notices = summary?.notices || [];
-  const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
 
   const setPeriod = (type) => {
     if (type === "today") setDateRange({ start: getToday(), end: getToday() });
@@ -136,10 +133,7 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
     if (type === "month") setDateRange({ start: getMonthAgo(), end: getToday() });
   };
 
-  const handleGroupTypeClick = (type) => {
-    setGroupType(type);
-    // 기간을 새로 설정하지 않음, 그래프만 그룹화 방식 변경
-  };
+  const handleGroupTypeClick = (type) => setGroupType(type);
 
   const goPrevWeek = () => {
     if (curWeek === 1) {
@@ -149,7 +143,6 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
       setCurWeek(w => w - 1);
     }
   };
-
   const goNextWeek = () => {
     if (curWeek === 52) {
       setCurYear(y => y + 1);
@@ -159,14 +152,7 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
     }
   };
 
-  const renderGroupTypeBtns = () => (
-    <div className={styles.groupTypeBtns}>
-      <button className={groupType === "day" ? styles.active : ""} onClick={() => handleGroupTypeClick("day")}>일별</button>
-      <button className={groupType === "week" ? styles.active : ""} onClick={() => handleGroupTypeClick("week")}>주별</button>
-      <button className={groupType === "month" ? styles.active : ""} onClick={() => handleGroupTypeClick("month")}>월별</button>
-    </div>
-  );
-
+  // === 화면 ===
   return (
     <div className={styles.dashboardWrap}>
       <div className={styles.header}>
@@ -176,7 +162,7 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
             type="date"
             name="start"
             value={dateRange.start}
-            onChange={e => setDateRange(prev => ({ ...prev, start: e.target.value }))} 
+            onChange={e => setDateRange(prev => ({ ...prev, start: e.target.value }))}
             max={dateRange.end}
           />
           <span> ~ </span>
@@ -184,14 +170,18 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
             type="date"
             name="end"
             value={dateRange.end}
-            onChange={e => setDateRange(prev => ({ ...prev, end: e.target.value }))} 
+            onChange={e => setDateRange(prev => ({ ...prev, end: e.target.value }))}
             min={dateRange.start}
           />
           <button onClick={() => setPeriod("today")} className={styles.periodBtn}>오늘</button>
-          <button onClick={() => setPeriod("week")} className={styles.periodBtn}>1주</button>
-          <button onClick={() => setPeriod("month")} className={styles.periodBtn}>1달</button>
+          <button onClick={() => setPeriod("week")} className={styles.periodBtn}>한 주</button>
+          <button onClick={() => setPeriod("month")} className={styles.periodBtn}>한 달</button>
         </div>
-        {renderGroupTypeBtns()}
+        <div className={styles.groupTypeBtns}>
+          <button className={groupType === "day" ? styles.active : ""} onClick={() => handleGroupTypeClick("day")}>일별</button>
+          <button className={groupType === "week" ? styles.active : ""} onClick={() => handleGroupTypeClick("week")}>주별</button>
+          <button className={groupType === "month" ? styles.active : ""} onClick={() => handleGroupTypeClick("month")}>월별</button>
+        </div>
       </div>
 
       {error && <div className={styles.error}>{error}</div>}
@@ -232,7 +222,7 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
               <PieChart>
                 <Pie data={pieData} cx="50%" cy="50%" outerRadius={86} dataKey="value" label={({ name }) => name}>
                   {pieData.map((entry, idx) => (
-                    <Cell key={`cell-${idx}`} fill={PIE_COLORS[idx % PIE_COLORS.length]} />
+                    <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
                   ))}
                 </Pie>
                 <Legend />
@@ -245,7 +235,7 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
               ? <li style={{ color: "#bbb" }}>인기 메뉴 없음</li>
               : pieData.map((d, idx) => (
                 <li key={d.name}>
-                  <span className={styles.pieColor} style={{ background: PIE_COLORS[idx % PIE_COLORS.length] }} />
+                  <span className={styles.pieColor} style={{ background: COLORS[idx % COLORS.length] }} />
                   {d.name}
                   <span className={styles.pieValue}>{d.value?.toLocaleString()}건</span>
                 </li>
@@ -296,17 +286,28 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
           )}
         </div>
 
+        {/* 재고/임박/폐기 한 줄 카드 */}
         <div className={styles.infoCard}>
-          <div className={styles.infoTitle}>재고 관리 현황</div>
+          <div className={styles.infoTitle}>재고 관리/폐기 현황</div>
           <ul>
-            <li>⚠️ 임박/폐기 예정 재고: <b>{expireSummary.totalCount ?? 0}</b>종</li>
-            <li>🔄 자동 발주 예정 품목: <b>{autoOrderExpectedCount}</b>종</li>
-            <li className={styles.blockLine}>📋 주요 재고 현황</li>
-            {mainStocks.length === 0
-              ? <li style={{ color: "#bbb" }}>주요 재고 없음</li>
-              : mainStocks.map(item => (
-                <li key={item.ingredientName}>{item.ingredientName} - {item.remainQuantity}{item.unit}</li>
-              ))}
+            <li>
+              <b>재고 부족</b>: {lowStockCount}종<br/>
+            </li>
+            <li>
+              <b>D-1 임박</b>: {expireSummary.d1Count ?? 0}종<br/>
+            </li>
+            <li>
+              <b>D-day 임박</b>: {expireSummary.todayCount ?? 0}종<br/>
+            </li>
+            <li>
+              <b>폐기 신청</b>: {disposalSummary.신청 ?? 0}건<br/>
+            </li>
+            <li>
+              <b>폐기 완료</b>: {disposalSummary.완료 ?? 0}건<br/>
+            </li>
+            <li>
+              <b>폐기 반려</b>: {disposalSummary.반려 ?? 0}건<br/>
+            </li>
           </ul>
         </div>
 
@@ -332,4 +333,4 @@ const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) ||
       </div>
     </div>
   );
-} 
+}

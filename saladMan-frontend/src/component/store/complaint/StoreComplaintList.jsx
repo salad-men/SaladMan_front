@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
 import { useNavigate } from "react-router-dom";
-import NoticeSidebar from "../Notice/NoticeSidebar";
+import NoticeSidebar from "../notice/NoticeSidebar";
 import styles from "./StoreComplaintList.module.css";
 import { myAxios } from "../../../config";
 import { accessTokenAtom, userAtom } from "/src/atoms";

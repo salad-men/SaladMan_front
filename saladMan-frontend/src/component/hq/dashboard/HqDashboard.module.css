@@ -1,12 +1,12 @@
 .dashboardWrap {
-  padding: 38px 36px 40px 36px;
-  min-height: 1200px;
+  padding: 10px 36px 0px 36px;
+  /* min-height: 1200px; */
   background: #f7faf8;
 }
 .header {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 34px;
+  margin-bottom: 10px;
   position: relative;
 }
 .title {
@@ -77,7 +77,7 @@
   display: grid;
   grid-template-columns: 2.3fr 1.2fr;
   grid-template-rows: 420px auto;
-  gap: 100px 22px;  
+  gap: 80px 22px;  
   margin-top: 0;
 }
 
@@ -85,7 +85,7 @@
 .gridCol2 {
   background: #fff;
   border-radius: 16px;
-  padding: 36px 28px 18px 32px;
+  padding: 10px 28px 18px 32px;
   box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
   grid-row: 1 / span 1;
   min-width: 0;
@@ -97,7 +97,7 @@
 .gridCol1 {
   background: #fff;
   border-radius: 16px;
-  padding: 36px 22px 18px 28px;
+  padding: 10px 22px 18px 28px;
   box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
   grid-row: 1 / span 1;
   min-width: 0;
@@ -111,7 +111,7 @@
   display: flex;
   gap: 22px;
   margin-top: 0; 
-  margin-bottom: 2px;
+  margin-bottom: 0px;
   justify-content: stretch;
 }
 
@@ -312,27 +312,13 @@
   margin-bottom: 30px;
 }
 
-@media (max-width: 1200px) {
-  .grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, auto);
-    gap: 36px 0;
-  }
-  .rowCards {
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 12px;
-  }
-  .infoCard {
-    min-width: 0;
-    width: 100%;
-  }
-}
-@media (max-width: 900px) {
-  .dashboardWrap {
-    padding: 18px 6px 20px 6px;
-  }
-  .gridCol2, .gridCol1 {
-    padding: 18px 6px 10px 12px;
-  }
+
+.noticeTitle {
+  display: block;       
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 98%;        
+  font-weight: 600;
+  color: #13795b;
 }

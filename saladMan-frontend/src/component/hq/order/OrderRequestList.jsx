@@ -114,9 +114,9 @@ export default function OrderRequestList() {
                             <span>~</span>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                             <button onClick={() => setDateRange("today")}>오늘</button>
-                            <button onClick={() => setDateRange("1week")}>1주</button>
-                            <button onClick={() => setDateRange("2weeks")}>2주</button>
-                            <button onClick={() => setDateRange("1month")}>1달</button>
+                            <button onClick={() => setDateRange("1week")}>한 주</button>
+                            {/* <button onClick={() => setDateRange("2weeks")}>두 주</button> */}
+                            <button onClick={() => setDateRange("1month")}>한 달</button>
                         </div>
 
                         <div className={styles.row}>

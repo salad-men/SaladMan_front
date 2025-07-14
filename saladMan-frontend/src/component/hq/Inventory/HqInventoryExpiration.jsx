@@ -36,10 +36,15 @@ function getPeriod(type) {
 
 function calcDiffDays(expiry) {
   if (!expiry) return null;
+  // 오늘(0시 기준)
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  // 유통기한(0시 기준)
   const exp = new Date(expiry);
+  exp.setHours(0, 0, 0, 0);
   return Math.floor((exp - today) / (1000 * 60 * 60 * 24));
 }
+
 
 function formatDday(diff) {
   if (diff == null) return "";

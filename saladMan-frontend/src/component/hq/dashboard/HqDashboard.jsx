@@ -5,11 +5,17 @@ import { myAxios } from "/src/config";
 import styles from "./HqDashboard.module.css";
 import {
   ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell 
+  PieChart, Pie, Cell
 } from "recharts";
 
-const COLORS = ["#74c69d", "#82ca9d", "#9ad0ec", "#f6c85f", "#e7717d"];
-
+const COLORS = [
+  "#70d6ff", // 하늘색 
+  "#ff70a6", // 핑크 
+  "#ffd670", // 노랑 
+  "#ff9770", // 오렌지 
+  "#6eeb83", // 연두
+];
+// 날짜 관련 유틸
 function getToday() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -24,15 +30,32 @@ function getMonthAgo() {
   return d.toISOString().slice(0, 10);
 }
 
+// X축 라벨 변환 (주/월 구분)
+function formatXAxisLabel(date, groupType) {
+  if (groupType === "week") {
+    if (!date) return "";
+    const parts = date.split("-");
+    // 예: "2024-27" → "27주차"
+    return parts.length === 2 ? `${Number(parts[1])}주차` : date;
+  }
+  if (groupType === "month") {
+    if (!date) return "";
+    const parts = date.split("-");
+    // 예: "2024-07" → "7월"
+    return parts.length === 2 ? `${Number(parts[1])}월` : date;
+  }
+  return date;
+}
+
 export default function HqDashboard() {
   const token = useAtomValue(accessTokenAtom);
   const [dateRange, setDateRange] = useState({ start: getWeekAgo(), end: getToday() });
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState("");
-  const [groupType, setGroupType] = useState("day"); // 일별, 주별, 월별
+  const [groupType, setGroupType] = useState("day"); // day, week, month
 
-  // fetch dashboard summary
+  // 데이터 요청
   useEffect(() => {
     if (!token) return;
     setLoading(true);
@@ -47,6 +70,8 @@ export default function HqDashboard() {
       })
       .then(res => {
         setSummary(res.data);
+              console.log("백엔드 응답 summary:", res.data);
+
         setLoading(false);
       })
       .catch(err => {
@@ -57,20 +82,19 @@ export default function HqDashboard() {
       });
   }, [token, dateRange.start, dateRange.end, groupType]);
 
-  // 일/주/월별 데이터 처리
-  const salesData =
-    (groupType === "week"
-      ? summary?.sales?.weekly
-      : groupType === "month"
-      ? summary?.sales?.monthly
-      : summary?.sales?.daily
-    )?.map(d => ({
-      date: d.date,
-      판매량: d.quantity,
-      매출: d.revenue,
-    })) || [];
+  // 매출 차트 데이터
+  const groupTypeMap = { day: "daily", week: "weekly", month: "monthly" };
+  const salesKey = groupTypeMap[groupType] || "daily";
+  const salesArr = summary?.sales?.[salesKey] ?? [];
+  const salesData = salesArr.map(d => ({
+    date: d.date,
+    판매량: d.quantity,
+    매출: d.revenue,
+  }));
+  const displaySalesData = [...salesData].reverse();
 
-  // 인기 메뉴 (최상위 5개)
+
+  // 인기 메뉴 Pie 데이터
   const topMenus = summary?.topMenus?.length ? summary.topMenus.slice(0, 5) : [];
   const pieData = topMenus.map(m => ({
     name: m.menuName,
@@ -83,18 +107,15 @@ export default function HqDashboard() {
   const d1Count = expireSummary.d1Count ?? 0;
   const todayCount = expireSummary.todayCount ?? 0;
   const lowStockCount = summary?.lowStockCount ?? 0;
-
-  // 발주, 폐기
   const orderSummary = summary?.orderSummary || {};
   const orderTotalCount = orderSummary.totalCount ?? 0;
   const orderTop3 = orderSummary.top3 || [];
-
   const disposalSummary = summary?.disposalSummary || {};
   const disposalTotalCount = disposalSummary.totalCount ?? 0;
   const disposalTop3 = disposalSummary.top3 || [];
-
-  // 공지/불편
   const notices = summary?.notices?.slice(0, 4) || [];
+
+  // 불편 접수 건수
   const [unreadComplaintCount, setUnreadComplaintCount] = useState(0);
   useEffect(() => {
     if (!token) return;
@@ -106,14 +127,14 @@ export default function HqDashboard() {
       });
   }, [token]);
 
-  // 기간 preset
+  // 기간 프리셋
   const setPeriod = (type) => {
     if (type === "today") setDateRange({ start: getToday(), end: getToday() });
     if (type === "week") setDateRange({ start: getWeekAgo(), end: getToday() });
     if (type === "month") setDateRange({ start: getMonthAgo(), end: getToday() });
   };
 
-  // 일/주/월 버튼
+  // 단위 버튼
   const renderGroupTypeBtns = () => (
     <div className={styles.groupTypeBtns}>
       <button className={groupType === "day" ? styles.active : ""} onClick={() => setGroupType("day")}>일별</button>
@@ -122,11 +143,11 @@ export default function HqDashboard() {
     </div>
   );
 
-  // ========== 화면 ==========
+  // === 화면 ===
   return (
     <div className={styles.dashboardWrap}>
       <div className={styles.header}>
-        <div className={styles.title}>본사 통합 대시보드</div>
+        <div className={styles.title}>대시보드</div>
         <div className={styles.periodFilter}>
           <input
             type="date"
@@ -171,25 +192,28 @@ export default function HqDashboard() {
             {loading ? <div className={styles.loading}>로딩중...</div>
               : error ? <div className={styles.error}>{error}</div>
                 : (
-<ResponsiveContainer width="100%" height={290}>
-  <ComposedChart
-    data={salesData}
-    margin={{ top: 32, right: 32, left: 16, bottom: 0 }}
-  >
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis dataKey="date" />
-    <YAxis yAxisId="left" label={{ value: "판매량", position: "top", offset: 8 }} />
-    <YAxis yAxisId="right" orientation="right"
-      label={{ value: "매출(₩)", angle: 0, position: "top", offset: 16 }} />
-    <Tooltip formatter={v => v?.toLocaleString()} />
-    <Legend />
-    {/* 막대그래프: 판매량 */}
-    <Bar yAxisId="left" dataKey="판매량" fill="#74c69d" barSize={24} />
-    {/* 선그래프: 매출 */}
-    <Line yAxisId="right" type="monotone" dataKey="매출" stroke="#2196f3" strokeWidth={3} dot={true} />
-  </ComposedChart>
-</ResponsiveContainer>
-                )}
+                <ResponsiveContainer width="100%" height={290}>
+                  <ComposedChart
+                    data={displaySalesData}
+                    margin={{ top: 32, right: 32, left: 16, bottom: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="date"
+                      tickFormatter={d => formatXAxisLabel(d, groupType)}
+                    />
+                    <YAxis yAxisId="left" label={{ value: "판매량", position: "top", offset: 8 }} />
+                    <YAxis yAxisId="right" orientation="right"
+                      label={{ value: "매출(₩)", angle: 0, position: "top", offset: 16 }} />
+                    <Tooltip formatter={v => v?.toLocaleString()} />
+                    <Legend />
+                    {/* 막대그래프: 판매량 */}
+                    <Bar yAxisId="left" dataKey="판매량" fill="#74c69d" barSize={24} />
+                    {/* 선그래프: 매출 */}
+                    <Line yAxisId="right" type="monotone" dataKey="매출" stroke="#2196f3" strokeWidth={3} dot={true} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              )}
           </div>
         </div>
         {/* 2열: 인기메뉴 */}
@@ -226,77 +250,73 @@ export default function HqDashboard() {
         </div>
         {/* 하단 카드 */}
         <div className={styles.rowCards}>
-{/* 재고/임박 */}
-<div className={styles.infoCard}>
-  <div className={styles.infoTitle}>유통기한 임박/재고 부족 관리</div>
-  <ul>
-    <li>전체 임박 품목 수: <b>{expireTotalCount}</b>건</li>
-    <li>D-1(내일) 임박: <b>{d1Count}</b>건</li>
-    <li>D-DAY(오늘) 임박: <b>{todayCount}</b>건</li>
-    <li>재고 부족 품목: <b>{lowStockCount}</b>건</li>
-  </ul>
-</div>
-
-{/* 공지/고객문의 */}
-<div className={styles.infoCard}>
-  <div className={styles.infoTitle}>공지 및 고객 문의</div>
-  <ul>
-    <li className={styles.blockLine}>최근 공지사항:</li>
-    <ul className={styles.top3List}>
-      {notices.slice(0, 5).map((n, idx) => (
-        <li
-          key={n.id}
-          className={idx === Math.min(4, notices.length - 1) ? styles.bottomLine : ""}
-        >
-          <b>{n.title}</b>
-          <span className={styles.noticeDate}>{n.regDate?.slice(0, 10)}</span>
-        </li>
-      ))}
-    </ul>
-    <li className={styles.blockLine}>불편 접수사항: <b>{unreadComplaintCount}</b>건 접수됨</li>
-  </ul>
-</div>
-
-{/* 발주/폐기 */}
-<div className={styles.infoCard}>
-  <div className={styles.infoTitle}>발주 및 폐기 현황</div>
-  <ul>
-    <li className={styles.blockLine}>
-      발주 전체 건수: <b>{orderTotalCount}</b>건
-    </li>
-    <ul className={styles.top3List}>
-      {orderTop3.map((item, idx) => (
-        <li
-          key={idx}
-          className={idx === orderTop3.length - 1 && orderTop3.length > 0 ? styles.bottomLine : ""}
-        >
-          <span className={styles.top3name}>{item.ingredientName}</span>
-          <span className={styles.graySmall}>({item.quantity ?? "-"} {item.unit ?? ""})</span>
-        </li>
-      ))}
-    </ul>
-    <li className={styles.blockLine}>
-      금일 신규 발주 품목: <b>0</b>건 | 자동발주 예정 품목: <b>0</b>건
-    </li>
-    <li className={styles.blockLine}>
-      폐기 전체 건수: <b>{disposalTotalCount}</b>건
-    </li>
-    <ul className={styles.top3List}>
-      {disposalTop3.map((item, idx) => (
-        <li
-          key={idx}
-          className={idx === disposalTop3.length - 1 && disposalTop3.length > 0 ? styles.bottomLine : ""}
-        >
-          <span className={styles.top3name}>{item.ingredientName}</span>
-          <span className={styles.graySmall}>({item.quantity ?? "-"} {item.unit ?? ""})</span>
-        </li>
-      ))}
-    </ul>
-  </ul>
-</div>
-
-</div>
-
+          {/* 재고/임박 */}
+          <div className={styles.infoCard}>
+            <div className={styles.infoTitle}>유통기한 임박/재고 부족 관리</div>
+            <ul>
+              {/* <li>전체 임박 품목 수: <b>{expireTotalCount}</b>건</li> */}
+              <li>유통기한 D-1(내일) 임박: <b>{d1Count}</b>건</li>
+              <li>유통기한 D-DAY(오늘) 임박: <b>{todayCount}</b>건</li>
+              <li>재고 부족 품목: <b>{lowStockCount}</b>건</li>
+            </ul>
+          </div>
+          {/* 공지/고객문의 */}
+          <div className={styles.infoCard}>
+            <div className={styles.infoTitle}>공지 및 고객 문의</div>
+            <ul>
+              <li className={styles.blockLine}>최근 공지사항:</li>
+              <ul className={styles.top3List}>
+                {notices.slice(0, 5).map((n, idx) => (
+                  <li
+                    key={n.id}
+                    className={idx === Math.min(4, notices.length - 1) ? styles.bottomLine : ""}
+                  >
+                    <b className={styles.noticeTitle}>{n.title}</b>
+                    <span className={styles.noticeDate}>{n.regDate?.slice(0, 10)}</span>
+                  </li>
+                ))}
+              </ul>
+              <li className={styles.blockLine}>불편 접수사항: <b>{unreadComplaintCount}</b>건 접수됨</li>
+            </ul>
+          </div>
+          {/* 발주/폐기 */}
+          <div className={styles.infoCard}>
+            <div className={styles.infoTitle}>수주 및 폐기요청 현황</div>
+            <ul>
+              <li className={styles.blockLine}>
+                수주 전체 건수: <b>{orderTotalCount}</b>건
+              </li>
+              <ul className={styles.top3List}>
+                {orderTop3.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className={idx === orderTop3.length - 1 && orderTop3.length > 0 ? styles.bottomLine : ""}
+                  >
+                    <span className={styles.top3name}>{item.ingredientName}</span>
+                    <span className={styles.graySmall}>({item.orderCount ?? "-"} {item.unit ?? ""})</span>
+                  </li>
+                ))}
+              </ul>
+              <li className={styles.blockLine}>
+                금일 신규 발주 품목: <b>0</b>건 | 자동발주 예정 품목: <b>0</b>건
+              </li>
+              <li className={styles.blockLine}>
+                폐기 요청 건수: <b>{disposalTotalCount}</b>건
+              </li>
+              <ul className={styles.top3List}>
+                {disposalTop3.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className={idx === disposalTop3.length - 1 && disposalTop3.length > 0 ? styles.bottomLine : ""}
+                  >
+                    <span className={styles.top3name}>{item.ingredientName}</span>
+                    <span className={styles.graySmall}>({item.quantity ?? "-"} {item.unit ?? ""})</span>
+                  </li>
+                ))}
+              </ul>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
