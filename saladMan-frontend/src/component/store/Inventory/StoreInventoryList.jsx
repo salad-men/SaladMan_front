@@ -68,7 +68,7 @@ export default function StoreInventoryList() {
         storeId: user.id,
         page,
         category: filters.category === "all" ? "all" : Number(filters.category),
-        keyword: filters.keyword,
+        keyword: filters.keyword.trim() === "" ? null : filters.keyword,
         startDate: filters.startDate || null,
         endDate: filters.endDate || null,
         sortOption: filters.sortOption,
@@ -82,8 +82,8 @@ export default function StoreInventoryList() {
           name: x.ingredientName || "",
           unit: x.unit || "",
           category: x.categoryName || "",
-          categoryId: x.categoryId ? Number(x.categoryId) : "", 
-          ingredientId: x.ingredientId ? Number(x.ingredientId) : "", 
+          categoryId: x.categoryId ? Number(x.categoryId) : "",
+          ingredientId: x.ingredientId ? Number(x.ingredientId) : "",
           unitCost: x.unitCost,
           quantity: Number(x.quantity),
           minimumOrderUnit: Number(x.minimumOrderUnit),
@@ -175,34 +175,34 @@ export default function StoreInventoryList() {
 
   // 저장
   const onRowSave = async (row) => {
-  if (!token) return;
-  // 모든 값이 정확히 들어가도록 가드
-  const payload = {
-    id: row.id,
-    categoryId: Number(editForm.categoryId ?? row.categoryId),
-    ingredientId: Number(editForm.ingredientId ?? row.ingredientId),
-    unitCost: Number(editForm.unitCost ?? row.unitCost),
-    quantity: Number(editForm.quantity ?? row.quantity),
-    minimumOrderUnit: Number(editForm.minimumOrderUnit ?? row.minimumOrderUnit),
-    expiredDate: (editForm.expiredDate ?? row.expiredDate) || null,
-    receivedDate: (editForm.receivedDate ?? row.receivedDate) || null,
-  };
-  // 빈값/문자열 오류 방지
-  Object.keys(payload).forEach(key => {
-    if (typeof payload[key] === 'string' && payload[key].trim() === '') {
-      payload[key] = null;
+    if (!token) return;
+    // 모든 값이 정확히 들어가도록 가드
+    const payload = {
+      id: row.id,
+      categoryId: Number(editForm.categoryId ?? row.categoryId),
+      ingredientId: Number(editForm.ingredientId ?? row.ingredientId),
+      unitCost: Number(editForm.unitCost ?? row.unitCost),
+      quantity: Number(editForm.quantity ?? row.quantity),
+      minimumOrderUnit: Number(editForm.minimumOrderUnit ?? row.minimumOrderUnit),
+      expiredDate: (editForm.expiredDate ?? row.expiredDate) || null,
+      receivedDate: (editForm.receivedDate ?? row.receivedDate) || null,
+    };
+    // 빈값/문자열 오류 방지
+    Object.keys(payload).forEach(key => {
+      if (typeof payload[key] === 'string' && payload[key].trim() === '') {
+        payload[key] = null;
+      }
+    });
+    console.log("저장요청", payload);
+    try {
+      await myAxios(token).post("/store/inventory/update", payload);
+      setEditRow(null);
+      setEditForm({});
+      fetchInventory(pageInfo.curPage);
+    } catch (e) {
+      alert("저장 실패: " + (e.response?.data?.error || e.message));
     }
-  });
-  console.log("저장요청", payload);
-  try {
-    await myAxios(token).post("/store/inventory/update", payload);
-    setEditRow(null);
-    setEditForm({});
-    fetchInventory(pageInfo.curPage);
-  } catch (e) {
-    alert("저장 실패: " + (e.response?.data?.error || e.message));
-  }
-};
+  };
 
 
   useEffect(() => {
@@ -255,10 +255,10 @@ export default function StoreInventoryList() {
                   {type === "all"
                     ? "전체"
                     : type === "today"
-                    ? "오늘"
-                    : type === "week"
-                    ? "한 주"
-                    : "한 달"}
+                      ? "오늘"
+                      : type === "week"
+                        ? "한 주"
+                        : "한 달"}
                 </button>
               ))}
             </div>
@@ -324,8 +324,8 @@ export default function StoreInventoryList() {
                   <th>수량</th>
                   <th>최소주문단위</th>
                   <th>최소수량</th>
-                  <th>유통기한</th>
                   <th>입고일</th>
+                  <th>유통기한</th>
                   <th>수정</th>
                 </tr>
               </thead>
@@ -354,14 +354,14 @@ export default function StoreInventoryList() {
                           {isEdit ? (
 
                             <select
-                            className={styles.editSelect}
-                            value={editForm.categoryId !== undefined ? Number(editForm.categoryId) : Number(r.categoryId)}
-                            onChange={e => handleEditChange("categoryId", Number(e.target.value))}
-                          >
-                            {categories.map(c => (
-                              <option key={c.id} value={c.id}>{c.name}</option>
-                            ))}
-                          </select>
+                              className={styles.editSelect}
+                              value={editForm.categoryId !== undefined ? Number(editForm.categoryId) : Number(r.categoryId)}
+                              onChange={e => handleEditChange("categoryId", Number(e.target.value))}
+                            >
+                              {categories.map(c => (
+                                <option key={c.id} value={c.id}>{c.name}</option>
+                              ))}
+                            </select>
 
                           ) : (
                             r.category
@@ -451,20 +451,6 @@ export default function StoreInventoryList() {
                             <input
                               type="date"
                               className={styles.editInput}
-                              value={editForm.expiredDate ?? (r.expiredDate ? r.expiredDate.substring(0, 10) : "")}
-                              onChange={e =>
-                                handleEditChange("expiredDate", e.target.value)
-                              }
-                            />
-                          ) : (
-                            r.expiredDate ? r.expiredDate.substring(0, 10) : ""
-                          )}
-                        </td>
-                        <td>
-                          {isEdit ? (
-                            <input
-                              type="date"
-                              className={styles.editInput}
                               value={editForm.receivedDate ?? (r.receivedDate ? r.receivedDate.substring(0, 10) : "")}
                               onChange={e =>
                                 handleEditChange("receivedDate", e.target.value)
@@ -472,6 +458,20 @@ export default function StoreInventoryList() {
                             />
                           ) : (
                             r.receivedDate ? r.receivedDate.substring(0, 10) : ""
+                          )}
+                        </td>
+                        <td>
+                          {isEdit ? (
+                            <input
+                              type="date"
+                              className={styles.editInput}
+                              value={editForm.expiredDate ?? (r.expiredDate ? r.expiredDate.substring(0, 10) : "")}
+                              onChange={e =>
+                                handleEditChange("expiredDate", e.target.value)
+                              }
+                            />
+                          ) : (
+                            r.expiredDate ? r.expiredDate.substring(0, 10) : ""
                           )}
                         </td>
                         <td>
@@ -525,232 +525,232 @@ export default function StoreInventoryList() {
             </table>
           </div>
 
-{/* 신규 입력 모달 */}
-{addModalOpen && (
-  <div className={styles.modalBg} onClick={() => setAddModalOpen(false)}>
-    <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
-      <h3 className={styles.modalHeader}>재고 추가</h3>
-      <table className={styles.modalTable}>
-        <thead>
-          <tr>
-            <th>분류</th>
-            <th>재료명</th>
-            <th>단위</th>
-            <th>단가</th>
-            <th>수량</th>
-            <th>최소주문단위</th>
-            <th>유통기한</th>
-            <th>입고일</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {newItems.map((row, idx) => {
-            // 현재 선택된 카테고리 id
-            const categoryId = categories.find(c => c.id === Number(row.category) || c.name === row.category)?.id;
-            // 현재 재료 id에 해당하는 단위 가져오기
-            const unit = ingredients.find(i => i.id === Number(row.ingredientId))?.unit || row.unit || "";
-            return (
-              <tr key={idx} className={styles.modalTr}>
-                <td>
-                  <select
-                    value={row.category}
-                    onChange={e =>
-                      setNewItems(ni =>
-                        ni.map((r, i) =>
-                          i === idx
-                            ? { ...r, category: e.target.value, ingredientId: "", unit: "" }
-                            : r
-                        )
-                      )
-                    }
-                  >
-                    <option value="">선택</option>
-                    {categories.map(c => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select
-                    value={row.ingredientId}
-                    onChange={e => {
-                      const selected = ingredients.find(i => i.id === Number(e.target.value));
-                      setNewItems(ni =>
-                        ni.map((r, i) =>
-                          i === idx
-                            ? { ...r, ingredientId: e.target.value, unit: selected?.unit || "" }
-                            : r
-                        )
+          {/* 신규 입력 모달 */}
+          {addModalOpen && (
+            <div className={styles.modalBg} onClick={() => setAddModalOpen(false)}>
+              <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
+                <h3 className={styles.modalHeader}>재고 추가</h3>
+                <table className={styles.modalTable}>
+                  <thead>
+                    <tr>
+                      <th>분류</th>
+                      <th>재료명</th>
+                      <th>단위</th>
+                      <th>단가</th>
+                      <th>수량</th>
+                      <th>최소주문단위</th>
+                      <th>유통기한</th>
+                      <th>입고일</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {newItems.map((row, idx) => {
+                      // 현재 선택된 카테고리 id
+                      const categoryId = categories.find(c => c.id === Number(row.category) || c.name === row.category)?.id;
+                      // 현재 재료 id에 해당하는 단위 가져오기
+                      const unit = ingredients.find(i => i.id === Number(row.ingredientId))?.unit || row.unit || "";
+                      return (
+                        <tr key={idx} className={styles.modalTr}>
+                          <td>
+                            <select
+                              value={row.category}
+                              onChange={e =>
+                                setNewItems(ni =>
+                                  ni.map((r, i) =>
+                                    i === idx
+                                      ? { ...r, category: e.target.value, ingredientId: "", unit: "" }
+                                      : r
+                                  )
+                                )
+                              }
+                            >
+                              <option value="">선택</option>
+                              {categories.map(c => (
+                                <option key={c.id} value={c.id}>{c.name}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td>
+                            <select
+                              value={row.ingredientId}
+                              onChange={e => {
+                                const selected = ingredients.find(i => i.id === Number(e.target.value));
+                                setNewItems(ni =>
+                                  ni.map((r, i) =>
+                                    i === idx
+                                      ? { ...r, ingredientId: e.target.value, unit: selected?.unit || "" }
+                                      : r
+                                  )
+                                );
+                              }}
+                            >
+                              <option value="">선택</option>
+                              {ingredients
+                                .filter(i => i.categoryId === Number(row.category))
+                                .map(i => (
+                                  <option key={i.id} value={i.id}>{i.name}</option>
+                                ))}
+                            </select>
+                          </td>
+                          <td>
+                            <input type="text" value={unit} disabled />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              value={row.unitCost}
+                              onChange={e =>
+                                setNewItems(ni =>
+                                  ni.map((r, i) =>
+                                    i === idx ? { ...r, unitCost: Number(e.target.value) } : r
+                                  )
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              value={row.quantity}
+                              onChange={e =>
+                                setNewItems(ni =>
+                                  ni.map((r, i) =>
+                                    i === idx ? { ...r, quantity: Number(e.target.value) } : r
+                                  )
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              value={row.minimumOrderUnit}
+                              onChange={e =>
+                                setNewItems(ni =>
+                                  ni.map((r, i) =>
+                                    i === idx ? { ...r, minimumOrderUnit: Number(e.target.value) } : r
+                                  )
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="date"
+                              value={row.expiredDate}
+                              onChange={e =>
+                                setNewItems(ni =>
+                                  ni.map((r, i) =>
+                                    i === idx ? { ...r, expiredDate: e.target.value } : r
+                                  )
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="date"
+                              value={row.receivedDate}
+                              onChange={e =>
+                                setNewItems(ni =>
+                                  ni.map((r, i) =>
+                                    i === idx ? { ...r, receivedDate: e.target.value } : r
+                                  )
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <button
+                              type="button"
+                              className={styles.btnRemoveRow}
+                              onClick={() =>
+                                setNewItems(ni => ni.filter((_, i) => i !== idx))
+                              }
+                            >
+                              X
+                            </button>
+                          </td>
+                        </tr>
                       );
-                    }}
-                  >
-                    <option value="">선택</option>
-                    {ingredients
-                      .filter(i => i.categoryId === Number(row.category))
-                      .map(i => (
-                        <option key={i.id} value={i.id}>{i.name}</option>
-                      ))}
-                  </select>
-                </td>
-                <td>
-                  <input type="text" value={unit} disabled />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.unitCost}
-                    onChange={e =>
-                      setNewItems(ni =>
-                        ni.map((r, i) =>
-                          i === idx ? { ...r, unitCost: Number(e.target.value) } : r
-                        )
-                      )
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.quantity}
-                    onChange={e =>
-                      setNewItems(ni =>
-                        ni.map((r, i) =>
-                          i === idx ? { ...r, quantity: Number(e.target.value) } : r
-                        )
-                      )
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.minimumOrderUnit}
-                    onChange={e =>
-                      setNewItems(ni =>
-                        ni.map((r, i) =>
-                          i === idx ? { ...r, minimumOrderUnit: Number(e.target.value) } : r
-                        )
-                      )
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="date"
-                    value={row.expiredDate}
-                    onChange={e =>
-                      setNewItems(ni =>
-                        ni.map((r, i) =>
-                          i === idx ? { ...r, expiredDate: e.target.value } : r
-                        )
-                      )
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="date"
-                    value={row.receivedDate}
-                    onChange={e =>
-                      setNewItems(ni =>
-                        ni.map((r, i) =>
-                          i === idx ? { ...r, receivedDate: e.target.value } : r
-                        )
-                      )
-                    }
-                  />
-                </td>
-                <td>
+                    })}
+                  </tbody>
+                </table>
+                <div className={styles.modalFooter}>
                   <button
                     type="button"
-                    className={styles.btnRemoveRow}
+                    className={styles.btnAddRow}
                     onClick={() =>
-                      setNewItems(ni => ni.filter((_, i) => i !== idx))
+                      setNewItems(ni => [
+                        ...ni,
+                        {
+                          category: "",
+                          ingredientId: "",
+                          unit: "",
+                          unitCost: 0,
+                          quantity: 0,
+                          minimumOrderUnit: 0,
+                          expiredDate: "",
+                          receivedDate: "",
+                        },
+                      ])
                     }
                   >
-                    X
+                    행추가
                   </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div className={styles.modalFooter}>
-        <button
-          type="button"
-          className={styles.btnAddRow}
-          onClick={() =>
-            setNewItems(ni => [
-              ...ni,
-              {
-                category: "",
-                ingredientId: "",
-                unit: "",
-                unitCost: 0,
-                quantity: 0,
-                minimumOrderUnit: 0,
-                expiredDate: "",
-                receivedDate: "",
-              },
-            ])
-          }
-        >
-          행추가
-        </button>
-        <button
-          type="button"
-          className={styles.btnModalSave}
-          onClick={async () => {
-            try {
-              if (!user?.id) return;
-              const ax = myAxios(token);
-              for (const row of newItems) {
-                await ax.post("/store/inventory/add", {
-                  storeId: user.id,
-                  categoryId: Number(row.category),
-                  ingredientId: Number(row.ingredientId),
-                  unitCost: row.unitCost,
-                  quantity: row.quantity,
-                  minimumOrderUnit: row.minimumOrderUnit,
-                  expiredDate: row.expiredDate || null,
-                  receivedDate: row.receivedDate || null,
-                });
-              }
-              setAddModalOpen(false);
-              setNewItems([
-                {
-                  category: "",
-                  ingredientId: "",
-                  unit: "",
-                  unitCost: 0,
-                  quantity: 0,
-                  minimumOrderUnit: 0,
-                  expiredDate: "",
-                  receivedDate: "",
-                },
-              ]);
-              fetchInventory(1);
-            } catch (e) {
-              console.error(e);
-              alert("등록 중 오류가 발생했습니다.");
-            }
-          }}
-        >
-          저장
-        </button>
-        <button
-          type="button"
-          className={styles.btnModalCancel}
-          onClick={() => setAddModalOpen(false)}
-        >
-          취소
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+                  <button
+                    type="button"
+                    className={styles.btnModalSave}
+                    onClick={async () => {
+                      try {
+                        if (!user?.id) return;
+                        const ax = myAxios(token);
+                        for (const row of newItems) {
+                          await ax.post("/store/inventory/add", {
+                            storeId: user.id,
+                            categoryId: Number(row.category),
+                            ingredientId: Number(row.ingredientId),
+                            unitCost: row.unitCost,
+                            quantity: row.quantity,
+                            minimumOrderUnit: row.minimumOrderUnit,
+                            expiredDate: row.expiredDate || null,
+                            receivedDate: row.receivedDate || null,
+                          });
+                        }
+                        setAddModalOpen(false);
+                        setNewItems([
+                          {
+                            category: "",
+                            ingredientId: "",
+                            unit: "",
+                            unitCost: 0,
+                            quantity: 0,
+                            minimumOrderUnit: 0,
+                            expiredDate: "",
+                            receivedDate: "",
+                          },
+                        ]);
+                        fetchInventory(1);
+                      } catch (e) {
+                        console.error(e);
+                        alert("등록 중 오류가 발생했습니다.");
+                      }
+                    }}
+                  >
+                    저장
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.btnModalCancel}
+                    onClick={() => setAddModalOpen(false)}
+                  >
+                    취소
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
 
           {/* 페이징 */}

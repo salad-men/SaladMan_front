@@ -67,6 +67,7 @@ const PaymentList = () => {
 
   const movePage = (p) => {
     if (p < 1 || p > pageInfo.allPage) return;
+    console.log("요청 페이지:", p); // ← 확인
     submit(p);
   };
 

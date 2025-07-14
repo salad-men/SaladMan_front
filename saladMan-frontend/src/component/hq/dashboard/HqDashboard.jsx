@@ -297,9 +297,7 @@ export default function HqDashboard() {
                   </li>
                 ))}
               </ul>
-              <li className={styles.blockLine}>
-                금일 신규 발주 품목: <b>0</b>건 | 자동발주 예정 품목: <b>0</b>건
-              </li>
+              
               <li className={styles.blockLine}>
                 폐기 요청 건수: <b>{disposalTotalCount}</b>건
               </li>
@@ -314,6 +312,15 @@ export default function HqDashboard() {
                   </li>
                 ))}
               </ul>
+
+              <li className={styles.blockLine}>
+                금일 신규 발주 품목: <b>0</b>건
+                
+              </li>
+              <li className={styles.blockLine}>
+                자동발주 예정 품목: <b>0</b>건
+                
+              </li>
             </ul>
           </div>
         </div>

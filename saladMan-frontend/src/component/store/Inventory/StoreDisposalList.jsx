@@ -54,6 +54,7 @@ export default function StoreDisposalList() {
     };
     try {
       const res = await myAxios(token).post("/store/inventory/disposal-list", params);
+      console.log(res.data.disposals);
       setData(res.data.disposals || []);
       setPageInfo(res.data.pageInfo || {
         curPage: 1, startPage: 1, endPage: 1, allPage: 1
@@ -197,6 +198,7 @@ export default function StoreDisposalList() {
               <thead>
                 <tr>
                   <th>분류</th>
+                  <th>품명</th>
                   <th>단위</th>
                   <th>폐기량</th>
                   <th>신청일</th>
@@ -215,6 +217,7 @@ export default function StoreDisposalList() {
                   : data.map(row => (
                     <tr key={row.id}>
                       <td>{row.categoryName || '-'}</td>
+                      <td>{row.ingredientName}</td>
                       <td>{row.unit || '-'}</td>
                       <td>{row.quantity ?? '-'}</td>
                       <td>{row.requestedAt ? row.requestedAt.slice(0, 10) : '-'}</td>
