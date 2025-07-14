@@ -48,6 +48,7 @@ export default function ChatRoomPage({ roomId, onClose, setRooms }) {
         stomp.subscribe(
           `/topic/${roomId}`,
           (msg) => {
+            console.log("[ChatRoomPage] 원본 msg:", msg);
             const payload = JSON.parse(msg.body);
             console.log("[ChatRoomPage] 메시지 수신:", payload);
             setMessages(msgs => [...msgs, payload]);
