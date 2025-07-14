@@ -58,7 +58,9 @@ export default function StoreDashboard() {
   const notices = summary?.notices || [];
   const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
   const lowStockCount = summary?.lowStockCount ?? 0;
-  const disposalSummary = summary?.disposalSummary || { 신청: 0, 완료: 0, 반려: 0 };
+  const disposalSummary = summary?.disposalSummary || { 신청: 0, 완료: 0, 반려: 0 }; //폐기
+  const orderSummary = summary?.orderSummary || { 요청: 0, 승인: 0, 반려: 0, 입고완료: 0 }; // 발주
+
 
   // 차트 데이터
   const sales = summary?.sales || {};
@@ -288,25 +290,30 @@ export default function StoreDashboard() {
 
         {/* 재고/임박/폐기 한 줄 카드 */}
         <div className={styles.infoCard}>
-          <div className={styles.infoTitle}>재고 관리/폐기 현황</div>
+          <div className={styles.infoTitle}>집계 요약 현황</div>
           <ul>
             <li>
-              <b>재고 부족</b>: {lowStockCount}종<br/>
+              <b>재고 부족</b>: {lowStockCount}종
             </li>
             <li>
-              <b>D-1 임박</b>: {expireSummary.d1Count ?? 0}종<br/>
+              <b>유통기한 D-1 임박</b>: {expireSummary.d1Count ?? 0}종
             </li>
             <li>
-              <b>D-day 임박</b>: {expireSummary.todayCount ?? 0}종<br/>
+              <b>유통기한 D-day 임박</b>: {expireSummary.todayCount ?? 0}종
             </li>
             <li>
-              <b>폐기 신청</b>: {disposalSummary.신청 ?? 0}건<br/>
+              <b>폐기 요청</b>: {disposalSummary.신청 ?? 0}건 / 
+              <b> 승인</b>: {disposalSummary.승인 ?? 0}건 /
+              <b> 반려</b>: {disposalSummary.반려 ?? 0}건
             </li>
             <li>
-              <b>폐기 완료</b>: {disposalSummary.완료 ?? 0}건<br/>
+              <b>발주 요청</b>: {orderSummary.요청 ?? 0}건 /
+              <b> 승인</b>: {orderSummary.승인 ?? 0}건 /
+              <b> 반려</b>: {orderSummary.반려 ?? 0}건 /
+              <b> 입고완료</b>: {orderSummary.입고완료 ?? 0}건
             </li>
             <li>
-              <b>폐기 반려</b>: {disposalSummary.반려 ?? 0}건<br/>
+              <b>자동발주 예정 품목</b>: {autoOrderExpectedCount}종
             </li>
           </ul>
         </div>
