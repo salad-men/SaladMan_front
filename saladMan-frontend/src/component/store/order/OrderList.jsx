@@ -238,7 +238,6 @@ export default function OrderList() {
                 <th>발주일</th>
                 <th>상태</th>
                 <th>입고량</th>
-                <th>합계</th>
                 <th>입고 검수서</th>
               </tr>
             </thead>
@@ -255,7 +254,6 @@ export default function OrderList() {
                   <td>{formatDate(order.orderDateTime)}</td>
                   <td>{order.status}</td>
                   <td>{order.quantitySummary}</td>
-                  <td>{(order.totalPrice ?? 0).toLocaleString()} 원</td>
                   <td>
                     <button
                       disabled={

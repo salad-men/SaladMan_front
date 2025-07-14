@@ -24,14 +24,14 @@ function getPeriod(type) {
   }
   if (type === "week") {
     const t = new Date(today);
-    t.setDate(t.getDate() - 6);
-    return { start: formatDate(t), end: formatDate(today) };
+    t.setDate(t.getDate() + 7);
+    return { start:formatDate(today) , end: formatDate(t) };
   }
   if (type === "month") {
     const t = new Date(today);
-    t.setMonth(t.getMonth() - 1);
-    t.setDate(t.getDate() + 1);
-    return { start: formatDate(t), end: formatDate(today) };
+    t.setMonth(t.getMonth() + 1);
+    t.setDate(t.getDate() - 1);
+    return { start: formatDate(today), end: formatDate(t) };
   }
   return { start: "", end: "" };
 }
@@ -57,7 +57,7 @@ export default function StoreInventoryExpiration() {
   const [keyword, setKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [sortOption, setSortOption] = useState("default");
+  const [sortOption, setSortOption] = useState("expiryAsc");
 
   // 데이터 상태
   const [inventory, setInventory] = useState([]);
@@ -297,9 +297,10 @@ export default function StoreInventoryExpiration() {
                     setPageInfo(pi => ({ ...pi, curPage: 1 }));
                   }}
                 >
-                  <option value="default">기본(분류-재료-유통기한)</option>
                   <option value="expiryAsc">유통기한↑-분류-재료</option>
                   <option value="expiryDesc">유통기한↓-분류-재료</option>
+                  <option value="default">분류-재료-유통기한</option>
+
                 </select>
               </div>
             </div>
