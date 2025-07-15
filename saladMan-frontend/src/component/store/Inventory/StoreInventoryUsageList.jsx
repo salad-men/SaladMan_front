@@ -65,10 +65,17 @@ export default function StoreInventoryUsageList() {
     fetchRecords(1);
     // eslint-disable-next-line
   }, [token, storeId]);
+  
 const fetchRecords = (page = 1) => {
   if (!token || !storeId) return;
   myAxios(token).get("/store/inventory/record", {
-    params: { storeId, type: activeTab, page }
+    params: { 
+      storeId, type: activeTab, page,
+      categoryId: filterCategory !== "all" ? filterCategory : undefined,
+      ingredientName: filterName || undefined,
+      startDate: filterStartDate || undefined,
+      endDate: filterEndDate || undefined,
+     }
   }).then(res => {
     setRecords(res.data.records || []);
     const pi = res.data.pageInfo || {};
@@ -87,18 +94,18 @@ const fetchRecords = (page = 1) => {
     // eslint-disable-next-line
   }, [activeTab, token, storeId]);
 
-  useEffect(() => {
-    let temp = records;
-    if (filterCategory !== "all") temp = temp.filter(r => r.categoryName === filterCategory);
-    if (filterName) temp = temp.filter(r => r.ingredientName.includes(filterName));
-    if (filterStartDate) temp = temp.filter(r => new Date(r.date) >= new Date(filterStartDate));
-    if (filterEndDate) {
-      const end = new Date(filterEndDate);
-      end.setHours(23, 59, 59, 999);
-      temp = temp.filter(r => new Date(r.date) <= end);
-    }
-    setFilteredRecords(temp);
-  }, [records, filterCategory, filterName, filterStartDate, filterEndDate]);
+  // useEffect(() => {
+  //   let temp = records;
+  //   if (filterCategory !== "all") temp = temp.filter(r => r.categoryName === filterCategory);
+  //   if (filterName) temp = temp.filter(r => r.ingredientName.includes(filterName));
+  //   if (filterStartDate) temp = temp.filter(r => new Date(r.date) >= new Date(filterStartDate));
+  //   if (filterEndDate) {
+  //     const end = new Date(filterEndDate);
+  //     end.setHours(23, 59, 59, 999);
+  //     temp = temp.filter(r => new Date(r.date) <= end);
+  //   }
+  //   setFilteredRecords(temp);
+  // }, [records, filterCategory, filterName, filterStartDate, filterEndDate]);
 
   // 기간 버튼 핸들러
   const setPeriod = (type) => {
@@ -248,13 +255,12 @@ const fetchRecords = (page = 1) => {
                 </tr>
               </thead>
               <tbody>
-                {filteredRecords.length > 0 ? (
-                  filteredRecords.map(r => (
+                {records.length > 0 ? (
+                  records.map(r => (
                     <tr key={r.id}>
                       <td>{r.categoryName}</td>
                       <td>{r.ingredientName}</td>
                       <td>{r.quantity}</td>
-                      {/* <td>{r.memo || "-"}</td> */}
                       <td>{formatDate(r.date)}</td>
                     </tr>
                   ))

@@ -2,7 +2,6 @@
     display: flex;
     overflow: hidden;
     padding: 24px 100px 0 280px;
-    background-color: #f9f9f9;
 }
 
 .orderSettingContent {
@@ -11,11 +10,8 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    min-width: 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
     overflow-y: auto;
-    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -34,7 +30,13 @@
     margin-bottom: 24px;
     gap: 20px;
 }
-
+.headWrap{
+    border-radius: 8px;
+    overflow: hidden;
+    width: 90%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
 .toggleSection {
     display: flex;
     align-items: center;
@@ -121,7 +123,8 @@ input:checked+.slider::before {
     border: 1px solid #dce3e9;
     border-radius: 8px;
     overflow: hidden;
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
 }
 
 /* header 테이블 */
@@ -250,6 +253,22 @@ input:checked+.slider::before {
 .saveButton:hover {
     background-color: #1a445a;
 }
+
+.scrollTopButton {
+  background-color: #4d774e;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.scrollTopButton:hover {
+  background-color: #3a5f3b;
+}
+
+
 
 /* 스크롤바 */
 .orderSettingContent::-webkit-scrollbar {

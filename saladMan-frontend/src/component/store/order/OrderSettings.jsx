@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef  } from "react";
 import styles from "./OrderSettings.module.css";
 import OrderSidebar from "./OrderSidebar";
 import { Info, X } from "lucide-react";
@@ -31,7 +31,6 @@ export default function OrderSettings() {
                 const res = await myAxios(token).get("/store/orderSettings");
                 setItems(res.data);
                 console.log(res.data);
-                // 여기서 전체 자동발주 여부도 별도 API로 가져와도 됩니다.
             } catch (err) {
                 console.error("설정 조회 실패", err);
                 alert("설정을 불러오지 못했습니다.");
@@ -109,30 +108,33 @@ export default function OrderSettings() {
                 <div className={styles.orderSettingContent}>
                     <h2 className={styles.title}>자동 발주 설정</h2>
 
-                    {/* ✅ 체크된 항목 수 표시 */}
-                    <div className={styles.autoOrderHeader}>
-                        <div className={styles.toggleSection}>
-                            <span>자동 발주 사용 여부</span>
-                            <label className={styles.toggleLabel}>
-                                <input
-                                    type="checkbox"
-                                    checked={isAutoOrderOn}
-                                    onChange={handleToggle}
-                                />
-                                <span className={styles.slider}></span>
-                            </label>
-                            <div className={styles.tooltipWrap}>
-                                자동 발주 시간&nbsp;
-                                <span className={styles.tooltipText}>
-                                    자동 발주 시간은 오후 5시입니다.
-                                </span>
+                    <div className={styles.headWrap}>
+                        {/* ✅ 체크된 항목 수 표시 */}
+                        <div className={styles.autoOrderHeader}>
+                            <div className={styles.toggleSection}>
+                                <span>자동 발주 사용 여부</span>
+                                <label className={styles.toggleLabel}>
+                                    <input
+                                        type="checkbox"
+                                        checked={isAutoOrderOn}
+                                        onChange={handleToggle}
+                                    />
+                                    <span className={styles.slider}></span>
+                                </label>
+                                <div className={styles.tooltipWrap}>
+                                    자동 발주 시간&nbsp;
+                                    <span className={styles.tooltipText}>
+                                        자동 발주 시간은 오후 5시입니다.
+                                    </span>
+                                </div>
                             </div>
                         </div>
+                        
+                        <div className={styles.checkedCount} style={{ marginBottom: 10 }}>
+                            자동 발주 체크된 품목 수: <strong>{checkedCount}</strong>개
+                        </div>
+                    </div>
 
-                    </div>
-                    <div className={styles.checkedCount} style={{ marginBottom: 10 }}>
-                        자동 발주 체크된 품목 수: <strong>{checkedCount}</strong>개
-                    </div>
                     <div className={styles.tableOuter}>
                         <table className={styles.autoTable}>
                             <thead>
@@ -185,6 +187,7 @@ export default function OrderSettings() {
                                                 <input
                                                     type="checkbox"
                                                     checked={item.autoOrderEnabled ?? false}
+                                                    disabled={!item.minimumOrderUnit || item.minimumOrderUnit <= 0} // 묶음단위 없으면 비활성화
                                                     onChange={(e) =>
                                                         handleItemChangeById(item.ingredientId, "autoOrderEnabled", e.target.checked)
                                                     }
