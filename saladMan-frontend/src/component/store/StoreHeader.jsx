@@ -36,25 +36,29 @@ const StoreHeader = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeRoomId, setActiveRoomId] = useState(null);
 
+  const setRoomsFn = (updater) => {
+  setChatRooms(prev => {
+    const next = typeof updater === "function" ? updater(prev) : updater;
+    setChatUnreadTotal(next.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
+    return next;
+  });
+};
+
   // 사이드바 열릴 때 방 목록 조회
   useEffect(() => {
-    if (!token || !showSidebar) return;
+    if (!token) return;
     (async () => {
       try {
-        const res = await fetch('/chat/my/rooms', {
-          headers: { Authorization: token }
-        });
+        const res = await fetch('/chat/my/rooms');
         const rooms = await res.json();
-        setChatRooms(rooms || []);
-        setChatUnreadTotal(
-          (rooms || []).reduce((sum, r) => sum + (r.unReadCount || 0), 0)
-        );
+        setChatRooms(()=>rooms);
+        setChatUnreadTotal(rooms.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
       } catch {
-        setChatRooms([]);
+      setChatRooms(() => []);
         setChatUnreadTotal(0);
       }
     })();
-  }, [token, showSidebar]);
+  }, [token]);
 
   // 알림 on/off 저장
   useEffect(() => {
@@ -71,15 +75,12 @@ const StoreHeader = () => {
     user,
     token: jwt,
     rooms: chatRooms,
-    setRooms: (next) => {
-      const arr = Array.isArray(next) ? next : [];
-      setChatRooms(arr);
-      setChatUnreadTotal(arr.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
-    },
+    setRooms: setRoomsFn,
     onUnreadTotal: setChatUnreadTotal,
     onModal: chatAlarmOn ? showChatModal : undefined,
     activeRoomId,
   });
+
 
   // 모달 자동 제거
   useEffect(() => {
@@ -178,13 +179,14 @@ const StoreHeader = () => {
             className="global-chat-badge"
             style={{
               position: 'absolute',
-              top: -8,
+              top: -10,
               right: 70,
               background: 'none',
               border: 'none',
               borderRadius: '50%',
               width: 45,
-              height: 80,
+              height: 75,
+              fontSize: 28,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -199,8 +201,8 @@ const StoreHeader = () => {
               src="/chatIcon.png"
               alt="채팅"
               style={{
-                width: 32,
-                height: 32,
+                width: 40,
+                height: 40,
                 objectFit: 'contain',
               }}
             />
@@ -208,13 +210,13 @@ const StoreHeader = () => {
               <span
                 style={{
                   position: 'absolute',
-                  top: -2,
-                  left: 30,
+                  top: 18,
+                  left: 25,
                   background: 'red',
                   color: 'white',
                   borderRadius: '50%',
-                  fontSize: '12px',
-                  minWidth: '18px',
+                  fontSize: '10px',
+                  minWidth: '8px',
                   textAlign: 'center',
                   fontWeight: 700,
                   padding: '1px 6px',
@@ -264,11 +266,12 @@ const StoreHeader = () => {
         chatAlarmOn={chatAlarmOn}
         setChatAlarmOn={setChatAlarmOn}
         rooms={chatRooms}
-        setRooms={setChatRooms}
+        setRooms={setRoomsFn}
         activeRoomId={activeRoomId}
         setActiveRoomId={setActiveRoomId}
         currentStoreId={store?.storeId}
       />
+
     </>
   );
 };

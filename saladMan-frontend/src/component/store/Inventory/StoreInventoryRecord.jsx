@@ -79,7 +79,6 @@ const fetchRecords = (page = 1) => {
       endPage: pi.endPage || 1
     });
   });
-};
 
   useEffect(() => {
     if (!token || !storeId) return;
@@ -349,4 +348,4 @@ const fetchRecords = (page = 1) => {
       </div>
     </div>
   );
-}
+}}

@@ -28,11 +28,11 @@ export default function useChatSSE({
       try {
         const msg = JSON.parse(e.data);
 
-        // // 본인이 보낸 메시지는 알림 제외
-        // if (msg.senderUsername === user?.username) return;
+        // 본인이 보낸 메시지는 알림 제외
+        if (msg.senderUsername === user?.username) return;
 
-        // // **이미 열려있는 채팅방이면 알림 모달 띄우지 않기**
-        // if (activeRoomId && msg.roomId === activeRoomId) return;
+        // **이미 열려있는 채팅방이면 알림 모달 띄우지 않기**
+        if (activeRoomId && msg.roomId === activeRoomId) return;
 
         setRooms(prevRooms => {
           const safeRooms = Array.isArray(prevRooms) ? prevRooms : [];

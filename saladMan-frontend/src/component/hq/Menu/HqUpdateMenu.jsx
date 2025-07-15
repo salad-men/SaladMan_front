@@ -95,6 +95,9 @@ export default function HqUpdateMenu() {
   // 저장
   const handleSubmit = async (e) => {
     e.preventDefault();
+     if (!imgFile) {
+      return alert("메뉴 사진을 반드시 등록해야 합니다.");
+    }
     if (!menuName || !salePrice || !selectedMenuCategoryId) {
       return alert("메뉴 이름, 가격, 카테고리를 모두 입력하세요.");
     }

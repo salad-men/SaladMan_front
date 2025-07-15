@@ -27,21 +27,29 @@ const HqHeader = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeRoomId, setActiveRoomId] = useState(null);
 
+  const setRoomsFn = (updater) => {
+  setChatRooms(prev => {
+    const next = typeof updater === "function" ? updater(prev) : updater;
+    setChatUnreadTotal(next.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
+    return next;
+  });
+};
   // 사이드바 열릴 때 방 목록 fetch
-  useEffect(() => {
-    if (!token || !showSidebar) return;
-    (async () => {
-      try {
-        const res = await myAxios(token).get('/chat/my/rooms');
-        const rooms = res.data || [];
-        setChatRooms(rooms);
-        setChatUnreadTotal(rooms.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
-      } catch {
-        setChatRooms([]);
-        setChatUnreadTotal(0);
-      }
-    })();
-  }, [token, showSidebar]);
+useEffect(() => {
+  if (!token) return;
+  (async () => {
+    try {
+      const res = await myAxios(token).get('/chat/my/rooms');
+      const rooms = res.data || [];
+      setChatRooms(() => rooms);
+      setChatUnreadTotal(rooms.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
+    } catch {
+      setChatRooms(() => []);
+      setChatUnreadTotal(0);
+    }
+  })();
+}, [token]);
+
 
   // 로컬 스토리지에 알림 설정 저장
   useEffect(() => {
@@ -58,15 +66,12 @@ const HqHeader = () => {
     user,
     token: jwt,
     rooms: chatRooms,
-    setRooms: (next) => {
-      const arr = Array.isArray(next) ? next : [];
-      setChatRooms(arr);
-      setChatUnreadTotal(arr.reduce((sum, r) => sum + (r.unReadCount || 0), 0));
-    },
+    setRooms: setRoomsFn,
     onUnreadTotal: setChatUnreadTotal,
     onModal: chatAlarmOn ? showChatModal : undefined,
     activeRoomId,
   });
+
 
   // 모달 자동 제거
   useEffect(() => {
@@ -174,13 +179,13 @@ const HqHeader = () => {
             className="global-chat-badge"
             style={{
               position: 'absolute',
-              top: -7,
+              top: -10,
               right: 70,
               background: 'none',
               border: 'none',
               borderRadius: '50%',
               width: 45,
-              height: 80,
+              height: 75,
               fontSize: 28,
               boxShadow: 'none',
               display: 'flex',
@@ -197,8 +202,8 @@ const HqHeader = () => {
               src="/chatIcon.png"
               alt="채팅"
               style={{
-                width: 32,
-                height: 32,
+                width: 40,
+                height: 40,
                 display: 'block',
                 objectFit: 'contain',
               }}
@@ -207,13 +212,13 @@ const HqHeader = () => {
               <span
                 style={{
                   position: 'absolute',
-                  top: -2,
-                  left: 30,
+                  top: 18,
+                  left: 25,
                   background: 'red',
                   color: 'white',
                   borderRadius: '50%',
-                  fontSize: '12px',
-                  minWidth: '18px',
+                  fontSize: '10px',
+                  minWidth: '8px',
                   textAlign: 'center',
                   fontWeight: 700,
                   padding: '1px 6px',
@@ -263,7 +268,8 @@ const HqHeader = () => {
         chatAlarmOn={chatAlarmOn}
         setChatAlarmOn={setChatAlarmOn}
         rooms={chatRooms}
-        setRooms={setChatRooms}
+        setRooms={setRoomsFn}
+
         activeRoomId={activeRoomId}
         setActiveRoomId={setActiveRoomId}
         currentStoreId={user?.storeId}
