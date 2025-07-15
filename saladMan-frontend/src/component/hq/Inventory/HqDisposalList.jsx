@@ -124,7 +124,7 @@ export default function HqDisposalList() {
       <div className={styles.content}>
         <div className={styles.innerContainer}>
 
-          <h2 className={styles.title}>폐기 목록</h2>
+          <h2 className={styles.title}>폐기 재료</h2>
 
           {/* 필터 */}
           <div className={styles.filters}>

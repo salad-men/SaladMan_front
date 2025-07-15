@@ -139,11 +139,21 @@
   color: #286180;
 }
 
+.salesTableWrap {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(80,110,80,0.04);
+  padding: 0px 16px 12px 0px;
+  margin-bottom: 0px;
+  width: 25%;
+}
+
+
 .salesTable {
-  max-height: 300px;
-  overflow-y: auto;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 1200px;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  table-layout: fixed;
 }
 
 .salesTable table {
@@ -170,13 +180,7 @@
   color: #286180;
   font-weight: 600;
 }
-.salesTableWrap {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(80,110,80,0.04);
-  padding: 0px 16px 12px 0px;
-  margin-bottom: 0px;
-}
+
 .tableScroll {
   max-height: calc(44px * 6); /* 헤더1 + 5행 */
   overflow-y: auto;

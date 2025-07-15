@@ -14,7 +14,7 @@ export default function StoreEmpSidebar() {
                         <a href="/store/paymentList" className={styles.link}>주문 내역</a>
                     </li>
                     <li className={styles.listItem}>
-                        <a href="/store/StoreEmployeeList" className={styles.link}>직원 목록</a>
+                        <a href="/store/StoreEmployeeList" className={styles.link}>직원 관리</a>
                     </li>
                     <li className={styles.listItem}>
                         <a href="/store/empSchedule" className={styles.link}>직원 일정 관리</a>

@@ -198,7 +198,7 @@ export default function StoreDisposalList() {
               <thead>
                 <tr>
                   <th>분류</th>
-                  <th>품명</th>
+                  <th>재료명</th>
                   <th>단위</th>
                   <th>폐기량</th>
                   <th>신청일</th>

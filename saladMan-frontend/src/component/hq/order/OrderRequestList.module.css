@@ -108,12 +108,14 @@
   border: 1px solid #e4e9e7;
   padding: 10px;
   text-align: center;
+  height: 31px; /* 👈 각 행의 높이 고정 */
 }
 .orderTable th {
   background-color: #eaf3eb;
   color: #2d4836;
   font-weight: 600;
 }
+
 .orderTable tbody tr {
   cursor: pointer;
   transition: background-color 0.2s ease;

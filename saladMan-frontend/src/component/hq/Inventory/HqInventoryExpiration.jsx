@@ -194,7 +194,7 @@ const onFilterChange = setter => e => {
       <HqInventorySidebar />
       <div className={styles.content}>
         <div className={styles.innerContainer}>
-          <h2 className={styles.title}>유통기한 목록</h2>
+          <h2 className={styles.title}>유통기한 관리</h2>
 
           {/* 필터 */}
           <div className={styles.filters}>

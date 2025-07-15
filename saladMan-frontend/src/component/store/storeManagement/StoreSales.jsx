@@ -132,7 +132,7 @@ const StoreSales = () => {
                 labels: finalLabels,
                 datasets: [{
                     data: finalData,
-                    backgroundColor: ['#82ca9d', '#9ad0ec', '#f6c85f', '#e7717d', '#ffb347', '#cccccc']
+                    backgroundColor: ['#82ca9d', '#9ad0ec', '#ffb347', '#e7717d', '#ffecacff', '#cccccc']
                 }]
             },
             options: {
@@ -160,6 +160,24 @@ const StoreSales = () => {
         };
     }, [salesData]);
 
+    // 단축 기간 버튼
+    const setPeriod = type => {
+        const today = getToday();
+        if (type === 'DAY') {
+            setStartDate(today); setEndDate(today);
+            setGroupType('DAY');
+        } else if (type === 'WEEK') {
+            setStartDate(getWeekAgo()); setEndDate(today);
+            setGroupType('WEEK');
+
+        } else if (type === 'MONTH') {
+            setStartDate(getMonthAgo()); setEndDate(today);
+            setGroupType('MONTH');
+
+        }
+    };
+
+
     return (
         <div className={styles.wrapper}>
             <StoreEmpSidebar/>
@@ -174,11 +192,11 @@ const StoreSales = () => {
                             ~ 
                         <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
                         <button className={groupType === 'DAY' ? styles.active : ''}
-                            onClick={() => setGroupType('DAY')}>일별</button>
+                            onClick={() => setPeriod('DAY')}>일별</button>
                         <button className={groupType === 'WEEK' ? styles.active : ''}
-                            onClick={() => setGroupType('WEEK')}>주별</button>
+                            onClick={() => setPeriod('WEEK')}>주별</button>
                         <button className={groupType === 'MONTH' ? styles.active : ''}
-                            onClick={() => setGroupType('MONTH')}>월별</button>
+                            onClick={() => setPeriod('MONTH')}>월별</button>
                     </div>
                     <div className={styles.filterActions}>
                         <button onClick={handleSearch}>검색</button>
@@ -197,29 +215,29 @@ const StoreSales = () => {
                                 <canvas ref={donutChartRef} />
                             </div>
                             <div className={styles.salesTableWrap} style={{ marginTop: '2rem' }}>
-                <h3 className={styles.subTitle}>메뉴별 판매 수량</h3>
-                <div className={styles.tableScroll}>
-                  <table className={styles.salesTable}>
-                    <thead>
-                      <tr>
-                        <th className={styles.menuCell}>메뉴명</th>
-                        <th className={styles.qtyCell}>판매 수량</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                     {salesData?.popularMenus &&[...salesData.popularMenus]
-                        .sort((a, b) => b.quantity - a.quantity)
-                        .slice(0, 5)
-                        .map((m) => (
-                        <tr key={m.menuName}>
-                          <td className={styles.left}>{m.menuName}</td>
-                          <td className={styles.right}>{m.quantity.toLocaleString()}건</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                                <h3 className={styles.subTitle}>메뉴별 판매 수량</h3>
+                                <div className={styles.tableScroll}>
+                                    <table className={styles.salesTable}>
+                                        <thead>
+                                            <tr>
+                                                <th className={styles.menuCell}>메뉴명</th>
+                                                <th className={styles.qtyCell}>판매 수량</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {salesData?.popularMenus && [...salesData.popularMenus]
+                                                .sort((a, b) => b.quantity - a.quantity)
+                                                .slice(0, 5)
+                                                .map((m) => (
+                                                    <tr key={m.menuName}>
+                                                        <td className={styles.left}>{m.menuName}</td>
+                                                        <td className={styles.right}>{m.quantity.toLocaleString()}건</td>
+                                                    </tr>
+                                                ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <div className={styles.box}>
                                 <h4>🥗 판매율</h4>
                                 <canvas ref={barChartRef} />

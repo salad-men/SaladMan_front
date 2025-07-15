@@ -76,6 +76,17 @@ function AlarmList() {
       .catch(err => console.error('알림 목록 가져오기 실패:', err));
   };
 
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    const yyyy = date.getFullYear();
+    const mm = date.getMonth() + 1;
+    const dd = date.getDate();
+    const hh = date.getHours();
+    const min = date.getMinutes().toString().padStart(2, '0');
+    const sec = date.getSeconds().toString().padStart(2, '0');
+    return `${yyyy}. ${mm}. ${dd}. ${hh}:${min}:${sec}`;
+  };
+
   return (
     <div className={styles.wrapper}>
       <NoticeSidebar />
@@ -127,7 +138,11 @@ function AlarmList() {
                   <td>{noti.title}</td>
                   <td>{noti.content}</td>
                   <td>{noti.isRead ? '읽음' : '안읽음'}</td>
-                  <td>{noti.sendAt}</td>
+                  <td>
+                      {new Date(noti.sendAt).toLocaleString('ko-KR', {
+                        year: 'numeric', month: '2-digit',  day: '2-digit', hour: '2-digit', minute: '2-digit'
+                      })}
+                  </td>
                 </tr>
               ))
             )}

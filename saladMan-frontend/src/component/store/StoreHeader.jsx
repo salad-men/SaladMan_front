@@ -101,66 +101,67 @@ const StoreHeader = () => {
 
         <div className="storeNav">
           <div className="storeDropdownContainer">
-                        <a href="/store/StoreInventoryList">재고</a>
-                        <div className="storeDropdown">
-                            <ul>
-                                <li><a href="/store/StoreInventoryList">재고 관리</a></li>
-                                <li><a href="/store/StoreInventoryExpiration">유통기한 목록</a></li>
-                                <li><a href="/store/StoreDisposalList">폐기신청 목록</a></li>
-                                <li><a href="/store/StoreIngredientSetting">재료 설정</a></li>
-                                <li><a href="/store/StoreInventoryRecord">입/출고 기록</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="storeDropdownContainer">
-                        <a href="/store/orderList">발주</a>
-                        <div className="storeDropdown">
-                            <ul>
-                                <li><a href="/store/orderList">발주 목록</a></li>
-                                <li><a href="/store/orderApply">발주 신청</a></li>
-                                <li><a href="/store/orderSettings">발주 설정</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="storeDropdownContainer">
-                        <a href="/store/totalMenu">메뉴</a>
-                        <div className="storeDropdown">
-                            <ul>
-                                <li><a href="/store/totalMenu">전체 메뉴</a></li>
-                                <li><a href="/store/menuStatus">판매 메뉴</a></li>
-                                <li><a href="/store/recipe">레시피 조회</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="storeDropdownContainer">
-                        <a href="storeSales">매장관리</a>
-                        <div className="storeDropdown">
-                            <ul>
-                                <li><a href="storeSales">매출 조회</a></li>
-                                <li><a href="paymentList">주문 내역</a></li>
-                                <li><a href="/store/StoreEmployeeList">직원 목록</a></li>
-                                <li><a href="/store/empSchedule">직원 일정관리</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="storeDropdownContainer">
-                        <a href="/store/otherStoreInven">점포 조회</a>
-                        <div className="storeDropdown">
-                            <ul>
-                                <li><a href="/store/otherStoreInven">타 매장 재고 조회</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="storeDropdownContainer">
-                        <a href="/store/StoreNoticeList">공지사항</a>
-                        <div className="storeDropdown">
-                            <ul>
-                                <li><a href="/store/StoreNoticeList">공지사항</a></li>
-                                <li><a href="/store/StoreComplaintList">불편사항</a></li>
-                                <li><a href="/store/alarmList">알림 목록</a></li>
-                            </ul>
-                        </div>
-                    </div>
+            <a href="/store/StoreInventoryList">재고</a>
+            <div className="storeDropdown">
+              <ul>
+                <li><a href="/store/StoreInventoryList">재고 관리</a></li>
+                <li><a href="/store/StoreInventoryExpiration">유통기한 관리</a></li>
+                <li><a href="/store/StoreDisposalList">폐기신청 목록</a></li>
+                <li><a href="/store/StoreInventoryRecord">재료 입고 내역</a></li>
+                <li><a href="/store/StoreInventoryUsageList">재료 사용 내역</a></li>
+                <li><a href="/store/StoreIngredientSetting">재료 설정</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="storeDropdownContainer">
+            <a href="/store/orderList">발주</a>
+            <div className="storeDropdown">
+              <ul>
+                <li><a href="/store/orderList">발주 목록</a></li>
+                <li><a href="/store/orderApply">발주 신청</a></li>
+                <li><a href="/store/orderSettings">자동 발주 설정</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="storeDropdownContainer">
+            <a href="/store/totalMenu">메뉴</a>
+            <div className="storeDropdown">
+              <ul>
+                <li><a href="/store/totalMenu">전체 메뉴</a></li>
+                <li><a href="/store/menuStatus">판매 메뉴</a></li>
+                <li><a href="/store/recipe">레시피 조회</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="storeDropdownContainer">
+            <a href="storeSales">매장관리</a>
+            <div className="storeDropdown">
+              <ul>
+                <li><a href="storeSales">매출 조회</a></li>
+                <li><a href="paymentList">주문 내역</a></li>
+                <li><a href="/store/StoreEmployeeList">직원 관리</a></li>
+                <li><a href="/store/empSchedule">직원 일정관리</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="storeDropdownContainer">
+            <a href="/store/otherStoreInven">점포 조회</a>
+            <div className="storeDropdown">
+              <ul>
+                <li><a href="/store/otherStoreInven">타 매장 재고 조회</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="storeDropdownContainer">
+            <a href="/store/StoreNoticeList">공지사항</a>
+            <div className="storeDropdown">
+              <ul>
+                <li><a href="/store/StoreNoticeList">공지사항</a></li>
+                <li><a href="/store/StoreComplaintList">불편사항</a></li>
+                <li><a href="/store/alarmList">알림 목록</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div className="user-info">

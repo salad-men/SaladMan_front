@@ -99,6 +99,7 @@ import PaymentFail from '@user/kiosk/PaymentFail';
 import PaymentPage from '@user/kiosk/PaymentPage';
 import NewsWritePage from "@user/page/NewsWritePage";
 import OrderRequestPrint from "@hq/order/OrderRequestPrint";
+import StoreInventoryUsageList from "@store/Inventory/StoreInventoryUsageList";
 
 
 function App() {
@@ -251,6 +252,11 @@ function App() {
           <Route
             path="/store/StoreInventoryRecord"
             element={<StoreInventoryRecord />}
+          />
+
+          <Route
+            path="/store/StoreInventoryUsageList"
+            element={<StoreInventoryUsageList />}
           />
 
           {/*매장 발주*/}

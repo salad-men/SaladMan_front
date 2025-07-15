@@ -257,7 +257,7 @@ export default function StoreInventoryExpiration() {
       <StoreInventorySidebar />
       <div className={styles.content}>
         <div className={styles.innerContainer}>
-          <h2 className={styles.title}>유통기한 목록</h2>
+          <h2 className={styles.title}>유통기한 관리</h2>
 
           {/* 필터/정렬 */}
           <div className={styles.filters}>
@@ -318,8 +318,8 @@ export default function StoreInventoryExpiration() {
                       onChange={toggleAll}
                     />
                   </th>
-                  <th>품목명</th>
                   <th>분류</th>
+                  <th>재료명</th>
                   <th>단위</th>
                   <th>재고량</th>
                   <th>단가</th>
@@ -348,8 +348,8 @@ export default function StoreInventoryExpiration() {
                           onChange={() => toggleSelect(it.id)}
                         />
                       </td>
-                      <td>{it.name}</td>
                       <td>{it.category}</td>
+                      <td>{it.name}</td>
                       <td>{it.unit}</td>
                       <td>{it.quantity}</td>
                       <td>{it.price}</td>

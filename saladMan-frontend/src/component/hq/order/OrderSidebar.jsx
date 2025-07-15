@@ -9,7 +9,7 @@ export default function OrderSidebar() {
           <a href="/hq/orderRequest" className={styles.link}>수주 목록</a>
         </li>
         <li className={styles.listItem}>
-          <a href="/hq/orderItemManage" className={styles.link}>수주품목 설정</a>
+          <a href="/hq/orderItemManage" className={styles.link}>재료별 수주 가능 여부 설정</a>
         </li>
       </ul>
     </div>
