@@ -12,6 +12,7 @@ const COLORS = [
   "#70d6ff", "#ff70a6", "#ffd670", "#ff9770", "#6eeb83",
 ];
 
+// 날짜 관련 함수
 function getISOWeek(date) {
   const target = new Date(date.valueOf());
   const dayNr = (date.getDay() + 6) % 7;
@@ -58,32 +59,34 @@ export default function StoreDashboard() {
   const notices = summary?.notices || [];
   const unreadComplaintCount = summary?.unreadComplaintCount ?? 0;
   const lowStockCount = summary?.lowStockCount ?? 0;
-  const disposalSummary = summary?.disposalSummary || { 대기: 0, 완료: 0, 반려: 0 }; //폐기
-  const orderSummary = summary?.orderSummary || { 대기중: 0, 반려: 0, 입고완료: 0 }; // 발주
-
+  const disposalSummary = summary?.disposalSummary || { 대기: 0, 완료: 0, 반려: 0 };
+  const orderSummary = summary?.orderSummary || { 대기중: 0, 반려: 0, 입고완료: 0, 승인: 0 };
 
   // 차트 데이터
   const sales = summary?.sales || {};
-  let salesData = [];
-  if (groupType === "week") {
-    salesData = (sales.weekly || []).map((d, idx, arr) => ({
-      date: `${curYear}년 ${arr.length - idx}주`,
+let salesData = [];
+if (groupType === "week") {
+  salesData = (sales.weekly || []).map((d, idx, arr) => ({
+    date: `${curYear}년 ${arr.length - idx}주차`,
+    판매량: d.quantity,
+    매출: d.revenue,
+  })).reverse();
+} else if (groupType === "month") {
+  salesData = (sales.monthly || []).map((d, idx, arr) => ({
+    date: `${arr.length - idx}월`,
+    판매량: d.quantity,
+    매출: d.revenue,
+  })).reverse();
+} else {
+  // 일별은 날짜를 07-07 처럼 표시, 최신일이 맨 위로 (역순)
+  salesData = (sales.daily || [])
+    .map(d => ({
+      date: d.date?.slice(5), // 'YYYY-MM-DD' → 'MM-DD'
       판매량: d.quantity,
       매출: d.revenue,
-    })).reverse();
-  } else if (groupType === "month") {
-    salesData = (sales.monthly || []).map((d, idx, arr) => ({
-      date: `${arr.length - idx}월`,
-      판매량: d.quantity,
-      매출: d.revenue,
-    })).reverse();
-  } else {
-    salesData = (sales.daily || []).map(d => ({
-      date: d.date,
-      판매량: d.quantity,
-      매출: d.revenue,
-    }));
-  }
+    }))
+    .reverse(); // 역순
+}
 
   const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) || [];
 
@@ -158,7 +161,6 @@ export default function StoreDashboard() {
   return (
     <div className={styles.dashboardWrap}>
       <div className={styles.header}>
-        <div className={styles.title}>매장 대시보드</div>
         <div className={styles.periodFilter}>
           <input
             type="date"
@@ -190,7 +192,9 @@ export default function StoreDashboard() {
 
       <div className={styles.grid}>
         <div className={styles.gridCol2}>
-          <div className={styles.sectionTitle}>매출 및 주문 현황</div>
+          <div className={styles.sectionTitle}>
+            <a href="/store/storeSales" style={{color:"#286180", textDecoration:"underline", fontWeight:"bold"}}>매출 및 주문 현황</a>
+          </div>
           <div className={styles.salesCharts}>
             {salesData.length === 0 ? (
               <div style={{ color: "#bbb", textAlign: "center", padding: "60px 0 30px 0" }}>
@@ -214,46 +218,48 @@ export default function StoreDashboard() {
         </div>
 
         <div className={styles.gridCol1}>
-          <div className={styles.sectionTitle}>인기 메뉴 TOP5</div>
-          <ResponsiveContainer width="100%" height={250}>
-            {pieData.length === 0 ? (
-              <div style={{ color: "#bbb", textAlign: "center", padding: "60px 0 30px 0" }}>
-                인기 메뉴 데이터가 없습니다.
-              </div>
-            ) : (
-              <PieChart>
-                <Pie data={pieData} cx="50%" cy="50%" outerRadius={86} dataKey="value" label={({ name }) => name}>
-                  {pieData.map((entry, idx) => (
-                    <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Legend />
-                <Tooltip formatter={v => v?.toLocaleString() + "건"} />
-              </PieChart>
-            )}
-          </ResponsiveContainer>
-          <ul className={styles.pieLegendList}>
-            {pieData.length === 0
-              ? <li style={{ color: "#bbb" }}>인기 메뉴 없음</li>
-              : pieData.map((d, idx) => (
-                <li key={d.name}>
-                  <span className={styles.pieColor} style={{ background: COLORS[idx % COLORS.length] }} />
-                  {d.name}
-                  <span className={styles.pieValue}>{d.value?.toLocaleString()}건</span>
-                </li>
-              ))}
-          </ul>
+        <div className={styles.sectionTitle}>
+          <a href="/store/storeSales" style={{color:"#286180", textDecoration:"underline", fontWeight:"bold"}}>인기 메뉴 TOP5</a>
         </div>
+        <ResponsiveContainer width="100%" height={250}>
+          {pieData.length === 0 ? (
+            <div style={{ color: "#bbb", textAlign: "center", padding: "60px 0 30px 0" }}>
+              인기 메뉴 데이터가 없습니다.
+            </div>
+          ) : (
+            <PieChart>
+              <Pie data={pieData} cx="50%" cy="50%" outerRadius={86} dataKey="value" label={({ name }) => name}>
+                {pieData.map((entry, idx) => (
+                  <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
+                ))}
+              </Pie>
+              {/* <Legend /> <- 삭제/주석 처리 */}
+              <Tooltip formatter={v => v?.toLocaleString() + "건"} />
+            </PieChart>
+          )}
+        </ResponsiveContainer>
+        <ul className={styles.pieLegendList}>
+          {pieData.length === 0
+            ? <li style={{ color: "#bbb" }}>인기 메뉴 없음</li>
+            : pieData.map((d, idx) => (
+              <li key={d.name}>
+                <span className={styles.pieColor} style={{ background: COLORS[idx % COLORS.length] }} />
+                {d.name}
+                <span className={styles.pieValue}>{d.value?.toLocaleString()}건</span>
+              </li>
+            ))}
+        </ul>
+      </div>
       </div>
 
       <div className={styles.rowCards}>
         <div className={`${styles.infoCard} ${styles.scheduleCard}`}>
           <div className={styles.infoTitle}>
-            주간 근무표
+            <a href="/store/empSchedule" style={{color:"#286180", textDecoration:"underline", fontWeight:"bold"}}>주간 근무표</a>
             <span style={{ float: "right" }}>
-              <button onClick={goPrevWeek} style={{ marginRight: 6 }}>이전주</button>
+              <button onClick={goPrevWeek} style={{ marginRight: 6 }}>이전</button>
               <b style={{ margin: "0 6px" }}>{curYear}년 {curWeek}주차</b>
-              <button onClick={goNextWeek}>다음주</button>
+              <button onClick={goNextWeek}>다음</button>
             </span>
           </div>
           {weekError ? (
@@ -288,39 +294,57 @@ export default function StoreDashboard() {
           )}
         </div>
 
-        {/* 재고/임박/폐기 한 줄 카드 */}
+        {/* 집계 요약 현황 (인디케이터 적용) */}
         <div className={styles.infoCard}>
           <div className={styles.infoTitle}>집계 요약 현황</div>
-          <ul>
+          <ul className={styles.indicatorList}>
             <li>
-              <b>재고 부족</b>: {lowStockCount}종
+              <span className={`${styles.indicator} ${styles.stock}`}></span>
+              <b>
+                <a href="/store/StoreInventoryList" style={{color:"#286180", textDecoration:"underline"}}>재고 부족</a>
+              </b>: {lowStockCount}종
             </li>
             <li>
-              <b>유통기한 D-1 임박</b>: {expireSummary.d1Count ?? 0}종
+              <span className={`${styles.indicator} ${styles.expire1}`}></span>
+              <b>
+                <a href="/store/StoreInventoryExpiration" style={{color:"#286180", textDecoration:"underline"}}>유통기한 D-1 임박</a>
+              </b>: {expireSummary.d1Count ?? 0}종
             </li>
             <li>
-              <b>유통기한 D-day 임박</b>: {expireSummary.todayCount ?? 0}종
+              <span className={`${styles.indicator} ${styles.expire0}`}></span>
+              <b>
+                <a href="/store/StoreInventoryExpiration" style={{color:"#286180", textDecoration:"underline"}}>유통기한 D-day 임박</a>
+              </b>: {expireSummary.todayCount ?? 0}종
             </li>
             <li>
-              <b>폐기 요청</b>: {disposalSummary.대기 ?? 0}건 / 
-              <b> 완료  </b>: {disposalSummary.완료 ?? 0}건 /
-              <b> 반려</b>: {disposalSummary.반려 ?? 0}건
+              <span className={`${styles.indicator} ${styles.dispose}`}></span>
+              <b>
+                <a href="/store/StoreDisposalList" style={{color:"#286180", textDecoration:"underline"}}>폐기신청목록</a>
+              </b>: {disposalSummary.대기 ?? 0}건 / 완료 : {disposalSummary.완료 ?? 0}건 / 반려 : {disposalSummary.반려 ?? 0}건
             </li>
             <li>
-              <b>발주 요청</b>: {orderSummary.대기중 ?? 0}건 /
-              <b> 완료</b>: {orderSummary.승인 ?? 0}건 /
-              <b> 반려</b>: {orderSummary.반려 ?? 0}건 /
+              <span className={`${styles.indicator} ${styles.order}`}></span>
+              <b>
+                <a href="/store/orderList" style={{color:"#286180", textDecoration:"underline"}}>발주목록</a>
+              </b>: {orderSummary.대기중 ?? 0}건 / 완료 : {orderSummary.승인 ?? 0}건 / 반려 : {orderSummary.반려 ?? 0}건
             </li>
             <li>
-              <b>자동발주 예정 품목</b>: {autoOrderExpectedCount}종
+              <span className={`${styles.indicator} ${styles.auto}`}></span>
+              <b>
+                <a href="/store/orderSettings" style={{color:"#286180", textDecoration:"underline"}}>자동발주설정</a>
+              </b>: {autoOrderExpectedCount}종
             </li>
           </ul>
         </div>
 
+        {/* 공지 및 고객 문의 (인디케이터 적용) */}
         <div className={styles.infoCard}>
           <div className={styles.infoTitle}>공지 및 고객 문의</div>
-          <ul>
-            <li className={styles.blockLine}>최근 공지사항:</li>
+          <ul className={styles.indicatorList}>
+            <li>
+              <span className={`${styles.indicator} ${styles.notice}`}></span>
+              <a href="/store/StoreNoticeList" style={{color:"#286180", textDecoration:"underline"}}><b>최근 공지사항:</b></a>
+            </li>
             <ul className={styles.top3List}>
               {notices.length === 0
                 ? <li style={{ color: "#bbb" }}>공지 없음</li>
@@ -331,8 +355,9 @@ export default function StoreDashboard() {
                   </li>
                 ))}
             </ul>
-            <li className={styles.blockLine}>
-              읽지 않은 고객문의: <b>{unreadComplaintCount}</b>건
+            <li>
+              <span className={`${styles.indicator} ${styles.complaint}`}></span>
+              <a href="/store/StoreComplaintList" style={{color:"#286180", textDecoration:"underline"}}><b>읽지 않은 고객문의</b></a>: <b>{unreadComplaintCount}</b>건
             </li>
           </ul>
         </div>

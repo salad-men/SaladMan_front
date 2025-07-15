@@ -1,7 +1,7 @@
 /* ChatModal.module.css */
 .modal {
   position: fixed;
-  bottom: 110px; right: 60px;
+  bottom: 50px; right: 60px;
   background: #fff; border-radius: 18px;
   box-shadow: 0 6px 20px #0001;
   padding: 19px 30px 16px 23px;
@@ -11,8 +11,8 @@
   animation: chatFadein 0.23s;
 }
 @keyframes chatFadein {
-  from { opacity: 0; bottom: 80px; }
-  to { opacity: 1; bottom: 110px; }
+  from { opacity: 0; bottom: 0px; }
+  to { opacity: 1; bottom: 50px; }
 }
 .title { font-weight: bold; font-size: 1.08rem; margin-bottom: 6px; }
 .body { font-size: 1rem; margin-bottom: 7px; }
