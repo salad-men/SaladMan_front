@@ -139,7 +139,7 @@ const StoreHeader = () => {
               <ul>
                 <li><a href="storeSales">매출 조회</a></li>
                 <li><a href="paymentList">주문 내역</a></li>
-                <li><a href="/store/StoreEmployeeList">직원 목록</a></li>
+                <li><a href="/store/StoreEmployeeList">직원 관리</a></li>
                 <li><a href="/store/empSchedule">직원 일정관리</a></li>
               </ul>
             </div>
