@@ -1,60 +1,67 @@
 .dashboardWrap {
   padding: 38px 36px 40px 36px;
-  /* min-height: 1200px; */
-  background: #f7faf8;
+  background: rgba(229, 240, 247, 0.4); /* 밝은 블루, 투명도 있음 */
 }
 
+/* Header & Title */
 .header {
   display: flex;
   align-items: flex-end;
   margin-bottom: 15px;
   position: relative;
 }
-
 .title {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #1d492e;
+  color: #286180; /* 메인 네이비톤 */
   margin-right: 22px;
   margin-bottom: 2px;
   letter-spacing: -2px;
 }
 
+/* 기간 필터 */
 .periodFilter {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #f5f9f7;
+  background: #f7f9fa;
   border-radius: 8px;
   padding: 7px 17px 7px 15px;
 }
-
 .periodFilter input[type="date"] {
   font-size: 1.05rem;
   padding: 7px 10px;
-  border-radius: 7px;
-  border: 1.3px solid #b3b3b3;
+  border-radius: 4px;
+  border: 1.3px solid #a8bcc6;
   background: #fff;
   margin-right: 2px;
+  color: #286180;
+  transition: border-color 0.18s;
+}
+.periodFilter input[type="date"]:focus {
+  border-color: #286180;
+  outline: none;
 }
 
 .periodBtn {
-  background: #e8f6ef;
-  color: #157347;
-  border: none;
-  border-radius: 7px;
+  background: #f7f9fa;
+  color: #286180;
+  border: 1px solid #286180;
+  border-radius: 4px;
   font-size: 1rem;
   padding: 7px 16px;
   margin-left: 2px;
   cursor: pointer;
   font-weight: 500;
-  transition: background 0.16s;
+  transition: background 0.18s;
+}
+.periodBtn:hover,
+.periodBtn.active {
+  background: #286180;
+  color: #fff;
 }
 
-.periodBtn:hover {
-  background: #b2f0d1;
-}
-
+/* 일/주/월 버튼 */
 .groupTypeBtns {
   display: flex;
   gap: 5px;
@@ -63,11 +70,10 @@
   right: 0;
   bottom: 0;
 }
-
 .groupTypeBtns button {
-  background: #eaf7ed;
-  color: #1d492e;
-  border: none;
+  background: #f7f9fa;
+  color: #286180;
+  border: 1px solid #286180;
   border-radius: 8px;
   font-size: 1.05rem;
   padding: 8px 20px;
@@ -75,65 +81,90 @@
   font-weight: 600;
   transition: background 0.18s;
 }
-
 .groupTypeBtns .active,
 .groupTypeBtns button:hover {
-  background: #74c69d;
+  background: #286180;
   color: #fff;
 }
 
+/* 메인 그리드 */
 .grid {
   display: grid;
   grid-template-columns: 2.3fr 1.2fr;
   grid-template-rows: 400px auto;
   gap: 75px 22px;
 }
-
-.gridCol2 {
+.gridCol2,
+.gridCol1 {
   background: #fff;
   border-radius: 16px;
   padding: 36px 28px 18px 32px;
-  box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
-  grid-row: 1 / span 1;
+  box-shadow: 0 3px 18px rgba(40,97,128, 0.08);
   min-width: 0;
   display: flex;
   flex-direction: column;
   height: 400px;
 }
-
 .gridCol1 {
-  background: #fff;
-  border-radius: 16px;
   padding: 36px 22px 18px 28px;
-  box-shadow: 0 3px 18px rgba(110, 147, 127, 0.06);
-  grid-row: 1 / span 1;
-  min-width: 0;
-  height: 400px;
 }
 
+.sectionTitle {
+  font-size: 1.17rem;
+  color: #286180;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* 하단 카드 */
 .rowCards {
   grid-column: 1 / span 2;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 22px;
 }
-
 .infoCard {
   background: #fff;
   border-radius: 15px;
   padding: 20px 18px 14px 24px;
-  box-shadow: 0 2px 10px rgba(80, 130, 104, 0.07);
+  box-shadow: 0 2px 10px rgba(40, 97, 128, 0.07);
   min-width: 230px;
   display: flex;
   flex-direction: column;
-  border: 1.2px solid #e6e9ec;
+  border: 1.2px solid #dce3e9;
   position: relative;
   height: 260px;
 }
 
+/* 주간 근무표 카드 */
 .scheduleCard {
   grid-column: 1 / span 1;
   min-width: 0;
+}
+.infoTitle {
+  font-size: 1.07rem;
+  color: #286180;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* 주간 근무표 내 네비 버튼 */
+.infoTitle button {
+  background: #f7f9fa;
+  color: #286180;
+  border: 1px solid #286180;
+  border-radius: 8px;
+  font-size: 0.99rem;
+  padding: 5px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s;
+  margin-left: 0 !important;
+}
+.infoTitle button:hover,
+.infoTitle .activeTab {
+  background: #286180;
+  color: #fff;
 }
 
 .scheduleTable {
@@ -143,21 +174,23 @@
   background: #fcfcfc;
   min-width: 450px;
 }
-
 .scheduleTable th,
 .scheduleTable td {
   padding: 7px 6px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid #dce3e9;
   text-align: center;
 }
-
+.scheduleTable th {
+  background-color: #e6eef5;
+  color: #286180;
+  font-weight: 600;
+}
 .scheduleEmptyMsg {
   color: #aaa;
   text-align: center;
   padding: 32px 0 28px 0;
   font-size: 1.04rem;
 }
-
 .error {
   font-size: 1.18rem;
   color: #d37676;
@@ -166,6 +199,7 @@
   margin-bottom: 12px;
 }
 
+/* pie chart 영역 */
 .pieLegendList {
   display: flex;
   flex-direction: column;
@@ -173,8 +207,8 @@
   margin: 11px 0 0 0;
   font-size: 0.99rem;
   padding: 0;
+  list-style: none;
 }
-
 .pieColor {
   display: inline-block;
   width: 17px;
@@ -183,11 +217,10 @@
   border-radius: 5px;
   vertical-align: middle;
 }
-
 .pieValue {
   margin-left: 10px;
   font-size: 0.96rem;
-  color: #22604b;
+  color: #286180;
 }
 
 .noticeDate {
@@ -196,44 +229,15 @@
   color: #a0a9b0;
 }
 
-.weekTabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 7px;
-  margin-top: 1px;
+/* 공지 Top3 */
+.top3List {
+  padding-left: 0;
+  margin: 0 0 0 16px;
+  list-style: none;
 }
-
-.weekTabs button,
-.infoTitle button {
-  background: #eaf7ed;
-  color: #1d492e;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.99rem;
-  padding: 5px 16px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.14s;
-  margin-left: 0 !important;
-}
-
-.weekTabs .activeTab,
-.infoTitle .activeTab,
-.weekTabs button:hover,
-.infoTitle button:hover {
-  background: #74c69d;
-  color: #fff !important;
-}
-
-.scheduleTable th {
-  background-color: #e6eef5;
-  color: #147c3a;
-  font-weight: 600;
-}
-
 .top3List li {
   font-size: 0.97rem !important;
-  color: #6c757d !important;
+  color: #5b6e7d !important;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -242,6 +246,65 @@
   line-height: 1.5;
   border-bottom: none !important;
   overflow: hidden;
-  white-space: nowrap;  /* 텍스트가 한 줄로 보이게 */
-  text-overflow: ellipsis; /* 텍스트가 넘칠 경우 "..."으로 표시 */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 기타 카드 내부 타이틀 */
+.blockLine {
+  color: #286180;
+  font-weight: 500;
+  margin-top: 7px;
+}
+
+/* 리스트 인디케이터 (컬러 네모, ●없음) */
+.indicatorList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.indicatorList li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+.indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-right: 9px;
+  vertical-align: middle;
+}
+.indicator.stock    { background: #286180;   } /* 진남색 */
+.indicator.expire1  { background: #ffd670;   } /* 노랑 */
+.indicator.expire0  { background: #ff9770;   } /* 주황 */
+.indicator.dispose  { background: #70d6ff;   } /* 파랑 */
+.indicator.order    { background: #ff70a6;   } /* 핑크 */
+.indicator.auto     { background: #6eeb83;   } /* 연두 */
+.indicator.notice   { background: #70d6ff;   } /* 파랑 */
+.indicator.complaint{ background: #ff70a6;   } /* 핑크 */
+
+/* (재고/임박/폐기) 리스트 강조 */
+.infoCard b {
+  color: #286180;
+  font-weight: 600;
+}
+
+/* 기타: 테이블 및 알림 */
+.trLow {
+  background-color: #ffeaea !important;
+}
+
+/* 반응형 */
+@media (max-width: 1200px) {
+  .grid { grid-template-columns: 1fr; }
+  .rowCards { grid-template-columns: 1fr; }
+  .gridCol2, .gridCol1 { height: auto; }
+}
+@media (max-width: 900px) {
+  .dashboardWrap { padding: 14px 4vw 40px 4vw; }
+  .header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .groupTypeBtns { position: static; margin-left: 0; margin-top: 14px; }
 }
