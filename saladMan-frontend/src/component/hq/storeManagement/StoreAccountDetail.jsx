@@ -136,7 +136,7 @@ export default function StoreAccountDetail() {
                         </div>
                     </div>
                     <div className={styles.buttonGroup}>
-                        <button className={styles.backButton} onClick={() => navigate(-1)}>목록</button>
+                        <button className={styles.backButton} onClick={() => navigate('/hq/storeAccount')}>목록</button>
                         <button className={styles.modifyButton} onClick={() => navigate(`/hq/storeModify?id=${id}`)}>수정</button>
                     </div>
                 </div>
