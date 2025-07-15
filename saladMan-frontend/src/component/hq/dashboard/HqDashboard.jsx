@@ -218,32 +218,12 @@ export default function HqDashboard() {
     ))}
   </select>
 
-  {/* 지점 셀렉트 */}
-  <select
-    value={selectedStoreId}
-    onChange={e => setSelectedStoreId(e.target.value)}
-    className={styles.selectStore}
-    style={{ minWidth: 140 }}
-    disabled={!selectedLocation}
-  >
-    <option value="ALL">전국</option>
-    {storeOptions.map(store => (
-      <option key={store.id} value={store.id}>{store.name}</option>
-    ))}
-  </select>
 </div>
-
-
-
       </div>
-
       <div className={styles.grid}>
         {/* 1열: 매출 요약/차트 */}
         <div className={styles.gridCol2}>
           {/* 매출조회(전사)로 이동 */}
-
-
-
           <div className={styles.sectionTitleRow}>
             <Link to="/hq/totalSales" style={{ textDecoration: "none", color: "inherit", flex: 1 }}>
               <div className={styles.sectionTitle} style={{ cursor: "pointer" }}>

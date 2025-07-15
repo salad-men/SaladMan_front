@@ -64,26 +64,29 @@ export default function StoreDashboard() {
 
   // 차트 데이터
   const sales = summary?.sales || {};
-  let salesData = [];
-  if (groupType === "week") {
-    salesData = (sales.weekly || []).map((d, idx, arr) => ({
-      date: `${curYear}년 ${arr.length - idx}주`,
+let salesData = [];
+if (groupType === "week") {
+  salesData = (sales.weekly || []).map((d, idx, arr) => ({
+    date: `${curYear}년 ${arr.length - idx}주차`,
+    판매량: d.quantity,
+    매출: d.revenue,
+  })).reverse();
+} else if (groupType === "month") {
+  salesData = (sales.monthly || []).map((d, idx, arr) => ({
+    date: `${arr.length - idx}월`,
+    판매량: d.quantity,
+    매출: d.revenue,
+  })).reverse();
+} else {
+  // 일별은 날짜를 07-07 처럼 표시, 최신일이 맨 위로 (역순)
+  salesData = (sales.daily || [])
+    .map(d => ({
+      date: d.date?.slice(5), // 'YYYY-MM-DD' → 'MM-DD'
       판매량: d.quantity,
       매출: d.revenue,
-    })).reverse();
-  } else if (groupType === "month") {
-    salesData = (sales.monthly || []).map((d, idx, arr) => ({
-      date: `${arr.length - idx}월`,
-      판매량: d.quantity,
-      매출: d.revenue,
-    })).reverse();
-  } else {
-    salesData = (sales.daily || []).map(d => ({
-      date: d.date,
-      판매량: d.quantity,
-      매출: d.revenue,
-    }));
-  }
+    }))
+    .reverse(); // 역순
+}
 
   const pieData = topMenus?.map(m => ({ name: m.menuName, value: m.quantity })) || [];
 
@@ -254,9 +257,9 @@ export default function StoreDashboard() {
           <div className={styles.infoTitle}>
             <a href="/store/empSchedule" style={{color:"#286180", textDecoration:"underline", fontWeight:"bold"}}>주간 근무표</a>
             <span style={{ float: "right" }}>
-              <button onClick={goPrevWeek} style={{ marginRight: 6 }}>이전주</button>
+              <button onClick={goPrevWeek} style={{ marginRight: 6 }}>이전</button>
               <b style={{ margin: "0 6px" }}>{curYear}년 {curWeek}주차</b>
-              <button onClick={goNextWeek}>다음주</button>
+              <button onClick={goNextWeek}>다음</button>
             </span>
           </div>
           {weekError ? (
