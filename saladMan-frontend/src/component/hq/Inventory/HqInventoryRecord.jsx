@@ -5,6 +5,7 @@ import { myAxios } from "/src/config";
 import { accessTokenAtom } from "/src/atoms";
 import styles from "./HqInventoryRecord.module.css";
 
+//날짜포멧변경
 function formatDate(dateStr) {
   if (!dateStr) return "-";
   const d = new Date(dateStr);
@@ -19,24 +20,16 @@ function formatDate(dateStr) {
 export default function HqInventoryRecord() {
   const token = useAtomValue(accessTokenAtom);
   const storeId = 1;
-  const [ingredients, setIngredients] = useState([]);
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
 
   const [activeTab, setActiveTab] = useState("입고");
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const [selectedIngredient, setSelectedIngredient] = useState("");
-  const [changeQuantity, setChangeQuantity] = useState("");
-  const [memo, setMemo] = useState("");
 
   const [filterCategory, setFilterCategory] = useState("all");
   const [filterName, setFilterName] = useState("");
   const [filterStartDate, setFilterStartDate] = useState("");
   const [filterEndDate, setFilterEndDate] = useState("");
   const [categories, setCategories] = useState([]);
-
-  const [selectedCategoryForModal, setSelectedCategoryForModal] = useState("");
 
   // 페이징
   const [pageInfo, setPageInfo] = useState({
@@ -111,37 +104,6 @@ export default function HqInventoryRecord() {
     }
   };
 
-  // 모달
-  const openModal = () => {
-    setSelectedCategoryForModal("");
-    setSelectedIngredient("");
-    setChangeQuantity("");
-    setMemo("");
-    setModalOpen(true);
-  };
-  const closeModal = () => setModalOpen(false);
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (!changeQuantity || Number(changeQuantity) <= 0) {
-      alert("수량을 입력해주세요.");
-      return;
-    }
-    myAxios(token).post("/hq/inventory/record-add", {
-      ingredientId: Number(selectedIngredient),
-      storeId: 1,
-      quantity: Number(changeQuantity),
-      memo,
-      changeType: activeTab,
-    }).then(() => {
-      alert("저장 완료!");
-      closeModal();
-      fetchRecords(1);
-    }).catch(() => {
-      alert("등록에 실패했습니다.");
-    });
-  };
-
   // 페이징
   const { curPage, startPage, endPage, allPage } = pageInfo;
   const pages = Array.from({ length: (endPage || 1) - (startPage || 1) + 1 }, (_, i) => (startPage || 1) + i);
@@ -193,10 +155,9 @@ export default function HqInventoryRecord() {
                 fetchRecords(1);
               }}>초기화</button>
               <div className={styles.rightActions}>
-                <button className={styles.addBtn} onClick={openModal}>+ 등록</button>
                 <div className={styles.tabBtns}>
                 <button className={activeTab === "입고" ? styles.tabActive : ""} onClick={() => setActiveTab("입고")}>입고</button>
-                <button className={activeTab === "사용" ? styles.tabActive : ""} onClick={() => setActiveTab("사용")}>출고</button>
+                <button className={activeTab === "사용" ? styles.tabActive : ""} onClick={() => setActiveTab("출고")}>출고</button>
               </div>
               </div>
             </div>
@@ -220,7 +181,7 @@ export default function HqInventoryRecord() {
                     <tr key={r.id}>
                       <td>{r.categoryName}</td>
                       <td>{r.ingredientName}</td>
-                      <td>{r.quantity}</td>
+                      <td>{Number(r.quantity).toLocaleString()}</td>
                       <td>{r.memo || "-"}</td>
                       <td>{formatDate(r.date)}</td>
                     </tr>
@@ -248,73 +209,6 @@ export default function HqInventoryRecord() {
             <button onClick={() => movePage(curPage + 1)} disabled={curPage === allPage}>&gt;</button>
             <button onClick={() => movePage(allPage)} disabled={curPage === allPage}>&gt;&gt;</button>
           </div>
-
-          {/* 등록 모달 */}
-          {modalOpen && (
-          <div className={styles.modal} onClick={closeModal}>
-            <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
-              <button className={styles.modalClose} onClick={closeModal}>&times;</button>
-              <h3>{activeTab} 등록</h3>
-              <form>
-                {/* 1. 분류(카테고리) 선택 */}
-                <div className={styles.formRow}>
-                  <label>분류</label>
-                  <select
-                    value={selectedCategoryForModal}
-                    onChange={e => {
-                      setSelectedCategoryForModal(e.target.value);
-                      setSelectedIngredient(""); 
-                    }}
-                  >
-                    <option value="">분류 선택</option>
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-                {/* 2. 재료 선택 (분류에 따라 필터링) */}
-                <div className={styles.formRow}>
-                  <label>재료</label>
-                  <select
-                    value={selectedIngredient}
-                    onChange={e => setSelectedIngredient(e.target.value)}
-                    disabled={!selectedCategoryForModal}
-                  >
-                    <option value="">재료 선택</option>
-                    {ingredients
-                      .filter(i => String(i.categoryId) === String(selectedCategoryForModal))
-                      .map(i => (
-                        <option key={i.id} value={i.id}>
-                          {i.name}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                {/* 수량 */}
-                <div className={styles.formRow}>
-                  <label>수량</label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={changeQuantity}
-                    onChange={e => setChangeQuantity(e.target.value)}
-                    className={styles.editable}
-                  />
-                </div>
-                {/* 메모 */}
-                <div className={styles.formRow}>
-                  <label>메모</label>
-                  <textarea value={memo} onChange={e => setMemo(e.target.value)} />
-                </div>
-                <div className={styles.modalActions}>
-                  <button type="button" onClick={closeModal}>취소</button>
-                  <button type="submit" onClick={handleSubmit}>저장</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
         </div>
       </div>
     </div>

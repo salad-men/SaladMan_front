@@ -159,7 +159,9 @@ function App() {
       {user?.id && (
         <>
           <div onClick={openModal}
-          style={{position: "absolute", top: 15, right: 45, fontSize: 23, cursor:"pointer"}}>🔔</div>
+          style={{position: "absolute", top: 18, right: 49, fontSize: 23, cursor:"pointer"}}>
+            <img src="/notification-bell.png" alt="" style={{width:28}}/>
+          </div>
           {alarms.length > 0 && (
             <div style={{
               width: '5px', height: '5px', backgroundColor: 'red',
