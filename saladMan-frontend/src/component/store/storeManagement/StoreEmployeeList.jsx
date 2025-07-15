@@ -205,7 +205,7 @@ export default function StoreEmployeeList() {
               <div className={styles.detailModalBtnRow}>
                 {!editMode ? (
                   <>
-                    <button className={styles.editButton} onClick={startEdit}>수정</button>
+                    {/* <button className={styles.editButton} onClick={startEdit}>수정</button> */}
                     <button className={styles.cancelButton} onClick={closeModal}>닫기</button>
                   </>
                 ) : (

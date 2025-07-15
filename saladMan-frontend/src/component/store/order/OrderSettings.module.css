@@ -57,7 +57,10 @@
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: #ccc;
     transition: 0.4s;
     border-radius: 34px;
@@ -114,26 +117,56 @@ input:checked+.slider::before {
     opacity: 1;
 }
 
-.autoTable {
+.tableOuter {
+    border: 1px solid #dce3e9;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+
+/* header 테이블 */
+.tableOuter>table.autoTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* scrollable tbody */
+.tableScroll {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.tableScroll table.autoTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* .autoTable {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
     border: 1px solid #dce3e9;
     border-radius: 8px;
     overflow: hidden;
-}
+} */
 
 .autoTable th,
 .autoTable td {
     padding: 12px 10px;
     text-align: center;
     font-size: 14px;
+    border: 1px solid #dce3e9;
 }
 
 .autoTable th {
     background-color: #dce3e9;
     color: #2d4836;
     font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .autoTable tbody tr {
@@ -154,6 +187,15 @@ input:checked+.slider::before {
 
 .autoTable input[type="checkbox"] {
     transform: scale(1.3);
+}
+
+.bundleInput {
+    width: 70px;
+    text-align: center;
+    padding: 5px 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .qtyControl {
@@ -240,6 +282,7 @@ input:checked+.slider::before {
     -webkit-appearance: none;
     margin: 0;
 }
+
 .autoTable input[type="number"] {
     -moz-appearance: textfield;
 }
