@@ -16,7 +16,7 @@ export default function LowStockList() {
                 const res = await myAxios(token).get('/store/orderApply/lowStock');
                 setShortages(res.data);
             } catch (err) {
-                console.error('수량미달 품목 조회 실패:', err);
+                console.error('수량 미달 품목 조회 실패:', err);
             }
         };
 
@@ -26,7 +26,7 @@ export default function LowStockList() {
         <>
 
             <div className={styles.shortageBox}>
-                <h4>수량미달품목 <span>(총 {shortages.length}개)</span></h4>
+                <h4>수량 미달 품목 <span>(총 {shortages.length}개)</span></h4>
                 <table className={styles.shortageTable}>
                     <thead>
                         <tr><th>품명</th><th>구분</th><th>매장보유량</th></tr>

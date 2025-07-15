@@ -137,6 +137,28 @@
   color:#2d4836;
   font-weight:600;
 }
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: 300px; /* 분류 */
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 300px; /* 재료명 */
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 300px; /* 수량 */
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 300px; /* 날짜 */
+}
+
+
 .table tr:hover { background:#edf4f7; }
 
 .noData {

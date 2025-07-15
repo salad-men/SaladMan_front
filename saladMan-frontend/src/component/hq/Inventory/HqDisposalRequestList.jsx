@@ -213,7 +213,7 @@ const approveSelected = async () => {
       <div className={styles.content}>
         <div className={styles.innerContainer}>
 
-          <h2 className={styles.title}>폐기요청 목록</h2>
+          <h2 className={styles.title}>폐기요청재료</h2>
 
           {/* 필터 + Bulk */}
  

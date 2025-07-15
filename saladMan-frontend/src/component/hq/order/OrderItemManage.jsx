@@ -95,7 +95,7 @@ export default function OrderItemManage() {
             <div className={styles.orderItemContainer}>
                 <OrderSidebar />
                 <div className={styles.orderItemContent}>
-                    <h2>수주 품목 설정</h2>
+                    <h2>재료별 수주 가능 여부 설정</h2>
 
                     <div className={styles.searchControls}>
                         <select

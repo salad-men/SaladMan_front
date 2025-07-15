@@ -96,12 +96,12 @@ export default function OrderSettings() {
                 <OrderSidebar />
 
                 <div className={styles.orderSettingContent}>
-                    <h2 className={styles.title}>발주 설정</h2>
+                    <h2 className={styles.title}>자동 발주 설정</h2>
 
                     {/* ✅ 체크된 항목 수 표시 */}
                     <div className={styles.autoOrderHeader}>
                         <div className={styles.toggleSection}>
-                            <span>자동 발주 사용여부</span>
+                            <span>자동 발주 사용 여부</span>
                             <label className={styles.toggleLabel}>
                                 <input
                                     type="checkbox"
@@ -111,22 +111,22 @@ export default function OrderSettings() {
                                 <span className={styles.slider}></span>
                             </label>
                             <div className={styles.tooltipWrap}>
-                                자동발주시간&nbsp;
+                                자동 발주 시간&nbsp;
                                 <span className={styles.tooltipText}>
                                     자동 발주 시간은 오후 5시입니다.
                                 </span>
                             </div>
                         </div>
-                        <div className={styles.checkedCount}>
-                            자동발주 체크된 품목 수: <strong>{checkedCount}</strong>개
-                        </div>
-                    </div>
 
+                    </div>
+                        <div className={styles.checkedCount} style={{marginBottom:10}}> 
+                            자동 발주 체크된 품목 수: <strong>{checkedCount}</strong>개
+                        </div> 
                     <table className={styles.autoTable}>
                         <thead>
                             <tr>
-                                <th>품명</th>
-                                <th>구분</th>
+                                <th>분류</th>
+                                <th>재료명</th>
                                 <th>매장 최소 수량</th>
                                 <th>묶음단위</th>
                                 <th>묶음수</th>
@@ -137,8 +137,8 @@ export default function OrderSettings() {
                         <tbody>
                             {sortedItems.map((item) => (
                                 <tr key={item.ingredientId}>
-                                    <td>{item.ingredientName}</td>
                                     <td>{item.categoryName}</td>
+                                    <td>{item.ingredientName}</td>
                                     <td>{item.minQuantity ?? 0}</td>
                                     <td>{item.minimumOrderUnit}</td>
                                     <td>

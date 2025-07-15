@@ -137,7 +137,7 @@ export default function HqInventoryList() {
       <HqInventorySidebar />
       <div className={styles.content}>
         <div className={styles.innerContainer}>
-          <h2 className={styles.title}>재고 목록</h2>
+          <h2 className={styles.title}>재고 관리</h2>
 
           {/* 필터 영역 */}
           <div className={styles.filterArea}>

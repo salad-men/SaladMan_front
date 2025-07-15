@@ -12,7 +12,7 @@ export default function OrderSidebar() {
                     <a href="/store/orderApply" className={styles.link}>발주 신청</a>
                 </li>
                 <li className={styles.listItem}>
-                    <a href="/store/orderSettings" className={styles.link}>발주 설정</a>
+                    <a href="/store/orderSettings" className={styles.link}>자동 발주 설정</a>
                 </li>
             </ul>
         </div>
