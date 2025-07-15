@@ -258,7 +258,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 14px;
+  margin-bottom: 1px;
   align-items: flex-start;
 }
 .statsLabel {
@@ -285,6 +285,7 @@
   margin: 11px 0 0 0;
   font-size: 0.99rem;
   padding: 0;
+  list-style: none;
 }
 .pieColor {
   display: inline-block;
@@ -321,4 +322,33 @@
   max-width: 98%;        
   font-weight: 600;
   color: #13795b;
+}
+
+
+.sectionTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+/* 기존 .sectionTitle는 그대로 두고, 오른쪽 선택박스만 스타일 추가! */
+.storeSelectorWrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* 선택박스는 기존 .selectStore 유지 가능, 필요시 조금 더 다듬기 */
+.selectStore {
+  min-width: 95px;
+  font-size: 1.04rem;
+  border-radius: 7px;
+  border: 1.1px solid #b3b3b3;
+  padding: 7px 13px 7px 12px;
+  background: #f5f9f7;
+  color: #216838;
+  font-weight: 500;
+  margin-right: 0;
 }
