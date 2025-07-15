@@ -41,37 +41,40 @@ export default function KioskLogin() {
     };
     return (
         <div className={styles.loginContainer}>
-            <h2 className={styles.title}>키오스크 로그인</h2>
-            <form
-                onSubmit={kioskLoginForm}
-                className={styles.loginForm}
-            >
-                <div className={styles.inputGroup}>
-                    <label htmlFor="username">아이디</label>
-                    <input
-                        id="username"
-                        name="username"
-                        type="text"
-                        placeholder="아이디를 입력하세요"
-                        required
-                        onChange={edit}
-                    />
+            <div className={styles.loginBlur}>
+                <div className={styles.loginBox}>
+
+                    <h2 className={styles.title}>키오스크 로그인</h2>
+                    <form
+                        onSubmit={kioskLoginForm}
+                        className={styles.loginForm}
+                    >
+                        <div className={styles.inputGroup}>
+                            <input
+                                id="username"
+                                name="username"
+                                type="text"
+                                placeholder="아이디"
+                                required
+                                onChange={edit}
+                            />
+                        </div>
+                        <div className={styles.inputGroup}>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                placeholder="비밀번호"
+                                required
+                                onChange={edit}
+                            />
+                        </div>
+                        <button type="submit" className={styles.loginButton}>
+                            로그인
+                        </button>
+                    </form>
                 </div>
-                <div className={styles.inputGroup}>
-                    <label htmlFor="password">비밀번호</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        placeholder="비밀번호를 입력하세요"
-                        required
-                        onChange={edit}
-                    />
-                </div>
-                <button type="submit" className={styles.loginButton}>
-                    로그인
-                </button>
-            </form>
+            </div>
         </div>
     );
 }

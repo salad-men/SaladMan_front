@@ -29,7 +29,7 @@ export default function LowStockList() {
                 <h4>수량 미달 품목 <span>(총 {shortages.length}개)</span></h4>
                 <table className={styles.shortageTable}>
                     <thead>
-                        <tr><th>품명</th><th>구분</th><th>매장보유량</th></tr>
+                        <tr><th>품명</th><th>구분</th><th>매장보유량</th><th>매장설정<br/>최소수량</th> </tr>
                     </thead>
                     <tbody>
                         {shortages.map((item, i) => (
@@ -37,6 +37,7 @@ export default function LowStockList() {
                                 <td>{item.name}</td>
                                 <td>{item.category}</td>
                                 <td>{item.quantity}{item.unit}</td>
+                                <td>{item.minQuantity}</td>
                             </tr>
                         ))}
                     </tbody>
