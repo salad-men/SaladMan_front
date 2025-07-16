@@ -37,7 +37,7 @@ export default function StockInspection() {
 
         const fetchDetail = async () => {
             try {
-                const res = await myAxios(token).get(`/store/stockInspection/${id}`);
+                const res = await myAxios().get(`/store/stockInspection/${id}`);
                 const data = res.data.map(item => ({
                     ...item,
                     inspection: item.inspection ?? "검수완료", 
@@ -49,7 +49,7 @@ export default function StockInspection() {
             }
         };
         fetchDetail();
-    }, [id, token]);
+    }, [id]);
 
     const handleInputChange = (index, field, value) => {
         const updated = [...items];
