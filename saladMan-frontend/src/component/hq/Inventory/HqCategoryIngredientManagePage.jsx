@@ -29,7 +29,7 @@ export default function HqCategoryIngredientManagePage() {
   const [editIngId, setEditIngId] = useState(null);
   const [editIngName, setEditIngName] = useState("");
   const [editIngUnit, setEditIngUnit] = useState("");
-
+  const [newIngPrice, setNewIngPrice] = useState("");
   useEffect(() => {
     if (!token) return;
     fetchCategories();
@@ -113,6 +113,7 @@ export default function HqCategoryIngredientManagePage() {
       const res = await myAxios(token).post("/hq/inventory/ingredient-add", {
         name: newIngName.trim(),
         unit: newIngUnit.trim(),
+        price: parseInt(newIngPrice, 10),
         categoryId: selectedCat.id,
       });
       setAllIngredients(prev => [...prev, {
@@ -272,6 +273,12 @@ export default function HqCategoryIngredientManagePage() {
                       placeholder="단위"
                       value={newIngUnit}
                       onChange={e => setNewIngUnit(e.target.value)}
+                    />
+                    <input
+                      className={styles.ingInput}
+                      placeholder="단위가격"
+                      value={newIngPrice}
+                      onChange={e => setNewIngPrice(e.target.value)}
                     />
                     <button className={styles.ingAddSubmitBtn} onClick={addIngredient}>추가</button>
                     <button className={styles.ingAddCancelBtn} onClick={() => { setShowIngInput(false); setNewIngName(""); setNewIngUnit(""); }}>취소</button>
