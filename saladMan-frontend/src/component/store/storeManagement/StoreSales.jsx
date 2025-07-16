@@ -238,9 +238,9 @@ const StoreSales = () => {
                                     </table>
                                 </div>
                             </div>
-                            <div className={styles.box}>
+                            <div className={`${styles.box} ${styles.chartBoxWide}`}>
                                 <h4>🥗 판매율</h4>
-                                <canvas ref={barChartRef} />
+                                <canvas ref={barChartRef}  />
                             </div>
                         </div>                        
                     </div>
