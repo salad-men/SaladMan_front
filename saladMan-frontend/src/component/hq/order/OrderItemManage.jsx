@@ -21,7 +21,7 @@ export default function OrderItemManage() {
 
     const token = useAtomValue(accessTokenAtom);
 
-    const PAGE_BLOCK = 10;
+    const PAGE_BLOCK = 5;
     const startPage = Math.floor((currentPage - 1) / PAGE_BLOCK) * PAGE_BLOCK + 1;
     const endPage = Math.min(startPage + PAGE_BLOCK - 1, totalPages);
 
@@ -36,7 +36,7 @@ export default function OrderItemManage() {
         try {
             const params = {
                 page: currentPage - 1,
-                size: 6,
+                size: 10,
             };
 
             if (availableFilter !== "all") {

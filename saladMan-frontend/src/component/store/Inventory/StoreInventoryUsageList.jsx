@@ -26,7 +26,7 @@ export default function StoreInventoryUsageList() {
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
 
-  const [activeTab, setActiveTab] = useState("사용");
+  const [activeTab, setActiveTab] = useState("출고");
   const [modalOpen, setModalOpen] = useState(false);
 
   const [selectedIngredient, setSelectedIngredient] = useState("");
@@ -66,7 +66,7 @@ export default function StoreInventoryUsageList() {
     // eslint-disable-next-line
   }, [token, storeId]);
   
-const fetchRecords = (page = 1) => {
+const fetchRecords = (page = 1) => {                                                                    
   if (!token || !storeId) return;
   myAxios(token).get("/store/inventory/record", {
     params: { storeId, type: activeTab, page }
