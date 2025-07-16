@@ -4,7 +4,7 @@ import OrderSidebar from "./OrderSidebar";
 import { myAxios } from "/src/config";
 import { useAtomValue } from 'jotai';
 import { accessTokenAtom } from "/src/atoms";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function StockInspection() {

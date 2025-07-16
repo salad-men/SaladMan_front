@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { userAtom, initStore, accessTokenAtom } from '/src/atoms';
 import { useNavigate } from 'react-router-dom';
+import { myAxios } from '/src/config';
 import ChatModal from '../Chat/ChatModal';
 import ChatSidebar from '../Chat/ChatSidebar';
 import useChatSSE from '../Chat/useChatSSE';
+import AlarmModal from '/src/component/common/AlarmModal';
+import { alarmsAtom } from "/src/atoms";
 import './StoreHeader.css';
 
 const StoreHeader = () => {
@@ -90,6 +93,35 @@ const StoreHeader = () => {
     }, 3200);
     return () => clearTimeout(timer);
   }, [chatModalQueue]);
+
+  // fcm알람
+    const [isAlarmOpen, setIsAlarmOpen] = useState(false);
+    const [alarms, setAlarms] = useAtom(alarmsAtom);
+    
+  
+    const fetchAlarms = async (open = false) => {
+    if (!token) return;
+      try {
+        const res = await myAxios(token).post("/alarms");
+        setAlarms(res.data);
+        if (open) setIsAlarmOpen(true);
+      } catch (err) {
+        console.error("알림 데이터를 가져오는데 실패했습니다.", err);
+      }
+    };
+  
+    // 초기 알림 로딩
+    useEffect(() => {
+      fetchAlarms(false);
+    }, [token]);
+  
+    // 모달 열기
+    const openModal = () => {
+      fetchAlarms(true);
+    };
+  
+    // 모달 닫기
+    const closeModal = () => setIsAlarmOpen(false);
 
   return (
     <>
@@ -272,6 +304,28 @@ const StoreHeader = () => {
         currentStoreId={store?.storeId}
       />
 
+      {/* fcm알람 */}
+      {user?.id && (
+        <>
+          <div onClick={openModal}
+            style={{ position: "absolute", top: 18, right: 49, fontSize: 23, cursor: "pointer" }}>
+            <img src="/notification-bell.png" alt="" style={{ width: 28 }} />
+          </div>
+          {alarms.length > 0 && (
+            <div style={{
+              width: '5px', height: '5px', backgroundColor: 'red',
+              position: 'absolute', top: 21, right: 47, borderRadius: '50%'
+            }}></div>
+          )}
+        </>
+      )}
+
+      {isAlarmOpen && (
+        <AlarmModal
+          alarms={alarms}
+          onClose={closeModal}
+        />
+      )}
     </>
   );
 };

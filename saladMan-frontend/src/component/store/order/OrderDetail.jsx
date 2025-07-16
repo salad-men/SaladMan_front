@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./OrderDetail.module.css";
 import OrderSidebar from "./OrderSidebar";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { myAxios } from "/src/config";
 import { useAtomValue } from 'jotai';
 import { accessTokenAtom } from "/src/atoms";

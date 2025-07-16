@@ -3,7 +3,7 @@ import styles from "./StoreRegister.module.css";
 import { useEffect, useRef, useState } from "react";
 import DaumPostcode from "react-daum-postcode";
 import { Modal } from "antd";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { myAxios } from "/src/config.jsx";
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";

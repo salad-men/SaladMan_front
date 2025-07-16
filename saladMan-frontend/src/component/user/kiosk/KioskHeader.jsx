@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
 import { useState } from "react";
 import { userAtom } from "/src/atoms";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import './KioskHeader.css';
 
 const KioskHeader = () => {
