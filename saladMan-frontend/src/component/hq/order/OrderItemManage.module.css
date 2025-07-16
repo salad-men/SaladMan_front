@@ -97,6 +97,14 @@
     margin-bottom: 12px;
     height: 585px;
 }
+
+.orderItemTable th:nth-child(1) { width: 180px; } /* 품목명 */
+.orderItemTable th:nth-child(2) { width: 140px; } /* 카테고리 */
+.orderItemTable th:nth-child(3) { width: 120px; } /* 본사보유량 */
+.orderItemTable th:nth-child(4) { width: 100px; } /* 단위 */
+.orderItemTable th:nth-child(5) { width: 100px; } /* 단위가격 */
+.orderItemTable th:nth-child(6) { width: 100px; } /* 수주 가능 */
+
 .orderItemTable th, .orderItemTable td {
     border: 1px solid #e4e9e7;
     padding: 10px 8px;
