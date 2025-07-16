@@ -5,6 +5,7 @@ import { myAxios } from "/src/config";
 import { useAtomValue } from 'jotai';
 import { accessTokenAtom } from "/src/atoms";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 export default function StockInspection() {
     const [items, setItems] = useState([]);
@@ -32,12 +33,11 @@ export default function StockInspection() {
     }, []);
 
     useEffect(() => {
-        if (!token) return;
         if (!id) return;
 
         const fetchDetail = async () => {
             try {
-                const res = await myAxios(token).get(`/store/stockInspection/${id}`);
+                const res = await myAxios().get(`/store/stockInspection/${id}`);
                 const data = res.data.map(item => ({
                     ...item,
                     inspection: item.inspection ?? "검수완료", 
@@ -49,7 +49,7 @@ export default function StockInspection() {
             }
         };
         fetchDetail();
-    }, [id, token]);
+    }, [id]);
 
     const handleInputChange = (index, field, value) => {
         const updated = [...items];
