@@ -35,7 +35,7 @@
   padding: 5px 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  width: 1200px;
+  max-width: 1500px;
 }
 
 .filterRow {
@@ -148,6 +148,36 @@
   width: 25%;
 }
 
+.salesTableWrapper {
+  width: 100%;
+  max-height: 420px; /* ✅ 원하는 높이 설정 */
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background: #fff;
+}
+
+.salesTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.salesTableInner thead {
+  position: sticky;      /* ✅ 헤더 고정 핵심 */
+  top: 0;
+  background-color: #dce3e9; /* ✅ 헤더 배경 (고정이 눈에 띄게) */
+  z-index: 2;
+}
+
+.salesTableInner th,
+.salesTableInner td {
+  border-bottom: 1px solid #dce3e9;
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+}
 
 .salesTable {
   width: 100%;
