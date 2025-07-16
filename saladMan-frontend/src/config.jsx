@@ -12,7 +12,7 @@ export const CF_BASE = import.meta.env.VITE_CLOUDFRONT_URL || ''; //
 export const myAxios = (token) => {
    var instance = axios.create({
       baseURL: API_BASE,
-      timeout: 9000,
+      timeout: 6000,
    })
 
    token && instance.interceptors.request.use((config) => {
