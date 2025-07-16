@@ -238,28 +238,29 @@ const StoreSales = () => {
                                     </table>
                                 </div>
                             </div>
-                            <div className={styles.box}>
+                            <div className={`${styles.box} ${styles.chartBoxWide}`}>
                                 <h4>🥗 판매율</h4>
-                                <canvas ref={barChartRef} />
+                                <canvas ref={barChartRef}  />
                             </div>
                         </div>                        
                     </div>
-
-                    <div className={styles.salesTable}>
-                        <table>
-                            <thead>
-                                <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>
-                            </thead>
-                            <tbody>
-                                {salesData?.daily?.map(d => (
-                                    <tr key={d.date}>
-                                        <td>{d.date}</td>
-                                        <td>{d.quantity}</td>
-                                        <td>₩{d.revenue.toLocaleString()}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className={styles.salesTableWrapper}>                                                
+                        <div className={styles.salesTable}>
+                            <table className={styles.salesTableInner}>
+                                <thead>
+                                    <tr><th>날짜</th><th>판매량</th><th>매출</th></tr>
+                                </thead>
+                                <tbody>
+                                    {salesData?.daily?.map(d => (
+                                        <tr key={d.date}>
+                                            <td>{d.date}</td>
+                                            <td>{d.quantity}</td>
+                                            <td>₩{d.revenue.toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

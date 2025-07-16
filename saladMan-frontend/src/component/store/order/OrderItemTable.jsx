@@ -114,11 +114,11 @@ export default function OrderItemTable() {
 
     return (
         <div className={styles.stockTableBox}>
-            <h4>품목 선택</h4>
+            <h4>재료 선택</h4>
             <table className={styles.stockTable}>
                 <thead>
                     <tr>
-                        <th>품명</th><th>재고</th><th>입고중</th><th>발주량</th><th></th>
+                        <th>재료</th><th>재고</th><th>입고중</th><th>발주량</th><th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,10 +178,13 @@ export default function OrderItemTable() {
                                 <option>전체</option>
                                 <option>단백질</option>
                                 <option>채소</option>
+                                <option>탄수화물</option>
+                                <option>소스</option>
+                                <option>일회용품</option>
                             </select>
                             <input
                                 type="text"
-                                placeholder="품명 검색"
+                                placeholder="재료 검색"
                                 value={keyword}
                                 onChange={(e) => setKeyword(e.target.value)}
                                 className={styles.searchInput}
@@ -191,8 +194,8 @@ export default function OrderItemTable() {
                         <table className={styles.modalTable}>
                             <thead>
                                 <tr>
-                                    <th>품명</th>
                                     <th>구분</th>
+                                    <th>재료</th>
                                     <th>단위</th>
                                     <th>재고</th>
                                     <th>입고중</th>

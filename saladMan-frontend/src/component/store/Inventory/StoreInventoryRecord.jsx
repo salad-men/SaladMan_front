@@ -42,14 +42,8 @@ export default function StoreInventoryRecord() {
 
   // 기간 선택 상태
   const [selectedPeriod, setSelectedPeriod] = useState("전체");
-
   // 페이징
-  const [pageInfo, setPageInfo] = useState({
-    curPage: 1,
-    allPage: 1,
-    startPage: 1,
-    endPage: 1,
-  });
+  const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
 
   // 데이터 로딩
   useEffect(() => {
@@ -65,20 +59,22 @@ export default function StoreInventoryRecord() {
     fetchRecords(1);
     // eslint-disable-next-line
   }, [token, storeId]);
-const fetchRecords = (page = 1) => {
-  if (!token || !storeId) return;
-  myAxios(token).get("/store/inventory/record", {
-    params: { storeId, type: activeTab, page }
-  }).then(res => {
-    setRecords(res.data.records || []);
-    const pi = res.data.pageInfo || {};
-    setPageInfo({
-      curPage: pi.curPage || 1,
-      allPage: pi.allPage || 1,
-      startPage: pi.startPage || 1,
-      endPage: pi.endPage || 1
+
+  const fetchRecords = (page = 1) => {
+    if (!token || !storeId) return;
+    myAxios(token).get("/store/inventory/record", {
+      params: { storeId, type: activeTab, page }
+    }).then(res => {
+      setRecords(res.data.records || []);
+      const pi = res.data.pageInfo || {};
+      setPageInfo({
+        curPage: pi.curPage || 1,
+        allPage: pi.allPage || 1,
+        startPage: pi.startPage || 1,
+        endPage: pi.endPage || 1
+      });
     });
-  });
+  };
 
   useEffect(() => {
     if (!token || !storeId) return;
@@ -143,6 +139,7 @@ const fetchRecords = (page = 1) => {
       alert("수량을 입력해주세요.");
       return;
     }
+    
     myAxios(token)
       .post("/store/inventory/record-add", {
         ingredientId: Number(selectedIngredient),
@@ -348,4 +345,4 @@ const fetchRecords = (page = 1) => {
       </div>
     </div>
   );
-}}
+};
