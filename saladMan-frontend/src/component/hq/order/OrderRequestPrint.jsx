@@ -100,7 +100,7 @@ export default function OrderRequestPrint() {
                             ) : (
                                 <tr>
                                     <td></td>
-                                    <td colSpan={3}>입고 내역 없음</td>
+                                    <td colSpan={2}>입고 내역 없음</td>
                                     <td>{item.approvalStatus || "-"}</td>
                                     <td>
                                         {item.approvalStatus === "반려"
