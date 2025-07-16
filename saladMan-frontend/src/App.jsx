@@ -100,6 +100,7 @@ import PaymentPage from '@user/kiosk/PaymentPage';
 import NewsWritePage from "@user/page/NewsWritePage";
 import OrderRequestPrint from "@hq/order/OrderRequestPrint";
 import StoreInventoryUsageList from "@store/Inventory/StoreInventoryUsageList";
+import PaymentFailSoldOut from "@user/kiosk/PaymentFailSoldOut";
 
 
 function App() {
@@ -337,6 +338,7 @@ function App() {
           <Route path="/kiosk/menu" element={<KioskMenuPage />} />
           <Route path="/kiosk/paymentSuccess" element={<PaymentSuccess />} />
           <Route path="/kiosk/paymentFail" element={<PaymentFail />} />
+          <Route path="/kiosk/paymentFailSoldOut" element={<PaymentFailSoldOut />} />
           <Route path="/kiosk/paymentPage" element={<PaymentPage />} />
 
         </Route>

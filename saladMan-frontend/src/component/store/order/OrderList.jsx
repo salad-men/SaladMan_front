@@ -90,10 +90,20 @@ export default function OrderList() {
     setSelectedRange("");
   };
 
+  const formatDateToKST = (date = new Date()) => {
+    const offset = date.getTimezoneOffset(); // 한국 기준: -540
+    const localDate = new Date(date.getTime() - offset * 60 * 1000);
+    return localDate.toISOString().slice(0, 10);
+  };
+
   const setDateRange = (range) => {
     const today = new Date();
-    const end = today.toISOString().slice(0, 10);
-    let start = new Date();
+    const offset = today.getTimezoneOffset();
+    const localToday = new Date(today.getTime() - offset * 60000);
+    const end = localToday.toISOString().slice(0, 10);
+
+    let start = new Date(localToday); // 복사
+
 
     if (range === "today") {
       start = today;
@@ -105,7 +115,9 @@ export default function OrderList() {
       start.setMonth(today.getMonth() - 1);
     }
 
-    setStartDate(start.toISOString().slice(0, 10));
+
+    const startStr = new Date(start.getTime() - offset * 60000).toISOString().slice(0, 10);
+    setStartDate(startStr);
     setEndDate(end);
     setSelectedRange(range);
   };
@@ -149,33 +161,29 @@ export default function OrderList() {
             />
             <button
               onClick={() => setDateRange("today")}
-              className={`${styles.dateButton} ${
-                selectedRange === "today" ? styles.selected : ""
-              }`}
+              className={`${styles.dateButton} ${selectedRange === "today" ? styles.selected : ""
+                }`}
             >
               오늘
             </button>
             <button
               onClick={() => setDateRange("1week")}
-              className={`${styles.dateButton} ${
-                selectedRange === "1week" ? styles.selected : ""
-              }`}
+              className={`${styles.dateButton} ${selectedRange === "1week" ? styles.selected : ""
+                }`}
             >
               1주
             </button>
             <button
               onClick={() => setDateRange("2weeks")}
-              className={`${styles.dateButton} ${
-                selectedRange === "2weeks" ? styles.selected : ""
-              }`}
+              className={`${styles.dateButton} ${selectedRange === "2weeks" ? styles.selected : ""
+                }`}
             >
               2주
             </button>
             <button
               onClick={() => setDateRange("1month")}
-              className={`${styles.dateButton} ${
-                selectedRange === "1month" ? styles.selected : ""
-              }`}
+              className={`${styles.dateButton} ${selectedRange === "1month" ? styles.selected : ""
+                }`}
             >
               1달
             </button>
@@ -262,7 +270,7 @@ export default function OrderList() {
                       }
                       className={
                         order.receiptAvailable &&
-                        order.status.trim() !== "검수완료"
+                          order.status.trim() !== "검수완료"
                           ? styles.activeButton
                           : styles.disabledButton
                       }

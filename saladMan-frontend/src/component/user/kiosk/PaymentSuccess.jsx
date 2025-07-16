@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "/src/atoms";
@@ -14,6 +14,9 @@ export default function PaymentSuccess() {
     const orderId = searchParams.get("orderId");
     const amount = searchParams.get("amount");
 
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSuccess, setIsSuccess] = useState(false);
+
     useEffect(() => {
         if (!token) return;
 
@@ -24,24 +27,40 @@ export default function PaymentSuccess() {
                     orderId,
                     amount: parseInt(amount)
                 });
+                setIsSuccess(true);
             } catch (err) {
                 const status = err.response?.status;
                 const message = err.response?.data;
 
                 if (status === 400 && message?.includes("재고")) {
-                    navigate("/kiosk/paymentFail");
+                    navigate("/kiosk/paymentFailSoldOut");
                 } else {
                     alert("결제 확인 중 문제가 발생했습니다");
                     navigate("/kiosk/paymentFail");
                 }
+            } finally {
+                setIsLoading(false);
             }
         };
 
         if (paymentKey && orderId && amount) {
             confirmPayment();
+        } else {
+            navigate("/kiosk/paymentFail");
         }
     }, [paymentKey, orderId, amount, token, navigate]);
+    
+    if (isLoading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.card}>
+                    <h2 className={styles.title}>결제 확인 중입니다...</h2>
+                </div>
+            </div>
+        );
+    }
 
+    if (!isSuccess) return null;
     return (
         <div className={styles.container}>
             
