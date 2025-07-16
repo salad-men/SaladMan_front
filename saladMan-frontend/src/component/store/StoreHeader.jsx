@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { userAtom, initStore, accessTokenAtom } from '/src/atoms';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import ChatModal from '../Chat/ChatModal';
 import ChatSidebar from '../Chat/ChatSidebar';
 import useChatSSE from '../Chat/useChatSSE';
