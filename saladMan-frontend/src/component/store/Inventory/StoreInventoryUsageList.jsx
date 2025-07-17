@@ -26,7 +26,7 @@ export default function StoreInventoryUsageList() {
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
 
-  const [activeTab, setActiveTab] = useState("사용");
+  const [activeTab, setActiveTab] = useState("출고");
   const [modalOpen, setModalOpen] = useState(false);
 
   const [selectedIngredient, setSelectedIngredient] = useState("");
