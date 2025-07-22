@@ -204,21 +204,6 @@ export default function HqDashboard() {
         </div>
         {renderGroupTypeBtns()}
 
-<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-  {/* 지역 셀렉트 */}
-  <select
-    value={selectedLocation}
-    onChange={e => setSelectedLocation(e.target.value)}
-    className={styles.selectStore}
-    style={{ minWidth: 100 }}
-  >
-    <option value="">지역</option>
-    {locations.map(loc => (
-      <option key={loc} value={loc}>{loc}</option>
-    ))}
-  </select>
-
-</div>
       </div>
       <div className={styles.grid}>
         {/* 1열: 매출 요약/차트 */}
